@@ -110,7 +110,7 @@
         <!-- hutool 工具组件 -->
         <dependency>
             <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
+            <artifactId>hutool-all</artifactId>
             <version>5.8.40</version>
         </dependency>
         <!-- joda-time https://mvnrepository.com/artifact/joda-time/joda-time -->

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Spring Boot 默认的logback配置，这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 可参考 DefaultLogbackConfiguration 类 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
+
+    <!-- 日志存放路径 线上/data/logs/${APP_NAME} -->
+    <property name="log.path" value="/data/logs/${APP_NAME}"/>
+    <springProfile name="local">
+        <property name="log.path" value="logs/${APP_NAME}"/>
+    </springProfile>
+    <!-- 日志输出格式 -->
+    <property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{39} [%method:%line] - %m%n"/>
+
+    <!-- consoleAppender 输出到控制台 -->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- info日志 -->
+    <appender name="infoAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/info.log</file>
+        <encoder charset="UTF-8">
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/info.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>512MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- error日志 -->
+    <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/error.log</file>
+        <encoder charset="UTF-8">
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/error.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>512MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- root兜底日志 -->
+    <appender name="rootAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/root.log</file>
+        <encoder charset="UTF-8">
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log.path}/root.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <maxFileSize>512MB</maxFileSize>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 业务日志级别 -->
+    <logger name="com.moyu" level="INFO"/>
+    <logger name="com.moyu.common" level="DEBUG"/>
+    <logger name="com.moyu.boot" level="DEBUG"/>
+    <logger name="org.springframework" level="INFO"/>
+
+    <!-- 兜底日志 -->
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+        <!-- 生产环境. -->
+        <springProfile name="prod">
+            <appender-ref ref="infoAppender"/>
+            <appender-ref ref="errorAppender"/>
+            <appender-ref ref="rootAppender"/>
+        </springProfile>
+    </root>
+
+</configuration>

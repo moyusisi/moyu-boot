@@ -1,0 +1,36 @@
+# 服务器配置
+server:
+  # 默认端口8080, 如果无需修改默认端口，此配置可不要
+  port: 8080
+  servlet:
+    # 配置servletContextPath路径后，所有的资源访问路径都会加上此前缀
+    context-path: /
+
+# spring配置
+spring:
+  application:
+    name: moyu-boot
+  profiles:
+    active: local
+  # mvc配置
+  mvc:
+    # json转换器，默认为jackson
+    converters:
+      preferred-json-mapper: jackson
+  # jackson格式配置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
+    # Asia/Shanghai 或 GMT+8
+    time-zone: Asia/Shanghai
+    # 不序列化null字段
+    default-property-inclusion: non_null
+
+# MyBatis Plus配置 参考：https://baomidou.com/reference/
+mybatis-plus:
+  # 别名包扫描路径，用于给包中的类注册别名。注册后可以直接使用类名，无需使用全限定类名。
+  type-aliases-package: com.moyu.system.sys.entity
+  # 配置mapper的扫描，如果在 Mapper 中有自定义方法，需要配置此项。 默认值：["classpath*:/mapper/**/*.xml"]
+  mapper-locations: classpath*:mapper/**/*.xml
+  # 加载全局的配置文件
+#  config-location: classpath:mybatis-config.xml

@@ -1,0 +1,17 @@
+# 监控管理
+management:
+  # 端点控制
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+# spring配置
+spring:
+  # 数据源配置
+  datasource:
+    url: jdbc:mysql://127.0.0.1/moyu?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: shisong
+    password: shisong
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
