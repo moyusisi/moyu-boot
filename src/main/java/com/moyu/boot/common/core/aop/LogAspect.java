@@ -25,7 +25,6 @@ import java.util.Arrays;
  * @since 2016-06-01
  */
 @Aspect
-//@Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 20)
 public class LogAspect {
 
