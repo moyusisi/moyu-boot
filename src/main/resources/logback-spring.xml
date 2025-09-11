@@ -5,7 +5,7 @@
 
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
-    <!-- 日志存放路径 线上/data/logs/${APP_NAME} -->
+    <!-- 日志存放路径 -->
     <property name="log.path" value="/data/logs/${APP_NAME}"/>
     <springProfile name="local">
         <property name="log.path" value="logs/${APP_NAME}"/>
@@ -69,20 +69,18 @@
     </appender>
 
     <!-- 业务日志级别 -->
-    <logger name="com.moyu" level="INFO"/>
-    <logger name="com.moyu.common" level="DEBUG"/>
     <logger name="com.moyu.boot" level="DEBUG"/>
     <logger name="org.springframework" level="INFO"/>
 
     <!-- 兜底日志 -->
     <root level="INFO">
-        <appender-ref ref="consoleAppender"/>
-        <!-- 生产环境. -->
-        <springProfile name="prod">
-            <appender-ref ref="infoAppender"/>
-            <appender-ref ref="errorAppender"/>
-            <appender-ref ref="rootAppender"/>
+        <!-- 本地环境输出控制台 -->
+        <springProfile name="local">
+            <appender-ref ref="consoleAppender"/>
         </springProfile>
+        <appender-ref ref="infoAppender"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="rootAppender"/>
     </root>
 
 </configuration>
