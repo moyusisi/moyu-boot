@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- 这里面定义了 CONSOLE_LOG_PATTERN, FILE_LOG_PATTERN 等日志格式, 可参考 DefaultLogbackConfiguration 类 -->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <!-- consoleAppender 输出到控制台 -->
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 业务日志级别 -->
+    <logger name="com.moyu" level="INFO"/>
+    <logger name="com.moyu.system" level="DEBUG"/>
+    <logger name="org.springframework" level="INFO"/>
+
+    <!-- 兜底日志 -->
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+
+</configuration>
