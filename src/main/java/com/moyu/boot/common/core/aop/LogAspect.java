@@ -64,13 +64,13 @@ public class LogAspect {
         String signature = joinPoint.getSignature().toShortString();
         // 请求参数
         String request = "";
-        if (Boolean.TRUE.equals(log.jsonLog())) {
+        if (log.jsonLog()) {
             request = objectMapper.writeValueAsString(joinPoint.getArgs());
         } else {
             request = Arrays.toString(joinPoint.getArgs());
         }
         // 打印请求参数
-        if (Boolean.TRUE.equals(log.request()) && !Boolean.TRUE.equals(log.exceptionOnly())) {
+        if (log.request() && !log.exceptionOnly()) {
             logger.info("{}的请求参数为:{}", signature, request);
         }
         long startTime = System.currentTimeMillis();
@@ -78,21 +78,21 @@ public class LogAspect {
         try {
             returnObject = joinPoint.proceed(joinPoint.getArgs());
         } catch (Throwable throwable) {
-            if (Boolean.TRUE.equals(log.request()) && Boolean.TRUE.equals(log.exceptionOnly())) {
+            if (log.request() && log.exceptionOnly()) {
                 logger.info("{}的请求参数为:{}", signature, request);
             }
             throw throwable;
         }
         // 打印响应结果
-        if (Boolean.TRUE.equals(log.response()) && !Boolean.TRUE.equals(log.exceptionOnly())) {
-            if (Boolean.TRUE.equals(log.jsonLog())) {
+        if (log.response() && !log.exceptionOnly()) {
+            if (log.jsonLog()) {
                 logger.info("{}返回结果为:{}", signature, objectMapper.writeValueAsString((returnObject)));
             } else {
                 logger.info("{}返回结果为:{}", signature, returnObject);
             }
         }
         // 打印运行时间
-        if (Boolean.TRUE.equals(log.runTime()) && !Boolean.TRUE.equals(log.exceptionOnly())) {
+        if (log.runTime() && !log.exceptionOnly()) {
             logger.info("{}运行时间为:{}ms", signature, System.currentTimeMillis() - startTime);
         }
         return returnObject;
