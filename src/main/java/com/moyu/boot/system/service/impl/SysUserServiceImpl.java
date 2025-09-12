@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -73,7 +73,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public PageResult<SysUser> pageList(SysUserParam userParam) {
+    public PageData<SysUser> pageList(SysUserParam userParam) {
         String deptCode = userParam.getOrgCode();
         // 查询指定的组织所有的children
         List<String> childrenCode = new ArrayList<>();
@@ -115,7 +115,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 分页查询
         Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());
         Page<SysUser> groupPage = this.page(page, queryWrapper);
-        return new PageResult<>(groupPage.getTotal(), groupPage.getRecords());
+        return new PageData<>(groupPage.getTotal(), groupPage.getRecords());
     }
 
     @Override

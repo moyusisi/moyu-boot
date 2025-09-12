@@ -19,7 +19,7 @@ import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysOrgMapper;
@@ -83,7 +83,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      * 获取组织分页
      */
     @Override
-    public PageResult<SysOrg> pageList(SysOrgParam orgParam) {
+    public PageData<SysOrg> pageList(SysOrgParam orgParam) {
         String parentCode = orgParam.getParentCode();
         // 查询条件
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
@@ -120,7 +120,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 分页查询
         Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);
-        return new PageResult<>(orgPage.getTotal(), orgPage.getRecords());
+        return new PageData<>(orgPage.getTotal(), orgPage.getRecords());
     }
 
     /**

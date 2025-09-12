@@ -2,7 +2,7 @@ package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 
@@ -28,7 +28,7 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 分页获取组织列表
      */
-    PageResult<SysOrg> pageList(SysOrgParam sysOrgParam);
+    PageData<SysOrg> pageList(SysOrgParam sysOrgParam);
 
     /**
      * 组织机构树（会有多颗树）

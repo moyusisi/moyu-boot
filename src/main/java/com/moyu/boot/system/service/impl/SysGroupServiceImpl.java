@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -79,7 +79,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
-    public PageResult<SysGroup> pageList(SysGroupParam groupParam) {
+    public PageData<SysGroup> pageList(SysGroupParam groupParam) {
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
                 // 关键词搜索
@@ -114,7 +114,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 分页查询
         Page<SysGroup> page = new Page<>(groupParam.getPageNum(), groupParam.getPageSize());
         Page<SysGroup> groupPage = this.page(page, queryWrapper);
-        return new PageResult<>(groupPage.getTotal(), groupPage.getRecords());
+        return new PageData<>(groupPage.getTotal(), groupPage.getRecords());
     }
 
     @Override

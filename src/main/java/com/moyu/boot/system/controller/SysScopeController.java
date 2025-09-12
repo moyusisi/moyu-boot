@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysScope;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysScopeParam;
@@ -37,9 +37,9 @@ public class SysScopeController {
      * 分页获取数据权限分组列表
      */
     @PostMapping("/page")
-    public Result<PageResult<SysScope>> pageList(@RequestBody SysScopeParam scopeParam) {
+    public Result<PageData<SysScope>> pageList(@RequestBody SysScopeParam scopeParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(scopeParam.getPageNum(), scopeParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysScope> page = sysScopeService.pageList(scopeParam);
+        PageData<SysScope> page = sysScopeService.pageList(scopeParam);
         return Result.success(page);
     }
 

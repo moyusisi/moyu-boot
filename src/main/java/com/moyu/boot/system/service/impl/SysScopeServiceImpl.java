@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -60,7 +60,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
     private SysUserService sysUserService;
 
     @Override
-    public PageResult<SysScope> pageList(SysScopeParam scopeParam) {
+    public PageData<SysScope> pageList(SysScopeParam scopeParam) {
         // 查询条件
         LambdaQueryWrapper<SysScope> queryWrapper = Wrappers.lambdaQuery(SysScope.class)
                 // 关键词搜索
@@ -95,7 +95,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         // 分页查询
         Page<SysScope> page = new Page<>(scopeParam.getPageNum(), scopeParam.getPageSize());
         Page<SysScope> scopePage = this.page(page, queryWrapper);
-        return new PageResult<>(scopePage.getTotal(), scopePage.getRecords());
+        return new PageData<>(scopePage.getTotal(), scopePage.getRecords());
     }
 
     @Override

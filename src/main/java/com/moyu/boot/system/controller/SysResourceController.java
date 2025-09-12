@@ -6,7 +6,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.service.SysResourceService;
@@ -48,9 +48,9 @@ public class SysResourceController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
     @PostMapping("/page")
-    public Result<PageResult<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
+    public Result<PageData<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysResource> list = sysResourceService.pageList(resourceParam);
+        PageData<SysResource> list = sysResourceService.pageList(resourceParam);
         return Result.success(list);
     }
 

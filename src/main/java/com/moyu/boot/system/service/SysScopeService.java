@@ -1,7 +1,7 @@
 package com.moyu.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysScope;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysScopeParam;
@@ -19,7 +19,7 @@ public interface SysScopeService extends IService<SysScope> {
     /**
      * 分页获取记录列表
      */
-    PageResult<SysScope> pageList(SysScopeParam scopeParam);
+    PageData<SysScope> pageList(SysScopeParam scopeParam);
 
     /**
      * 获取记录详情

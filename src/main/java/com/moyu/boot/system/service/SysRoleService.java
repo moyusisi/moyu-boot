@@ -2,7 +2,7 @@ package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -25,7 +25,7 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 分页获取记录列表
      */
-    PageResult<SysRole> pageList(SysRoleParam roleParam);
+    PageData<SysRole> pageList(SysRoleParam roleParam);
 
     /**
      * 获取记录详情

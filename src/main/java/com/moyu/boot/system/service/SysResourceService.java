@@ -2,7 +2,7 @@ package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
 
@@ -31,7 +31,7 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 分页获取菜单列表
      */
-    PageResult<SysResource> pageList(SysResourceParam resourceParam);
+    PageData<SysResource> pageList(SysResourceParam resourceParam);
 
     /**
      * 获取菜单详情

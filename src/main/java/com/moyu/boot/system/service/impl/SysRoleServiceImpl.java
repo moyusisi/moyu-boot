@@ -22,7 +22,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -90,7 +90,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public PageResult<SysRole> pageList(SysRoleParam roleParam) {
+    public PageData<SysRole> pageList(SysRoleParam roleParam) {
         // 查询条件
         LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
                 // 关键词搜索
@@ -104,7 +104,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 分页查询
         Page<SysRole> page = new Page<>(roleParam.getPageNum(), roleParam.getPageSize());
         Page<SysRole> rolePage = this.page(page, queryWrapper);
-        return new PageResult<>(rolePage.getTotal(), rolePage.getRecords());
+        return new PageData<>(rolePage.getTotal(), rolePage.getRecords());
     }
 
     @Override

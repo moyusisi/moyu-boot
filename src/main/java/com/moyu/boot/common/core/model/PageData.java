@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
+ * 分页数据
+ *
  * @author shisong02
  * @since 2023-12-28
  */
-public class PageResult<T> implements Serializable {
+public class PageData<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -41,21 +43,21 @@ public class PageResult<T> implements Serializable {
     /**
      * 返回一个无数据的空结果页
      */
-    public static <T> PageResult<T> emptyPage() {
-        return new PageResult<>(0L, new ArrayList<>());
+    public static <T> PageData<T> emptyPage() {
+        return new PageData<>(0L, new ArrayList<>());
     }
 
     /**
      * 构造方法
      */
-    public PageResult(Long total, List<T> records) {
+    public PageData(Long total, List<T> records) {
         this.total = total;
         this.records = records;
     }
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", PageResult.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", PageData.class.getSimpleName() + "[", "]")
                 .add("total=" + total)
                 .add("records=" + records)
                 .toString();

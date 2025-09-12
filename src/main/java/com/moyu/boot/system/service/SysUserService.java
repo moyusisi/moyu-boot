@@ -1,7 +1,7 @@
 package com.moyu.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 
@@ -22,7 +22,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 分页获取记录列表
      */
-    PageResult<SysUser> pageList(SysUserParam userParam);
+    PageData<SysUser> pageList(SysUserParam userParam);
 
     /**
      * 获取记录详情

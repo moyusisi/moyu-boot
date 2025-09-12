@@ -6,7 +6,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -49,9 +49,9 @@ public class SysRoleController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
     @PostMapping("/page")
-    public Result<PageResult<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
+    public Result<PageData<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysRole> page = sysRoleService.pageList(roleParam);
+        PageData<SysRole> page = sysRoleService.pageList(roleParam);
         return Result.success(page);
     }
 

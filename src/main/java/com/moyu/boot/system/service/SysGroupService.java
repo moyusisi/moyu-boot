@@ -1,7 +1,7 @@
 package com.moyu.boot.system.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -25,7 +25,7 @@ public interface SysGroupService extends IService<SysGroup> {
     /**
      * 分页获取记录列表
      */
-    PageResult<SysGroup> pageList(SysGroupParam groupParam);
+    PageData<SysGroup> pageList(SysGroupParam groupParam);
 
     /**
      * 获取记录详情

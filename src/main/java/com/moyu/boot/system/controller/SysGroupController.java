@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -40,9 +40,9 @@ public class SysGroupController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:page')")
     @PostMapping("/page")
-    public Result<PageResult<SysGroup>> pageList(@RequestBody SysGroupParam groupParam) {
+    public Result<PageData<SysGroup>> pageList(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(groupParam.getPageNum(), groupParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysGroup> page = sysGroupService.pageList(groupParam);
+        PageData<SysGroup> page = sysGroupService.pageList(groupParam);
         return Result.success(page);
     }
 

@@ -6,7 +6,7 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.service.SysOrgService;
@@ -39,9 +39,9 @@ public class SysOrgController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @PostMapping("/page")
-    public Result<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
+    public Result<PageData<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysOrg> page = sysOrgService.pageList(orgParam);
+        PageData<SysOrg> page = sysOrgService.pageList(orgParam);
         return Result.success(page);
     }
 

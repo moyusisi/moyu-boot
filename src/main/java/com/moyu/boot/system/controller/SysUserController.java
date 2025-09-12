@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.service.SysUserService;
@@ -37,9 +37,9 @@ public class SysUserController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
     @PostMapping("/page")
-    public Result<PageResult<SysUser>> pageList(@RequestBody SysUserParam userParam) {
+    public Result<PageData<SysUser>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageResult<SysUser> page = sysUserService.pageList(userParam);
+        PageData<SysUser> page = sysUserService.pageList(userParam);
         return Result.success(page);
     }
 

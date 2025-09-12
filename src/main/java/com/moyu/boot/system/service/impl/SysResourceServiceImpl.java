@@ -19,7 +19,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
-import com.moyu.boot.common.core.model.PageResult;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
@@ -82,7 +82,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public PageResult<SysResource> pageList(SysResourceParam resourceParam) {
+    public PageData<SysResource> pageList(SysResourceParam resourceParam) {
         QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
         // 查询条件
         queryWrapper.lambda()
@@ -102,7 +102,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 分页查询
         Page<SysResource> page = new Page<>(resourceParam.getPageNum(), resourceParam.getPageSize());
         Page<SysResource> menuPage = this.page(page, queryWrapper);
-        return new PageResult<>(menuPage.getTotal(), menuPage.getRecords());
+        return new PageData<>(menuPage.getTotal(), menuPage.getRecords());
     }
 
     @Override
