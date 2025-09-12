@@ -40,6 +40,8 @@ knife4j:
   production: false  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
   setting:
     language: zh_cn
+    enable-open-api: false
+    enable-swagger-models: false
 
 # 自定义配置
 custom:
