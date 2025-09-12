@@ -27,8 +27,6 @@ import java.util.StringJoiner;
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final int SUCCESS_CODE = 0;
-
     /**
      * 响应码
      */
@@ -82,13 +80,6 @@ public class Result<T> implements Serializable {
     public Result(IResultCode resultCode) {
         this.code = resultCode.getCode();
         this.message = resultCode.getMessage();
-    }
-
-    /**
-     * 判断请求是否成功的方法
-     */
-    public boolean isSuccess() {
-        return SUCCESS_CODE == code;
     }
 
     public Integer getCode() {
