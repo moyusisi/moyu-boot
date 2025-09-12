@@ -2,12 +2,13 @@ package com.moyu.boot.common.core.exception;
 
 
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.model.IResultCode;
 
 import java.util.StringJoiner;
 
 /**
  * <p>使用举例:</p>
- * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(ResultCodeEnum)}和{@link #BaseException(ResultCodeEnum, String)}
+ * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(IResultCode)}和{@link #BaseException(ResultCodeEnum, String)}
  * <pre>
  * throw new BaseException(code, message); // 自定义响应码和响应描述信息
  * throw new BaseException(ResultCodeEnum.SYSTEM_ERROR); // 抛出某类型的异常
@@ -50,19 +51,19 @@ public class BaseException extends RuntimeException {
     /**
      * 根据枚举类创建异常, 以枚举类的描述信息作为异常的message
      */
-    public BaseException(ResultCodeEnum resultCodeEnum) {
-        super(resultCodeEnum.getMessage());
-        this.code = resultCodeEnum.getCode();
-        this.message = resultCodeEnum.getMessage();
+    public BaseException(IResultCode resultCode) {
+        super(resultCode.getMessage());
+        this.code = resultCode.getCode();
+        this.message = resultCode.getMessage();
     }
 
     /**
      * 根据枚举类创建异常, 并补充具体的错误描述信息, 以枚举描述+detail作为异常的message
      */
-    public BaseException(ResultCodeEnum resultCodeEnum, String detail) {
-        super(resultCodeEnum.getMessage());
-        this.code = resultCodeEnum.getCode();
-        String message = resultCodeEnum.getMessage();
+    public BaseException(IResultCode resultCode, String detail) {
+        super(resultCode.getMessage());
+        this.code = resultCode.getCode();
+        String message = resultCode.getMessage();
         if (detail != null && !detail.isEmpty()) {
             message = message + ":" + detail;
         }
