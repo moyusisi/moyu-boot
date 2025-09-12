@@ -1,7 +1,7 @@
 package com.moyu.boot.common.security.util;
 
 
-import com.moyu.boot.common.core.exception.BaseException;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class SecurityUtils {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
+            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
         }
     }
 

@@ -8,7 +8,7 @@ import java.util.StringJoiner;
 
 /**
  * <p>使用举例:</p>
- * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(IResultCode)}和{@link #BaseException(ResultCodeEnum, String)}
+ * <p>1. 构造方法: {@link #BusinessException(int, String)}, {@link #BusinessException(IResultCode)}和{@link #BaseException(ResultCodeEnum, String)}
  * <pre>
  * throw new BaseException(code, message); // 自定义响应码和响应描述信息
  * throw new BaseException(ResultCodeEnum.SYSTEM_ERROR); // 抛出某类型的异常
@@ -33,7 +33,7 @@ import java.util.StringJoiner;
  * @author song.shi
  * @since 2016-04-05
  */
-public class BaseException extends RuntimeException {
+public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 4067917628321917086L;
 
     /**
@@ -42,7 +42,7 @@ public class BaseException extends RuntimeException {
     private int code;
     private String message;
 
-    public BaseException(int code, String message) {
+    public BusinessException(int code, String message) {
         super(message);
         this.code = code;
         this.message = message;
@@ -51,7 +51,7 @@ public class BaseException extends RuntimeException {
     /**
      * 根据枚举类创建异常, 以枚举类的描述信息作为异常的message
      */
-    public BaseException(IResultCode resultCode) {
+    public BusinessException(IResultCode resultCode) {
         super(resultCode.getMessage());
         this.code = resultCode.getCode();
         this.message = resultCode.getMessage();
@@ -60,7 +60,7 @@ public class BaseException extends RuntimeException {
     /**
      * 根据枚举类创建异常, 并补充具体的错误描述信息, 以枚举描述+detail作为异常的message
      */
-    public BaseException(IResultCode resultCode, String detail) {
+    public BusinessException(IResultCode resultCode, String detail) {
         super(resultCode.getMessage());
         this.code = resultCode.getCode();
         String message = resultCode.getMessage();

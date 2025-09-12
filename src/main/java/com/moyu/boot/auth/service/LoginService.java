@@ -1,7 +1,7 @@
 package com.moyu.boot.auth.service;
 
 
-import com.moyu.boot.common.core.exception.BaseException;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import com.moyu.boot.auth.model.param.UserLoginParam;
@@ -45,16 +45,16 @@ public class LoginService {
             authentication = authenticationManager.authenticate(authenticationToken);
         } catch (Exception e) {
             if (e instanceof UsernameNotFoundException) {
-                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
+                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
             } else if (e instanceof BadCredentialsException) {
-                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
+                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "用户名或密码错误");
             } else if (e instanceof LockedException) {
-                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户账号已锁定");
+                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "用户账号已锁定");
             } else if (e instanceof DisabledException) {
-                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "用户暂不可用");
+                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "用户暂不可用");
             } else {
                 log.error("登陆失败", e);
-                throw new BaseException(HttpStatus.UNAUTHORIZED.value(), "登陆失败");
+                throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "登陆失败");
             }
         }
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();

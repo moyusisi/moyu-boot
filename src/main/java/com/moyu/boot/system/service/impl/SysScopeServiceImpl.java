@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
-import com.moyu.boot.common.core.exception.BaseException;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.util.SecurityUtils;
@@ -106,7 +106,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         // id、code均为唯一标识
         SysScope sysScope = this.getOne(queryWrapper);
         if (sysScope == null) {
-            throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         return sysScope;
     }

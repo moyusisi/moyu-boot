@@ -21,7 +21,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
-import com.moyu.boot.common.core.exception.BaseException;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.util.SecurityUtils;
@@ -115,7 +115,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // id、code均为唯一标识
         SysRole sysRole = this.getOne(queryWrapper);
         if (sysRole == null) {
-            throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         return sysRole;
     }
@@ -129,7 +129,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     .eq(SysRole::getCode, roleParam.getCode())
                     .eq(SysRole::getDeleteFlag, 0));
             if (role != null) {
-                throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 属性复制
