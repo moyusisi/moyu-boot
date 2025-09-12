@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.core.model.PageResult;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
@@ -39,10 +39,10 @@ public class SysOrgController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
+    public Result<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysOrg> page = sysOrgService.pageList(orgParam);
-        return BaseResponse.success(page);
+        return Result.success(page);
     }
 
     /**
@@ -50,9 +50,9 @@ public class SysOrgController {
      */
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
-    public BaseResponse<List<Tree<String>>> tree() {
+    public Result<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();
-        return BaseResponse.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -60,9 +60,9 @@ public class SysOrgController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
     @PostMapping("/detail")
-    public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
+    public Result<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.success(sysOrgService.detail(orgParam));
+        return Result.success(sysOrgService.detail(orgParam));
     }
 
     /**
@@ -70,9 +70,9 @@ public class SysOrgController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:add')")
     @PostMapping("/add")
-    public BaseResponse<String> add(@Validated @RequestBody SysOrgParam orgParam) {
+    public Result<String> add(@Validated @RequestBody SysOrgParam orgParam) {
         sysOrgService.add(orgParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -80,10 +80,10 @@ public class SysOrgController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:delete')")
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysOrgParam orgParam) {
+    public Result<String> delete(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
         sysOrgService.deleteByIds(orgParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -91,10 +91,10 @@ public class SysOrgController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:deleteTree')")
     @PostMapping("/deleteTree")
-    public BaseResponse<String> deleteTree(@RequestBody SysOrgParam orgParam) {
+    public Result<String> deleteTree(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
         sysOrgService.deleteTree(orgParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -102,10 +102,10 @@ public class SysOrgController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
+    public Result<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
         sysOrgService.edit(orgParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
 }

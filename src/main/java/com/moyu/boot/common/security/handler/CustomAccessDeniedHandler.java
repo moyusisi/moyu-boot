@@ -2,7 +2,7 @@ package com.moyu.boot.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -32,7 +32,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 
         int code = HttpStatus.FORBIDDEN.value();
         String message = "权限不足，无法访问：" + request.getRequestURI();
-        String responseBody = new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message));
+        String responseBody = new ObjectMapper().writeValueAsString(new Result<>(code, message));
         PrintWriter printWriter = response.getWriter();
         printWriter.print(responseBody);
         printWriter.flush();

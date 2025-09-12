@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.core.model.PageResult;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
@@ -38,9 +38,9 @@ public class SysResourceController {
      * 资源列表
      */
     @PostMapping("/list")
-    public BaseResponse<List<SysResource>> list(@RequestBody SysResourceParam resourceParam) {
+    public Result<List<SysResource>> list(@RequestBody SysResourceParam resourceParam) {
         List<SysResource> list = sysResourceService.list(resourceParam);
-        return BaseResponse.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -48,10 +48,10 @@ public class SysResourceController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
+    public Result<PageResult<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysResource> list = sysResourceService.pageList(resourceParam);
-        return BaseResponse.success(list);
+        return Result.success(list);
     }
 
     /**
@@ -60,9 +60,9 @@ public class SysResourceController {
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:tree')")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
-    public BaseResponse<List<Tree<String>>> tree(@RequestBody SysResourceParam resourceParam) {
+    public Result<List<Tree<String>>> tree(@RequestBody SysResourceParam resourceParam) {
         List<Tree<String>> treeList = sysResourceService.tree(resourceParam);
-        return BaseResponse.success(treeList);
+        return Result.success(treeList);
     }
 
     /**
@@ -70,9 +70,9 @@ public class SysResourceController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:detail')")
     @PostMapping("/detail")
-    public BaseResponse<SysResource> detail(@RequestBody SysResourceParam resourceParam) {
+    public Result<SysResource> detail(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.success(sysResourceService.detail(resourceParam));
+        return Result.success(sysResourceService.detail(resourceParam));
     }
 
     /**
@@ -80,9 +80,9 @@ public class SysResourceController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:add')")
     @PostMapping("/add")
-    public BaseResponse<String> add(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> add(@RequestBody SysResourceParam resourceParam) {
         sysResourceService.add(resourceParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -90,10 +90,10 @@ public class SysResourceController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:delete')")
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> delete(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getIds(), "删除列表ids不能为空");
         sysResourceService.deleteByIds(resourceParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -101,10 +101,10 @@ public class SysResourceController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:deleteTree')")
     @PostMapping("/deleteTree")
-    public BaseResponse<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getCodes(), "删除列表codes不能为空");
         sysResourceService.deleteTree(resourceParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -112,18 +112,18 @@ public class SysResourceController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
-    public BaseResponse<String> edit(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> edit(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
         sysResourceService.edit(resourceParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
      * 获取菜单树选择器
      */
     @PostMapping("/menuTreeSelector")
-    public BaseResponse<List<Tree<String>>> menuTreeSelector(@RequestBody SysResourceParam resourceParam) {
-        return BaseResponse.success(sysResourceService.menuTreeSelector(resourceParam));
+    public Result<List<Tree<String>>> menuTreeSelector(@RequestBody SysResourceParam resourceParam) {
+        return Result.success(sysResourceService.menuTreeSelector(resourceParam));
     }
 
 }

@@ -2,7 +2,7 @@ package com.moyu.boot.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import org.springframework.http.MediaType;
@@ -34,7 +34,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         PrintWriter printWriter = response.getWriter();
-        printWriter.print(new ObjectMapper().writeValueAsString(BaseResponse.success(token)));
+        printWriter.print(new ObjectMapper().writeValueAsString(Result.success(token)));
         printWriter.flush();
     }
 }

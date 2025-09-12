@@ -1,7 +1,7 @@
 package com.moyu.boot.common.security.advice;
 
 
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -31,18 +31,18 @@ public class AuthExceptionHandler {
 
     // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
     @ExceptionHandler(AccessDeniedException.class)
-    public BaseResponse<?> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+    public Result<?> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         int code = HttpStatus.FORBIDDEN.value();
         log.error("权限不足", e);
         String message = "权限不足，无法访问：" + request.getRequestURI();
-        return new BaseResponse<>(code, message);
+        return new Result<>(code, message);
     }
 
     // security的认证异常(AuthenticationException及子类) 先于security AccessDeniedHandler 处理
     @ExceptionHandler(AuthenticationException.class)
-    public BaseResponse<?> authenticationException(HttpServletRequest request, AuthenticationException e) {
+    public Result<?> authenticationException(HttpServletRequest request, AuthenticationException e) {
         int code = HttpStatus.UNAUTHORIZED.value();
         String message = "未认证，无法访问：" + request.getRequestURI();
-        return new BaseResponse<>(code, message);
+        return new Result<>(code, message);
     }
 }

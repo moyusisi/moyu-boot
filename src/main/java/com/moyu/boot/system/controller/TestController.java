@@ -1,7 +1,7 @@
 package com.moyu.boot.system.controller;
 
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,8 +16,8 @@ public class TestController {
 
     @Log
     @RequestMapping(value = "/index", method = RequestMethod.GET)
-    public BaseResponse<?> testIndex() {
-        return BaseResponse.success("返回汉字不乱码");
+    public Result<?> testIndex() {
+        return Result.success("返回汉字不乱码");
     }
 
 }

@@ -2,7 +2,7 @@ package com.moyu.boot.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -33,6 +33,6 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
 
         int code = HttpStatus.UNAUTHORIZED.value();
         String message = "认证失败";
-        response.getWriter().print(new ObjectMapper().writeValueAsString(new BaseResponse<>(code, message)));
+        response.getWriter().print(new ObjectMapper().writeValueAsString(new Result<>(code, message)));
     }
 }

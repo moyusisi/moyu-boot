@@ -4,7 +4,7 @@ package com.moyu.boot.system.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.core.model.PageResult;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
@@ -37,10 +37,10 @@ public class SysUserController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
     @PostMapping("/page")
-    public BaseResponse<PageResult<SysUser>> pageList(@RequestBody SysUserParam userParam) {
+    public Result<PageResult<SysUser>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysUser> page = sysUserService.pageList(userParam);
-        return BaseResponse.success(page);
+        return Result.success(page);
     }
 
     /**
@@ -48,9 +48,9 @@ public class SysUserController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:detail')")
     @PostMapping("/detail")
-    public BaseResponse<SysUser> detail(@RequestBody SysUserParam userParam) {
+    public Result<SysUser> detail(@RequestBody SysUserParam userParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(userParam.getId(), userParam.getAccount()), "id和account不能同时为空");
-        return BaseResponse.success(sysUserService.detail(userParam));
+        return Result.success(sysUserService.detail(userParam));
     }
 
     /**
@@ -58,9 +58,9 @@ public class SysUserController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:add')")
     @PostMapping("/add")
-    public BaseResponse<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
+    public Result<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
         sysUserService.add(sysUserParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -68,10 +68,10 @@ public class SysUserController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:delete')")
     @PostMapping("/delete")
-    public BaseResponse<String> delete(@RequestBody SysUserParam sysUserParam) {
+    public Result<String> delete(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getIds(), "删除列表ids不能为空");
         sysUserService.deleteByIds(sysUserParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -79,9 +79,9 @@ public class SysUserController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/edit")
-    public BaseResponse<?> edit(@Validated @RequestBody SysUserParam userParam) {
+    public Result<?> edit(@Validated @RequestBody SysUserParam userParam) {
         sysUserService.edit(userParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -89,10 +89,10 @@ public class SysUserController {
      **/
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/updatePwd")
-    public BaseResponse<?> updatePassword(@RequestBody SysUserParam userParam) {
+    public Result<?> updatePassword(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getAccount(), userParam.getPassword()), "account、password都不能为空");
         sysUserService.updatePassword(userParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
     /**
@@ -100,10 +100,10 @@ public class SysUserController {
      **/
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/resetPwd")
-    public BaseResponse<?> resetPassword(@RequestBody SysUserParam sysUserParam) {
+    public Result<?> resetPassword(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getAccount(), "account不能为空");
         sysUserService.resetPassword(sysUserParam);
-        return BaseResponse.success();
+        return Result.success();
     }
 
 }

@@ -10,21 +10,21 @@ import java.util.StringJoiner;
  * <p>使用举例:</p>
  * <pre>
  * 仅创建一个空响应对象:
- *     BaseResponse<T> response = new BaseResponse<T>();
+ *     Result<T> response = new Result<T>();
  * 创建一个成功的响应对象:
- *     BaseResponse<T> response = BaseResponse.success();
+ *     Result<T> response = Result.success();
  * 自定义响应码和响应描述信息:
- *     BaseResponse<T> response = new BaseResponse<T>(code, message);
+ *     Result<T> response = new Result<T>(code, message);
  * 自定义响应码和响应描述信息:
- *     BaseResponse<T> response = new BaseResponse<T>(code, message);
+ *     Result<T> response = new Result<T>(code, message);
  * 通过数据创建对象:
- *     BaseResponse<T> response = new BaseResponse<T>(code, message, data);
+ *     Result<T> response = new Result<T>(code, message, data);
  * </pre>
  *
  * @author song.shi
  * @since 2018-07-31
  */
-public class BaseResponse<T> implements Serializable {
+public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final int SUCCESS_CODE = 0;
@@ -47,39 +47,39 @@ public class BaseResponse<T> implements Serializable {
     /**
      * 创建响应码为 SUCCESS_CODE 的对象
      */
-    public static <T> BaseResponse<T> success() {
-        return new BaseResponse<>(ExceptionEnum.SUCCESS);
+    public static <T> Result<T> success() {
+        return new Result<>(ExceptionEnum.SUCCESS);
     }
 
     /**
      * 返回成功的响应
      */
-    public static <T> BaseResponse<T> success(T data) {
-        BaseResponse<T> response = success();
+    public static <T> Result<T> success(T data) {
+        Result<T> response = success();
         response.setData(data);
         return response;
     }
 
-    public BaseResponse() {
+    public Result() {
     }
 
 
-    public BaseResponse(T data) {
+    public Result(T data) {
         this.data = data;
     }
 
-    public BaseResponse(int code, String message) {
+    public Result(int code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public BaseResponse(int code, String message, T data) {
+    public Result(int code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
     }
 
-    public BaseResponse(IResultCode resultCode) {
+    public Result(IResultCode resultCode) {
         this.code = resultCode.getCode();
         this.message = resultCode.getMessage();
     }
@@ -117,7 +117,7 @@ public class BaseResponse<T> implements Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", BaseResponse.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", Result.class.getSimpleName() + "[", "]")
                 .add("code=" + code)
                 .add("message='" + message + "'")
                 .add("data=" + data)

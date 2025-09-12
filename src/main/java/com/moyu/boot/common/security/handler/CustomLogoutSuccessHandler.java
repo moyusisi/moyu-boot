@@ -2,7 +2,7 @@ package com.moyu.boot.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,6 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         response.setStatus(HttpServletResponse.SC_OK);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().print(new ObjectMapper().writeValueAsString(BaseResponse.success("退出成功")));
+        response.getWriter().print(new ObjectMapper().writeValueAsString(Result.success("退出成功")));
     }
 }

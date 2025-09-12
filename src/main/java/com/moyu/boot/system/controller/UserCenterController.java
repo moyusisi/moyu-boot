@@ -4,7 +4,7 @@ package com.moyu.boot.system.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.BaseResponse;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.param.SysGroupParam;
@@ -37,20 +37,20 @@ public class UserCenterController {
      * 获取当前登陆用户信息
      */
     @PostMapping("/userInfo")
-    public BaseResponse<UserInfo> currentUserInfo() {
+    public Result<UserInfo> currentUserInfo() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.success(userCenterService.currentUserInfo(username));
+        return Result.success(userCenterService.currentUserInfo(username));
     }
 
     /**
      * 获取当前登陆用户的菜单
      */
     @RequestMapping("/userMenu")
-    public BaseResponse<List<Tree<String>>> userMenu() {
+    public Result<List<Tree<String>>> userMenu() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.success(userCenterService.userMenu(username));
+        return Result.success(userCenterService.userMenu(username));
     }
 
     /**
@@ -58,30 +58,30 @@ public class UserCenterController {
      */
     @Log(jsonLog = true, response = false)
     @PostMapping("/userOrgTree")
-    public BaseResponse<List<Tree<String>>> userOrgTree() {
+    public Result<List<Tree<String>>> userOrgTree() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
         List<Tree<String>> list = userCenterService.userOrgTree(username);
-        return BaseResponse.success(list);
+        return Result.success(list);
     }
 
     /**
      * 获取当前用户拥有的角色列表
      */
     @PostMapping("/userRoleList")
-    public BaseResponse<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
+    public Result<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.success(userCenterService.userRoleList(username, roleParam.getSearchKey()));
+        return Result.success(userCenterService.userRoleList(username, roleParam.getSearchKey()));
     }
 
     /**
      * 获取当前用户拥有的角色列表
      */
     @PostMapping("/switchUserGroup")
-    public BaseResponse<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {
+    public Result<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "岗位code不能为空");
-        return BaseResponse.success(userCenterService.switchUserGroup(groupParam.getCode()));
+        return Result.success(userCenterService.switchUserGroup(groupParam.getCode()));
     }
 
 }
