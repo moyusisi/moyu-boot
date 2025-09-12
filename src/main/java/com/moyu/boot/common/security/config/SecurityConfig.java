@@ -1,22 +1,23 @@
 package com.moyu.boot.common.security.config;
 
 
-import cn.hutool.core.util.ObjectUtil;
-import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.filter.JwtTokenAuthenticationFilter;
 import com.moyu.boot.common.security.handler.AuthExceptionEntryPoint;
 import com.moyu.boot.common.security.handler.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public class SecurityConfig {
     private SecurityProperties properties;
 
     /**
-     * 跨域配置
+     * 跨域过滤器配置
      */
     @Bean
     public CorsFilter corsFilter() {
@@ -51,32 +52,40 @@ public class SecurityConfig {
         return new CorsFilter(source);
     }
 
+    /**
+     * 配置安全过滤器链
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // CSRF禁用，否则POST工具报403错误
-        http.csrf().disable();
-        // 允许跨域访问
-        http.cors();
-
-        // 禁用HTTP响应头的缓存控制，以确保敏感数据不会被缓存。默认情况下，会添加一些缓存控制头部，如no-store和private
-        http.headers().cacheControl().disable().frameOptions().sameOrigin();
-        // 设置会话会话创建策略为无状态, 基于token，不使用session
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // 放行白名单 TODO
-        List<String> whiteList = SecurityConstants.WHITE_LIST;
-        // 如果没有开启认证，则全放行
-        if (ObjectUtil.notEqual(properties.getEnabled(), true)) {
+        // 放行白名单
+        List<String> whiteList = new ArrayList<>();
+        // 如果没有开启认证，则全放行，否则按照白名单放行
+        if (Boolean.FALSE.equals(properties.getEnabled())) {
             whiteList.add("/**");
+        } else {
+            whiteList.addAll(properties.getWhiteList());
         }
         // 白名单放行
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
-        // 静态资源放行
-        http.authorizeRequests().antMatchers("/static/**", "/public/**", "/**/*.ico").permitAll();
-        // /api下的接口，需要认证才可访问
+        // 设置/api下的接口，需要认证才可访问
         http.authorizeRequests().antMatchers("/api/**").authenticated();
 
-        // 添加JWT filter
+        // 允许跨域访问
+        http.cors();
+        // 禁用 CSRF 防护，否则POST工具报403错误，前后端分离无需此防护机制
+        http.csrf().disable();
+        // 设置会话会话创建策略为无状态, 基于token，不使用session，适用于前后端分离架构
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        // 禁用HTTP响应头的缓存控制，以确保敏感数据不会被缓存。默认情况下，会添加一些缓存控制头部，如no-store和private
+        http.headers().cacheControl().disable();
+        // 禁用 X-Frame-Options 响应头，允许页面被嵌套到 iframe 中
+        http.headers().frameOptions().disable();
+        // 禁用Spring Security默认自带的表单登录功能
+        http.formLogin().disable();
+        // 禁用 HTTP Basic 认证，避免弹窗式登录
+        http.httpBasic().disable();
+
+        // 添加Token认证解析过滤器
         http.addFilterBefore(new JwtTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
         http.addFilterBefore(corsFilter(), JwtTokenAuthenticationFilter.class);
@@ -89,4 +98,19 @@ public class SecurityConfig {
                 .accessDeniedHandler(new CustomAccessDeniedHandler());
         return http.build();
     }
+
+    /**
+     * 自定义web安全配置，以忽略特定请求路径的安全性检查。
+     * 该配置用于指定哪些请求路径不经过Spring Security过滤器链。通常用于静态资源文件。
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> {
+            List<String> ignoreList = properties.getIgnoreList();
+            if (!CollectionUtils.isEmpty(ignoreList)) {
+                web.ignoring().antMatchers(ignoreList.toArray(new String[0]));
+            }
+        };
+    }
+
 }

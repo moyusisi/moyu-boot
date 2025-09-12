@@ -15,3 +15,56 @@ spring:
     password: shisong
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
+
+# springdoc-openapi配置 参考：https://doc.xiaominfo.com/docs/quick-start
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: '系统文档'
+      paths-to-match: '/**'
+      packages-to-scan:
+        - com.moyu.boot.auth.controller
+        - com.moyu.boot.system.controller
+        - com.youlai.boot.shared.codegen.controller
+  default-flat-param-object: true
+# knife4j 接口文档配置，UI的增强配置
+knife4j:
+  # 是否开启 Knife4j 增强功能
+  enable: true  # 设置为 true 表示开启增强功能
+  # 生产环境配置
+  production: false  # 设置为 true 表示在生产环境中不显示文档，为 false 表示显示文档（通常在开发环境中使用）
+  setting:
+    language: zh_cn
+
+# 自定义配置
+custom:
+  # 自定义Spring Security配置
+  security:
+    # 是否启用认证，为false时等同于全加白
+    enabled: true
+    # 白名单列表，仅跳过 AuthorizationFilter 过滤器，还是会走其他过滤器(CSRF、CORS等)
+    white-list:
+      # 认证授权类
+      - /api/auth/login/**
+      - /api/auth/captcha/**
+      - /api/auth/refresh-token
+      # 回调、远程调用类
+      - /callback/**
+      - /feign/**
+      # 监控管理类
+      - /actuator/**
+      - /monitor/**
+    # 忽略列表，不经过Security的任何过滤器(如静态资源)
+    ignore-list:
+      - ${springdoc.swagger-ui.path}
+      - /swagger-ui/**
+      - /v3/api-docs/**
+      - /doc.html
+      - /static/**
+      - /public/**
+      - /**/*.ico

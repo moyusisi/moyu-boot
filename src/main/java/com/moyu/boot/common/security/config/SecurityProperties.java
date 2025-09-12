@@ -22,14 +22,19 @@ import java.util.List;
 public class SecurityProperties {
 
     /**
-     * 是否启用鉴权功能
+     * 是否启用鉴权功能(false等同于全加白)
      */
     @Value("${custom.security.enabled:true}")
     private Boolean enabled;
 
     /**
-     * 白名单url
+     * 白名单，Security AuthorizationFilter 过滤器直接放行的路径
      */
     private List<String> whiteList = new ArrayList<>();
+
+    /**
+     * 忽略列表，不经过Security的任何过滤器(如静态资源)
+     */
+    private List<String> ignoreList = new ArrayList<>();
 
 }

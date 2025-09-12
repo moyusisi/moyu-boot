@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.annotation.Resource;
 
 /**
+ * 认证配置(使用Spring Security实现)
+ *
  * @author shisong
  * @since 2024-12-27
  */
@@ -27,6 +29,7 @@ public class AuthConfig {
     @Bean
     AuthenticationManager authenticationManager(HttpSecurity httpSecurity) throws Exception {
         AuthenticationManagerBuilder authBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+        // 仅使用了 DaoAuthenticationProvider 这种方式进行认证。
         // 设置自定义身份认证接口进行身份认证，并使用BCryptPasswordEncoder进行密码加密。
         authBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authBuilder.build();
