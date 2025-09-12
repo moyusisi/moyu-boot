@@ -42,7 +42,7 @@ public class SysOrgController {
     public BaseResponse<PageResult<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysOrg> page = sysOrgService.pageList(orgParam);
-        return BaseResponse.getSuccessResponse(page);
+        return BaseResponse.success(page);
     }
 
     /**
@@ -52,7 +52,7 @@ public class SysOrgController {
     @PostMapping("/tree")
     public BaseResponse<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -62,7 +62,7 @@ public class SysOrgController {
     @PostMapping("/detail")
     public BaseResponse<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.getSuccessResponse(sysOrgService.detail(orgParam));
+        return BaseResponse.success(sysOrgService.detail(orgParam));
     }
 
     /**
@@ -72,7 +72,7 @@ public class SysOrgController {
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysOrgParam orgParam) {
         sysOrgService.add(orgParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -83,7 +83,7 @@ public class SysOrgController {
     public BaseResponse<String> delete(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
         sysOrgService.deleteByIds(orgParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -94,7 +94,7 @@ public class SysOrgController {
     public BaseResponse<String> deleteTree(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
         sysOrgService.deleteTree(orgParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -105,7 +105,7 @@ public class SysOrgController {
     public BaseResponse<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
         sysOrgService.edit(orgParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
 }

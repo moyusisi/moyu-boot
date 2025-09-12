@@ -1,5 +1,7 @@
 package com.moyu.boot.common.core.model;
 
+import com.moyu.boot.common.core.enums.ExceptionEnum;
+
 import java.io.Serializable;
 import java.util.StringJoiner;
 
@@ -9,10 +11,14 @@ import java.util.StringJoiner;
  * <pre>
  * 仅创建一个空响应对象:
  *     BaseResponse<T> response = new BaseResponse<T>();
- * 通过数据创建对象, 此时响应码和响应信息都是空的:
- *     BaseResponse<T> response = new BaseResponse<T>(data);
+ * 创建一个成功的响应对象:
+ *     BaseResponse<T> response = BaseResponse.success();
  * 自定义响应码和响应描述信息:
  *     BaseResponse<T> response = new BaseResponse<T>(code, message);
+ * 自定义响应码和响应描述信息:
+ *     BaseResponse<T> response = new BaseResponse<T>(code, message);
+ * 通过数据创建对象:
+ *     BaseResponse<T> response = new BaseResponse<T>(code, message, data);
  * </pre>
  *
  * @author song.shi
@@ -41,15 +47,15 @@ public class BaseResponse<T> implements Serializable {
     /**
      * 创建响应码为 SUCCESS_CODE 的对象
      */
-    public static <T> BaseResponse<T> getSuccessResponse() {
-        return new BaseResponse<T>(SUCCESS_CODE, "成功");
+    public static <T> BaseResponse<T> success() {
+        return new BaseResponse<>(ExceptionEnum.SUCCESS);
     }
 
     /**
      * 返回成功的响应
      */
-    public static <T> BaseResponse<T> getSuccessResponse(T data) {
-        BaseResponse<T> response = getSuccessResponse();
+    public static <T> BaseResponse<T> success(T data) {
+        BaseResponse<T> response = success();
         response.setData(data);
         return response;
     }
@@ -71,6 +77,11 @@ public class BaseResponse<T> implements Serializable {
         this.code = code;
         this.message = message;
         this.data = data;
+    }
+
+    public BaseResponse(IResultCode resultCode) {
+        this.code = resultCode.getCode();
+        this.message = resultCode.getMessage();
     }
 
     /**

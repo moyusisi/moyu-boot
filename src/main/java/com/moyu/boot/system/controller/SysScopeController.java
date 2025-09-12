@@ -40,7 +40,7 @@ public class SysScopeController {
     public BaseResponse<PageResult<SysScope>> pageList(@RequestBody SysScopeParam scopeParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(scopeParam.getPageNum(), scopeParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysScope> page = sysScopeService.pageList(scopeParam);
-        return BaseResponse.getSuccessResponse(page);
+        return BaseResponse.success(page);
     }
 
     /**
@@ -49,7 +49,7 @@ public class SysScopeController {
     @PostMapping("/detail")
     public BaseResponse<SysScope> detail(@RequestBody SysScopeParam scopeParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(scopeParam.getId(), scopeParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.getSuccessResponse(sysScopeService.detail(scopeParam));
+        return BaseResponse.success(sysScopeService.detail(scopeParam));
     }
 
     /**
@@ -58,7 +58,7 @@ public class SysScopeController {
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysScopeParam scopeParam) {
         sysScopeService.add(scopeParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -68,7 +68,7 @@ public class SysScopeController {
     public BaseResponse<String> delete(@RequestBody SysScopeParam scopeParam) {
         Assert.notEmpty(scopeParam.getIds(), "删除列表ids不能为空");
         sysScopeService.deleteByIds(scopeParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -78,7 +78,7 @@ public class SysScopeController {
     public BaseResponse<String> edit(@Validated @RequestBody SysScopeParam scopeParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(scopeParam.getId(), scopeParam.getCode()), "id和code不能同时为空");
         sysScopeService.edit(scopeParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -88,7 +88,7 @@ public class SysScopeController {
     public BaseResponse<List<SysUser>> userList(@RequestBody SysScopeParam scopeParam) {
         Assert.notEmpty(scopeParam.getCode(), "分组code不能为空");
         List<SysUser> list = sysScopeService.scopeUserList(scopeParam);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -99,7 +99,7 @@ public class SysScopeController {
         Assert.notEmpty(scopeParam.getCode(), "分组code不能为空");
         Assert.notEmpty(scopeParam.getCodeSet(), "指定集合codeSet不能为空");
         sysScopeService.scopeAddUser(scopeParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -110,7 +110,7 @@ public class SysScopeController {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
         sysScopeService.scopeDeleteUser(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
 }

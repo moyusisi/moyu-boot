@@ -41,7 +41,7 @@ public class SysRoleController {
     @PostMapping("/list")
     public BaseResponse<List<SysRole>> list(@RequestBody SysRoleParam roleParam) {
         List<SysRole> list = sysRoleService.list(roleParam);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -52,7 +52,7 @@ public class SysRoleController {
     public BaseResponse<PageResult<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysRole> page = sysRoleService.pageList(roleParam);
-        return BaseResponse.getSuccessResponse(page);
+        return BaseResponse.success(page);
     }
 
     /**
@@ -62,7 +62,7 @@ public class SysRoleController {
     @PostMapping("/detail")
     public BaseResponse<SysRole> detail(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.getSuccessResponse(sysRoleService.detail(roleParam));
+        return BaseResponse.success(sysRoleService.detail(roleParam));
     }
 
     /**
@@ -72,7 +72,7 @@ public class SysRoleController {
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysRoleParam roleParam) {
         sysRoleService.add(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -83,7 +83,7 @@ public class SysRoleController {
     public BaseResponse<String> delete(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getIds(), "删除列表ids不能为空");
         sysRoleService.deleteByIds(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -94,7 +94,7 @@ public class SysRoleController {
     public BaseResponse<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         sysRoleService.edit(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -103,7 +103,7 @@ public class SysRoleController {
     @PostMapping("/menuTreeForGrant")
     public BaseResponse<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
-        return BaseResponse.getSuccessResponse(sysRoleService.treeForGrant(roleParam));
+        return BaseResponse.success(sysRoleService.treeForGrant(roleParam));
     }
 
     /**
@@ -116,7 +116,7 @@ public class SysRoleController {
         Assert.notEmpty(roleParam.getModule(), "模块module不能为空");
         Assert.notEmpty(roleParam.getGrantMenuList(), "授权列表grantMenuList不能为空");
         sysRoleService.grantMenu(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -127,7 +127,7 @@ public class SysRoleController {
     public BaseResponse<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
         List<SysUser> list = sysRoleService.roleUserList(roleParam);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -139,7 +139,7 @@ public class SysRoleController {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
         sysRoleService.roleAddUser(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -151,7 +151,7 @@ public class SysRoleController {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
         sysRoleService.roleDeleteUser(roleParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
 }

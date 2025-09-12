@@ -32,7 +32,7 @@ public class AuthController {
     @PostMapping("/login")
     public BaseResponse<String> userLogin(@Validated UserLoginParam loginParam) {
         String token = loginService.login(loginParam);
-        return BaseResponse.getSuccessResponse(token);
+        return BaseResponse.success(token);
     }
 
     /**
@@ -40,7 +40,7 @@ public class AuthController {
      */
     @PostMapping("/logout")
     public BaseResponse<String> userLogout(UserLoginParam loginParam) {
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
 }

@@ -1,5 +1,10 @@
 package com.moyu.boot.common.core.enums;
 
+import com.moyu.boot.common.core.model.IResultCode;
+
+import java.io.Serializable;
+import java.util.StringJoiner;
+
 /**
  * <p>响应码的枚举类, 不细分具体错误错误类型</p>
  * <p>可通过 {@code BaseException(ExceptionEnum.INVALID_PARAMETER, "uid不能为空")} 这种方式对错误进行具体描述</p>
@@ -7,7 +12,7 @@ package com.moyu.boot.common.core.enums;
  * @author song.shi
  * @since 2016-04-01
  */
-public enum ExceptionEnum {
+public enum ExceptionEnum implements IResultCode, Serializable {
 
     /**
      * 成功
@@ -28,9 +33,9 @@ public enum ExceptionEnum {
     SYSTEM_ERROR(2, "系统异常"),
 
     /**
-     * 自定义异常,描述信息可以直接展示给用户看
+     * 自定义提示异常,描述信息可以直接展示给用户看
      */
-    BUSINESS_CUSTOM_ERROR(3, "自定义异常");
+    CUSTOM_ERROR(3, "自定义提示异常");
 
     private int code;
 
@@ -41,11 +46,21 @@ public enum ExceptionEnum {
         this.message = errorMessage;
     }
 
+    @Override
     public int getCode() {
         return code;
     }
 
+    @Override
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", ExceptionEnum.class.getSimpleName() + "[", "]")
+                .add("code=" + code)
+                .add("message='" + message + "'")
+                .toString();
     }
 }

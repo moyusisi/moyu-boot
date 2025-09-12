@@ -40,7 +40,7 @@ public class UserCenterController {
     public BaseResponse<UserInfo> currentUserInfo() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.getSuccessResponse(userCenterService.currentUserInfo(username));
+        return BaseResponse.success(userCenterService.currentUserInfo(username));
     }
 
     /**
@@ -50,7 +50,7 @@ public class UserCenterController {
     public BaseResponse<List<Tree<String>>> userMenu() {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.getSuccessResponse(userCenterService.userMenu(username));
+        return BaseResponse.success(userCenterService.userMenu(username));
     }
 
     /**
@@ -62,7 +62,7 @@ public class UserCenterController {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
         List<Tree<String>> list = userCenterService.userOrgTree(username);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -72,7 +72,7 @@ public class UserCenterController {
     public BaseResponse<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
         // 当前登陆用户username
         String username = SecurityUtils.getLoginUser().getUsername();
-        return BaseResponse.getSuccessResponse(userCenterService.userRoleList(username, roleParam.getSearchKey()));
+        return BaseResponse.success(userCenterService.userRoleList(username, roleParam.getSearchKey()));
     }
 
     /**
@@ -81,7 +81,7 @@ public class UserCenterController {
     @PostMapping("/switchUserGroup")
     public BaseResponse<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "岗位code不能为空");
-        return BaseResponse.getSuccessResponse(userCenterService.switchUserGroup(groupParam.getCode()));
+        return BaseResponse.success(userCenterService.switchUserGroup(groupParam.getCode()));
     }
 
 }

@@ -43,7 +43,7 @@ public class SysGroupController {
     public BaseResponse<PageResult<SysGroup>> pageList(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(groupParam.getPageNum(), groupParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageResult<SysGroup> page = sysGroupService.pageList(groupParam);
-        return BaseResponse.getSuccessResponse(page);
+        return BaseResponse.success(page);
     }
 
     /**
@@ -53,7 +53,7 @@ public class SysGroupController {
     @PostMapping("/detail")
     public BaseResponse<SysGroup> detail(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
-        return BaseResponse.getSuccessResponse(sysGroupService.detail(groupParam));
+        return BaseResponse.success(sysGroupService.detail(groupParam));
     }
 
     /**
@@ -63,7 +63,7 @@ public class SysGroupController {
     @PostMapping("/add")
     public BaseResponse<String> add(@Validated @RequestBody SysGroupParam groupParam) {
         sysGroupService.add(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -74,7 +74,7 @@ public class SysGroupController {
     public BaseResponse<String> delete(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getIds(), "删除列表ids不能为空");
         sysGroupService.deleteByIds(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -85,7 +85,7 @@ public class SysGroupController {
     public BaseResponse<String> edit(@Validated @RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
         sysGroupService.edit(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -96,7 +96,7 @@ public class SysGroupController {
     public BaseResponse<List<SysRole>> roleList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         List<SysRole> list = sysGroupService.groupRoleList(groupParam);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -108,7 +108,7 @@ public class SysGroupController {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
         sysGroupService.groupAddRole(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -120,7 +120,7 @@ public class SysGroupController {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
         sysGroupService.groupDeleteRole(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -131,7 +131,7 @@ public class SysGroupController {
     public BaseResponse<List<SysUser>> userList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         List<SysUser> list = sysGroupService.groupUserList(groupParam);
-        return BaseResponse.getSuccessResponse(list);
+        return BaseResponse.success(list);
     }
 
     /**
@@ -143,7 +143,7 @@ public class SysGroupController {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
         sysGroupService.groupAddUser(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
     /**
@@ -155,7 +155,7 @@ public class SysGroupController {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
         sysGroupService.groupDeleteUser(groupParam);
-        return BaseResponse.getSuccessResponse();
+        return BaseResponse.success();
     }
 
 }

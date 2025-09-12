@@ -34,7 +34,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         PrintWriter printWriter = response.getWriter();
-        printWriter.print(new ObjectMapper().writeValueAsString(BaseResponse.getSuccessResponse(token)));
+        printWriter.print(new ObjectMapper().writeValueAsString(BaseResponse.success(token)));
         printWriter.flush();
     }
 }

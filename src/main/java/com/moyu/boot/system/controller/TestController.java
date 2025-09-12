@@ -17,7 +17,7 @@ public class TestController {
     @Log
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public BaseResponse<?> testIndex() {
-        return BaseResponse.getSuccessResponse("返回汉字不乱码");
+        return BaseResponse.success("返回汉字不乱码");
     }
 
 }
