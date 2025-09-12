@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
-import com.moyu.boot.common.core.enums.ExceptionEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
 import com.moyu.boot.common.core.model.PageResult;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
@@ -126,7 +126,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // id、code均为唯一标识
         SysUser SysUser = this.getOne(queryWrapper);
         if (SysUser == null) {
-            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         return SysUser;
     }
@@ -139,7 +139,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
                     .eq(SysUser::getAccount, userParam.getAccount()));
             if (user != null) {
-                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "此账号已存在，请更换账号");
+                throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "此账号已存在，请更换账号");
             }
         }
         // 属性复制

@@ -17,7 +17,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
-import com.moyu.boot.common.core.enums.ExceptionEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BaseException;
 import com.moyu.boot.common.core.model.PageResult;
 import com.moyu.boot.system.constant.SysConstants;
@@ -113,7 +113,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // id、code均为唯一标识
         SysResource sysResource = this.getOne(queryWrapper);
         if (sysResource == null) {
-            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         return sysResource;
     }
@@ -127,7 +127,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                     .eq(SysResource::getCode, resourceParam.getCode())
                     .eq(SysResource::getDeleteFlag, 0));
             if (menu != null) {
-                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+                throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 非root节点的parent必须存在(module为root节点)
@@ -138,11 +138,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                     .eq(SysResource::getCode, resourceParam.getParentCode())
                     .eq(SysResource::getDeleteFlag, 0));
             if (parentMenu == null) {
-                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "指定的父节点不存在");
+                throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "指定的父节点不存在");
             }
             // 若上级菜单指定了module, 则子节点也必须一致
             if (parentMenu.getModule() != null && !parentMenu.getModule().equals(resourceParam.getModule())) {
-                throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "与上级菜单module不一致");
+                throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "与上级菜单module不一致");
             }
         }
         // 转换
@@ -192,7 +192,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .map(SysResource::getId)
                 .collect(Collectors.toSet());
         if (CollectionUtils.isEmpty(idSet)) {
-            throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "删除失败,未查到指定数据");
+            throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "删除失败,未查到指定数据");
         }
         // 循环查找子节点,并加入到待删除集合
         while (!CollectionUtils.isEmpty(codeSet)) {

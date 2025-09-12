@@ -1,18 +1,18 @@
 package com.moyu.boot.common.core.exception;
 
 
-import com.moyu.boot.common.core.enums.ExceptionEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 
 import java.util.StringJoiner;
 
 /**
  * <p>使用举例:</p>
- * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(ExceptionEnum)}和{@link #BaseException(ExceptionEnum, String)}
+ * <p>1. 构造方法: {@link #BaseException(int, String)}, {@link #BaseException(ResultCodeEnum)}和{@link #BaseException(ResultCodeEnum, String)}
  * <pre>
  * throw new BaseException(code, message); // 自定义响应码和响应描述信息
- * throw new BaseException(ExceptionEnum.SYSTEM_ERROR); // 抛出某类型的异常
- * throw new BaseException(ExceptionEnum.BUSINESS_ERROR, "rpc调用异常");  // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "业务异常:rpc调用异常"
- * throw new BaseException(ExceptionEnum.INVALID_PARAMETER, "userId不能为空"); // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "参数错误:userId不能为空"
+ * throw new BaseException(ResultCodeEnum.SYSTEM_ERROR); // 抛出某类型的异常
+ * throw new BaseException(ResultCodeEnum.BUSINESS_ERROR, "rpc调用异常");  // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "业务异常:rpc调用异常"
+ * throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "userId不能为空"); // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "参数错误:userId不能为空"
  * </pre></p>
  *
  * <p>2. 异常的使用场景
@@ -25,7 +25,7 @@ import java.util.StringJoiner;
  *     Preconditions.checkNotNull(request, "请求参数不能为空");    // 抛出 NullPointerException
  *     Preconditions.checkArgument(!Strings.isNullOrEmpty(mobile), "mobile不能为空");   // 抛出 IllegalArgumentException
  * } catch (Exception e) {
- *     throw new BaseException(ExceptionEnum.INVALID_PARAMETER, e.getMessage());
+ *     throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, e.getMessage());
  * }
  * </pre></p>
  *
@@ -50,19 +50,19 @@ public class BaseException extends RuntimeException {
     /**
      * 根据枚举类创建异常, 以枚举类的描述信息作为异常的message
      */
-    public BaseException(ExceptionEnum exceptionEnum) {
-        super(exceptionEnum.getMessage());
-        this.code = exceptionEnum.getCode();
-        this.message = exceptionEnum.getMessage();
+    public BaseException(ResultCodeEnum resultCodeEnum) {
+        super(resultCodeEnum.getMessage());
+        this.code = resultCodeEnum.getCode();
+        this.message = resultCodeEnum.getMessage();
     }
 
     /**
      * 根据枚举类创建异常, 并补充具体的错误描述信息, 以枚举描述+detail作为异常的message
      */
-    public BaseException(ExceptionEnum exceptionEnum, String detail) {
-        super(exceptionEnum.getMessage());
-        this.code = exceptionEnum.getCode();
-        String message = exceptionEnum.getMessage();
+    public BaseException(ResultCodeEnum resultCodeEnum, String detail) {
+        super(resultCodeEnum.getMessage());
+        this.code = resultCodeEnum.getCode();
+        String message = resultCodeEnum.getMessage();
         if (detail != null && !detail.isEmpty()) {
             message = message + ":" + detail;
         }

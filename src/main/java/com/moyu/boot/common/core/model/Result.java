@@ -1,6 +1,6 @@
 package com.moyu.boot.common.core.model;
 
-import com.moyu.boot.common.core.enums.ExceptionEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 
 import java.io.Serializable;
 import java.util.StringJoiner;
@@ -48,7 +48,7 @@ public class Result<T> implements Serializable {
      * 创建响应码为 SUCCESS_CODE 的对象
      */
     public static <T> Result<T> success() {
-        return new Result<>(ExceptionEnum.SUCCESS);
+        return new Result<>(ResultCodeEnum.SUCCESS);
     }
 
     /**

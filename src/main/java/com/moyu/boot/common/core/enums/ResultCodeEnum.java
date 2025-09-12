@@ -7,12 +7,12 @@ import java.util.StringJoiner;
 
 /**
  * <p>响应码的枚举类, 不细分具体错误错误类型</p>
- * <p>可通过 {@code BaseException(ExceptionEnum.INVALID_PARAMETER, "uid不能为空")} 这种方式对错误进行具体描述</p>
+ * <p>可通过 {@code BaseException(ResultCodeEnum.INVALID_PARAMETER, "uid不能为空")} 这种方式对错误进行具体描述</p>
  *
  * @author song.shi
  * @since 2016-04-01
  */
-public enum ExceptionEnum implements IResultCode, Serializable {
+public enum ResultCodeEnum implements IResultCode, Serializable {
 
     /**
      * 成功
@@ -41,7 +41,7 @@ public enum ExceptionEnum implements IResultCode, Serializable {
 
     private String message;
 
-    ExceptionEnum(int errorCode, String errorMessage) {
+    ResultCodeEnum(int errorCode, String errorMessage) {
         this.code = errorCode;
         this.message = errorMessage;
     }
@@ -58,7 +58,7 @@ public enum ExceptionEnum implements IResultCode, Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", ExceptionEnum.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", ResultCodeEnum.class.getSimpleName() + "[", "]")
                 .add("code=" + code)
                 .add("message='" + message + "'")
                 .toString();
