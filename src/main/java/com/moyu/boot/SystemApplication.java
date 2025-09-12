@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 2023-02-21
  */
 @EnableCommonLog
-//@MapperScan(basePackages = {"com.moyu.system.**.mapper"})
+//@MapperScan(basePackages = {"com.moyu.boot.**.mapper"})
 @SpringBootApplication
 public class SystemApplication {
 

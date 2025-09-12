@@ -88,10 +88,6 @@
             <artifactId>guava</artifactId>
             <version>31.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-        </dependency>
         <!-- mybatis-plus 增强CRUD 参考：https://baomidou.com/introduce/ -->
         <dependency>
             <groupId>com.baomidou</groupId>

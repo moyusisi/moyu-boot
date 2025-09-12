@@ -21,7 +21,7 @@ public class ValidatorConfig {
     @Bean
     public Validator validator() {
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class).configure()
-                // 快速失败模式
+                // 快速失败模式，遇到第一个校验失败则立即返回，false 表示校验所有参数
                 .failFast(true)
                 .buildValidatorFactory();
         return validatorFactory.getValidator();
