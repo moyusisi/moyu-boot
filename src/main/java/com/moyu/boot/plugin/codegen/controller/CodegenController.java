@@ -1,0 +1,37 @@
+package com.moyu.boot.plugin.codegen.controller;
+
+
+import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.core.model.Result;
+import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
+import com.moyu.boot.plugin.codegen.model.vo.TableVO;
+import com.moyu.boot.plugin.codegen.service.CodegenService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+
+/**
+ * 代码生成器控制器
+ *
+ * @author shisong
+ * @since 2025-09-14
+ */
+@Log(jsonLog = true)
+@RestController
+@RequestMapping("/api/code/gen")
+public class CodegenController {
+
+    @Resource
+    private CodegenService codegenService;
+
+    @PostMapping("/tablePageList")
+    public Result<PageData<TableVO>> pageList(@RequestBody TableQueryParam param) {
+        PageData<TableVO> page = codegenService.tablePageList(param);
+        return Result.success(page);
+    }
+
+}
