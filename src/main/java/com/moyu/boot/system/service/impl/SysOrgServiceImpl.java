@@ -100,20 +100,20 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
             // 指定的列名
-            Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
+            Integer dataScope = SecurityUtils.getDataScope();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = SecurityUtils.getLoginUser().getUsername();
+                String username = SecurityUtils.getUsername();
                 queryWrapper.and(e -> e.eq(SysOrg::getCreateBy, username));
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode));
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 // find_in_set函数比like高效
 //                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().like(SysOrg::getOrgPath, orgCode));
                 queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                Set<String> scopes = SecurityUtils.getScopes();
                 queryWrapper.and(e -> e.in(SysOrg::getCode, scopes));
             }
         }

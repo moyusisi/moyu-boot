@@ -14,6 +14,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import com.moyu.boot.common.security.util.SecurityUtils;
@@ -70,7 +72,11 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 查询用户entity
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 当前登陆用户
-        LoginUser loginUser = SecurityUtils.getLoginUser();
+        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        if (!optUser.isPresent()) {
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+        }
+        LoginUser loginUser = optUser.get();
         // 构造用户信息视图对象
         UserInfo userInfo = UserInfo.builder().account(username)
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
@@ -160,7 +166,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 获取全部树
         Tree<String> rootTree = sysOrgService.singleTree();
         // 查询用户当前岗位所属公司
-        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getLoginUser().getOrgCode());
+        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
         // 用户公司树列表
@@ -176,7 +182,7 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public String switchUserGroup(String groupCode) {
-        String username = SecurityUtils.getLoginUser().getUsername();
+        String username = SecurityUtils.getUsername();
         SysGroup group = sysGroupService.detail(SysGroupParam.builder().code(groupCode).build());
         // 角色集
         Set<String> roleSet = sysRoleService.userAllRoles(username);

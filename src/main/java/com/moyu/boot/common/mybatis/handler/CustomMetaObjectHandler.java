@@ -70,6 +70,6 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
      * 获取用户id
      */
     private String getUserId() {
-        return SecurityUtils.getLoginUser().getUsername();
+        return SecurityUtils.getUsername();
     }
 }

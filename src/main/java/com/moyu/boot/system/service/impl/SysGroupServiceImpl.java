@@ -14,10 +14,10 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
@@ -93,20 +93,20 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
             // 指定的列名
-            Integer dataScope = SecurityUtils.getLoginUser().getDataScope();
+            Integer dataScope = SecurityUtils.getDataScope();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = SecurityUtils.getLoginUser().getUsername();
+                String username = SecurityUtils.getUsername();
                 queryWrapper.and(e -> e.eq(SysGroup::getCreateBy, username));
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode));
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getLoginUser().getOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 // find_in_set函数比like高效
 //                queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode).or().like(SysGroup::getOrgPath, orgCode));
                 queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-                Set<String> scopes = SecurityUtils.getLoginUser().getScopes();
+                Set<String> scopes = SecurityUtils.getScopes();
                 queryWrapper.and(e -> e.in(SysGroup::getOrgCode, scopes));
             }
             log.debug("数据权限为:{}, 已追加过滤条件", DataScopeEnum.getByCode(dataScope));

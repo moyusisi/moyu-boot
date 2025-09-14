@@ -1,19 +1,16 @@
 package com.moyu.boot.common.security.util;
 
 
-import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -33,69 +30,78 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取用户(已认证返回LoginUser，未认证返回null)
+     * 获取当前登录用户信息
      **/
-    public static LoginUser getLoginUser() {
-        try {
-            if (getAuthentication().getPrincipal() instanceof LoginUser) {
-                return (LoginUser) getAuthentication().getPrincipal();
-            } else {
-                return null;
+    public static Optional<LoginUser> getLoginUser() {
+        Optional<LoginUser> loginUser = Optional.empty();
+        Authentication authentication = getAuthentication();
+        if (authentication != null) {
+            // 以登录用户为 LoginUser，未登录用户为username
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof LoginUser) {
+                loginUser = Optional.of((LoginUser) principal);
             }
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new BusinessException(HttpStatus.UNAUTHORIZED.value(), "获取用户信息异常");
         }
+        return loginUser;
     }
+
+
+    /**
+     * 获取用户账号
+     *
+     * @return String 用户账号
+     */
+    public static String getUsername() {
+        return getLoginUser().map(LoginUser::getUsername).orElse(null);
+    }
+
+    /**
+     * 获取部门ID
+     */
+    public static String getOrgCode() {
+        return getLoginUser().map(LoginUser::getOrgCode).orElse(null);
+    }
+
+    /**
+     * 获取数据权限范围
+     */
+    public static Integer getDataScope() {
+        return getLoginUser().map(LoginUser::getDataScope).orElse(null);
+    }
+
 
     /**
      * 获取用户角色集合
      */
     public static Set<String> getRoles() {
-        if (getLoginUser() == null) {
-            return new HashSet<>();
-        }
-        return getLoginUser().getRoles();
+        return getLoginUser().map(LoginUser::getRoles).orElse(new HashSet<>());
     }
 
     /**
      * 获取用户权限集合
      */
     public static Set<String> getPerms() {
-        if (getLoginUser() == null) {
-            return new HashSet<>();
-        }
-        return getLoginUser().getPerms();
+        return getLoginUser().map(LoginUser::getPerms).orElse(new HashSet<>());
     }
 
     /**
      * 获取用户数据权限范围
      */
     public static Set<String> getScopes() {
-        if (getLoginUser() == null) {
-            return new HashSet<>();
-        }
-        return getLoginUser().getScopes();
+        return getLoginUser().map(LoginUser::getScopes).orElse(new HashSet<>());
     }
 
     /**
      * 获取用户授权集合
      */
     public static Set<String> getAuthorities() {
-        if (getLoginUser() == null) {
-            return new HashSet<>();
-        }
-        Collection<GrantedAuthority> authorities = getLoginUser().getAuthorities();
-        return authorities == null ? new HashSet<>() : AuthorityUtils.authorityListToSet(authorities);
+        return getLoginUser().map(e -> AuthorityUtils.authorityListToSet(e.getAuthorities())).orElse(new HashSet<>());
     }
 
     /**
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        if (getLoginUser() == null) {
-            return false;
-        }
         return getRoles().contains(SecurityConstants.ROOT_ROLE);
     }
 

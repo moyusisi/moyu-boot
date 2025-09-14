@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * 注销登录处理类, 用于 httpSecurity.logout() 指定
@@ -27,8 +28,10 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        LoginUser loginUser = SecurityUtils.getLoginUser();
-        if (loginUser != null) {
+        // 当前登陆用户
+        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        if (optUser.isPresent()) {
+            LoginUser loginUser = optUser.get();
             // 删除用户缓存记录 TODO
             // 记录用户退出日志
             log.info("退出登录:{}", loginUser.getUsername());
