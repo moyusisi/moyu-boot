@@ -12,20 +12,18 @@
         t1.TABLE_COLLATION,
         t1.ENGINE,
         t1.CREATE_TIME,
-        CASE WHEN t2.id IS NOT NULL THEN 1 ELSE 0 END AS isConfigured
-        FROM
-        information_schema.tables t1
-        LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
+        CASE WHEN t2.id IS NOT NULL THEN 1 ELSE 0 END AS hasConfig
+        FROM information_schema.tables t1 LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
         WHERE
         t1.TABLE_SCHEMA = (SELECT DATABASE())
         AND t1.table_type = 'BASE TABLE'
-        <if test="queryParams.keywords != null and queryParams.keywords.trim() neq ''">
-            AND t1.TABLE_NAME LIKE CONCAT('%',#{queryParams.keywords},'%')
+        <if test="param.searchKey != null and param.keywords.trim() neq ''">
+            AND t1.TABLE_NAME LIKE CONCAT('%',#{param.searchKey},'%')
         </if>
         <!-- 排除的表 -->
-        <if test="queryParams.excludeTables != null and queryParams.excludeTables.size() > 0">
+        <if test="param.excludeTables != null and param.excludeTables.size() > 0">
             AND t1.TABLE_NAME NOT IN
-            <foreach collection="queryParams.excludeTables" item="excludeTable" open="(" close=")" separator=",">
+            <foreach collection="param.excludeTables" item="excludeTable" open="(" close=")" separator=",">
                 #{excludeTable}
             </foreach>
         </if>
