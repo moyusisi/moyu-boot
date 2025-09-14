@@ -34,7 +34,8 @@ public class CodegenServiceImpl implements CodegenService {
         Page<TableVO> page = new Page<>(param.getPageNum(), param.getPageSize());
         // 设置排除的表
         param.setExcludeTables(codegenProperties.getExcludeTables());
-
-        return dbTableMapper.getTablePage(page, param);
+        //  分页查询
+        Page<TableVO> tablePage = dbTableMapper.getTablePage(page, param);
+        return new PageData<>(tablePage.getTotal(), tablePage.getRecords());
     }
 }

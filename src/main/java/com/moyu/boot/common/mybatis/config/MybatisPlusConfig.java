@@ -32,10 +32,10 @@ public class MybatisPlusConfig {
         interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
         // 阻断插件
         interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
-        // 分页插件
-        interceptor.addInnerInterceptor(paginationInnerInterceptor());
         // 数据权限
         interceptor.addInnerInterceptor(new DataPermissionInterceptor(new CustomDataPermissionHandler()));
+        // 分页插件。如果配置多个插件, 切记分页最后添加
+        interceptor.addInnerInterceptor(paginationInnerInterceptor());
         return interceptor;
     }
 

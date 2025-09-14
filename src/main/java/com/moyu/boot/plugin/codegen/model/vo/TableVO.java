@@ -1,10 +1,15 @@
 package com.moyu.boot.plugin.codegen.model.vo;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Data;
+
 /**
  * @author shisong
  * @since 2025-09-14
  */
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TableVO {
 
     /**
