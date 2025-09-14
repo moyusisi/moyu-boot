@@ -12,6 +12,8 @@ spring:
     name: moyu-boot
   profiles:
     active: local
+  config:
+    import: classpath:codegen.yml
   # mvc配置
   mvc:
     # json转换器，默认为jackson

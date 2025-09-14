@@ -1,0 +1,6 @@
+# 代码生成器配置
+codegen:
+  # 排除数据表
+  excludeTables:
+    - gen_config
+    - gen_field_config
