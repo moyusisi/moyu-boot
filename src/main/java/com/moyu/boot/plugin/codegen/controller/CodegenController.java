@@ -28,7 +28,10 @@ public class CodegenController {
     @Resource
     private CodegenService codegenService;
 
-    @PostMapping("/tablePageList")
+    /**
+     * 代码生成分页列表
+     */
+    @PostMapping("/page")
     public Result<PageData<TableVO>> pageList(@RequestBody TableQueryParam param) {
         PageData<TableVO> page = codegenService.tablePageList(param);
         return Result.success(page);
