@@ -76,7 +76,7 @@ public class UserCenterController {
     }
 
     /**
-     * 获取当前用户拥有的角色列表
+     * 当前用户岗位切换
      */
     @PostMapping("/switchUserGroup")
     public Result<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {

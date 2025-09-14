@@ -83,6 +83,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orgCode(sysUser.getOrgCode())
                 .dataScope(DataScopeEnum.SELF.getCode())
                 .build();
+        // TODO 应该通过岗位获取权限，无任何岗位则应使用默认岗位
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(sysUser.getAccount());
         SysGroup group = null;
