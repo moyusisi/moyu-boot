@@ -37,9 +37,9 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
      */
     CUSTOM_ERROR(3, "自定义提示异常");
 
-    private int code;
+    private final int code;
 
-    private String message;
+    private final String message;
 
     ResultCodeEnum(int errorCode, String errorMessage) {
         this.code = errorCode;
