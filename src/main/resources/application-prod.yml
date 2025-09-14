@@ -26,8 +26,6 @@ custom:
     white-list:
       # 认证授权类
       - /api/auth/login/**
-      - /api/auth/captcha/**
-      - /api/auth/refresh-token
       # 回调、远程调用类
       - /callback/**
       - /feign/**
@@ -36,10 +34,6 @@ custom:
       - /monitor/**
     # 忽略列表，不经过Security的任何过滤器(如静态资源)
     ignore-list:
-      - ${springdoc.swagger-ui.path}
-      - /swagger-ui/**
-      - /v3/api-docs/**
-      - /doc.html
       - /static/**
       - /public/**
       - /**/*.ico
