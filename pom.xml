@@ -116,11 +116,11 @@
             <version>2.12.5</version>
         </dependency>
         <!--  使用openapi3 参考 https://doc.xiaominfo.com/docs/quick-start#openapi3  -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.5.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.github.xiaoymin</groupId>-->
+<!--            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>-->
+<!--            <version>4.5.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
