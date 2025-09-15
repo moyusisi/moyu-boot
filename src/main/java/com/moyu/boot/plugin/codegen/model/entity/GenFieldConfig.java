@@ -30,12 +30,12 @@ public class GenFieldConfig extends BaseEntity {
     private Long id;
 
     /**
-     * 关联的配置ID
+     * 关联的实体配置ID
      */
     private Long tableId;
 
     /**
-     * 列名
+     * 列名称
      */
     private String columnName;
 
@@ -55,7 +55,7 @@ public class GenFieldConfig extends BaseEntity {
     private String fieldType;
 
     /**
-     * 注释
+     * 字段描述
      */
     private String fieldComment;
 
@@ -65,9 +65,9 @@ public class GenFieldConfig extends BaseEntity {
     private Integer fieldSort;
 
     /**
-     * 字段长度
+     * 最大长度
      */
-    private Long maxLength;
+    private Integer maxLength;
 
     /**
      * 是否必填
@@ -75,29 +75,29 @@ public class GenFieldConfig extends BaseEntity {
     private Integer required;
 
     /**
-     * 是否在查询条件显示(查)
-     */
-    private Integer showInQuery;
-
-    /**
      * 是否在列表显示
      */
     private Integer showInList;
 
     /**
-     * 是否在表单显示(增改)
+     * 是否在表单显示
      */
     private Integer showInForm;
 
     /**
+     * 是否在查询条件显示
+     */
+    private Integer showInQuery;
+
+    /**
      * 查询方式
      */
-    private String queryType;
+    private Integer queryType;
 
     /**
      * 表单类型(输入方式)
      */
-    private String formType;
+    private Integer formType;
 
     /**
      * 字典类型
