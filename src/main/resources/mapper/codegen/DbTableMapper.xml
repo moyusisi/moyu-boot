@@ -13,7 +13,7 @@
         t1.ENGINE,
         t1.CREATE_TIME,
         CASE WHEN t2.id IS NOT NULL THEN 1 ELSE 0 END AS hasConfig
-        FROM information_schema.tables t1 LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
+        FROM information_schema.tables t1 LEFT JOIN gen_table_config t2 on t1.TABLE_NAME = t2.table_name
         WHERE
         t1.TABLE_SCHEMA = (SELECT DATABASE())
         AND t1.table_type = 'BASE TABLE'

@@ -19,9 +19,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "gen_config")
+@TableName(value = "gen_table_config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenTableConfig extends BaseEntity {
+public class GenTable extends BaseEntity {
 
     /**
      * 主键id

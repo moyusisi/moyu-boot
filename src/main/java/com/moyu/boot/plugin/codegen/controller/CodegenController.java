@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/code/gen")
+@RequestMapping("/api/gen/code")
 public class CodegenController {
 
     @Resource

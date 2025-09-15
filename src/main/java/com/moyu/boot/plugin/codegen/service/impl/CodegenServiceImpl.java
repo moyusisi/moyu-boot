@@ -3,7 +3,7 @@ package com.moyu.boot.plugin.codegen.service.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.codegen.controller.config.CodegenProperties;
+import com.moyu.boot.plugin.codegen.config.CodegenProperties;
 import com.moyu.boot.plugin.codegen.mapper.DbTableMapper;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.TableVO;
