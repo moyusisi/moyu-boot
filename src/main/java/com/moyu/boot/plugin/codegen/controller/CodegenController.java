@@ -1,11 +1,13 @@
 package com.moyu.boot.plugin.codegen.controller;
 
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
-import com.moyu.boot.plugin.codegen.model.vo.TableVO;
+import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.CodegenService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,9 +34,19 @@ public class CodegenController {
      * 代码生成分页列表
      */
     @PostMapping("/page")
-    public Result<PageData<TableVO>> pageList(@RequestBody TableQueryParam param) {
-        PageData<TableVO> page = codegenService.tablePageList(param);
+    public Result<PageData<TableMetaData>> pageList(@RequestBody TableQueryParam param) {
+        PageData<TableMetaData> page = codegenService.tablePageList(param);
         return Result.success(page);
+    }
+
+    /**
+     * 查询某个表的配置(无则生成)
+     */
+    @PostMapping("/config")
+    public Result<?> config(@RequestBody TableQueryParam param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        codegenService.configDetail(param);
+        return Result.success();
     }
 
 }

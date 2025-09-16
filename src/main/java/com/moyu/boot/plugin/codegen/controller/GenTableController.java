@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
+ * 代码生成实体配置表控制器
  * @author shisong
  * @since 2025-09-15
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/dev/getTable")
+@RequestMapping("/api/gen/table")
 public class GenTableController {
 
     @Resource

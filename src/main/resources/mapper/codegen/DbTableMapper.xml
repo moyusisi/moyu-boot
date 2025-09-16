@@ -5,7 +5,7 @@
 <mapper namespace="com.moyu.boot.plugin.codegen.mapper.DbTableMapper">
 
     <!-- 查询数据库表分页 -->
-    <select id="getTablePage" resultType="com.moyu.boot.plugin.codegen.model.vo.TableVO">
+    <select id="getTablePage" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
         SELECT
         t1.TABLE_NAME ,
         t1.TABLE_COMMENT ,
@@ -17,7 +17,7 @@
         WHERE
         t1.TABLE_SCHEMA = (SELECT DATABASE())
         AND t1.table_type = 'BASE TABLE'
-        <if test="param.searchKey != null and param.keywords.trim() neq ''">
+        <if test="param.searchKey != null and param.searchKey.trim() neq ''">
             AND t1.TABLE_NAME LIKE CONCAT('%',#{param.searchKey},'%')
         </if>
         <!-- 排除的表 -->
@@ -31,4 +31,10 @@
         CREATE_TIME DESC
     </select>
 
+    <select id="getTableMetadata" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
+    </select>
+
+
+    <select id="getTableColumns" resultType="com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData">
+    </select>
 </mapper>

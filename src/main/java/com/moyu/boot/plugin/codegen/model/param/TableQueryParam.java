@@ -29,4 +29,15 @@ public class TableQueryParam extends BasePageParam {
      */
     @JsonIgnore
     private List<String> excludeTables;
+
+    //********** db中存在的字段 **********//
+    /**
+     * 主键ID
+     */
+    private Long id;
+
+    /**
+     * 表名
+     */
+    private String tableName;
 }

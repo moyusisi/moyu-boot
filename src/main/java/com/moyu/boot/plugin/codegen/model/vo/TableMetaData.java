@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TableVO {
+public class TableMetaData {
 
     /**
      * 表名
@@ -23,7 +23,7 @@ public class TableVO {
     private String tableComment;
 
     /**
-     * 表排序规则，如：utf8mb4_general_ci
+     * 排序规则，如：utf8mb4_general_ci
      */
     private String tableCollation;
 
@@ -41,9 +41,4 @@ public class TableVO {
      * 创建时间
      */
     private String createTime;
-
-    /**
-     * 是否已配置
-     */
-    private Integer hasConfig;
 }
