@@ -33,7 +33,7 @@ public interface DbTableMapper extends BaseMapper {
     TableMetaData getTableMetadata(String tableName);
 
     /**
-     * 获取表字段元数据列表
+     * 获取字段元数据列表
      */
     List<ColumnMetaData> getTableColumns(String tableName);
 
