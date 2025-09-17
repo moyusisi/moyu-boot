@@ -8,14 +8,11 @@ CREATE TABLE `gen_table_config`
     `package_name`     VARCHAR(255) NOT NULL COMMENT '包名',
     `business_name`    VARCHAR(100) NOT NULL COMMENT '业务名',
     `entity_name`      VARCHAR(100) NOT NULL COMMENT '实体类名',
-    `author`           VARCHAR(50)  COMMENT '作者',
+    `author`           VARCHAR(50) COMMENT '作者',
     `parent_menu_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父菜单编码',
 
-    `delete_flag`      TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`      DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
-    `create_by`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '创建人',
     `update_time`      DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
-    `update_by`        VARCHAR(20)  NULL DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_table_name` (`table_name`)
 ) ENGINE = InnoDB COMMENT ='代码生成实体配置表'
@@ -39,8 +36,8 @@ CREATE TABLE `gen_field_config`
     `show_in_list`  TINYINT(5) DEFAULT '0' COMMENT '是否在列表显示',
     `show_in_form`  TINYINT(5) DEFAULT '0' COMMENT '是否在表单显示',
     `show_in_query` TINYINT(5) DEFAULT '0' COMMENT '是否在查询条件显示',
-    `query_type`    TINYINT(5) COMMENT '查询方式',
-    `form_type`     TINYINT(5) COMMENT '表单类型',
+    `query_type`    VARCHAR(20) COMMENT '查询方式',
+    `form_type`     VARCHAR(20) COMMENT '表单类型',
     `dict_type`     VARCHAR(50) COMMENT '字典类型',
     `create_time`   DATETIME COMMENT '创建时间',
     `update_time`   DATETIME COMMENT '更新时间',
