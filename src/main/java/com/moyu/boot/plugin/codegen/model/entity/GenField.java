@@ -1,25 +1,22 @@
 package com.moyu.boot.plugin.codegen.model.entity;
 
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.moyu.boot.common.mybatis.entity.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author shisong
  * @since 2025-09-15
  */
-@Getter
-@Setter
+@Data
 @TableName(value = "gen_field_config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenField extends BaseEntity {
+public class GenField {
 
     /**
      * 主键id
@@ -103,4 +100,16 @@ public class GenField extends BaseEntity {
      * 字典类型
      */
     private String dictType;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
 }

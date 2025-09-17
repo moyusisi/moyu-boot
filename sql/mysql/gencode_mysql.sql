@@ -8,7 +8,7 @@ CREATE TABLE `gen_table_config`
     `package_name`     VARCHAR(255) NOT NULL COMMENT '包名',
     `business_name`    VARCHAR(100) NOT NULL COMMENT '业务名',
     `entity_name`      VARCHAR(100) NOT NULL COMMENT '实体类名',
-    `author`           VARCHAR(50)  NOT NULL COMMENT '作者',
+    `author`           VARCHAR(50)  COMMENT '作者',
     `parent_menu_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父菜单编码',
 
     `delete_flag`      TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',

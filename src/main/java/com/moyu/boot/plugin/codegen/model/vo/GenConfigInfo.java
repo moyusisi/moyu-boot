@@ -63,5 +63,5 @@ public class GenConfigInfo {
     /**
      * 字段配置列表
      */
-    private List<GenField> genFieldList;
+    private List<GenField> fieldConfigList;
 }
