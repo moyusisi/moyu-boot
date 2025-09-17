@@ -54,10 +54,10 @@ public class CodegenController {
      * 保存生成代码配置
      */
     @PostMapping("/save")
-    public Result<GenConfigInfo> save(@RequestBody GenConfigInfo param) {
+    public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
-        return Result.success(genConfigInfo);
+        codegenService.saveConfig(param);
+        return Result.success();
     }
 
     /**

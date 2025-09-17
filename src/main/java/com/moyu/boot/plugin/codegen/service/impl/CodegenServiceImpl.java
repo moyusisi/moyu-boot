@@ -8,6 +8,8 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.base.CaseFormat;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.config.CodegenProperties;
 import com.moyu.boot.plugin.codegen.enums.FormTypeEnum;
@@ -115,6 +117,21 @@ public class CodegenServiceImpl implements CodegenService {
         return genConfigInfo;
     }
 
+    @Override
+    public void saveConfig(GenConfigInfo genConfigInfo) {
+        // 新生成的表配置
+        GenTable genTable = buildGenTable(genConfigInfo);
+        genTableService.saveOrUpdate(genTable);
+
+        List<GenField> genFieldList = genConfigInfo.getFieldConfigList();
+        if (CollectionUtil.isEmpty(genFieldList)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "字段配置不能为空");
+        }
+        genFieldList.forEach(genFieldConfig -> {
+            genFieldConfig.setTableId(genTable.getId());
+        });
+        genFieldService.saveOrUpdateBatch(genFieldList);
+    }
 
     /**
      * 根据列元数据构建字段配置
@@ -134,7 +151,7 @@ public class CodegenServiceImpl implements CodegenService {
 
         fieldConfig.setShowInList(1);
         fieldConfig.setShowInForm(1);
-        fieldConfig.setShowInQuery(1);
+        fieldConfig.setShowInQuery(0);
         // formType
         if (fieldConfig.getColumnType().equals("date")) {
             fieldConfig.setFormType(FormTypeEnum.DATE.name());
@@ -166,5 +183,23 @@ public class CodegenServiceImpl implements CodegenService {
         genConfigInfo.setAuthor(genTable.getAuthor());
 //        genConfigInfo.setGenFieldConfigList(genTable.getGenFieldConfigList());
         return genConfigInfo;
+    }
+
+    /**
+     * 生成代码配置表
+     */
+    private GenTable buildGenTable(GenConfigInfo genConfigInfo) {
+        if (genConfigInfo == null) {
+            return null;
+        }
+        GenTable genTable = new GenTable();
+        genTable.setId(genConfigInfo.getId());
+        genTable.setTableName(genConfigInfo.getTableName());
+        genTable.setPackageName(genConfigInfo.getPackageName());
+        genTable.setModuleName(genConfigInfo.getModuleName());
+        genTable.setEntityName(genConfigInfo.getEntityName());
+        genTable.setBusinessName(genConfigInfo.getBusinessName());
+        genTable.setAuthor(genConfigInfo.getAuthor());
+        return genTable;
     }
 }
