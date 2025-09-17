@@ -130,8 +130,8 @@ public class CodegenServiceImpl implements CodegenService {
         fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
         fieldConfig.setFieldComment(columnMetaData.getColumnComment());
         fieldConfig.setMaxLength(columnMetaData.getMaxLength());
-        // TODO
-        fieldConfig.setRequired("YES".equals(columnMetaData.getIsNullable()) ? 0 : 1);
+        // 必填和允许为空反着
+        fieldConfig.setRequired(columnMetaData.getNullable() == 1 ? 0 : 1);
 
         fieldConfig.setShowInList(1);
         fieldConfig.setShowInForm(1);
