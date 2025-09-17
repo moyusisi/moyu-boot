@@ -1,20 +1,36 @@
 package com.moyu.boot.plugin.codegen.service.impl;
 
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.config.CodegenProperties;
-import com.moyu.boot.plugin.codegen.mapper.DbTableMapper;
+import com.moyu.boot.plugin.codegen.enums.FormTypeEnum;
+import com.moyu.boot.plugin.codegen.enums.JavaTypeEnum;
+import com.moyu.boot.plugin.codegen.enums.QueryTypeEnum;
+import com.moyu.boot.plugin.codegen.mapper.DataBaseMapper;
+import com.moyu.boot.plugin.codegen.model.entity.GenFieldConfig;
 import com.moyu.boot.plugin.codegen.model.entity.GenTable;
 import com.moyu.boot.plugin.codegen.model.param.GenTableParam;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
+import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
+import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.CodegenService;
+import com.moyu.boot.plugin.codegen.service.GenFieldConfigService;
 import com.moyu.boot.plugin.codegen.service.GenTableService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 代码生成器服务类实现
@@ -27,10 +43,13 @@ import javax.annotation.Resource;
 public class CodegenServiceImpl implements CodegenService {
 
     @Resource
-    private DbTableMapper dbTableMapper;
+    private DataBaseMapper dataBaseMapper;
 
     @Resource
     private GenTableService genTableService;
+
+    @Resource
+    private GenFieldConfigService getFieldConfigService;
 
     @Resource
     private CodegenProperties codegenProperties;
@@ -41,14 +60,113 @@ public class CodegenServiceImpl implements CodegenService {
         // 设置排除的表
         param.setExcludeTables(codegenProperties.getExcludeTables());
         //  分页查询
-        Page<TableMetaData> tablePage = dbTableMapper.getTablePage(page, param);
+        Page<TableMetaData> tablePage = dataBaseMapper.getTablePage(page, param);
         return new PageData<>(tablePage.getTotal(), tablePage.getRecords());
     }
 
     @Override
-    public void configDetail(TableQueryParam param) {
+    public GenConfigInfo configDetail(String tableName) {
         // 查询表生成配置
-        GenTable genTable = genTableService.detail(GenTableParam.builder().tableName(param.getTableName()).build());
+        GenTable genTable = genTableService.detail(GenTableParam.builder().tableName(tableName).build());
 
+        // 若无配置，则根据表的元数据生成默认配置(仅生成，不保存)
+        if (genTable == null) {
+            TableMetaData tableMetadata = dataBaseMapper.getTableMetadata(tableName);
+            Assert.isTrue(tableMetadata != null, "未找到表元数据");
+            // 生成默认的表配置
+            genTable = new GenTable();
+            genTable.setTableName(tableName);
+            // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
+            String tableComment = tableMetadata.getTableComment();
+            if (ObjectUtil.isNotEmpty(tableComment)) {
+                genTable.setBusinessName(tableComment.replace("表", "").trim());
+            }
+            //  根据表名生成实体类名 例如：sys_user -> SysUser
+            // lower_underscore 转 UpperCamel
+            genTable.setEntityName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName));
+            genTable.setPackageName(codegenProperties.getPackageName());
+            genTable.setModuleName(codegenProperties.getModuleName());
+            genTable.setAuthor(codegenProperties.getAuthor());
+        }
+
+        // 字段配置，优先查库，无则生成
+        List<GenFieldConfig> genFieldList = new ArrayList<>();
+
+        // 获取表的列
+        List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
+        if (CollectionUtil.isNotEmpty(tableColumnList)) {
+            for (ColumnMetaData tableColumn : tableColumnList) {
+                // 查询db中的字段生成配置
+                List<GenFieldConfig> fieldConfigList = getFieldConfigService.list(Wrappers.lambdaQuery(GenFieldConfig.class)
+                        .eq(GenFieldConfig::getTableId, genTable.getId())
+                        .orderByAsc(GenFieldConfig::getFieldSort)
+                );
+
+                // 优先取db中存的，无则新生成默认字段配置
+                String columnName = tableColumn.getColumnName();
+                GenFieldConfig fieldConfig = fieldConfigList.stream()
+                        .filter(item -> Objects.equals(item.getColumnName(), columnName))
+                        .findFirst().orElseGet(() -> buildGenFieldConfig(tableColumn));
+                // 加入字段配置列表
+                genFieldList.add(fieldConfig);
+            }
+        }
+        GenConfigInfo genConfigInfo = buildGenConfigInfo(genTable);
+        genConfigInfo.setGenFieldConfigList(genFieldList);
+        return genConfigInfo;
+    }
+
+
+    /**
+     * 根据列元数据构建字段配置
+     */
+    private GenFieldConfig buildGenFieldConfig(ColumnMetaData columnMetaData) {
+        GenFieldConfig fieldConfig = new GenFieldConfig();
+        fieldConfig.setColumnName(columnMetaData.getColumnName());
+        fieldConfig.setColumnType(columnMetaData.getDataType());
+        // 字段名
+        fieldConfig.setFieldName(StrUtil.toCamelCase(columnMetaData.getColumnName()));
+        // 字段类型
+        fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
+        fieldConfig.setFieldComment(columnMetaData.getColumnComment());
+        fieldConfig.setMaxLength(columnMetaData.getMaxLength());
+        // TODO
+        fieldConfig.setRequired("YES".equals(columnMetaData.getIsNullable()) ? 0 : 1);
+
+        fieldConfig.setShowInList(1);
+        fieldConfig.setShowInForm(1);
+        fieldConfig.setShowInQuery(1);
+        // formType
+        if (fieldConfig.getColumnType().equals("date")) {
+            fieldConfig.setFormType(FormTypeEnum.DATE.name());
+        } else if (fieldConfig.getColumnType().equals("datetime")) {
+            fieldConfig.setFormType(FormTypeEnum.DATE_TIME.name());
+        } else {
+            fieldConfig.setFormType(FormTypeEnum.INPUT.name());
+        }
+        // queryType
+        fieldConfig.setQueryType(QueryTypeEnum.EQ.name());
+
+        return fieldConfig;
+    }
+
+    /**
+     * 根据配置生成配置信息
+     */
+    private GenConfigInfo buildGenConfigInfo(GenTable genTable) {
+        if (genTable == null) {
+            return null;
+        }
+        GenConfigInfo genConfigInfo = new GenConfigInfo();
+        genConfigInfo.setId(genTable.getId());
+        genConfigInfo.setTableName(genTable.getTableName());
+        genConfigInfo.setPackageName(genTable.getPackageName());
+        genConfigInfo.setModuleName(genTable.getModuleName());
+        genConfigInfo.setEntityName(genTable.getEntityName());
+        genConfigInfo.setBusinessName(genTable.getBusinessName());
+        genConfigInfo.setParentMenuId(genTable.getParentMenuId());
+        genConfigInfo.setAuthor(genTable.getAuthor());
+//        genConfigInfo.setGenFieldConfigList(genTable.getGenFieldConfigList());
+        return genConfigInfo;
     }
 }

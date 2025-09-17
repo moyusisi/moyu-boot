@@ -19,6 +19,20 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "codegen")
 public class CodegenProperties {
+    /**
+     * 包名，如:com.moyu.boot
+     */
+    private String packageName;
+
+    /**
+     * 模块名，如system。最终会与包名拼接在一起，如:com.moyu.boot.system
+     */
+    private String moduleName;
+
+    /**
+     * 作者
+     */
+    private String author;
 
     /**
      * 排除数据表名称列表

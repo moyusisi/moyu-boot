@@ -7,6 +7,7 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
+import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.CodegenService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,10 +44,10 @@ public class CodegenController {
      * 查询某个表的配置(无则生成)
      */
     @PostMapping("/config")
-    public Result<?> config(@RequestBody TableQueryParam param) {
+    public Result<GenConfigInfo> config(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        codegenService.configDetail(param);
-        return Result.success();
+        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
+        return Result.success(genConfigInfo);
     }
 
 }

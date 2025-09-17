@@ -1,5 +1,11 @@
 # 代码生成器配置
 codegen:
+  # 生成代码的包名
+  packageName: com.moyu.boot
+  # 生成代码的模块名，会与包名拼接在一起，如:com.moyu.boot.system
+  moduleName: system
+  # 生成代码实体的作者名
+  author: moyusisi
   # 排除数据表
   excludeTables:
     - gen_config

@@ -15,7 +15,7 @@ import java.util.List;
  * @since 2025-09-14
  */
 @Mapper
-public interface DbTableMapper extends BaseMapper {
+public interface DataBaseMapper extends BaseMapper {
 
     /**
      * 获取表分页列表

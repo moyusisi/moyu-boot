@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.moyu.boot.plugin.codegen.mapper.DbTableMapper">
+<mapper namespace="com.moyu.boot.plugin.codegen.mapper.DataBaseMapper">
 
     <!-- 查询数据库表分页 -->
     <select id="getTablePage" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
@@ -32,9 +32,35 @@
     </select>
 
     <select id="getTableMetadata" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
+        SELECT
+            TABLE_NAME ,
+            TABLE_COMMENT ,
+            TABLE_COLLATION,
+            ENGINE,
+            CREATE_TIME
+        FROM
+            information_schema.tables
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+          AND TABLE_NAME = #{tableName}
     </select>
 
 
     <select id="getTableColumns" resultType="com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData">
+        SELECT
+            COLUMN_NAME,
+            DATA_TYPE,
+            COLUMN_COMMENT,
+            CASE COLUMN_KEY WHEN 'PRI' THEN 1 ELSE 0 END AS primaryKey,
+            CASE IS_NULLABLE WHEN 'YES' THEN 1 ELSE 0 END AS nullable,
+            CHARACTER_MAXIMUM_LENGTH AS maxLength,
+            CHARACTER_SET_NAME,
+            COLLATION_NAME
+        FROM
+            information_schema.columns
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+          AND TABLE_NAME = #{tableName}
+        ORDER BY ORDINAL_POSITION ASC
     </select>
 </mapper>

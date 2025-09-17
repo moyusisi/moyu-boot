@@ -5,6 +5,7 @@ import lombok.Data;
 
 /**
  * 字段元数据
+ *
  * @author shisong
  * @since 2025-09-16
  */
@@ -29,17 +30,17 @@ public class ColumnMetaData {
     /**
      * 字段长度
      */
-    private Long characterMaximumLength;
+    private Long maxLength;
 
     /**
      * 是否主键(1-是 0-否)
      */
-    private Integer isPrimaryKey;
+    private Integer primaryKey;
 
     /**
      * 是否可为空(1-是 0-否)
      */
-    private String isNullable;
+    private Integer nullable;
 
     /**
      * 字符集

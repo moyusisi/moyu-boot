@@ -67,7 +67,7 @@ public class GenFieldConfig extends BaseEntity {
     /**
      * 最大长度
      */
-    private Integer maxLength;
+    private Long maxLength;
 
     /**
      * 是否必填
@@ -90,14 +90,14 @@ public class GenFieldConfig extends BaseEntity {
     private Integer showInQuery;
 
     /**
-     * 查询方式
-     */
-    private Integer queryType;
-
-    /**
      * 表单类型(输入方式)
      */
-    private Integer formType;
+    private String formType;
+
+    /**
+     * 查询方式
+     */
+    private String queryType;
 
     /**
      * 字典类型
