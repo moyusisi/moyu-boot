@@ -44,7 +44,7 @@ public class CodegenController {
      * 查询生成代码配置(无则生成)
      */
     @PostMapping("/detail")
-    public Result<GenConfigInfo> detail(@RequestBody TableQueryParam param) {
+    public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
         GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
         return Result.success(genConfigInfo);

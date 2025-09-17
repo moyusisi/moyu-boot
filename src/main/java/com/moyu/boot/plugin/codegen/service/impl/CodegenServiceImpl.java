@@ -164,7 +164,6 @@ public class CodegenServiceImpl implements CodegenService {
         genConfigInfo.setModuleName(genTable.getModuleName());
         genConfigInfo.setEntityName(genTable.getEntityName());
         genConfigInfo.setBusinessName(genTable.getBusinessName());
-        genConfigInfo.setParentMenuId(genTable.getParentMenuId());
         genConfigInfo.setAuthor(genTable.getAuthor());
 //        genConfigInfo.setGenFieldConfigList(genTable.getGenFieldConfigList());
         return genConfigInfo;

@@ -57,11 +57,6 @@ public class GenTable extends BaseEntity {
     private String businessName;
 
     /**
-     * 父菜单ID
-     */
-    private Long parentMenuId;
-
-    /**
      * 作者
      */
     private String author;
