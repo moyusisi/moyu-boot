@@ -14,7 +14,7 @@ import com.moyu.boot.plugin.codegen.enums.FormTypeEnum;
 import com.moyu.boot.plugin.codegen.enums.JavaTypeEnum;
 import com.moyu.boot.plugin.codegen.enums.QueryTypeEnum;
 import com.moyu.boot.plugin.codegen.mapper.DataBaseMapper;
-import com.moyu.boot.plugin.codegen.model.entity.GenFieldConfig;
+import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.entity.GenTable;
 import com.moyu.boot.plugin.codegen.model.param.GenTableParam;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
@@ -22,7 +22,7 @@ import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.CodegenService;
-import com.moyu.boot.plugin.codegen.service.GenFieldConfigService;
+import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import com.moyu.boot.plugin.codegen.service.GenTableService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,7 +49,7 @@ public class CodegenServiceImpl implements CodegenService {
     private GenTableService genTableService;
 
     @Resource
-    private GenFieldConfigService getFieldConfigService;
+    private GenFieldService getFieldService;
 
     @Resource
     private CodegenProperties codegenProperties;
@@ -90,21 +90,21 @@ public class CodegenServiceImpl implements CodegenService {
         }
 
         // 字段配置，优先查库，无则生成
-        List<GenFieldConfig> genFieldList = new ArrayList<>();
+        List<GenField> genFieldList = new ArrayList<>();
 
         // 获取表的列
         List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
         if (CollectionUtil.isNotEmpty(tableColumnList)) {
             for (ColumnMetaData tableColumn : tableColumnList) {
                 // 查询db中的字段生成配置
-                List<GenFieldConfig> fieldConfigList = getFieldConfigService.list(Wrappers.lambdaQuery(GenFieldConfig.class)
-                        .eq(GenFieldConfig::getTableId, genTable.getId())
-                        .orderByAsc(GenFieldConfig::getFieldSort)
+                List<GenField> fieldConfigList = getFieldService.list(Wrappers.lambdaQuery(GenField.class)
+                        .eq(GenField::getTableId, genTable.getId())
+                        .orderByAsc(GenField::getFieldSort)
                 );
 
                 // 优先取db中存的，无则新生成默认字段配置
                 String columnName = tableColumn.getColumnName();
-                GenFieldConfig fieldConfig = fieldConfigList.stream()
+                GenField fieldConfig = fieldConfigList.stream()
                         .filter(item -> Objects.equals(item.getColumnName(), columnName))
                         .findFirst().orElseGet(() -> buildGenFieldConfig(tableColumn));
                 // 加入字段配置列表
@@ -112,7 +112,7 @@ public class CodegenServiceImpl implements CodegenService {
             }
         }
         GenConfigInfo genConfigInfo = buildGenConfigInfo(genTable);
-        genConfigInfo.setGenFieldConfigList(genFieldList);
+        genConfigInfo.setGenFieldList(genFieldList);
         return genConfigInfo;
     }
 
@@ -120,8 +120,8 @@ public class CodegenServiceImpl implements CodegenService {
     /**
      * 根据列元数据构建字段配置
      */
-    private GenFieldConfig buildGenFieldConfig(ColumnMetaData columnMetaData) {
-        GenFieldConfig fieldConfig = new GenFieldConfig();
+    private GenField buildGenFieldConfig(ColumnMetaData columnMetaData) {
+        GenField fieldConfig = new GenField();
         fieldConfig.setColumnName(columnMetaData.getColumnName());
         fieldConfig.setColumnType(columnMetaData.getDataType());
         // 字段名

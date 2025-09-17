@@ -1,9 +1,9 @@
 package com.moyu.boot.plugin.codegen.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.moyu.boot.plugin.codegen.mapper.GenFieldConfigMapper;
-import com.moyu.boot.plugin.codegen.model.entity.GenFieldConfig;
-import com.moyu.boot.plugin.codegen.service.GenFieldConfigService;
+import com.moyu.boot.plugin.codegen.mapper.GenFieldMapper;
+import com.moyu.boot.plugin.codegen.model.entity.GenField;
+import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @createDate 2025-09-15 16:08:55
  */
 @Service
-public class GenFieldConfigServiceImpl extends ServiceImpl<GenFieldConfigMapper, GenFieldConfig> implements GenFieldConfigService {
+public class GenFieldServiceImpl extends ServiceImpl<GenFieldMapper, GenField> implements GenFieldService {
 
 }
 

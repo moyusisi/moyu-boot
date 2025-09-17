@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @TableName(value = "gen_field_config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenFieldConfig extends BaseEntity {
+public class GenField extends BaseEntity {
 
     /**
      * 主键id
