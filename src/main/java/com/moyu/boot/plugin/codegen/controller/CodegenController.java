@@ -32,7 +32,7 @@ public class CodegenController {
     private CodegenService codegenService;
 
     /**
-     * 代码生成分页列表
+     * 生成代码表分页列表
      */
     @PostMapping("/page")
     public Result<PageData<TableMetaData>> pageList(@RequestBody TableQueryParam param) {
@@ -41,10 +41,30 @@ public class CodegenController {
     }
 
     /**
-     * 查询某个表的配置(无则生成)
+     * 查询生成代码配置(无则生成)
      */
-    @PostMapping("/config")
-    public Result<GenConfigInfo> config(@RequestBody TableQueryParam param) {
+    @PostMapping("/detail")
+    public Result<GenConfigInfo> detail(@RequestBody TableQueryParam param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
+        return Result.success(genConfigInfo);
+    }
+
+    /**
+     * 保存生成代码配置
+     */
+    @PostMapping("/save")
+    public Result<GenConfigInfo> save(@RequestBody GenConfigInfo param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
+        return Result.success(genConfigInfo);
+    }
+
+    /**
+     * 删除生成代码配置
+     */
+    @PostMapping("/delete")
+    public Result<GenConfigInfo> delete(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
         GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
         return Result.success(genConfigInfo);
