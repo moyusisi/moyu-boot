@@ -12,7 +12,7 @@ CREATE TABLE `sys_org`
 
     `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
-    `ext_json`    LONGTEXT      NULL COMMENT '扩展信息',
+    `ext_json`    TEXT          NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
@@ -78,7 +78,7 @@ create table sys_role
 
     `sort_num`    INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `ext_json`    LONGTEXT     NULL COMMENT '扩展信息',
+    `ext_json`    TEXT         NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
@@ -106,7 +106,7 @@ create table sys_group
 
     `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
-    `ext_json`    LONGTEXT      NULL COMMENT '扩展信息',
+    `ext_json`    TEXT          NULL COMMENT '扩展信息',
     `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
     `delete_flag` TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
@@ -138,7 +138,7 @@ create table sys_resource
 
     `sort_num`      INT(10)      NULL DEFAULT NULL COMMENT '排序顺序',
     `status`        TINYINT(5)   NULL DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `ext_json`      LONGTEXT     NULL COMMENT '扩展信息',
+    `ext_json`      TEXT         NULL COMMENT '扩展信息',
     `remark`        VARCHAR(200) NULL DEFAULT NULL comment '备注',
     `delete_flag`   TINYINT(5)   NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME     NULL DEFAULT NULL COMMENT '创建时间',
