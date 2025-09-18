@@ -101,13 +101,12 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 获取表的列
         List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
         if (CollectionUtil.isNotEmpty(tableColumnList)) {
+            // 查询db中的字段生成配置
+            List<GenField> genFieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
+                    .eq(GenField::getTableId, genConfig.getId())
+                    .orderByAsc(GenField::getFieldSort)
+            );
             for (ColumnMetaData tableColumn : tableColumnList) {
-                // 查询db中的字段生成配置
-                List<GenField> genFieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
-                        .eq(GenField::getTableId, genConfig.getId())
-                        .orderByAsc(GenField::getFieldSort)
-                );
-
                 // 优先取db中存的，无则新生成默认字段配置
                 String columnName = tableColumn.getColumnName();
                 GenField genField = genFieldList.stream()
@@ -136,6 +135,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfigList.forEach(fieldConfigVO -> {
             GenField genField = buildGenFieldConfig(fieldConfigVO);
             genField.setTableId(genConfig.getId());
+            genFieldList.add(genField);
         });
         genFieldService.saveOrUpdateBatch(genFieldList);
     }
