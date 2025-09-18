@@ -133,6 +133,16 @@ public class CodegenServiceImpl implements CodegenService {
         genFieldService.saveOrUpdateBatch(genFieldList);
     }
 
+    @Override
+    public void deleteConfig(String tableName) {
+        GenTable genTable = genTableService.getOne(Wrappers.lambdaQuery(GenTable.class).eq(GenTable::getTableName, tableName));
+        Assert.isTrue(genTable != null, "未找到相关配置");
+        boolean result = genTableService.removeById(genTable.getId());
+        if (result) {
+            genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genTable.getId()));
+        }
+    }
+
     /**
      * 根据列元数据构建字段配置
      */

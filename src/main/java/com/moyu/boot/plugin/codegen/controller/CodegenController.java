@@ -64,10 +64,10 @@ public class CodegenController {
      * 删除生成代码配置
      */
     @PostMapping("/delete")
-    public Result<GenConfigInfo> delete(@RequestBody TableQueryParam param) {
+    public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
-        return Result.success(genConfigInfo);
+        codegenService.deleteConfig(param.getTableName());
+        return Result.success();
     }
 
 }

@@ -29,4 +29,8 @@ public interface CodegenService {
      */
     void saveConfig(GenConfigInfo genConfigInfo);
 
+    /**
+     * 删除代码生成配置
+     */
+    void deleteConfig(String tableName);
 }
