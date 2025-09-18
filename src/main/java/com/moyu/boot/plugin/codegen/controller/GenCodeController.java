@@ -10,6 +10,7 @@ import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenCodeService;
+import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,9 @@ public class GenCodeController {
     @Resource
     private GenCodeService genCodeService;
 
+    @Resource
+    private GenConfigService genConfigService;
+
     /**
      * 生成代码表分页列表
      */
@@ -46,7 +50,7 @@ public class GenCodeController {
     @PostMapping("/detail")
     public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = genCodeService.configDetail(param.getTableName());
+        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
         return Result.success(genConfigInfo);
     }
 
@@ -56,7 +60,7 @@ public class GenCodeController {
     @PostMapping("/save")
     public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        genCodeService.saveConfig(param);
+        genConfigService.saveConfig(param);
         return Result.success();
     }
 
@@ -66,7 +70,7 @@ public class GenCodeController {
     @PostMapping("/delete")
     public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        genCodeService.deleteConfig(param.getTableName());
+        genConfigService.deleteConfig(param.getTableName());
         return Result.success();
     }
 

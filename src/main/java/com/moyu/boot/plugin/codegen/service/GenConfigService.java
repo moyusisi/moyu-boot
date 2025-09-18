@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
-
-import java.util.List;
+import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service
@@ -17,33 +16,22 @@ import java.util.List;
 public interface GenConfigService extends IService<GenConfig> {
 
     /**
-     * 获取记录列表
-     */
-    List<GenConfig> list(GenConfigParam param);
-
-    /**
      * 分页获取记录列表
      */
     PageData<GenConfig> pageList(GenConfigParam param);
 
     /**
-     * 获取记录详情
+     * 查询代码配置详情(包括字段配置)，无则新生成(仅生成未保存)
      */
-    GenConfig detail(GenConfigParam param);
+    GenConfigInfo getConfigDetail(String tableName);
 
     /**
-     * 添加记录
+     * 保存代码生成配置(包括字段配置)
      */
-    void add(GenConfigParam param);
+    void saveConfig(GenConfigInfo genConfigInfo);
 
     /**
-     * 通过ids删除记录
+     * 删除代码生成配置(包括字段配置)
      */
-    void deleteByIds(GenConfigParam param);
-
-    /**
-     * 修改记录
-     */
-    void edit(GenConfigParam param);
-
+    void deleteConfig(String tableName);
 }

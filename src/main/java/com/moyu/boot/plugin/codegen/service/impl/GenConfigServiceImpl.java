@@ -1,26 +1,39 @@
 package com.moyu.boot.plugin.codegen.service.impl;
 
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.base.Strings;
+import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.plugin.codegen.config.CodegenProperties;
+import com.moyu.boot.plugin.codegen.enums.FormTypeEnum;
+import com.moyu.boot.plugin.codegen.enums.JavaTypeEnum;
+import com.moyu.boot.plugin.codegen.enums.QueryTypeEnum;
+import com.moyu.boot.plugin.codegen.mapper.DataBaseMapper;
 import com.moyu.boot.plugin.codegen.mapper.GenConfigMapper;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
+import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
+import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
+import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
+import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service实现
@@ -32,18 +45,14 @@ import java.util.Set;
 @Service
 public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig> implements GenConfigService {
 
-    @Override
-    public List<GenConfig> list(GenConfigParam param) {
-        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
-                // 关键词搜索(表名、业务名)
-                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
-                .or()
-                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getBusinessName, param.getSearchKey())
-                .orderByAsc(GenConfig::getUpdateTime);
-        // 查询
-        List<GenConfig> genConfigList = this.list(queryWrapper);
-        return genConfigList;
-    }
+    @Resource
+    private DataBaseMapper dataBaseMapper;
+
+    @Resource
+    private GenFieldService genFieldService;
+
+    @Resource
+    private CodegenProperties codegenProperties;
 
     @Override
     public PageData<GenConfig> pageList(GenConfigParam param) {
@@ -61,52 +70,150 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public GenConfig detail(GenConfigParam param) {
-        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
-                .eq(ObjectUtil.isNotEmpty(param.getId()), GenConfig::getId, param.getId())
-                .eq(ObjectUtil.isNotEmpty(param.getTableName()), GenConfig::getTableName, param.getTableName());
-        // id、code均为唯一标识
-        GenConfig genConfig = this.getOne(queryWrapper);
-        if (genConfig == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
-        }
-        return genConfig;
-    }
+    public GenConfigInfo getConfigDetail(String tableName) {
+        // 查询表生成配置
+        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
 
-    @Override
-    public void add(GenConfigParam param) {
-        // 若指定了唯一键，则必须全局唯一
-        if (!Strings.isNullOrEmpty(param.getTableName())) {
-            // 查询指定code
-            GenConfig old = this.getOne(new LambdaQueryWrapper<GenConfig>().eq(GenConfig::getTableName, param.getTableName()));
-            if (old != null) {
-                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+        // 若无配置，则根据表的元数据生成默认配置(仅生成，不保存)
+        if (genConfig == null) {
+            TableMetaData tableMetadata = dataBaseMapper.getTableMetadata(tableName);
+            Assert.isTrue(tableMetadata != null, "未找到表元数据");
+            // 生成默认的表配置
+            genConfig = new GenConfig();
+            genConfig.setTableName(tableName);
+            // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
+            String tableComment = tableMetadata.getTableComment();
+            if (ObjectUtil.isNotEmpty(tableComment)) {
+                genConfig.setBusinessName(tableComment.replace("表", "").trim());
+            }
+            //  根据表名生成实体类名 例如：sys_user -> SysUser
+            // lower_underscore 转 UpperCamel
+            genConfig.setEntityName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName));
+            genConfig.setPackageName(codegenProperties.getPackageName());
+            genConfig.setModuleName(codegenProperties.getModuleName());
+            genConfig.setAuthor(codegenProperties.getAuthor());
+        }
+
+        // 字段配置，优先查库，无则生成
+        List<GenField> fieldConfigList = new ArrayList<>();
+
+        // 获取表的列
+        List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
+        if (CollectionUtil.isNotEmpty(tableColumnList)) {
+            for (ColumnMetaData tableColumn : tableColumnList) {
+                // 查询db中的字段生成配置
+                List<GenField> genFieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
+                        .eq(GenField::getTableId, genConfig.getId())
+                        .orderByAsc(GenField::getFieldSort)
+                );
+
+                // 优先取db中存的，无则新生成默认字段配置
+                String columnName = tableColumn.getColumnName();
+                GenField fieldConfig = genFieldList.stream()
+                        .filter(item -> Objects.equals(item.getColumnName(), columnName))
+                        .findFirst().orElseGet(() -> buildGenFieldConfig(tableColumn));
+                // 加入字段配置列表
+                fieldConfigList.add(fieldConfig);
             }
         }
-        // 属性复制
-        GenConfig genConfig = BeanUtil.copyProperties(param, GenConfig.class);
-        genConfig.setId(null);
-        this.save(genConfig);
+        GenConfigInfo genConfigInfo = buildGenConfigInfo(genConfig);
+        genConfigInfo.setFieldConfigList(fieldConfigList);
+        return genConfigInfo;
     }
 
     @Override
-    public void deleteByIds(GenConfigParam param) {
-        // 待删除的id集合
-        Set<Long> idSet = param.getIds();
-        // 通过查询条件 物理删除
-        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
-                .in(ObjectUtil.isNotEmpty(idSet), GenConfig::getId, idSet);
-        this.remove(queryWrapper);
-        // 或直接通过ids 物理删除
-        // this.removeByIds(idSet);
+    public void saveConfig(GenConfigInfo genConfigInfo) {
+        // 新生成的表配置
+        GenConfig genConfig = buildGenTable(genConfigInfo);
+        this.saveOrUpdate(genConfig);
+
+        List<GenField> genFieldList = genConfigInfo.getFieldConfigList();
+        if (CollectionUtil.isEmpty(genFieldList)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "字段配置不能为空");
+        }
+        genFieldList.forEach(genFieldConfig -> {
+            genFieldConfig.setTableId(genConfig.getId());
+        });
+        genFieldService.saveOrUpdateBatch(genFieldList);
     }
 
     @Override
-    public void edit(GenConfigParam param) {
-        GenConfig oldGenConfig = this.detail(param);
-        // 属性复制
-        GenConfig updateGenConfig = BeanUtil.copyProperties(param, GenConfig.class);
-        updateGenConfig.setId(oldGenConfig.getId());
-        this.updateById(updateGenConfig);
+    public void deleteConfig(String tableName) {
+        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
+        Assert.isTrue(genConfig != null, "未找到相关配置");
+        boolean result = this.removeById(genConfig.getId());
+        if (result) {
+            genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
+        }
+    }
+
+    /**
+     * 根据列元数据构建字段配置
+     */
+    private GenField buildGenFieldConfig(ColumnMetaData columnMetaData) {
+        GenField fieldConfig = new GenField();
+        fieldConfig.setColumnName(columnMetaData.getColumnName());
+        fieldConfig.setColumnType(columnMetaData.getDataType());
+        // 字段名
+        fieldConfig.setFieldName(StrUtil.toCamelCase(columnMetaData.getColumnName()));
+        // 字段类型
+        fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
+        fieldConfig.setFieldComment(columnMetaData.getColumnComment());
+        fieldConfig.setMaxLength(columnMetaData.getMaxLength());
+        // 必填和允许为空反着
+        fieldConfig.setRequired(columnMetaData.getNullable() == 1 ? 0 : 1);
+
+        fieldConfig.setShowInList(1);
+        fieldConfig.setShowInForm(1);
+        fieldConfig.setShowInQuery(0);
+        // formType
+        if (fieldConfig.getColumnType().equals("date")) {
+            fieldConfig.setFormType(FormTypeEnum.DATE.name());
+        } else if (fieldConfig.getColumnType().equals("datetime")) {
+            fieldConfig.setFormType(FormTypeEnum.DATE_TIME.name());
+        } else {
+            fieldConfig.setFormType(FormTypeEnum.INPUT.name());
+        }
+        // queryType
+        fieldConfig.setQueryType(QueryTypeEnum.EQ.name());
+
+        return fieldConfig;
+    }
+
+    /**
+     * 根据配置生成配置信息
+     */
+    private GenConfigInfo buildGenConfigInfo(GenConfig genConfig) {
+        if (genConfig == null) {
+            return null;
+        }
+        GenConfigInfo genConfigInfo = new GenConfigInfo();
+        genConfigInfo.setId(genConfig.getId());
+        genConfigInfo.setTableName(genConfig.getTableName());
+        genConfigInfo.setPackageName(genConfig.getPackageName());
+        genConfigInfo.setModuleName(genConfig.getModuleName());
+        genConfigInfo.setEntityName(genConfig.getEntityName());
+        genConfigInfo.setBusinessName(genConfig.getBusinessName());
+        genConfigInfo.setAuthor(genConfig.getAuthor());
+//        genConfigInfo.setGenFieldConfigList(genTable.getGenFieldConfigList());
+        return genConfigInfo;
+    }
+
+    /**
+     * 生成代码配置表
+     */
+    private GenConfig buildGenTable(GenConfigInfo genConfigInfo) {
+        if (genConfigInfo == null) {
+            return null;
+        }
+        GenConfig genConfig = new GenConfig();
+        genConfig.setId(genConfigInfo.getId());
+        genConfig.setTableName(genConfigInfo.getTableName());
+        genConfig.setPackageName(genConfigInfo.getPackageName());
+        genConfig.setModuleName(genConfigInfo.getModuleName());
+        genConfig.setEntityName(genConfigInfo.getEntityName());
+        genConfig.setBusinessName(genConfigInfo.getBusinessName());
+        genConfig.setAuthor(genConfigInfo.getAuthor());
+        return genConfig;
     }
 }
