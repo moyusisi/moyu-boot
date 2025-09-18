@@ -10,15 +10,15 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 代码生成实体配置表
+ * 代码生成配置表
  *
  * @author shisong
  * @since 2025-09-14
  */
 @Data
-@TableName(value = "gen_table_config")
+@TableName(value = "gen_config")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenTable {
+public class GenConfig {
 
     /**
      * 主键id

@@ -10,6 +10,8 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * 代码生成字段配置表
+ *
  * @author shisong
  * @since 2025-09-15
  */

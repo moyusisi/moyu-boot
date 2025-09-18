@@ -1,6 +1,6 @@
--- 1. 代码生成实体配置表
-DROP TABLE IF EXISTS `gen_table_config`;
-CREATE TABLE `gen_table_config`
+-- 1. 代码生成配置表
+DROP TABLE IF EXISTS `gen_config`;
+CREATE TABLE `gen_config`
 (
     `id`               BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `table_name`       VARCHAR(100) NOT NULL COMMENT '表名',
@@ -15,7 +15,7 @@ CREATE TABLE `gen_table_config`
     `update_time`      DATETIME     NULL DEFAULT NULL COMMENT '修改时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_table_name` (`table_name`)
-) ENGINE = InnoDB COMMENT ='代码生成实体配置表'
+) ENGINE = InnoDB COMMENT ='代码生成配置表'
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
