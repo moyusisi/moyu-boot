@@ -143,7 +143,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     @Override
     public void deleteConfig(String tableName) {
         GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
-        Assert.isTrue(genConfig != null, "未找到相关配置");
+        if (genConfig == null) {
+            return;
+        }
         boolean result = this.removeById(genConfig.getId());
         if (result) {
             genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
