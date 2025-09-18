@@ -4,7 +4,6 @@ package com.moyu.boot.plugin.codegen.model.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import lombok.Data;
 
 import java.util.List;
@@ -63,5 +62,5 @@ public class GenConfigInfo {
     /**
      * 字段配置列表
      */
-    private List<GenField> fieldConfigList;
+    private List<FieldConfigVO> fieldConfigList;
 }

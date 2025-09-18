@@ -44,7 +44,7 @@
     </select>
 
 
-    <select id="getTableColumns" resultType="com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData">
+    <select id="getTableColumns" resultType="com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData">
         SELECT
             COLUMN_NAME,
             DATA_TYPE,

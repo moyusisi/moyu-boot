@@ -19,10 +19,11 @@ import com.moyu.boot.plugin.codegen.enums.JavaTypeEnum;
 import com.moyu.boot.plugin.codegen.enums.QueryTypeEnum;
 import com.moyu.boot.plugin.codegen.mapper.DataBaseMapper;
 import com.moyu.boot.plugin.codegen.mapper.GenConfigMapper;
+import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
-import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
+import com.moyu.boot.plugin.codegen.model.vo.FieldConfigVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
@@ -95,7 +96,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         }
 
         // 字段配置，优先查库，无则生成
-        List<GenField> fieldConfigList = new ArrayList<>();
+        List<GenField> fieldList = new ArrayList<>();
 
         // 获取表的列
         List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
@@ -109,30 +110,32 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
                 // 优先取db中存的，无则新生成默认字段配置
                 String columnName = tableColumn.getColumnName();
-                GenField fieldConfig = genFieldList.stream()
+                GenField genField = genFieldList.stream()
                         .filter(item -> Objects.equals(item.getColumnName(), columnName))
                         .findFirst().orElseGet(() -> buildGenFieldConfig(tableColumn));
                 // 加入字段配置列表
-                fieldConfigList.add(fieldConfig);
+                fieldList.add(genField);
             }
         }
-        GenConfigInfo genConfigInfo = buildGenConfigInfo(genConfig);
-        genConfigInfo.setFieldConfigList(fieldConfigList);
-        return genConfigInfo;
+        return buildGenConfigInfo(genConfig, fieldList);
     }
 
     @Override
     public void saveConfig(GenConfigInfo genConfigInfo) {
+        List<FieldConfigVO> fieldConfigList = genConfigInfo.getFieldConfigList();
+        if (CollectionUtil.isEmpty(fieldConfigList)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "字段配置不能为空");
+        }
+
         // 新生成的表配置
         GenConfig genConfig = buildGenTable(genConfigInfo);
         this.saveOrUpdate(genConfig);
 
-        List<GenField> genFieldList = genConfigInfo.getFieldConfigList();
-        if (CollectionUtil.isEmpty(genFieldList)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "字段配置不能为空");
-        }
-        genFieldList.forEach(genFieldConfig -> {
-            genFieldConfig.setTableId(genConfig.getId());
+        // 组装实体
+        List<GenField> genFieldList = new ArrayList<>();
+        fieldConfigList.forEach(fieldConfigVO -> {
+            GenField genField = buildGenFieldConfig(fieldConfigVO);
+            genField.setTableId(genConfig.getId());
         });
         genFieldService.saveOrUpdateBatch(genFieldList);
     }
@@ -148,7 +151,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 根据列元数据构建字段配置
+     * 根据列元数据构建字段配置 (bo -> entity)
      */
     private GenField buildGenFieldConfig(ColumnMetaData columnMetaData) {
         GenField fieldConfig = new GenField();
@@ -181,9 +184,62 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 根据配置生成配置信息
+     * 字段配置实体 转换为 字段配置vo
      */
-    private GenConfigInfo buildGenConfigInfo(GenConfig genConfig) {
+    private FieldConfigVO buildFieldConfigVO(GenField genField) {
+        if (genField == null) {
+            return null;
+        }
+        FieldConfigVO fieldConfigVO = new FieldConfigVO();
+        fieldConfigVO.setId(genField.getId());
+        fieldConfigVO.setTableId(genField.getTableId());
+        fieldConfigVO.setColumnName(genField.getColumnName());
+        fieldConfigVO.setColumnType(genField.getColumnType());
+        fieldConfigVO.setFieldName(genField.getFieldName());
+        fieldConfigVO.setFieldType(genField.getFieldType());
+        fieldConfigVO.setFieldComment(genField.getFieldComment());
+        fieldConfigVO.setFieldSort(genField.getFieldSort());
+        fieldConfigVO.setMaxLength(genField.getMaxLength());
+        fieldConfigVO.setRequired(genField.getRequired());
+        fieldConfigVO.setShowInList(genField.getShowInList() == 1);
+        fieldConfigVO.setShowInForm(genField.getShowInForm() == 1);
+        fieldConfigVO.setShowInQuery(genField.getShowInQuery() == 1);
+        fieldConfigVO.setFormType(genField.getFormType());
+        fieldConfigVO.setQueryType(genField.getQueryType());
+        fieldConfigVO.setDictType(genField.getDictType());
+        fieldConfigVO.setCreateTime(genField.getCreateTime());
+        fieldConfigVO.setUpdateTime(genField.getUpdateTime());
+        return fieldConfigVO;
+    }
+
+    private GenField buildGenFieldConfig(FieldConfigVO fieldConfigVO) {
+        if (fieldConfigVO == null) {
+            return null;
+        }
+        GenField genField = new GenField();
+        genField.setId(fieldConfigVO.getId());
+        genField.setTableId(fieldConfigVO.getTableId());
+        genField.setColumnName(fieldConfigVO.getColumnName());
+        genField.setColumnType(fieldConfigVO.getColumnType());
+        genField.setFieldName(fieldConfigVO.getFieldName());
+        genField.setFieldType(fieldConfigVO.getFieldType());
+        genField.setFieldComment(fieldConfigVO.getFieldComment());
+        genField.setFieldSort(fieldConfigVO.getFieldSort());
+        genField.setMaxLength(fieldConfigVO.getMaxLength());
+        genField.setRequired(fieldConfigVO.getRequired());
+        genField.setShowInList(Boolean.TRUE.equals(fieldConfigVO.getShowInList()) ? 1 : 0);
+        genField.setShowInForm(Boolean.TRUE.equals(fieldConfigVO.getShowInForm()) ? 1 : 0);
+        genField.setShowInQuery(Boolean.TRUE.equals(fieldConfigVO.getShowInQuery()) ? 1 : 0);
+        genField.setFormType(fieldConfigVO.getFormType());
+        genField.setQueryType(fieldConfigVO.getQueryType());
+        genField.setDictType(fieldConfigVO.getDictType());
+        return genField;
+    }
+
+    /**
+     * 根据配置生成配置信息 entity -> vo
+     */
+    private GenConfigInfo buildGenConfigInfo(GenConfig genConfig, List<GenField> fieldList) {
         if (genConfig == null) {
             return null;
         }
@@ -195,12 +251,19 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfigInfo.setEntityName(genConfig.getEntityName());
         genConfigInfo.setBusinessName(genConfig.getBusinessName());
         genConfigInfo.setAuthor(genConfig.getAuthor());
-//        genConfigInfo.setGenFieldConfigList(genTable.getGenFieldConfigList());
+        List<FieldConfigVO> fieldConfigList = new ArrayList<>();
+        if (CollectionUtil.isNotEmpty(fieldList)) {
+            for (GenField field : fieldList) {
+                FieldConfigVO fieldConfigVO = buildFieldConfigVO(field);
+                fieldConfigList.add(fieldConfigVO);
+            }
+        }
+        genConfigInfo.setFieldConfigList(fieldConfigList);
         return genConfigInfo;
     }
 
     /**
-     * 生成代码配置表
+     * 生成代码配置表 vo -> entity
      */
     private GenConfig buildGenTable(GenConfigInfo genConfigInfo) {
         if (genConfigInfo == null) {

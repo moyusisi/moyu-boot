@@ -3,7 +3,7 @@ package com.moyu.boot.plugin.codegen.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
+import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import org.apache.ibatis.annotations.Mapper;

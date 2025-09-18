@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.codegen.model.vo;
+package com.moyu.boot.plugin.codegen.model.bo;
 
 
 import lombok.Data;
