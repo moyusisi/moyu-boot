@@ -9,7 +9,7 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
-import com.moyu.boot.plugin.codegen.service.CodegenService;
+import com.moyu.boot.plugin.codegen.service.GenCodeService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,14 +29,14 @@ import javax.annotation.Resource;
 public class GenCodeController {
 
     @Resource
-    private CodegenService codegenService;
+    private GenCodeService genCodeService;
 
     /**
      * 生成代码表分页列表
      */
     @PostMapping("/page")
     public Result<PageData<TableMetaData>> pageList(@RequestBody TableQueryParam param) {
-        PageData<TableMetaData> page = codegenService.tablePageList(param);
+        PageData<TableMetaData> page = genCodeService.tablePageList(param);
         return Result.success(page);
     }
 
@@ -46,7 +46,7 @@ public class GenCodeController {
     @PostMapping("/detail")
     public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = codegenService.configDetail(param.getTableName());
+        GenConfigInfo genConfigInfo = genCodeService.configDetail(param.getTableName());
         return Result.success(genConfigInfo);
     }
 
@@ -56,7 +56,7 @@ public class GenCodeController {
     @PostMapping("/save")
     public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        codegenService.saveConfig(param);
+        genCodeService.saveConfig(param);
         return Result.success();
     }
 
@@ -66,7 +66,7 @@ public class GenCodeController {
     @PostMapping("/delete")
     public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        codegenService.deleteConfig(param.getTableName());
+        genCodeService.deleteConfig(param.getTableName());
         return Result.success();
     }
 

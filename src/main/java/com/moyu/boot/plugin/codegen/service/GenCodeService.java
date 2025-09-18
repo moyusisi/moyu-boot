@@ -12,7 +12,7 @@ import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
  * @author shisong
  * @since 2025-09-14
  */
-public interface CodegenService {
+public interface GenCodeService {
 
     /**
      * 分页查询数据表列表

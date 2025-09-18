@@ -22,7 +22,7 @@ import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
-import com.moyu.boot.plugin.codegen.service.CodegenService;
+import com.moyu.boot.plugin.codegen.service.GenCodeService;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-public class CodegenServiceImpl implements CodegenService {
+public class GenCodeServiceImpl implements GenCodeService {
 
     @Resource
     private DataBaseMapper dataBaseMapper;
