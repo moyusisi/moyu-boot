@@ -68,7 +68,7 @@ public class FieldConfigVO {
     /**
      * 是否必填
      */
-    private Integer required;
+    private Boolean required;
 
     /**
      * 是否在列表显示

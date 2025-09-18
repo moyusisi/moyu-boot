@@ -4,6 +4,8 @@ package com.moyu.boot.plugin.codegen.model.vo;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author shisong
  * @since 2025-09-14
@@ -38,7 +40,17 @@ public class TableMetaData {
     private String charset;
 
     /**
+     * 是否已有配置
+     */
+    private Integer hasConfig;
+
+    /**
      * 创建时间
      */
     private String createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 }
