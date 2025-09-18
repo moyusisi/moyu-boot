@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 @Log(jsonLog = true)
 @RestController
 @RequestMapping("/api/gen/code")
-public class CodegenController {
+public class GenCodeController {
 
     @Resource
     private CodegenService codegenService;

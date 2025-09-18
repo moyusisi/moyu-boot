@@ -4,7 +4,7 @@ package com.moyu.boot.plugin.codegen.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
-import com.moyu.boot.plugin.codegen.model.param.GenTableParam;
+import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 
 import java.util.List;
 
@@ -19,31 +19,31 @@ public interface GenConfigService extends IService<GenConfig> {
     /**
      * 获取记录列表
      */
-    List<GenConfig> list(GenTableParam param);
+    List<GenConfig> list(GenConfigParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<GenConfig> pageList(GenTableParam param);
+    PageData<GenConfig> pageList(GenConfigParam param);
 
     /**
      * 获取记录详情
      */
-    GenConfig detail(GenTableParam param);
+    GenConfig detail(GenConfigParam param);
 
     /**
      * 添加记录
      */
-    void add(GenTableParam param);
+    void add(GenConfigParam param);
 
     /**
      * 通过ids删除记录
      */
-    void deleteByIds(GenTableParam param);
+    void deleteByIds(GenConfigParam param);
 
     /**
      * 修改记录
      */
-    void edit(GenTableParam param);
+    void edit(GenConfigParam param);
 
 }

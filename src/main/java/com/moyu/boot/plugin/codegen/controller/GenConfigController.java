@@ -7,7 +7,7 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
-import com.moyu.boot.plugin.codegen.model.param.GenTableParam;
+import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +35,7 @@ public class GenConfigController {
      * 分页获取实体配置列表
      */
     @PostMapping("/page")
-    public Result<PageData<GenConfig>> pageList(@RequestBody GenTableParam param) {
+    public Result<PageData<GenConfig>> pageList(@RequestBody GenConfigParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageData<GenConfig> page = genConfigService.pageList(param);
         return Result.success(page);
@@ -45,7 +45,7 @@ public class GenConfigController {
      * 获取详情
      */
     @PostMapping("/detail")
-    public Result<GenConfig> detail(@RequestBody GenTableParam param) {
+    public Result<GenConfig> detail(@RequestBody GenConfigParam param) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(param.getId(), param.getTableName()), "id和tableName不能同时为空");
         return Result.success(genConfigService.detail(param));
     }
@@ -54,7 +54,7 @@ public class GenConfigController {
      * 添加
      */
     @PostMapping("/add")
-    public Result<String> add(@Validated @RequestBody GenTableParam param) {
+    public Result<String> add(@Validated @RequestBody GenConfigParam param) {
         genConfigService.add(param);
         return Result.success();
     }
@@ -63,7 +63,7 @@ public class GenConfigController {
      * 删除
      */
     @PostMapping("/delete")
-    public Result<String> delete(@RequestBody GenTableParam param) {
+    public Result<String> delete(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
         genConfigService.deleteByIds(param);
         return Result.success();
@@ -73,7 +73,7 @@ public class GenConfigController {
      * 编辑
      */
     @PostMapping("/edit")
-    public Result<String> edit(@Validated @RequestBody GenTableParam param) {
+    public Result<String> edit(@Validated @RequestBody GenConfigParam param) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(param.getId(), param.getTableName()), "id和tableName不能同时为空");
         genConfigService.edit(param);
         return Result.success();

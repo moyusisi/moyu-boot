@@ -14,7 +14,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.mapper.GenConfigMapper;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
-import com.moyu.boot.plugin.codegen.model.param.GenTableParam;
+import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.Set;
 public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig> implements GenConfigService {
 
     @Override
-    public List<GenConfig> list(GenTableParam param) {
+    public List<GenConfig> list(GenConfigParam param) {
         LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
                 // 关键词搜索(表名、业务名)
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
@@ -46,7 +46,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public PageData<GenConfig> pageList(GenTableParam param) {
+    public PageData<GenConfig> pageList(GenConfigParam param) {
         // 查询条件
         LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
                 // 关键词搜索(表名、业务名)
@@ -61,7 +61,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public GenConfig detail(GenTableParam param) {
+    public GenConfig detail(GenConfigParam param) {
         LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
                 .eq(ObjectUtil.isNotEmpty(param.getId()), GenConfig::getId, param.getId())
                 .eq(ObjectUtil.isNotEmpty(param.getTableName()), GenConfig::getTableName, param.getTableName());
@@ -74,7 +74,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public void add(GenTableParam param) {
+    public void add(GenConfigParam param) {
         // 若指定了唯一键，则必须全局唯一
         if (!Strings.isNullOrEmpty(param.getTableName())) {
             // 查询指定code
@@ -90,7 +90,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public void deleteByIds(GenTableParam param) {
+    public void deleteByIds(GenConfigParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 通过查询条件 物理删除
@@ -102,7 +102,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public void edit(GenTableParam param) {
+    public void edit(GenConfigParam param) {
         GenConfig oldGenConfig = this.detail(param);
         // 属性复制
         GenConfig updateGenConfig = BeanUtil.copyProperties(param, GenConfig.class);

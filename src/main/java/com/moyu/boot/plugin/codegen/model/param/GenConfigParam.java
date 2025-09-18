@@ -17,7 +17,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenTableParam extends BasePageParam {
+public class GenConfigParam extends BasePageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表
