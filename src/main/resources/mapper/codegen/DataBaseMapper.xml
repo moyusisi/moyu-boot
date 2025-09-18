@@ -18,7 +18,7 @@
         t1.TABLE_SCHEMA = (SELECT DATABASE())
         AND t1.table_type = 'BASE TABLE'
         <if test="param.searchKey != null and param.searchKey.trim() neq ''">
-            AND t1.TABLE_NAME LIKE CONCAT('%',#{param.searchKey},'%')
+            AND (t1.TABLE_NAME LIKE CONCAT('%',#{param.searchKey},'%') OR t1.TABLE_COMMENT LIKE CONCAT('%',#{param.searchKey},'%'))
         </if>
         <!-- 排除的表 -->
         <if test="param.excludeTables != null and param.excludeTables.size() > 0">
