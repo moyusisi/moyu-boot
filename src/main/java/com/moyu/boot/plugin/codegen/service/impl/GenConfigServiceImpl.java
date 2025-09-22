@@ -164,6 +164,41 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
     }
 
+    @Override
+    public void syncTable(String tableName) {
+        // tableName 均为唯一标识
+        GenConfig old = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
+        // 表元数据
+        TableMetaData tableMetaData = dataBaseMapper.getTableMetaData(tableName);
+        // 列元数据
+        List<ColumnMetaData> columnList = dataBaseMapper.getTableColumns(tableMetaData.getTableName());
+        if (old == null || CollectionUtils.isEmpty(columnList)) {
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "同步数据失败，表结构已不存在");
+        }
+        // 构造表配置
+        GenConfig genConfig = buildGenTableConfig(tableMetaData);
+        genConfig.setId(old.getId());
+        // 更新表配置
+        boolean result = this.updateById(genConfig);
+        if (result) {
+            // 列配置列表
+            List<GenField> genFieldList = new ArrayList<>();
+            if (CollectionUtil.isNotEmpty(columnList)) {
+                for (ColumnMetaData tableColumn : columnList) {
+                    // 构造列配置
+                    GenField genField = buildGenFieldConfig(tableColumn);
+                    genField.setTableId(genConfig.getId());
+                    // 加入字段配置列表
+                    genFieldList.add(genField);
+                }
+            }
+            // 删除字段配置
+            genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
+            // 写入新字段配置
+            genFieldService.saveBatch(genFieldList);
+        }
+    }
+
     /**
      * 根据表元数据构建表配置 (bo -> entity)
      */

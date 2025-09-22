@@ -48,4 +48,9 @@ public interface GenConfigService extends IService<GenConfig> {
      */
     void importTable(Set<String> tableNameSet);
 
+    /**
+     * 同步表，相当于重新导入表
+     */
+    void syncTable(String tableName);
+
 }

@@ -66,7 +66,7 @@ public class GenConfigController {
      * 删除生成代码配置
      */
     @PostMapping("/delete")
-    public Result<GenConfigInfo> deleteConfig(@RequestBody GenConfigParam param) {
+    public Result<?> deleteConfig(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
         genConfigService.deleteByIds(param);
         return Result.success();
@@ -88,6 +88,16 @@ public class GenConfigController {
     public Result<PageData<TableMetaData>> importTable(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getTableNameSet(), "tableNameSet不能为空");
         genConfigService.importTable(param.getTableNameSet());
+        return Result.success();
+    }
+
+    /**
+     * 同步表
+     */
+    @PostMapping("/syncTable")
+    public Result<?> syncTable(@RequestBody GenConfigParam param) {
+        Assert.notEmpty(param.getTableName(), "tableName不能为空");
+        genConfigService.syncTable(param.getTableName());
         return Result.success();
     }
 

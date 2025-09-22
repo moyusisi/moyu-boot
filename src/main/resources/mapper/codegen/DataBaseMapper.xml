@@ -42,7 +42,7 @@
         </foreach>
     </select>
 
-    <select id="getTableMetadata" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
+    <select id="getTableMetaData" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
         SELECT
             TABLE_NAME ,
             TABLE_COMMENT ,

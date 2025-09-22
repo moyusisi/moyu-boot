@@ -36,7 +36,7 @@ public interface DataBaseMapper extends BaseMapper {
     /**
      * 获取表元数据
      */
-    TableMetaData getTableMetadata(String tableName);
+    TableMetaData getTableMetaData(String tableName);
 
     /**
      * 获取字段元数据列表
