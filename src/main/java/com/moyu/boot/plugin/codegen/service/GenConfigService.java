@@ -23,9 +23,9 @@ public interface GenConfigService extends IService<GenConfig> {
     PageData<GenConfig> pageList(GenConfigParam param);
 
     /**
-     * 查询代码配置详情(包括字段配置)，无则新生成(仅生成未保存)
+     * 查询代码配置详情(包括字段配置)
      */
-    GenConfigInfo getConfigDetail(String tableName);
+    GenConfigInfo configDetail(GenConfigParam param);
 
     /**
      * 保存代码生成配置(包括字段配置)

@@ -8,7 +8,6 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
-import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
@@ -47,9 +46,9 @@ public class GenConfigController {
      * 查询生成代码配置(无则生成)
      */
     @PostMapping("/detail")
-    public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
+    public Result<GenConfigInfo> configDetail(@RequestBody GenConfigParam param) {
+        Assert.isTrue(!ObjectUtil.isAllEmpty(param.getId(), param.getTableName()), "id和tableName不能同时为空");
+        GenConfigInfo genConfigInfo = genConfigService.configDetail(param);
         return Result.success(genConfigInfo);
     }
 

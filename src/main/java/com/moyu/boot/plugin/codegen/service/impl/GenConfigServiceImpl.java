@@ -2,7 +2,6 @@ package com.moyu.boot.plugin.codegen.service.impl;
 
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -36,7 +35,6 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -74,52 +72,20 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public GenConfigInfo getConfigDetail(String tableName) {
+    public GenConfigInfo configDetail(GenConfigParam param) {
         // 查询表生成配置
-        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
-
-        // 若无配置，则根据表的元数据生成默认配置(仅生成，不保存)
+        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
+                .eq(ObjectUtil.isNotEmpty(param.getId()), GenConfig::getId, param.getId())
+                .eq(ObjectUtil.isNotEmpty(param.getTableName()), GenConfig::getTableName, param.getTableName());
+        // id、tableName 均为唯一标识
+        GenConfig genConfig = this.getOne(queryWrapper);
         if (genConfig == null) {
-            TableMetaData tableMetadata = dataBaseMapper.getTableMetadata(tableName);
-            Assert.isTrue(tableMetadata != null, "未找到表元数据");
-            // 生成默认的表配置
-            genConfig = new GenConfig();
-            genConfig.setTableName(tableName);
-            // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
-            String tableComment = tableMetadata.getTableComment();
-            if (ObjectUtil.isNotEmpty(tableComment)) {
-                genConfig.setTableComment(tableComment);
-                genConfig.setEntityComment(tableComment.replace("表", "").trim());
-            }
-            //  根据表名生成实体类名 例如：sys_user -> SysUser
-            // lower_underscore 转 UpperCamel
-            genConfig.setEntityName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName));
-            genConfig.setPackageName(codegenProperties.getPackageName());
-            genConfig.setModuleName(codegenProperties.getModuleName());
-            genConfig.setAuthor(codegenProperties.getAuthor());
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-
-        // 字段配置，优先查库，无则生成
-        List<GenField> fieldList = new ArrayList<>();
-
-        // 获取表的列
-        List<ColumnMetaData> tableColumnList = dataBaseMapper.getTableColumns(tableName);
-        if (CollectionUtil.isNotEmpty(tableColumnList)) {
-            // 查询db中的字段生成配置
-            List<GenField> genFieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
-                    .eq(GenField::getTableId, genConfig.getId())
-                    .orderByAsc(GenField::getFieldSort)
-            );
-            for (ColumnMetaData tableColumn : tableColumnList) {
-                // 优先取db中存的，无则新生成默认字段配置
-                String columnName = tableColumn.getColumnName();
-                GenField genField = genFieldList.stream()
-                        .filter(item -> Objects.equals(item.getColumnName(), columnName))
-                        .findFirst().orElseGet(() -> buildGenFieldConfig(tableColumn));
-                // 加入字段配置列表
-                fieldList.add(genField);
-            }
-        }
+        // 字段配置
+        List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
+                .eq(GenField::getTableId, genConfig.getId()).orderByAsc(GenField::getFieldSort));
+        // 组装VO
         return buildGenConfigInfo(genConfig, fieldList);
     }
 

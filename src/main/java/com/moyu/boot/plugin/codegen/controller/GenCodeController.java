@@ -50,8 +50,8 @@ public class GenCodeController {
     @PostMapping("/preview")
     public Result<GenConfigInfo> preview(@RequestBody TableQueryParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
-        return Result.success(genConfigInfo);
+//        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
+        return Result.success();
     }
 
 }
