@@ -4,10 +4,11 @@ CREATE TABLE `gen_config`
 (
     `id`               BIGINT(20)   NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `table_name`       VARCHAR(100) NOT NULL COMMENT '表名',
-    `module_name`      VARCHAR(100) COMMENT '模块名',
+    `table_comment`    VARCHAR(100) COMMENT '表描述',
     `package_name`     VARCHAR(255) NOT NULL COMMENT '包名',
-    `business_name`    VARCHAR(100) NOT NULL COMMENT '业务名',
+    `module_name`      VARCHAR(100) NOT NULL COMMENT '模块名',
     `entity_name`      VARCHAR(100) NOT NULL COMMENT '实体类名',
+    `entity_comment`   VARCHAR(100) COMMENT '实体类描述',
     `author`           VARCHAR(50) COMMENT '作者',
     `parent_menu_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父菜单编码',
 
