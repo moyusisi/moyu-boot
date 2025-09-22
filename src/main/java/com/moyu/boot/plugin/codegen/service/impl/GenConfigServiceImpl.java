@@ -30,11 +30,14 @@ import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service实现
@@ -59,7 +62,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     public PageData<GenConfig> pageList(GenConfigParam param) {
         // 查询条件
         LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
-                // 关键词搜索(表名、业务名)
+                // 关键词搜索(表表名、表描述)
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
                 .or()
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getBusinessName, param.getSearchKey())
@@ -150,6 +153,61 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         if (result) {
             genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
         }
+    }
+
+    @Override
+    @Transactional
+    public void importTable(Set<String> tableNameSet) {
+        List<TableMetaData> tableList = dataBaseMapper.getTableListByNames(tableNameSet);
+        if (CollectionUtils.isEmpty(tableList)) {
+            return;
+        }
+        for (TableMetaData tableMetaData : tableList) {
+            // 构造表配置
+            GenConfig genConfig = buildGenTableConfig(tableMetaData);
+            // 写入表配置
+            boolean result = this.save(genConfig);
+            if (result) {
+                // 查询列元数据
+                List<ColumnMetaData> columnList = dataBaseMapper.getTableColumns(tableMetaData.getTableName());
+                // 列配置列表
+                List<GenField> genFieldList = new ArrayList<>();
+                if (CollectionUtil.isNotEmpty(columnList)) {
+                    for (ColumnMetaData tableColumn : columnList) {
+                        // 构造列配置
+                        GenField genField = buildGenFieldConfig(tableColumn);
+                        genField.setTableId(genConfig.getId());
+                        // 加入字段配置列表
+                        genFieldList.add(genField);
+                    }
+                }
+                // 写入字段配置
+                genFieldService.saveBatch(genFieldList);
+            }
+        }
+
+    }
+
+    /**
+     * 根据表元数据构建表配置 (bo -> entity)
+     */
+    private GenConfig buildGenTableConfig(TableMetaData tableMetaData) {
+        String tableName = tableMetaData.getTableName();
+        // 生成默认的表配置
+        GenConfig genConfig = new GenConfig();
+        genConfig.setTableName(tableName);
+        // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
+        String tableComment = tableMetaData.getTableComment();
+        if (ObjectUtil.isNotEmpty(tableComment)) {
+            genConfig.setBusinessName(tableComment.replace("表", "").trim());
+        }
+        //  根据表名生成实体类名 例如：sys_user -> SysUser
+        // lower_underscore 转 UpperCamel
+        genConfig.setEntityName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName));
+        genConfig.setPackageName(codegenProperties.getPackageName());
+        genConfig.setModuleName(codegenProperties.getModuleName());
+        genConfig.setAuthor(codegenProperties.getAuthor());
+        return genConfig;
     }
 
     /**

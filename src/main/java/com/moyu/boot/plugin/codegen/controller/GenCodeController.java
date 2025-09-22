@@ -45,36 +45,6 @@ public class GenCodeController {
     }
 
     /**
-     * 查询生成代码配置(无则生成)
-     */
-    @PostMapping("/detail")
-    public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
-        return Result.success(genConfigInfo);
-    }
-
-    /**
-     * 保存生成代码配置
-     */
-    @PostMapping("/save")
-    public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        genConfigService.saveConfig(param);
-        return Result.success();
-    }
-
-    /**
-     * 删除生成代码配置
-     */
-    @PostMapping("/delete")
-    public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-        genConfigService.deleteConfig(param.getTableName());
-        return Result.success();
-    }
-
-    /**
      * 预览生成的代码
      */
     @PostMapping("/preview")

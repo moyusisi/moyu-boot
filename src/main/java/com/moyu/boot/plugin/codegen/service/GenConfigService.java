@@ -7,6 +7,8 @@ import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 
+import java.util.Set;
+
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service
  *
@@ -34,4 +36,10 @@ public interface GenConfigService extends IService<GenConfig> {
      * 删除代码生成配置(包括字段配置)
      */
     void deleteConfig(String tableName);
+
+    /**
+     * 导入表，从表结构生成表配置(包括字段配置)
+     */
+    void importTable(Set<String> tableNameSet);
+
 }

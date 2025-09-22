@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 表查询参数
@@ -23,6 +24,10 @@ public class TableQueryParam extends BasePageParam {
      * 搜索关键词
      */
     private String searchKey;
+    /**
+     * 指定表名集合
+     */
+    private Set<String> tableNameSet;
 
     /**
      * 要排除的表名

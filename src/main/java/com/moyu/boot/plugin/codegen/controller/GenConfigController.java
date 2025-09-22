@@ -8,6 +8,9 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
+import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
+import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,6 +41,46 @@ public class GenConfigController {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         PageData<GenConfig> page = genConfigService.pageList(param);
         return Result.success(page);
+    }
+
+    /**
+     * 查询生成代码配置(无则生成)
+     */
+    @PostMapping("/detail")
+    public Result<GenConfigInfo> configDetail(@RequestBody TableQueryParam param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
+        return Result.success(genConfigInfo);
+    }
+
+    /**
+     * 保存生成代码配置
+     */
+    @PostMapping("/save")
+    public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        genConfigService.saveConfig(param);
+        return Result.success();
+    }
+
+    /**
+     * 删除生成代码配置
+     */
+    @PostMapping("/delete")
+    public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
+        Assert.notEmpty(param.getTableName(), "tableName不能为空");
+        genConfigService.deleteConfig(param.getTableName());
+        return Result.success();
+    }
+
+    /**
+     * 导入表
+     */
+    @PostMapping("/import")
+    public Result<PageData<TableMetaData>> importTable(@RequestBody GenConfigParam param) {
+        Assert.notEmpty(param.getTableNameSet(), "tableNameSet不能为空");
+        genConfigService.importTable(param.getTableNameSet());
+        return Result.success();
     }
 
 }

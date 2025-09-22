@@ -17,6 +17,7 @@
         FROM information_schema.tables t1 LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
         WHERE
         t1.TABLE_SCHEMA = (SELECT DATABASE())
+        AND t1.table_name NOT IN (select table_name from gen_config)
         AND t1.table_type = 'BASE TABLE'
         <if test="param.searchKey != null and param.searchKey.trim() neq ''">
             AND (t1.TABLE_NAME LIKE CONCAT('%',#{param.searchKey},'%') OR t1.TABLE_COMMENT LIKE CONCAT('%',#{param.searchKey},'%'))
@@ -28,6 +29,17 @@
                 #{excludeTable}
             </foreach>
         </if>
+    </select>
+
+    <select id="getTableListByNames" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
+        SELECT TABLE_NAME, TABLE_COMMENT, CREATE_TIME, UPDATE_TIME
+        FROM information_schema.tables
+        WHERE
+            TABLE_SCHEMA = (SELECT DATABASE())
+        AND TABLE_NAME IN
+        <foreach collection="collection" item="name" open="(" separator="," close=")">
+            #{name}
+        </foreach>
     </select>
 
     <select id="getTableMetadata" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">

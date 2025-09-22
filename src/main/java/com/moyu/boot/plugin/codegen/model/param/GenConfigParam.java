@@ -24,6 +24,10 @@ public class GenConfigParam extends BasePageParam {
      */
     private Set<Long> ids;
     /**
+     * 指定表名集合
+     */
+    private Set<String> tableNameSet;
+    /**
      * 名称关键词
      */
     private String searchKey;

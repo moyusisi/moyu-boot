@@ -8,6 +8,7 @@ import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -26,6 +27,11 @@ public interface DataBaseMapper extends BaseMapper {
      * @param param 查询参数
      */
     Page<TableMetaData> getTablePage(Page<TableMetaData> page, TableQueryParam param);
+
+    /**
+     * 获取表元数据
+     */
+    List<TableMetaData> getTableListByNames(Collection<String> tableNameSet);
 
     /**
      * 获取表元数据
