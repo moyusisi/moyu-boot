@@ -33,9 +33,9 @@ public interface GenConfigService extends IService<GenConfig> {
     void saveConfig(GenConfigInfo genConfigInfo);
 
     /**
-     * 删除代码生成配置(包括字段配置)
+     * 通过ids删除记录(包括字段配置)
      */
-    void deleteConfig(String tableName);
+    void deleteByIds(GenConfigParam param);
 
     /**
      * 导入表，从表结构生成表配置(包括字段配置)

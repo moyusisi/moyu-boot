@@ -65,7 +65,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 // 关键词搜索(表表名、表描述)
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
                 .or()
-                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getBusinessName, param.getSearchKey())
+                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableComment, param.getSearchKey())
                 .orderByAsc(GenConfig::getUpdateTime);
         // 分页查询
         Page<GenConfig> page = new Page<>(param.getPageNum(), param.getPageSize());
@@ -88,7 +88,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
             String tableComment = tableMetadata.getTableComment();
             if (ObjectUtil.isNotEmpty(tableComment)) {
-                genConfig.setBusinessName(tableComment.replace("表", "").trim());
+                genConfig.setTableComment(tableComment);
+                genConfig.setEntityComment(tableComment.replace("表", "").trim());
             }
             //  根据表名生成实体类名 例如：sys_user -> SysUser
             // lower_underscore 转 UpperCamel
@@ -144,15 +145,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public void deleteConfig(String tableName) {
-        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
-        if (genConfig == null) {
-            return;
-        }
-        boolean result = this.removeById(genConfig.getId());
-        if (result) {
-            genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
-        }
+    @Transactional
+    public void deleteByIds(GenConfigParam param) {
+        // 待删除的id集合
+        Set<Long> idSet = param.getIds();
+        // 删除实体配置
+        this.removeByIds(idSet);
+        // 删除字段配置
+        genFieldService.remove(Wrappers.lambdaQuery(GenField.class).in(GenField::getTableId, idSet));
     }
 
     @Override
@@ -199,7 +199,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
         String tableComment = tableMetaData.getTableComment();
         if (ObjectUtil.isNotEmpty(tableComment)) {
-            genConfig.setBusinessName(tableComment.replace("表", "").trim());
+            genConfig.setTableComment(tableComment);
+            genConfig.setEntityComment(tableComment.replace("表", "").trim());
         }
         //  根据表名生成实体类名 例如：sys_user -> SysUser
         // lower_underscore 转 UpperCamel
@@ -306,10 +307,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         GenConfigInfo genConfigInfo = new GenConfigInfo();
         genConfigInfo.setId(genConfig.getId());
         genConfigInfo.setTableName(genConfig.getTableName());
+        genConfigInfo.setTableComment(genConfig.getTableComment());
         genConfigInfo.setPackageName(genConfig.getPackageName());
         genConfigInfo.setModuleName(genConfig.getModuleName());
         genConfigInfo.setEntityName(genConfig.getEntityName());
-        genConfigInfo.setBusinessName(genConfig.getBusinessName());
+        genConfigInfo.setEntityComment(genConfig.getEntityComment());
         genConfigInfo.setAuthor(genConfig.getAuthor());
         List<FieldConfigVO> fieldConfigList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(fieldList)) {
@@ -332,10 +334,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         GenConfig genConfig = new GenConfig();
         genConfig.setId(genConfigInfo.getId());
         genConfig.setTableName(genConfigInfo.getTableName());
+        genConfig.setTableComment(genConfigInfo.getTableComment());
         genConfig.setPackageName(genConfigInfo.getPackageName());
         genConfig.setModuleName(genConfigInfo.getModuleName());
         genConfig.setEntityName(genConfigInfo.getEntityName());
-        genConfig.setBusinessName(genConfigInfo.getBusinessName());
+        genConfig.setEntityComment(genConfigInfo.getEntityComment());
         genConfig.setAuthor(genConfigInfo.getAuthor());
         return genConfig;
     }

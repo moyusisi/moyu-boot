@@ -34,6 +34,11 @@ public class GenConfig {
     private String tableName;
 
     /**
+     * 表描述
+     */
+    private String tableComment;
+
+    /**
      * 包名
      */
     private String packageName;
@@ -49,9 +54,9 @@ public class GenConfig {
     private String entityName;
 
     /**
-     * 业务名
+     * 实体类描述
      */
-    private String businessName;
+    private String entityComment;
 
     /**
      * 作者

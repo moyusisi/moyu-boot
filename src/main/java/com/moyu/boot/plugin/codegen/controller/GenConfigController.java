@@ -67,9 +67,9 @@ public class GenConfigController {
      * 删除生成代码配置
      */
     @PostMapping("/delete")
-    public Result<GenConfigInfo> deleteConfig(@RequestBody TableQueryParam param) {
-        Assert.notEmpty(param.getTableName(), "tableName不能为空");
-        genConfigService.deleteConfig(param.getTableName());
+    public Result<GenConfigInfo> deleteConfig(@RequestBody GenConfigParam param) {
+        Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
+        genConfigService.deleteByIds(param);
         return Result.success();
     }
 

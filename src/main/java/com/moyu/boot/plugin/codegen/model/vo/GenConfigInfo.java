@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,11 @@ public class GenConfigInfo {
     private String tableName;
 
     /**
+     * 表描述
+     */
+    private String tableComment;
+
+    /**
      * 包名
      */
     private String packageName;
@@ -45,9 +51,9 @@ public class GenConfigInfo {
     private String entityName;
 
     /**
-     * 业务名
+     * 实体类描述
      */
-    private String businessName;
+    private String entityComment;
 
     /**
      * 父菜单ID
@@ -58,6 +64,16 @@ public class GenConfigInfo {
      * 作者
      */
     private String author;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 
     /**
      * 字段配置列表
