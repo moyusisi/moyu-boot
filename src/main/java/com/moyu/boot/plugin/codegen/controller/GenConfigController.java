@@ -73,6 +73,15 @@ public class GenConfigController {
     }
 
     /**
+     * 分页查询数据库中的表，以便导入
+     */
+    @PostMapping("/tablePage")
+    public Result<PageData<TableMetaData>> tablePageList(@RequestBody GenConfigParam param) {
+        PageData<TableMetaData> page = genConfigService.tablePageList(param);
+        return Result.success(page);
+    }
+
+    /**
      * 导入表
      */
     @PostMapping("/import")
@@ -82,4 +91,13 @@ public class GenConfigController {
         return Result.success();
     }
 
+    /**
+     * 预览生成的代码
+     */
+    @PostMapping("/preview")
+    public Result<GenConfigInfo> preview(@RequestBody GenConfigParam param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+//        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
+        return Result.success();
+    }
 }

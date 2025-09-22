@@ -6,6 +6,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
+import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 
 import java.util.Set;
 
@@ -36,6 +37,11 @@ public interface GenConfigService extends IService<GenConfig> {
      * 通过ids删除记录(包括字段配置)
      */
     void deleteByIds(GenConfigParam param);
+
+    /**
+     * 分页查询数据库中的表
+     */
+    PageData<TableMetaData> tablePageList(GenConfigParam param);
 
     /**
      * 导入表，从表结构生成表配置(包括字段配置)

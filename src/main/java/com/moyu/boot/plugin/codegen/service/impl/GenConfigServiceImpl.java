@@ -122,6 +122,16 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
+    public PageData<TableMetaData> tablePageList(GenConfigParam param) {
+        Page<TableMetaData> page = new Page<>(param.getPageNum(), param.getPageSize());
+        // 设置排除的表
+        param.setExcludeTables(codegenProperties.getExcludeTables());
+        //  分页查询
+        Page<TableMetaData> tablePage = dataBaseMapper.getTablePage(page, param);
+        return new PageData<>(tablePage.getTotal(), tablePage.getRecords());
+    }
+
+    @Override
     @Transactional
     public void importTable(Set<String> tableNameSet) {
         List<TableMetaData> tableList = dataBaseMapper.getTableListByNames(tableNameSet);

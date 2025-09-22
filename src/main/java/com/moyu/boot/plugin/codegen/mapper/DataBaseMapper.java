@@ -4,7 +4,7 @@ package com.moyu.boot.plugin.codegen.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
-import com.moyu.boot.plugin.codegen.model.param.TableQueryParam;
+import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,7 +26,7 @@ public interface DataBaseMapper extends BaseMapper {
      * @param page  分页参数
      * @param param 查询参数
      */
-    Page<TableMetaData> getTablePage(Page<TableMetaData> page, TableQueryParam param);
+    Page<TableMetaData> getTablePage(Page<TableMetaData> page, GenConfigParam param);
 
     /**
      * 获取表元数据

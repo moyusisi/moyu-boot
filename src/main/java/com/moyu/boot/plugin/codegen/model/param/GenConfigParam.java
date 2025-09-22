@@ -1,12 +1,16 @@
 package com.moyu.boot.plugin.codegen.model.param;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,10 +36,18 @@ public class GenConfigParam extends BasePageParam {
      */
     private String searchKey;
 
+    /**
+     * 要排除的表名
+     */
+    @JsonIgnore
+    private List<String> excludeTables;
+
     //********** db中存在的字段 **********//
     /**
-     * 主键ID
+     * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
