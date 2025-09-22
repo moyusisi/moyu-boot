@@ -85,7 +85,7 @@ public class GenConfigController {
      * 导入表
      */
     @PostMapping("/import")
-    public Result<PageData<TableMetaData>> importTable(@RequestBody GenConfigParam param) {
+    public Result<?> importTable(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getTableNameSet(), "tableNameSet不能为空");
         genConfigService.importTable(param.getTableNameSet());
         return Result.success();
