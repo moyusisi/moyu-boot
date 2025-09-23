@@ -9,8 +9,6 @@
         SELECT
         t1.TABLE_NAME,
         t1.TABLE_COMMENT,
-        t1.TABLE_COLLATION,
-        t1.ENGINE,
         t1.CREATE_TIME,
         t1.UPDATE_TIME
         FROM information_schema.tables t1 LEFT JOIN gen_config t2 on t1.TABLE_NAME = t2.table_name
