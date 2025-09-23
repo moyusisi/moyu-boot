@@ -25,26 +25,6 @@ public class TableMetaData {
     private String tableComment;
 
     /**
-     * 排序规则，如：utf8mb4_general_ci
-     */
-    private String tableCollation;
-
-    /**
-     * 存储引擎，如：InnoDB
-     */
-    private String engine;
-
-    /**
-     * 字符集，如：utf8mb4
-     */
-    private String charset;
-
-    /**
-     * 是否已有配置
-     */
-    private Integer hasConfig;
-
-    /**
      * 创建时间
      */
     private String createTime;
