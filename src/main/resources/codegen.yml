@@ -10,3 +10,35 @@ codegen:
   excludeTables:
     - gen_config
     - gen_field_config
+  ## 模板配置
+  templateConfigs:
+    api:
+      templatePath: codegen/api.js.vm
+      subPackageName: api
+    view:
+      templatePath: codegen/index.vue.vm
+      subPackageName: views
+    controller:
+      templatePath: codegen/controller.java.vm
+      subPackageName: controller
+    service:
+      templatePath: codegen/service.java.vm
+      subPackageName: service
+    impl:
+      templatePath: codegen/serviceImpl.java.vm
+      subPackageName: service.impl
+    mapper:
+      templatePath: codegen/mapper.java.vm
+      subPackageName: mapper
+    xml:
+      templatePath: codegen/mapper.xml.vm
+      subPackageName: mapper
+    entity:
+      templatePath: codegen/entity.java.vm
+      subPackageName: model.entity
+    param:
+      templatePath: codegen/param.java.vm
+      subPackageName: model.param
+    vo:
+      templatePath: codegen/vo.java.vm
+      subPackageName: model.vo

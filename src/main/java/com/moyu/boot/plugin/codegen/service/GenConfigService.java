@@ -5,9 +5,12 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -53,4 +56,8 @@ public interface GenConfigService extends IService<GenConfig> {
      */
     void syncTable(String tableName);
 
+    /**
+     * 生成代码预览
+     */
+    Map<String, String> previewCode(GenConfigParam param);
 }

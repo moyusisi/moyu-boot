@@ -4,6 +4,10 @@ package com.moyu.boot.plugin.codegen.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.template.Template;
+import cn.hutool.extra.template.TemplateConfig;
+import cn.hutool.extra.template.TemplateEngine;
+import cn.hutool.extra.template.TemplateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,6 +26,7 @@ import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codegen.model.vo.FieldConfigVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
@@ -33,9 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service实现
@@ -199,6 +202,40 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         }
     }
 
+    @Override
+    public Map<String, String> previewCode(GenConfigParam param) {
+        // code代码map
+        Map<String, String> codeMap = new LinkedHashMap<>();
+        // 查询表配置
+        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getId, param.getId()));
+        if (genConfig == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
+        // 字段配置
+        List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
+        if (CollectionUtil.isEmpty(fieldList)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
+        // 获取所有模板文件名
+        List<String> templateList = getTemplateList();
+        // 组装模板中用到的变量
+        Map<String, Object> bindMap = buildBindMap(genConfig);
+        // 创建模板引擎
+        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
+        // 遍历模板文件
+        for (String templateName : templateList) {
+            Template template = engine.getTemplate(templateName);
+            // 模板渲染后的内容
+            String content = template.render(bindMap);
+            // 模板名
+            String simpleName = templateName.replace(".vm", "");
+            simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
+            codeMap.put(simpleName, content);
+        }
+
+        return codeMap;
+    }
+
     /**
      * 根据表元数据构建表配置 (bo -> entity)
      */
@@ -353,4 +390,91 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setAuthor(genConfigInfo.getAuthor());
         return genConfig;
     }
+
+    /**
+     * 构建CodePreviewVO，不包含模板生成的内容
+     */
+    private CodePreviewVO buildPreviewVO(GenConfig genConfig, String templateName) {
+        CodePreviewVO previewVO = new CodePreviewVO();
+        // 代码文件名
+        previewVO.setFileName(templateName);
+
+        // 代码路径
+        previewVO.setFilePath(templateName);
+        return previewVO;
+    }
+
+    /**
+     * 获取模板列表(从resources/templates开始的全路径)
+     */
+    private List<String> getTemplateList() {
+        List<String> templates = new ArrayList<String>();
+        templates.add("java/entity.java.vm");
+        templates.add("java/mapper.java.vm");
+        templates.add("java/service.java.vm");
+        templates.add("java/serviceImpl.java.vm");
+        templates.add("java/controller.java.vm");
+        templates.add("xml/mapper.xml.vm");
+//        templates.add("sql/sql.vm");
+        templates.add("js/api.js.vm");
+        return templates;
+    }
+
+    /**
+     * 设置模板变量信息
+     */
+    public static Map<String, Object> buildBindMap(GenConfig genConfig) {
+        String packageName = genConfig.getPackageName();
+        String moduleName = genConfig.getModuleName();
+        String entityName = genConfig.getEntityName();
+        String entityComment = genConfig.getEntityComment();
+
+        Map<String, Object> bindMap = new HashMap<>();
+        bindMap.put("packageName", packageName);
+        bindMap.put("moduleName", moduleName);
+        bindMap.put("entityName", entityName);
+        bindMap.put("entityComment", entityComment);
+        bindMap.put("author", genConfig.getAuthor());
+        return bindMap;
+    }
+
+    /**
+     * 获取代码文件的全路径文件名
+     */
+    private String getFullFileName(String template, GenConfig genConfig) {
+        String className = genConfig.getEntityName();
+        String packageName = genConfig.getPackageName();
+        String moduleName = genConfig.getModuleName();
+        String javaPath = "main/java/" + packageName.replace(".", "/") + moduleName;
+
+        String fileName = "";
+
+        if (template.contains("controller.java.vm")) {
+            fileName = String.format("%s/controller/%sController.java", javaPath, className);
+        } else if (template.contains("service.java.vm")) {
+            fileName = String.format("%s/service/%sService.java", javaPath, className);
+        } else if (template.contains("serviceImpl.java.vm")) {
+            fileName = String.format("%s/service/impl/%sServiceImpl.java", javaPath, className);
+        } else if (template.contains("mapper.java.vm")) {
+            fileName = String.format("%s/mapper/%sMapper.java", javaPath, className);
+        } else if (template.contains("entity.java.vm")) {
+            fileName = String.format("%s/model/entity/%s.java", javaPath, className);
+        } else if (template.contains("param.java.vm")) {
+            fileName = String.format("%s/model/param/%sParam.java", javaPath, className);
+        } else if (template.contains("VO.java.vm")) {
+            fileName = String.format("%s/model/vo/%sVO.java", javaPath, className);
+        } else if (template.contains("mapper.xml.vm")) {
+            fileName = String.format("main/resources/mapper/%sMapper.xml", className);
+        } else if (template.contains("api.js.vm")) {
+            fileName = String.format("src/api/%s/%sApi.js", moduleName, className);
+        } else if (template.contains("index.vue.vm")) {
+            fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
+        } else if (template.contains("addForm.vue.vm")) {
+            fileName = String.format("src/views/%s/%s/addForm.vue", moduleName, className);
+        } else if (template.contains("editForm.vue.vm")) {
+            fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
+        }
+        return fileName;
+    }
+
 }

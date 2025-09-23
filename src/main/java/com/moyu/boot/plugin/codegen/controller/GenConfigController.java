@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 /**
  * 代码生成配置控制器
@@ -57,7 +58,7 @@ public class GenConfigController {
      */
     @PostMapping("/save")
     public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
+        Assert.notNull(param.getId(), "id不能为空");
         genConfigService.saveConfig(param);
         return Result.success();
     }
@@ -105,9 +106,9 @@ public class GenConfigController {
      * 预览生成的代码
      */
     @PostMapping("/preview")
-    public Result<GenConfigInfo> preview(@RequestBody GenConfigParam param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getTableName()), "tableName不能为空");
-//        GenConfigInfo genConfigInfo = genConfigService.getConfigDetail(param.getTableName());
-        return Result.success();
+    public Result<Map<String, String>> preview(@RequestBody GenConfigParam param) {
+        Assert.notNull(param.getId(), "id不能为空");
+        Map<String, String> codeMap = genConfigService.previewCode(param);
+        return Result.success(codeMap);
     }
 }
