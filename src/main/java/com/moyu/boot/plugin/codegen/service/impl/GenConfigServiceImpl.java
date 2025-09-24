@@ -2,7 +2,6 @@ package com.moyu.boot.plugin.codegen.service.impl;
 
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
@@ -34,7 +33,6 @@ import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -436,6 +434,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         bindMap.put("packageName", packageName);
         bindMap.put("moduleName", moduleName);
         bindMap.put("tableName", genConfig.getTableName());
+        bindMap.put("tableComment", genConfig.getTableComment());
         bindMap.put("entityName", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName));
         bindMap.put("className", entityName);
         bindMap.put("entityDesc", entityDesc);

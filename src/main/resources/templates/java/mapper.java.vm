@@ -1,0 +1,31 @@
+package ${packageName}.${moduleName}.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${packageName}.${moduleName}.model.entity.${className};
+import ${packageName}.${moduleName}.model.param.${className}Param;
+import ${packageName}.${moduleName}.model.vo.${className}VO;
+import org.apache.ibatis.annotations.Mapper;
+
+/**
+ * 针对表${tableName}(${tableComment})的数据库操作Mapper
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Mapper
+public interface ${className}Mapper extends BaseMapper<${className}> {
+
+    /**
+     * 获取${entityDesc}分页数据
+     * 仅示例自定义方法的写法，实际mybatis-plus提供了分页查询方法
+     * 注意：自定义 Mapper 方法中使用分页，返回类型必须是 IPage(或List)。
+     *
+     * @param page 分页对象(包含页码、页大小)
+     * @param param 查询参数
+     * @return {@link Page<${className}VO>} $!{entityDesc}分页列表
+     */
+    Page<${className}VO> get${className}Page(Page<${className}VO> page, ${className}Param param);
+
+}
+
