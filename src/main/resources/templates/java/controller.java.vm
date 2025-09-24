@@ -10,6 +10,7 @@ import ${packageName}.${moduleName}.model.param.${entityName}Param;
 import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import ${packageName}.${moduleName}.service.${entityName}Service;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
