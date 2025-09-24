@@ -53,7 +53,7 @@ public class GenConfigInfo {
     /**
      * 实体类描述
      */
-    private String entityComment;
+    private String entityDesc;
 
     /**
      * 父菜单ID

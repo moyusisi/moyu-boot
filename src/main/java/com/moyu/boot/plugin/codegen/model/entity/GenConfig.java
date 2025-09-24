@@ -56,7 +56,7 @@ public class GenConfig {
     /**
      * 实体类描述
      */
-    private String entityComment;
+    private String entityDesc;
 
     /**
      * 作者

@@ -1,0 +1,34 @@
+package ${packageName}.${moduleName}.model.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import com.moyu.boot.common.mybatis.entity.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * $!{entityDesc}实体对象
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+@Getter
+@Setter
+@TableName("${tableName}")
+public class ${className} extends BaseEntity {
+
+    #foreach($fieldConfig in ${fieldList})
+        #if(!$fieldConfig.fieldName.equals("id")
+        && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime")
+        && !$fieldConfig.fieldName.equals("createBy") && !$fieldConfig.fieldName.equals("updateBy"))
+        #if("$!fieldConfig.fieldComment" != "")
+    /**
+     * ${fieldConfig.fieldComment}
+     */
+    #end
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
+        #end
+    #end
+}

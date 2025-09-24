@@ -2,6 +2,7 @@ package com.moyu.boot.plugin.codegen.service.impl;
 
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
@@ -33,6 +34,8 @@ import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -219,9 +222,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 获取所有模板文件名
         List<String> templateList = getTemplateList();
         // 组装模板中用到的变量
-        Map<String, Object> bindMap = buildBindMap(genConfig);
-        // 创建模板引擎
-        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("templates", TemplateConfig.ResourceMode.CLASSPATH));
+        Map<String, Object> bindMap = buildBindMap(genConfig, fieldList);
+        // 自动根据用户引入的模板引擎库的jar来自动选择使用的引擎
+        TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("", TemplateConfig.ResourceMode.CLASSPATH));
         // 遍历模板文件
         for (String templateName : templateList) {
             Template template = engine.getTemplate(templateName);
@@ -248,7 +251,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         String tableComment = tableMetaData.getTableComment();
         if (ObjectUtil.isNotEmpty(tableComment)) {
             genConfig.setTableComment(tableComment);
-            genConfig.setEntityComment(tableComment.replace("表", "").trim());
+            genConfig.setEntityDesc(tableComment.replace("表", "").trim());
         }
         //  根据表名生成实体类名 例如：sys_user -> SysUser
         // lower_underscore 转 UpperCamel
@@ -359,7 +362,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfigInfo.setPackageName(genConfig.getPackageName());
         genConfigInfo.setModuleName(genConfig.getModuleName());
         genConfigInfo.setEntityName(genConfig.getEntityName());
-        genConfigInfo.setEntityComment(genConfig.getEntityComment());
+        genConfigInfo.setEntityDesc(genConfig.getEntityDesc());
         genConfigInfo.setAuthor(genConfig.getAuthor());
         List<FieldConfigVO> fieldConfigList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(fieldList)) {
@@ -386,7 +389,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setPackageName(genConfigInfo.getPackageName());
         genConfig.setModuleName(genConfigInfo.getModuleName());
         genConfig.setEntityName(genConfigInfo.getEntityName());
-        genConfig.setEntityComment(genConfigInfo.getEntityComment());
+        genConfig.setEntityDesc(genConfigInfo.getEntityDesc());
         genConfig.setAuthor(genConfigInfo.getAuthor());
         return genConfig;
     }
@@ -409,32 +412,36 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     private List<String> getTemplateList() {
         List<String> templates = new ArrayList<String>();
-        templates.add("java/entity.java.vm");
-        templates.add("java/mapper.java.vm");
-        templates.add("java/service.java.vm");
-        templates.add("java/serviceImpl.java.vm");
-        templates.add("java/controller.java.vm");
-        templates.add("xml/mapper.xml.vm");
-//        templates.add("sql/sql.vm");
-        templates.add("js/api.js.vm");
+        templates.add("templates/java/entity.java.vm");
+        templates.add("templates/java/mapper.java.vm");
+        templates.add("templates/java/service.java.vm");
+        templates.add("templates/java/serviceImpl.java.vm");
+        templates.add("templates/java/controller.java.vm");
+        templates.add("templates/xml/mapper.xml.vm");
+//        templates.add("templates/sql/sql.vm");
+        templates.add("templates/js/api.js.vm");
         return templates;
     }
 
     /**
      * 设置模板变量信息
      */
-    public static Map<String, Object> buildBindMap(GenConfig genConfig) {
+    public static Map<String, Object> buildBindMap(GenConfig genConfig, List<GenField> fieldList) {
         String packageName = genConfig.getPackageName();
         String moduleName = genConfig.getModuleName();
         String entityName = genConfig.getEntityName();
-        String entityComment = genConfig.getEntityComment();
+        String entityDesc = genConfig.getEntityDesc();
 
         Map<String, Object> bindMap = new HashMap<>();
         bindMap.put("packageName", packageName);
         bindMap.put("moduleName", moduleName);
-        bindMap.put("entityName", entityName);
-        bindMap.put("entityComment", entityComment);
+        bindMap.put("tableName", genConfig.getTableName());
+        bindMap.put("entityName", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName));
+        bindMap.put("className", entityName);
+        bindMap.put("entityDesc", entityDesc);
         bindMap.put("author", genConfig.getAuthor());
+        bindMap.put("date", LocalDateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
+        bindMap.put("fieldList", fieldList);
         return bindMap;
     }
 

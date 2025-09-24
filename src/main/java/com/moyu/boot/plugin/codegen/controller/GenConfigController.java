@@ -111,4 +111,14 @@ public class GenConfigController {
         Map<String, String> codeMap = genConfigService.previewCode(param);
         return Result.success(codeMap);
     }
+
+    /**
+     * 预览生成的代码
+     */
+    @PostMapping("/download")
+    public Result<?> downloadZip(@RequestBody GenConfigParam param) {
+        Assert.notEmpty(param.getIds(), "ids不能为空");
+        genConfigService.previewCode(param);
+        return Result.success();
+    }
 }

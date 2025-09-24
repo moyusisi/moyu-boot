@@ -5,16 +5,17 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.mybatis.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 
 /**
  * 数据权限分组表
  *
  * @TableName sys_scope
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @TableName(value = "sys_scope")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysScope extends BaseEntity {

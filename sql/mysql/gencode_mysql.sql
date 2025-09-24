@@ -8,7 +8,7 @@ CREATE TABLE `gen_config`
     `package_name`     VARCHAR(255) NOT NULL COMMENT '包名',
     `module_name`      VARCHAR(100) NOT NULL COMMENT '模块名',
     `entity_name`      VARCHAR(100) NOT NULL COMMENT '实体类名',
-    `entity_comment`   VARCHAR(100) COMMENT '实体类描述',
+    `entity_desc`      VARCHAR(100) COMMENT '实体类描述',
     `author`           VARCHAR(50) COMMENT '作者',
     `parent_menu_code` VARCHAR(64)  NULL DEFAULT '0' COMMENT '父菜单编码',
 
