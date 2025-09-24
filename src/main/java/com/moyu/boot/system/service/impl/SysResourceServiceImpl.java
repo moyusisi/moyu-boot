@@ -216,7 +216,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     @Override
-    public void edit(SysResourceParam resourceParam) {
+    public void update(SysResourceParam resourceParam) {
         SysResource oldMenu = this.detail(resourceParam);
         // 转换
         SysResource updateMenu = buildSysMenu(resourceParam);

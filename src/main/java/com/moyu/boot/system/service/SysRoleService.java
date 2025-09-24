@@ -45,7 +45,7 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 修改记录
      */
-    void edit(SysRoleParam roleParam);
+    void update(SysRoleParam roleParam);
 
     /**
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)

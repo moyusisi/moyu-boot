@@ -67,6 +67,6 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 修改组织机构
      */
-    void edit(SysOrgParam orgParam);
+    void update(SysOrgParam orgParam);
 
 }

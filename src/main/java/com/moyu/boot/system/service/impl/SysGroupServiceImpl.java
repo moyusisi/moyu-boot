@@ -170,7 +170,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
-    public void edit(SysGroupParam groupParam) {
+    public void update(SysGroupParam groupParam) {
         SysGroup oldGroup = this.detail(groupParam);
         // 属性复制
         SysGroup updateGroup = BeanUtil.copyProperties(groupParam, SysGroup.class);

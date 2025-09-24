@@ -39,7 +39,7 @@ public interface SysScopeService extends IService<SysScope> {
     /**
      * 修改记录
      */
-    void edit(SysScopeParam scopeParam);
+    void update(SysScopeParam scopeParam);
 
     ////// scope 通过 relation 管理的数据
 

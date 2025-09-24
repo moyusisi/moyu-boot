@@ -151,7 +151,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
     }
 
     @Override
-    public void edit(SysScopeParam scopeParam) {
+    public void update(SysScopeParam scopeParam) {
         SysScope oldScope = this.detail(scopeParam);
         // 属性复制
         SysScope updateScope = BeanUtil.copyProperties(scopeParam, SysScope.class);

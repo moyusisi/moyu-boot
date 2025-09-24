@@ -232,7 +232,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     @Override
-    public void edit(SysOrgParam orgParam) {
+    public void update(SysOrgParam orgParam) {
         SysOrg oldOrg = this.detail(orgParam);
         // 不使用beanCopy是为了效率
         SysOrg updateOrg = buildSysOrg(orgParam);

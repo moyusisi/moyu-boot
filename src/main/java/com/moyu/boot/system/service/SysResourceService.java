@@ -56,7 +56,7 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 修改菜单
      */
-    void edit(SysResourceParam resourceParam);
+    void update(SysResourceParam resourceParam);
 
     /**
      * 获取菜单树选择器(字段少，不包含按钮)

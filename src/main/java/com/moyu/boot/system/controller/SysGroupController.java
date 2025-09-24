@@ -82,9 +82,9 @@ public class SysGroupController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:edit')")
     @PostMapping("/edit")
-    public Result<String> edit(@Validated @RequestBody SysGroupParam groupParam) {
+    public Result<String> update(@Validated @RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
-        sysGroupService.edit(groupParam);
+        sysGroupService.update(groupParam);
         return Result.success();
     }
 

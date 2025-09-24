@@ -112,9 +112,9 @@ public class SysResourceController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
-    public Result<String> edit(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> update(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
-        sysResourceService.edit(resourceParam);
+        sysResourceService.update(resourceParam);
         return Result.success();
     }
 

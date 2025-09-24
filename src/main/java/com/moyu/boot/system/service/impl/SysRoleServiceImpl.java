@@ -154,7 +154,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void edit(SysRoleParam roleParam) {
+    public void update(SysRoleParam roleParam) {
         SysRole oldRole = this.detail(roleParam);
         // 属性复制
         SysRole updateOrg = BeanUtil.copyProperties(roleParam, SysRole.class);

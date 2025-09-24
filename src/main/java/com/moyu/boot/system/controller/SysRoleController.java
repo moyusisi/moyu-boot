@@ -91,9 +91,9 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:edit')")
     @PostMapping("/edit")
-    public Result<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
+    public Result<String> update(@Validated @RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
-        sysRoleService.edit(roleParam);
+        sysRoleService.update(roleParam);
         return Result.success();
     }
 

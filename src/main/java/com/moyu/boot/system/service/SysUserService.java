@@ -42,7 +42,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 修改记录
      */
-    void edit(SysUserParam userParam);
+    void update(SysUserParam userParam);
 
     /**
      * 重置用户密码

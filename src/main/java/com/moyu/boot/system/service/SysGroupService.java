@@ -45,7 +45,7 @@ public interface SysGroupService extends IService<SysGroup> {
     /**
      * 修改记录
      */
-    void edit(SysGroupParam groupParam);
+    void update(SysGroupParam groupParam);
 
     ////// group 通过 relation 管理的数据
 

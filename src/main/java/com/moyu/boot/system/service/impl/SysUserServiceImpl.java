@@ -174,7 +174,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void edit(SysUserParam userParam) {
+    public void update(SysUserParam userParam) {
         SysUser oldUser = this.detail(userParam);
         // 属性复制
         SysUser updateUser = BeanUtil.copyProperties(userParam, SysUser.class);

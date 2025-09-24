@@ -75,9 +75,9 @@ public class SysScopeController {
      * 编辑
      */
     @PostMapping("/edit")
-    public Result<String> edit(@Validated @RequestBody SysScopeParam scopeParam) {
+    public Result<String> update(@Validated @RequestBody SysScopeParam scopeParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(scopeParam.getId(), scopeParam.getCode()), "id和code不能同时为空");
-        sysScopeService.edit(scopeParam);
+        sysScopeService.update(scopeParam);
         return Result.success();
     }
 
