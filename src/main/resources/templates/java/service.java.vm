@@ -1,0 +1,46 @@
+package ${packageName}.${moduleName}.service;
+
+import ${packageName}.${moduleName}.model.entity.${className};
+import ${packageName}.${moduleName}.model.param.${className}Param;
+import ${packageName}.${moduleName}.model.vo.${className}VO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.IService;
+
+/**
+ * $!{entityDesc}服务类Service
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+public interface ${className}Service extends IService<${className}> {
+
+    /**
+     * 获取记录列表(不分页，通过条件自行控制数量)
+     */
+    List<${className}VO> list(${className}Param roleParam);
+
+    /**
+     * 分页获取记录列表
+     */
+    PageData<${className}VO> pageList(${className}Param param);
+
+    /**
+     * 获取记录详情(通过主键或唯一键)
+     */
+     ${className} detail(${className}Param param);
+
+    /**
+     * 添加记录
+     */
+    void add(${className}Param param);
+
+    /**
+     * 修改记录(通过主键id更新)
+     */
+    void update(${className}Param param);
+
+    /**
+     * 通过ids删除记录
+     */
+    void deleteByIds(${className}Param param);
+}
