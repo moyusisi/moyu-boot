@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter
 @Setter
 @TableName("${tableName}")
-public class ${className} extends BaseEntity {
+public class ${entityName} extends BaseEntity {
 
 #foreach($fieldConfig in ${fieldList})
     #if(!$fieldConfig.fieldName.equals("id")

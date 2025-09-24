@@ -437,8 +437,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         bindMap.put("moduleName", moduleName);
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("tableComment", genConfig.getTableComment());
-        bindMap.put("entityName", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName));
-        bindMap.put("className", entityName);
+        bindMap.put("entityName", entityName);
+        bindMap.put("lowerCamelEntityName", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName));
         bindMap.put("entityDesc", entityDesc);
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("date", LocalDateTime.now().toString("yyyy-MM-dd HH:mm:ss"));

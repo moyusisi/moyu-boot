@@ -30,7 +30,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ${className}Param extends BasePageParam {
+public class ${entityName}Param extends BasePageParam {
 
     //********** 额外字段 **********//
     /**

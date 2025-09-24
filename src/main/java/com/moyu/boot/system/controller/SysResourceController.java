@@ -1,12 +1,11 @@
 package com.moyu.boot.system.controller;
 
-
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.service.SysResourceService;
@@ -110,7 +109,7 @@ public class SysResourceController {
     /**
      * 编辑资源
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
+    @PreAuthorize("hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
     public Result<String> update(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");

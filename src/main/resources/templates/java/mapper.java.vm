@@ -2,9 +2,9 @@ package ${packageName}.${moduleName}.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import ${packageName}.${moduleName}.model.entity.${className};
-import ${packageName}.${moduleName}.model.param.${className}Param;
-import ${packageName}.${moduleName}.model.vo.${className}VO;
+import ${packageName}.${moduleName}.model.entity.${entityName};
+import ${packageName}.${moduleName}.model.param.${entityName}Param;
+import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -14,7 +14,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @since ${date}
  */
 @Mapper
-public interface ${className}Mapper extends BaseMapper<${className}> {
+public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
 
     /**
      * 获取${entityDesc}分页数据
@@ -23,9 +23,9 @@ public interface ${className}Mapper extends BaseMapper<${className}> {
      *
      * @param page 分页对象(包含页码、页大小)
      * @param param 查询参数
-     * @return {@link Page<${className}VO>} $!{entityDesc}分页列表
+     * @return {@link Page<${entityName}VO>} $!{entityDesc}分页列表
      */
-    Page<${className}VO> get${className}Page(Page<${className}VO> page, ${className}Param param);
+    Page<${entityName}VO> get${entityName}Page(Page<${entityName}VO> page, ${entityName}Param param);
 
 }
 

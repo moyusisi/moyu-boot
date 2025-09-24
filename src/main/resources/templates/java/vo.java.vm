@@ -24,7 +24,7 @@ import java.util.Date;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ${className}VO {
+public class ${entityName}VO {
 
     /**
      * 主键id
