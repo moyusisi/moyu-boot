@@ -27,7 +27,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
     /**
      * 获取记录详情(通过主键或唯一键)
      */
-     ${entityName} detail(${entityName}Param param);
+     ${entityName}VO detail(${entityName}Param param);
 
     /**
      * 添加记录
