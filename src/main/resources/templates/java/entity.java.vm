@@ -19,16 +19,16 @@ import java.util.Date;
 @TableName("${tableName}")
 public class ${className} extends BaseEntity {
 
-    #foreach($fieldConfig in ${fieldList})
-        #if(!$fieldConfig.fieldName.equals("id")
-        && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime")
-        && !$fieldConfig.fieldName.equals("createBy") && !$fieldConfig.fieldName.equals("updateBy"))
+#foreach($fieldConfig in ${fieldList})
+    #if(!$fieldConfig.fieldName.equals("id")
+    && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime")
+    && !$fieldConfig.fieldName.equals("createBy") && !$fieldConfig.fieldName.equals("updateBy"))
         #if("$!fieldConfig.fieldComment" != "")
     /**
      * ${fieldConfig.fieldComment}
      */
-    #end
-    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         #end
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
     #end
+#end
 }

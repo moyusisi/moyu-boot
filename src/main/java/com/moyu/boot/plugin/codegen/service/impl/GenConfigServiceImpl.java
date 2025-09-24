@@ -68,7 +68,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
                 .or()
                 .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableComment, param.getSearchKey())
-                .orderByAsc(GenConfig::getUpdateTime);
+                .orderByDesc(GenConfig::getUpdateTime);
         // 分页查询
         Page<GenConfig> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<GenConfig> rolePage = this.page(page, queryWrapper);
@@ -411,6 +411,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     private List<String> getTemplateList() {
         List<String> templates = new ArrayList<String>();
         templates.add("templates/java/entity.java.vm");
+        templates.add("templates/java/param.java.vm");
+        templates.add("templates/java/vo.java.vm");
         templates.add("templates/java/mapper.java.vm");
         templates.add("templates/java/service.java.vm");
         templates.add("templates/java/serviceImpl.java.vm");
@@ -467,7 +469,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             fileName = String.format("%s/model/entity/%s.java", javaPath, className);
         } else if (template.contains("param.java.vm")) {
             fileName = String.format("%s/model/param/%sParam.java", javaPath, className);
-        } else if (template.contains("VO.java.vm")) {
+        } else if (template.contains("vo.java.vm")) {
             fileName = String.format("%s/model/vo/%sVO.java", javaPath, className);
         } else if (template.contains("mapper.xml.vm")) {
             fileName = String.format("main/resources/mapper/%sMapper.xml", className);

@@ -26,6 +26,7 @@
                 #{excludeTable}
             </foreach>
         </if>
+        ORDER BY t1.CREATE_TIME DESC
     </select>
 
     <select id="getTableListByNames" resultType="com.moyu.boot.plugin.codegen.model.vo.TableMetaData">
