@@ -336,7 +336,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genField.setFieldComment(fieldConfigVO.getFieldComment());
         genField.setFieldSort(fieldConfigVO.getFieldSort());
         genField.setMaxLength(fieldConfigVO.getMaxLength());
-        genField.setRequired(Boolean.TRUE.equals(fieldConfigVO.getShowInList()) ? 1 : 0);
+        genField.setRequired(Boolean.TRUE.equals(fieldConfigVO.getRequired()) ? 1 : 0);
         genField.setShowInList(Boolean.TRUE.equals(fieldConfigVO.getShowInList()) ? 1 : 0);
         genField.setShowInForm(Boolean.TRUE.equals(fieldConfigVO.getShowInForm()) ? 1 : 0);
         genField.setShowInQuery(Boolean.TRUE.equals(fieldConfigVO.getShowInQuery()) ? 1 : 0);

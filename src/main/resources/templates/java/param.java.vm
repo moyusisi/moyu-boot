@@ -60,7 +60,7 @@ public class ${entityName}Param extends BasePageParam {
      * ${fieldConfig.fieldComment}
      */
         #end
-        #if($fieldConfig.required)
+        #if($fieldConfig.required == 1)
             #if($fieldConfig.fieldType == 'String')
     @NotBlank(message = "$fieldConfig.fieldName不能为空")
             #else
@@ -75,11 +75,12 @@ public class ${entityName}Param extends BasePageParam {
         #end
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         ## 时间范围控制多一个字段
-        #if($fieldConfig.queryType == "BETWEEN" && ($fieldConfig.formType == "DATE" || $fieldConfig.formType == "DATE_TIME"))
+        #if($fieldConfig.queryType == "BETWEEN")
+##        #if($fieldConfig.queryType == "BETWEEN" && ($fieldConfig.formType == "DATE" || $fieldConfig.formType == "DATE_TIME"))
     /**
      * ${fieldConfig.fieldComment}范围
      */
-    private List<String> ${fieldConfig.fieldName}Range;
+    private List<${fieldConfig.fieldType}> ${fieldConfig.fieldName}Range;
         #end
     #end
 #end
