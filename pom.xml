@@ -115,11 +115,10 @@
             <artifactId>joda-time</artifactId>
             <version>2.12.5</version>
         </dependency>
-        <!-- velocity 模板引擎(代码生成) -->
+        <!-- freemarker 模板引擎(代码生成) -->
         <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-engine-core</artifactId>
-            <version>2.3</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
 
     </dependencies>

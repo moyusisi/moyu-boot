@@ -45,10 +45,6 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     public List<${entityName}VO> list(${entityName}Param param) {
 
     }
-    ## 定义一个宏来将字符串的首字母大写
-    #macro( upFirst $string )
-        #set($result = $string.substring(0, 1).toUpperCase() + $string.substring(1))
-$result#end
 
     @Override
     public PageData<${entityName}VO> pageList(${entityName}Param param) {
@@ -58,24 +54,24 @@ $result#end
         #if($fieldConfig.showInQuery == 1)
             // 指定${$fieldConfig.fieldName}查询条件
             #if($fieldConfig.queryType == "LIKE")
-            .like(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .like(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'EQ')
-            .eq(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .eq(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'GT')
-            .gt(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .gt(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'GE')
-            .ge(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .ge(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'LT')
-            .lt(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .lt(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'LE')
-            .le(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .le(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'NE')
-            .ne(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .ne(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #elseif($fieldConfig.queryType == 'BETWEEN')
-            .between(ObjectUtil.isAllNotEmpty(param.get#upFirst($fieldConfig.fieldName)Range().get(0), param.get#upFirst($fieldConfig.fieldName)Range().get(1)),
-                    ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)Range().get(0), param.get#upFirst($fieldConfig.fieldName)Range().get(1))
+            .between(ObjectUtil.isAllNotEmpty(param.get#${fieldConfig.fieldName?cap_first}Range().get(0), param.get#${fieldConfig.fieldName?cap_first}Range().get(1)),
+                    ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}Range().get(0), param.get#${fieldConfig.fieldName?cap_first}Range().get(1))
             #elseif($fieldConfig.queryType == 'IN')
-            .in(ObjectUtil.isNotEmpty(param.get#upFirst($fieldConfig.fieldName)), ${entityName}::get#upFirst($fieldConfig.fieldName), param.get#upFirst($fieldConfig.fieldName)())
+            .in(ObjectUtil.isNotEmpty(param.get#${fieldConfig.fieldName?cap_first}), ${entityName}::get#${fieldConfig.fieldName?cap_first}, param.get#${fieldConfig.fieldName?cap_first}())
             #end
             // TODO 是否需要排序
             .orderByDesc(${entityName}::getUpdateTime);

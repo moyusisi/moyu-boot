@@ -410,16 +410,16 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
      */
     private List<String> getTemplateList() {
         List<String> templates = new ArrayList<String>();
-        templates.add("templates/java/entity.java.vm");
-        templates.add("templates/java/param.java.vm");
-        templates.add("templates/java/vo.java.vm");
-        templates.add("templates/java/mapper.java.vm");
-        templates.add("templates/java/service.java.vm");
-        templates.add("templates/java/serviceImpl.java.vm");
-        templates.add("templates/java/controller.java.vm");
-        templates.add("templates/xml/mapper.xml.vm");
+        templates.add("templates/java/entity.java.ftl");
+        templates.add("templates/java/param.java.ftl");
+        templates.add("templates/java/vo.java.ftl");
+        templates.add("templates/java/mapper.java.ftl");
+        templates.add("templates/java/service.java.ftl");
+        templates.add("templates/java/serviceImpl.java.ftl");
+        templates.add("templates/java/controller.java.ftl");
+        templates.add("templates/xml/mapper.xml.ftl");
 //        templates.add("templates/sql/sql.vm");
-        templates.add("templates/js/api.js.vm");
+        templates.add("templates/js/api.js.ftl");
         return templates;
     }
 
@@ -457,29 +457,29 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
         String fileName = "";
 
-        if (template.contains("controller.java.vm")) {
+        if (template.contains("controller.java.ftl")) {
             fileName = String.format("%s/controller/%sController.java", javaPath, className);
-        } else if (template.contains("service.java.vm")) {
+        } else if (template.contains("service.java.ftl")) {
             fileName = String.format("%s/service/%sService.java", javaPath, className);
-        } else if (template.contains("serviceImpl.java.vm")) {
+        } else if (template.contains("serviceImpl.java.ftl")) {
             fileName = String.format("%s/service/impl/%sServiceImpl.java", javaPath, className);
-        } else if (template.contains("mapper.java.vm")) {
+        } else if (template.contains("mapper.java.ftl")) {
             fileName = String.format("%s/mapper/%sMapper.java", javaPath, className);
-        } else if (template.contains("entity.java.vm")) {
+        } else if (template.contains("entity.java.ftl")) {
             fileName = String.format("%s/model/entity/%s.java", javaPath, className);
-        } else if (template.contains("param.java.vm")) {
+        } else if (template.contains("param.java.ftl")) {
             fileName = String.format("%s/model/param/%sParam.java", javaPath, className);
-        } else if (template.contains("vo.java.vm")) {
+        } else if (template.contains("vo.java.ftl")) {
             fileName = String.format("%s/model/vo/%sVO.java", javaPath, className);
-        } else if (template.contains("mapper.xml.vm")) {
+        } else if (template.contains("mapper.xml.ftl")) {
             fileName = String.format("main/resources/mapper/%sMapper.xml", className);
-        } else if (template.contains("api.js.vm")) {
+        } else if (template.contains("api.js.ftl")) {
             fileName = String.format("src/api/%s/%sApi.js", moduleName, className);
-        } else if (template.contains("index.vue.vm")) {
+        } else if (template.contains("index.vue.ftl")) {
             fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
-        } else if (template.contains("addForm.vue.vm")) {
+        } else if (template.contains("addForm.vue.ftl")) {
             fileName = String.format("src/views/%s/%s/addForm.vue", moduleName, className);
-        } else if (template.contains("editForm.vue.vm")) {
+        } else if (template.contains("editForm.vue.ftl")) {
             fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
         }
         return fileName;

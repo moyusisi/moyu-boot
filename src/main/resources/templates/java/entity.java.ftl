@@ -12,23 +12,25 @@ import java.util.Date;
  * $!{entityDesc}实体对象
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Getter
 @Setter
 @TableName("${tableName}")
 public class ${entityName} extends BaseEntity {
 
-#foreach($fieldConfig in ${fieldList})
-    #if(!$fieldConfig.fieldName.equals("id")
-    && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime")
-    && !$fieldConfig.fieldName.equals("createBy") && !$fieldConfig.fieldName.equals("updateBy"))
-        #if("$!fieldConfig.fieldComment" != "")
+<#if fieldList??>
+    <#list fieldList as fieldConfig>
+        <#if (fieldConfig.fieldName!"") != "id"
+            && (fieldConfig.fieldName!"") != "createTime" && (fieldConfig.fieldName!"") != "updateTime"
+            && (fieldConfig.fieldName!"") != "createBy" && (fieldConfig.fieldName!"") != "updateBy">
     /**
-     * ${fieldConfig.fieldComment}
-     */
-        #end
+    * ${fieldConfig.fieldComment}
+    */
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-    #end
-#end
+        </#if>
+
+    </#list>
+</#if>
+
 }

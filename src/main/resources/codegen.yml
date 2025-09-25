@@ -13,32 +13,32 @@ codegen:
   ## 模板配置
   templateConfigs:
     api:
-      templatePath: codegen/api.js.vm
+      templatePath: codegen/api.js.ftl
       subPackageName: api
     view:
-      templatePath: codegen/index.vue.vm
+      templatePath: codegen/index.vue.ftl
       subPackageName: views
     controller:
-      templatePath: codegen/controller.java.vm
+      templatePath: codegen/controller.java.ftl
       subPackageName: controller
     service:
-      templatePath: codegen/service.java.vm
+      templatePath: codegen/service.java.ftl
       subPackageName: service
     impl:
-      templatePath: codegen/serviceImpl.java.vm
+      templatePath: codegen/serviceImpl.java.ftl
       subPackageName: service.impl
     mapper:
-      templatePath: codegen/mapper.java.vm
+      templatePath: codegen/mapper.java.ftl
       subPackageName: mapper
     xml:
-      templatePath: codegen/mapper.xml.vm
+      templatePath: codegen/mapper.xml.ftl
       subPackageName: mapper
     entity:
-      templatePath: codegen/entity.java.vm
+      templatePath: codegen/entity.java.ftl
       subPackageName: model.entity
     param:
-      templatePath: codegen/param.java.vm
+      templatePath: codegen/param.java.ftl
       subPackageName: model.param
     vo:
-      templatePath: codegen/vo.java.vm
+      templatePath: codegen/vo.java.ftl
       subPackageName: model.vo
