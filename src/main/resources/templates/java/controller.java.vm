@@ -78,9 +78,9 @@ public class ${entityName}Controller {
     /**
      * 修改${entityDesc}
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${lowerCamelEntityName}:update')")
-    @PostMapping("/update")
-    public Result<String> update(@Validated @RequestBody ${entityName}Param param) {
+    //@PreAuthorize("hasAuthority('${moduleName}:${lowerCamelEntityName}:edit')")
+    @PostMapping("/edit")
+    public Result<String> edit(@Validated @RequestBody ${entityName}Param param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
         ${lowerCamelEntityName}Service.update(param);
         return Result.success();
