@@ -21,9 +21,9 @@ public class ${entityName} extends BaseEntity {
 
 <#if fieldList??>
     <#list fieldList as fieldConfig>
-        <#if (fieldConfig.fieldName!"") != "id"
-            && (fieldConfig.fieldName!"") != "createTime" && (fieldConfig.fieldName!"") != "updateTime"
-            && (fieldConfig.fieldName!"") != "createBy" && (fieldConfig.fieldName!"") != "updateBy">
+        <#if fieldConfig.fieldName != "id"
+            && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
+            && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
     * ${fieldConfig.fieldComment}
     */
