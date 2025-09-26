@@ -1,16 +1,10 @@
 package com.moyu.boot.system.model.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -19,10 +13,7 @@ import java.util.Date;
  * @author moyusisi
  * @since 2025-09-26
  */
-@Getter
-@Setter
-@Builder
-@ToString
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysRoleVO {
 
