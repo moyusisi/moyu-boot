@@ -228,7 +228,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             // 模板渲染后的内容
             String content = template.render(bindMap);
             // 模板名
-            String simpleName = templateName.replace(".vm", "");
+            String simpleName = templateName.replace(".ftl", "");
             simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
             codeMap.put(simpleName, content);
         }
