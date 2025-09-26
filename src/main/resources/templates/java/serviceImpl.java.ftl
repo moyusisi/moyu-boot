@@ -152,6 +152,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
 </#if>;
         // 查询
         ${entityName} ${entityName?uncap_first} = this.getOne(queryWrapper);
+        if (${entityName?uncap_first} == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
         // 转换为vo
         ${entityName}VO vo = BeanUtil.copyProperties(${entityName?uncap_first}, ${entityName}VO.class);
         return vo;
@@ -168,12 +171,26 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
 
     @Override
     public void update(${entityName}Param param) {
-
+        // 通过主键id查询原有数据
+        ${entityName} old = this.getById(param.getId());
+        if (old == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+        }
+        // 属性复制
+        ${entityName} toUpdate = BeanUtil.copyProperties(param, ${entityName}.class);
+        // 其他处理
+        toUpdate.setId(param.getId());
+        this.updateById(toUpdate);
     }
 
     @Override
     public void deleteByIds(${entityName}Param param) {
-
+        // 待删除的id集合
+        Set<Long> idSet = param.getIds();
+        // 物理删除
+        this.removeByIds(idSet);
+        // 逻辑删除
+        //this.update(Wrappers.lambdaUpdate(${entityName}.class).in(${entityName}::getId, idSet).set(${entityName}::getDeleteFlag, 1));
     }
 
     /**
