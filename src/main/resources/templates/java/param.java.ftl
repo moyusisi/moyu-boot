@@ -20,10 +20,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * $!{entityDesc}请求参数(查询、修改)
+ * ${entityDesc}请求参数(查询、修改)
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Getter
 @Setter
@@ -36,7 +36,7 @@ public class ${entityName}Param extends BasePageParam {
     /**
      * 待删除的id集合
      */
-    private Set<Long> ids;
+    private Set\lLong\g ids;
 
     /**
      * 搜索关键词
@@ -51,37 +51,36 @@ public class ${entityName}Param extends BasePageParam {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
-#foreach($fieldConfig in ${fieldList})
-    #if(!$fieldConfig.fieldName.equals("id")
-      && !$fieldConfig.fieldName.equals("createTime") && !$fieldConfig.fieldName.equals("updateTime")
-      && !$fieldConfig.fieldName.equals("createBy") && !$fieldConfig.fieldName.equals("updateBy"))
-        #if("$!fieldConfig.fieldComment" != "")
+<#if fieldList??>
+    <#list fieldList as fieldConfig>
+        <#if fieldConfig.fieldName != "id"
+        && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
+        && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
-     * ${fieldConfig.fieldComment}
-     */
-        #end
-        #if($fieldConfig.required == 1)
-            #if($fieldConfig.fieldType == 'String')
+    * ${fieldConfig.fieldComment}
+    */
+            <#if fieldConfig.required == 1 >
+                <#if fieldConfig.fieldType == 'String'>
     @NotBlank(message = "$fieldConfig.fieldName不能为空")
-            #else
+                <#else>
     @NotNull(message = "$fieldConfig.fieldName不能为空")
-            #end
-        #end
-        #if($fieldConfig.maxLength)
-    @Size(max=$fieldConfig.maxLength, message="$fieldConfig.fieldName长度不能超过${fieldConfig.maxLength}个字符")
-        #end
-        #if($fieldConfig.fieldType == 'LocalDateTime')
+                </#if>
+            </#if>
+            <#if fieldConfig.maxLength?? >
+    @Size(max=${fieldConfig.maxLength}, message="$fieldConfig.fieldName长度不能超过${fieldConfig.maxLength}个字符")
+            </#if>
+            <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-        #end
+            </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-        ## 时间范围控制多一个字段
-        #if($fieldConfig.queryType == "BETWEEN")
-##        #if($fieldConfig.queryType == "BETWEEN" && ($fieldConfig.formType == "DATE" || $fieldConfig.formType == "DATE_TIME"))
+        </#if>
+        <#-- 时间范围控制多一个字段 -->
+        <#if fieldConfig.queryType == "BETWEEN">
     /**
-     * ${fieldConfig.fieldComment}范围
-     */
+    * ${fieldConfig.fieldComment}范围
+    */
     private List<${fieldConfig.fieldType}> ${fieldConfig.fieldName}Range;
-        #end
-    #end
-#end
+        </#if>
+    </#list>
+</#if>
 }
