@@ -36,7 +36,7 @@ public class ${entityName}Param extends BasePageParam {
     /**
      * 待删除的id集合
      */
-    private Set\lLong\g ids;
+    private Set<Long> ids;
 
     /**
      * 搜索关键词
@@ -61,13 +61,13 @@ public class ${entityName}Param extends BasePageParam {
     */
             <#if fieldConfig.required == 1 >
                 <#if fieldConfig.fieldType == 'String'>
-    @NotBlank(message = "$fieldConfig.fieldName不能为空")
+    @NotBlank(message = "${fieldConfig.fieldName}不能为空")
                 <#else>
-    @NotNull(message = "$fieldConfig.fieldName不能为空")
+    @NotNull(message = "${fieldConfig.fieldName}不能为空")
                 </#if>
             </#if>
             <#if fieldConfig.maxLength?? >
-    @Size(max=${fieldConfig.maxLength}, message="$fieldConfig.fieldName长度不能超过${fieldConfig.maxLength}个字符")
+    @Size(max=${fieldConfig.maxLength}, message="${fieldConfig.fieldName}长度不能超过${fieldConfig.maxLength}个字符")
             </#if>
             <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

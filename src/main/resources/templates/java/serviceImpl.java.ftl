@@ -36,20 +36,20 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class ${entityName}ServiceImpl extends ServiceImpl\l${entityName}Mapper, ${entityName}\g implements ${entityName}Service {
+public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
 
     @Resource
     private ${entityName}Service ${entityName?uncap_first}Service;
 
     @Override
-    public List\l${entityName}VO\g list(${entityName}Param param) {
+    public List<${entityName}VO> list(${entityName}Param param) {
 
     }
 
     @Override
-    public PageData\l${entityName}VO\g pageList(${entityName}Param param) {
+    public PageData<${entityName}VO> pageList(${entityName}Param param) {
         // 查询条件
-        LambdaQueryWrapper\l${entityName}\g queryWrapper = Wrappers.lambdaQuery(${entityName}.class)
+        LambdaQueryWrapper<${entityName}> queryWrapper = Wrappers.lambdaQuery(${entityName}.class)
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.showInQuery == 1>
@@ -75,9 +75,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl\l${entityName}Mapper, 
             .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             </#if>
         </#if>
+    </#list>
             // TODO 是否需要排序
             .orderByDesc(${entityName}::getUpdateTime);
-    </#list>
 </#if>
     }
 

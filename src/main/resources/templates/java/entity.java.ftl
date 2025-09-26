@@ -29,7 +29,6 @@ public class ${entityName} extends BaseEntity {
     */
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         </#if>
-
     </#list>
 </#if>
 
