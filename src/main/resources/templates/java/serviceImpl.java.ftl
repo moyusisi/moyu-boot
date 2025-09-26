@@ -73,7 +73,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             .orderByDesc(${entityName}::getUpdateTime);
         // 查询
         List<${entityName}> ${entityName?uncap_first}List = this.list(queryWrapper);
-        return ${entityName?uncap_first}List;
+        // 转换为voList
+        List<${entityName}VO> voList = build${entityName}VOList(${entityName?uncap_first}List);
+        return voList;
 </#if>
     }
 
