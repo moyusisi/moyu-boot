@@ -69,6 +69,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             </#if>
         </#if>
     </#list>
+</#if>
             // TODO 是否需要排序
             .orderByDesc(${entityName}::getUpdateTime);
         // 查询
@@ -76,7 +77,6 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 转换为voList
         List<${entityName}VO> voList = build${entityName}VOList(${entityName?uncap_first}List);
         return voList;
-</#if>
     }
 
     @Override
@@ -109,6 +109,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             </#if>
         </#if>
     </#list>
+</#if>
             // TODO 是否需要排序
             .orderByDesc(${entityName}::getUpdateTime);
         // 分页查询
@@ -116,17 +117,53 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         Page<${entityName}> ${entityName?uncap_first}Page = this.page(page, queryWrapper);
         List<${entityName}VO> voList = build${entityName}VOList(${entityName?uncap_first}Page.getRecords());
         return new PageData<>(${entityName?uncap_first}Page.getTotal(), voList);
-</#if>
     }
 
     @Override
     public ${entityName}VO detail(${entityName}Param param) {
-
+        // 查询条件
+        LambdaQueryWrapper<${entityName}> queryWrapper = Wrappers.lambdaQuery(${entityName}.class)
+<#if fieldList??>
+    <#list fieldList as fieldConfig>
+        <#if fieldConfig.showInQuery == 1>
+            // 指定${fieldConfig.fieldName}查询条件
+            <#if fieldConfig.queryType == "LIKE">
+                .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'EQ'>
+                .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'GT'>
+                .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'GE'>
+                .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'LT'>
+                .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'LE'>
+                .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'NE'>
+                .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'BETWEEN'>
+                .between(ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1)),
+                ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))
+            <#elseif fieldConfig.queryType == 'IN'>
+                .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            </#if>
+        </#if>
+    </#list>
+</#if>;
+        // 查询
+        ${entityName} ${entityName?uncap_first} = this.getOne(queryWrapper);
+        // 转换为vo
+        ${entityName}VO vo = BeanUtil.copyProperties(${entityName?uncap_first}, ${entityName}VO.class);
+        return vo;
     }
 
     @Override
     public void add(${entityName}Param param) {
-
+        // 属性复制
+        ${entityName} ${entityName?uncap_first} = BeanUtil.copyProperties(param, ${entityName}.class);
+        // 其他处理
+        ${entityName?uncap_first}.setId(null);
+        this.save(${entityName?uncap_first});
     }
 
     @Override
