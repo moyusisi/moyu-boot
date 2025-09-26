@@ -22,6 +22,7 @@ import ${packageName}.${moduleName}.service.${entityName}Service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -78,6 +79,11 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     </#list>
             // TODO 是否需要排序
             .orderByDesc(${entityName}::getUpdateTime);
+        // 分页查询
+        Page<${entityName}> page = new Page<>(param.getPageNum(), param.getPageSize());
+        Page<${entityName}> ${entityName?uncap_first}Page = this.page(page, queryWrapper);
+        List<${entityName}VO> voList = build${entityName}VOList(${entityName?uncap_first}Page.getRecords());
+        return new PageData<>(${entityName?uncap_first}.getTotal(), voList);
 </#if>
     }
 
@@ -100,5 +106,32 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     public void deleteByIds(${entityName}Param param) {
 
     }
-}
 
+    /**
+    * 实体对象生成展示对象 entity -> vo
+    */
+    private ${entityName}VO build${entityName}VO(${entityName} entity) {
+        if (entity == null) {
+            return null;
+        }
+        ${entityName}VO vo = new ${entityName}VO();
+        <#list fieldList as fieldConfig>
+            vo.set${fieldConfig.fieldName?cap_first}(entity.get${fieldConfig.fieldName?cap_first});
+        </#list>
+        return vo;
+    }
+
+    /**
+    * 实体对象生成展示对象 entityList -> voList
+    */
+    private List<${entityName}VO> build${entityName}VOList(List<${entityName}> entityList) {
+        List<${entityName}VO> voList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(fieldConfigList)) {
+            return voList;
+        }
+        for (${entityName} entity : entityList) {
+            voList.add(build${entityName}VO(entity));
+        }
+        return voList;
+    }
+}
