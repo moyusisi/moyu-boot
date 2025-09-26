@@ -11,7 +11,7 @@ import org.apache.ibatis.annotations.Mapper;
  * 针对表${tableName}(${tableComment})的数据库操作Mapper
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Mapper
 public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
@@ -23,7 +23,7 @@ public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
      *
      * @param page 分页对象(包含页码、页大小)
      * @param param 查询参数
-     * @return {@link Page<${entityName}VO>} $!{entityDesc}分页列表
+     * @return {@link Page<${entityName}VO>} ${entityDesc}分页列表
      */
     Page<${entityName}VO> get${entityName}Page(Page<${entityName}VO> page, ${entityName}Param param);
 

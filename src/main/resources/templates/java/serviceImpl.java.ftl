@@ -29,10 +29,10 @@ import java.util.stream.Collectors;
 
 
 /**
- * $!{entityDesc}服务实现类
+ * ${entityDesc}服务实现类
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Slf4j
 @Service

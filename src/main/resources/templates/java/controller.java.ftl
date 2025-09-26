@@ -20,10 +20,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * $!{entityDesc}控制器
+ * ${entityDesc}控制器
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Log(jsonLog = true)
 @RestController

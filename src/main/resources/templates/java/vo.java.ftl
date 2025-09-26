@@ -14,10 +14,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * $!{entityDesc}视图对象
+ * ${entityDesc}视图对象
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 @Getter
 @Setter

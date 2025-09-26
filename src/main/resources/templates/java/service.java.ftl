@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
- * $!{entityDesc}服务类Service
+ * ${entityDesc}服务类Service
  *
  * @author ${author}
- * @since ${date}
+ * @since ${.now?string["yyyy-MM-dd"]}
  */
 public interface ${entityName}Service extends IService<${entityName}> {
 
