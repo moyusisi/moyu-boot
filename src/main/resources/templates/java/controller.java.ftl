@@ -40,7 +40,7 @@ public class ${entityName}Controller {
 //    @PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:list')")
     @PostMapping("/list")
     public Result<List<${entityName}VO>> list(@RequestBody ${entityName}Param param) {
-        List<SysResource> list = ${entityName?uncap_first}Service.list(param);
+        List<${entityName}VO> list = ${entityName?uncap_first}Service.list(param);
         return Result.success(list);
     }
 
@@ -70,7 +70,7 @@ public class ${entityName}Controller {
      */
     //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:add')")
     @PostMapping("/add")
-    public Result<String> add(@Validated @RequestBody ${entityName}Param param) {
+    public Result<?> add(@Validated @RequestBody ${entityName}Param param) {
         ${entityName?uncap_first}Service.add(param);
         return Result.success();
     }
@@ -80,7 +80,7 @@ public class ${entityName}Controller {
      */
     //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:edit')")
     @PostMapping("/edit")
-    public Result<String> edit(@Validated @RequestBody ${entityName}Param param) {
+    public Result<?> edit(@Validated @RequestBody ${entityName}Param param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
         ${entityName?uncap_first}Service.update(param);
         return Result.success();
@@ -91,7 +91,7 @@ public class ${entityName}Controller {
      */
     //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:delete')")
     @PostMapping("/delete")
-    public Result<String> delete(@RequestBody ${entityName}Param param) {
+    public Result<?> delete(@RequestBody ${entityName}Param param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
         ${entityName?uncap_first}Service.deleteByIds(param);
         return Result.success();
