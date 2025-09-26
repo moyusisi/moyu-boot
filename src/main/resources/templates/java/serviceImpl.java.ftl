@@ -41,7 +41,40 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
 
     @Override
     public List<${entityName}VO> list(${entityName}Param param) {
-
+        // 查询条件
+        LambdaQueryWrapper<${entityName}> queryWrapper = Wrappers.lambdaQuery(${entityName}.class)
+<#if fieldList??>
+    <#list fieldList as fieldConfig>
+        <#if fieldConfig.showInQuery == 1>
+            // 指定${fieldConfig.fieldName}查询条件
+            <#if fieldConfig.queryType == "LIKE">
+            .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'EQ'>
+            .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'GT'>
+            .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'GE'>
+            .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'LT'>
+            .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'LE'>
+            .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'NE'>
+            .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            <#elseif fieldConfig.queryType == 'BETWEEN'>
+            .between(ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1)),
+                    ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))
+            <#elseif fieldConfig.queryType == 'IN'>
+            .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            </#if>
+        </#if>
+    </#list>
+            // TODO 是否需要排序
+            .orderByDesc(${entityName}::getUpdateTime);
+        // 查询
+        List<${entityName}> ${entityName?uncap_first}List = this.list(queryWrapper);
+        return ${entityName?uncap_first}List;
+</#if>
     }
 
     @Override
