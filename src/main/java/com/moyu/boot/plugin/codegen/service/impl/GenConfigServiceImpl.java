@@ -33,7 +33,6 @@ import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -438,10 +437,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         bindMap.put("tableName", genConfig.getTableName());
         bindMap.put("tableComment", genConfig.getTableComment());
         bindMap.put("entityName", entityName);
-        bindMap.put("camelEntityName", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, entityName));
         bindMap.put("entityDesc", entityDesc);
         bindMap.put("author", genConfig.getAuthor());
-        bindMap.put("date", LocalDateTime.now().toString("yyyy-MM-dd HH:mm:ss"));
         bindMap.put("fieldList", fieldList);
         return bindMap;
     }

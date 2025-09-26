@@ -5,28 +5,28 @@ import service from '@/utils/request'
  */
 export default {
   // 查询${entityDesc}列表
-  ${entityName}List(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/list', data)
+  ${entityName?uncap_first}List(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/list', data)
   },
   // 分页查询${entityDesc}列表
-  ${entityName}Page(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/page', data)
+  ${entityName?uncap_first}Page(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/page', data)
   },
   // 获取${entityDesc}详情
-  ${entityName}Detail(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/detail', data)
+  ${entityName?uncap_first}Detail(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/detail', data)
   },
   // 新增${entityDesc}
-  add${className}(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/add', data)
+  add${entityName}(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/add', data)
   },
   // 更新${entityDesc}
-  update${className}(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/update', data)
+  update${entityName}(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/update', data)
   },
   // 删除${entityDesc}，通过ids删除
-  delete${className}(data) {
-    return service.postJson('/api/${moduleName}/${entityName}/delete', data)
+  delete${entityName}(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/delete', data)
   }
 
 }

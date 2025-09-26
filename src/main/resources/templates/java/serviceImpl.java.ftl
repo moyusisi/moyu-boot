@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 public class ${entityName}ServiceImpl extends ServiceImpl\l${entityName}Mapper, ${entityName}\g implements ${entityName}Service {
 
     @Resource
-    private ${entityName}Service ${camelEntityName}Service;
+    private ${entityName}Service ${entityName?uncap_first}Service;
 
     @Override
     public List\l${entityName}VO\g list(${entityName}Param param) {
@@ -53,7 +53,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl\l${entityName}Mapper, 
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.showInQuery == 1>
-            // 指定${$fieldConfig.fieldName}查询条件
+            // 指定${fieldConfig.fieldName}查询条件
             <#if fieldConfig.queryType == "LIKE">
             .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'EQ'>

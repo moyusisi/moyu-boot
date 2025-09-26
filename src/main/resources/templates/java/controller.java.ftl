@@ -27,73 +27,73 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/${moduleName}/${camelEntityName}")
+@RequestMapping("/api/${moduleName}/${entityName?uncap_first}")
 public class ${entityName}Controller {
 
 
     @Resource
-    private ${entityName}Service ${camelEntityName}Service;
+    private ${entityName}Service ${entityName?uncap_first}Service;
 
     /**
      * ${entityDesc}列表
      */
-//    @PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:list')")
+//    @PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:list')")
     @PostMapping("/list")
     public Result<List<${entityName}VO>> list(@RequestBody ${entityName}Param param) {
-        List<SysResource> list = ${camelEntityName}Service.list(param);
+        List<SysResource> list = ${entityName?uncap_first}Service.list(param);
         return Result.success(list);
     }
 
     /**
      * ${entityDesc}分页列表
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:page')")
+    //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:page')")
     @PostMapping("/page")
     public Result<PageData<${entityName}VO>> pageList(@RequestBody ${entityName}Param param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<${entityName}VO> pageList = ${camelEntityName}Service.pageList(param);
+        PageData<${entityName}VO> pageList = ${entityName?uncap_first}Service.pageList(param);
         return Result.success(pageList);
     }
 
     /**
      * ${entityDesc}详情
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:detail')")
+    //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:detail')")
     @PostMapping("/detail")
     public Result<${entityName}VO> detail(@RequestBody ${entityName}Param param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
-        return Result.success(${camelEntityName}Service.detail(param));
+        return Result.success(${entityName?uncap_first}Service.detail(param));
     }
 
     /**
      * 新增${entityDesc}
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:add')")
+    //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody ${entityName}Param param) {
-        ${camelEntityName}Service.add(param);
+        ${entityName?uncap_first}Service.add(param);
         return Result.success();
     }
 
     /**
      * 修改${entityDesc}
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:edit')")
+    //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody ${entityName}Param param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
-        ${camelEntityName}Service.update(param);
+        ${entityName?uncap_first}Service.update(param);
         return Result.success();
     }
 
     /**
      * 删除数据
      */
-    //@PreAuthorize("hasAuthority('${moduleName}:${camelEntityName}:delete')")
+    //@PreAuthorize("hasAuthority('${moduleName}:${entityName?uncap_first}:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody ${entityName}Param param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
-        ${camelEntityName}Service.deleteByIds(param);
+        ${entityName?uncap_first}Service.deleteByIds(param);
         return Result.success();
     }
 
