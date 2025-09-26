@@ -32,25 +32,24 @@ public class ${entityName}VO {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-
-#foreach($fieldConfig in ${fieldList})
-    #if($fieldConfig.fieldName.equals("id"))
+<#if fieldList??>
+    <#list fieldList as fieldConfig>
+        <#if fieldConfig.fieldName == "id">
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-    #else
-        #if("$!fieldConfig.fieldComment" != "")
+        <#else>
     /**
      * ${fieldConfig.fieldComment}
      */
-        #end
-        #if($fieldConfig.fieldType == 'LocalDateTime')
+            <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
-        #end
+            </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
-    #end
-#end
+        </#if>
+    </#list>
+</#if>
 }
