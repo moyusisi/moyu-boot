@@ -1,14 +1,11 @@
-package ${packageName}.${moduleName}.model.param;
+package ${packageName}.${moduleName}.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.moyu.boot.common.core.model.BasePageParam;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,19 +16,10 @@ import java.util.Date;
  * @author ${author}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ${entityName}VO {
 
-    /**
-     * 主键id
-     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.fieldName == "id">

@@ -39,9 +39,6 @@ import java.util.stream.Collectors;
 @Service
 public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, ${entityName}> implements ${entityName}Service {
 
-    @Resource
-    private ${entityName}Service ${entityName?uncap_first}Service;
-
     @Override
     public List<${entityName}VO> list(${entityName}Param param) {
 
@@ -83,7 +80,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         Page<${entityName}> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<${entityName}> ${entityName?uncap_first}Page = this.page(page, queryWrapper);
         List<${entityName}VO> voList = build${entityName}VOList(${entityName?uncap_first}Page.getRecords());
-        return new PageData<>(${entityName?uncap_first}.getTotal(), voList);
+        return new PageData<>(${entityName?uncap_first}Page.getTotal(), voList);
 </#if>
     }
 
@@ -115,9 +112,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             return null;
         }
         ${entityName}VO vo = new ${entityName}VO();
-        <#list fieldList as fieldConfig>
-            vo.set${fieldConfig.fieldName?cap_first}(entity.get${fieldConfig.fieldName?cap_first});
-        </#list>
+    <#list fieldList as fieldConfig>
+        vo.set${fieldConfig.fieldName?cap_first}(entity.get${fieldConfig.fieldName?cap_first}());
+    </#list>
         return vo;
     }
 
@@ -126,7 +123,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     */
     private List<${entityName}VO> build${entityName}VOList(List<${entityName}> entityList) {
         List<${entityName}VO> voList = new ArrayList<>();
-        if(CollectionUtils.isEmpty(fieldConfigList)) {
+        if(CollectionUtils.isEmpty(entityList)) {
             return voList;
         }
         for (${entityName} entity : entityList) {

@@ -28,8 +28,8 @@ public enum JavaTypeEnum {
     FLOAT("float", "Float", "number"),
     DOUBLE("double", "Double", "number"),
     DECIMAL("decimal", "BigDecimal", "number"),
-    DATE("date", "LocalDate", "Date"),
-    DATETIME("datetime", "LocalDateTime", "Date");
+    DATE("date", "Date", "Date"),
+    DATETIME("datetime", "Date", "Date");
 
     // 数据库类型
     private final String dbType;
