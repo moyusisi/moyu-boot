@@ -10,17 +10,18 @@
         <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
         <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
-      <#elseif fieldConfig.formType == "SELECT">
+      <#elseif fieldConfig.formType == "SELECT" || fieldConfig.formType == "RADIO" || fieldConfig.formType == "CHECK_BOX">
         <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />
-      <#elseif fieldConfig.formType == "RADIO">
-        <a-radio-group v-model:value="queryFormData.${fieldConfig.fieldName}" option-type="button" :options="exampleOptions" />
-      <#--  <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />-->
-      <#elseif fieldConfig.formType == "CHECK_BOX">
-        <a-checkbox-group v-model:value="queryFormData.${fieldConfig.fieldName}" :options="exampleOptions" />
       <#elseif fieldConfig.formType == "TEXT_AREA">
         <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
+        <#if fieldConfig.queryType == "BETWEEN">
+          <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" />
+        </#if>
       <#elseif fieldConfig.formType == "DATE_TIME">
+        <#if fieldConfig.queryType == "BETWEEN">
+          <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm"/>
+        </#if>
       </#if>
       </a-form-item>
     </#if>
