@@ -1,0 +1,139 @@
+<template>
+  <!-- 上方选择区 -->
+  <a-card size="small">
+    <a-form ref="queryFormRef" :model="queryFormData" layout="inline">
+<#if fieldList??>
+  <#list fieldList as fieldConfig>
+    <#if fieldConfig.showInQuery == 1>
+      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldComment}" tooltip="${fieldConfig.fieldComment}">
+      <#if fieldConfig.formType == "INPUT">
+        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+      <#elseif fieldConfig.formType == "INPUT_NUMBER">
+        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+      <#elseif fieldConfig.formType == "SELECT">
+        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />
+      <#elseif fieldConfig.formType == "RADIO">
+        <a-radio-group v-model:value="queryFormData.${fieldConfig.fieldName}" option-type="button" :options="exampleOptions" />
+      <#--  <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />-->
+      <#elseif fieldConfig.formType == "CHECK_BOX">
+        <a-checkbox-group v-model:value="queryFormData.${fieldConfig.fieldName}" :options="exampleOptions" />
+      <#elseif fieldConfig.formType == "TEXT_AREA">
+        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+      <#elseif fieldConfig.formType == "DATE">
+      <#elseif fieldConfig.formType == "DATE_TIME">
+      </#if>
+      </a-form-item>
+    </#if>
+  </#list>
+</#if>
+      <a-form-item>
+        <a-space>
+          <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
+          <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
+        </a-space>
+      </a-form-item>
+    </a-form>
+  </a-card>
+  <a-card size="small">
+  </a-card>
+</template>
+
+<script setup>
+  import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
+
+  import { h } from "vue"
+  import { message } from "ant-design-vue"
+  import { PlusOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
+  import BatchDeleteButton from "@/components/BatchDeleteButton/index.vue"
+  import STable from "@/components/STable/index.vue"
+
+  const queryFormRef = ref()
+  const queryFormData = ref({})
+  const addFormRef = ref()
+  const editFormRef = ref()
+  const tableRef = ref()
+  const toolConfig = { refresh: true, height: true, columnSetting: false, striped: false }
+  const columns = [
+    {
+      title: '显示名称',
+      dataIndex: 'name',
+      resizable: true,
+      width: 180
+    },
+    {
+      title: '接口地址',
+      dataIndex: 'path',
+      ellipsis: true,
+      width: 150
+    },
+    {
+      title: '操作',
+      dataIndex: 'action',
+      align: 'center',
+      width: 150
+    }
+  ]
+
+  let selectedRowKeys = ref([])
+  // 列表选择配置
+  const options = {
+    alert: {
+      show: false,
+      clear: () => {
+      selectedRowKeys = ref([])
+      }
+    },
+    rowSelection: {
+      onChange: (selectedRowKey, selectedRows) => {
+        selectedRowKeys.value = selectedRowKey
+      }
+    }
+  }
+
+  // 下拉框选项
+  const exampleOptions = [
+    { label: "选项一", value: 1 },
+    { label: "选项二", value: 2 }
+  ]
+
+  const loadData = async (parameter) => {
+
+  }
+
+  // 查询
+  const querySubmit = () => {
+    tableRef.value.refresh(true)
+  }
+  // 重置
+  const reset = () => {
+    queryFormRef.value.resetFields()
+    tableRef.value.refresh(true)
+  }
+  // 删除
+  const delete${entityName} = (record) => {
+    let data = { ids: [record.id] }
+    ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
+      message.success(res.message)
+      tableRef.value.refresh()
+    })
+  }
+  // 批量删除
+  const batchDelete = (record) => {
+    let data = { ids: selectedRowKeys.value }
+    ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
+      message.success(res.message)
+      tableRef.value.refresh(true)
+    })
+  }
+</script>
+
+<style scoped>
+  /** 后代选择器 **/
+  .ant-card-small .ant-form-inline {
+    margin-bottom: -12px !important;
+  }
+  /** 直接后代选择器 **/
+  .ant-form-inline > .ant-form-item {
+    margin-bottom: 12px !important;
+  }
+</style>
