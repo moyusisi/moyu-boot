@@ -16,26 +16,26 @@
             </#if>
             <#if fieldConfig.queryType == "LIKE">
                 AND ${fieldConfig.columnName} LIKE CONCAT('%', <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}, '%')
-            <#elseif fieldConfig.queryType == 'EQ'>
+            <#elseif fieldConfig.queryType == "EQ">
                 AND ${fieldConfig.columnName} = <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'GT'>
+            <#elseif fieldConfig.queryType == "GT">
                 AND ${fieldConfig.columnName} > <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'GE'>
+            <#elseif fieldConfig.queryType == "GE">
                 AND ${fieldConfig.columnName} >= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'LT'>
+            <#elseif fieldConfig.queryType == "LT">
                 AND ${fieldConfig.columnName} < <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'LE'>
+            <#elseif fieldConfig.queryType == "LE">
                 AND ${fieldConfig.columnName} <= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'NE'>
+            <#elseif fieldConfig.queryType == "NE">
                 AND ${fieldConfig.columnName} != <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
-            <#elseif fieldConfig.queryType == 'BETWEEN'>
+            <#elseif fieldConfig.queryType == "BETWEEN">
                 <if test="param.${fieldConfig.fieldNameRange}[0] != null and param.${fieldConfig.fieldNameRange}[0] != ''">
                     AND ${fieldConfig.columnName} &gt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[0]}
                 </if>
                 <if test="param.${fieldConfig.fieldName}[1] != null and param.${fieldConfig.fieldName}[1] != ''">
                     AND ${fieldConfig.columnName} &lt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[1]}
                 </if>
-            <#elseif fieldConfig.queryType == 'IN'>
+            <#elseif fieldConfig.queryType == "IN">
                 AND ${fieldConfig.columnName} IN  <foreach collection="param.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </#if>
         </#if>
