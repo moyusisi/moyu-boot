@@ -36,6 +36,21 @@
     </a-form>
   </a-card>
   <a-card size="small">
+    <a-row>
+      <a-col :span="20" style="margin-bottom: 12px">
+        <a-space wrap>
+          <a-button type="primary" :icon="h(PlusOutlined)" @click="xx.onOpen(module)">新增</a-button>
+          <a-popconfirm title="确定要批量删除吗？" :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
+            <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
+              批量删除
+            </a-button>
+          </a-popconfirm>
+        </a-space>
+      </a-col>
+      <a-col :span="4" style="text-align: right">
+        <a-button @click="addRows" :icon="h(PlusOutlined)" class="custom-btn">导入</a-button>
+      </a-col>
+    </a-row>
   </a-card>
 </template>
 
@@ -43,9 +58,8 @@
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
   import { h } from "vue"
+  import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import { PlusOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
-  import BatchDeleteButton from "@/components/BatchDeleteButton/index.vue"
   import STable from "@/components/STable/index.vue"
 
   const queryFormRef = ref()
@@ -120,10 +134,14 @@
   }
   // 批量删除
   const batchDelete = (record) => {
+    if (selectedRowKeys.value.length < 1) {
+      message.warning('请至少选择一条数据')
+      return
+    }
     let data = { ids: selectedRowKeys.value }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      tableRef.value.refresh(true)
+      tableRef.value.refresh()
     })
   }
 </script>
