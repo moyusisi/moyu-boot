@@ -28,47 +28,40 @@ public enum FormTypeEnum {
     SELECT(2, "下拉框"),
 
     /**
+     * 数字输入框
+     */
+    INPUT_NUMBER(3, "数字输入框"),
+
+    /**
      * 单选框
      */
-    RADIO(3, "单选框"),
+    RADIO(4, "单选框"),
 
     /**
      * 复选框
      */
-    CHECK_BOX(4, "复选框"),
-
-    /**
-     * 数字输入框
-     */
-    INPUT_NUMBER(5, "数字输入框"),
-
-    /**
-     * 开关
-     */
-    SWITCH(6, "开关"),
+    CHECK_BOX(5, "复选框"),
 
     /**
      * 文本域
      */
-    TEXT_AREA(7, "文本域"),
+    TEXT_AREA(6, "文本域"),
 
     /**
      * 日期时间框
      */
-    DATE(8, "日期框"),
+    DATE(7, "日期框"),
 
     /**
      * 日期框
      */
-    DATE_TIME(9, "日期时间框"),
+    DATE_TIME(8, "日期时间框"),
 
     /**
      * 隐藏域
      */
-    HIDDEN(10, "隐藏域");
+    HIDDEN(9, "隐藏域");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    // @EnumValue
     @JsonValue
     private final Integer code;
 
