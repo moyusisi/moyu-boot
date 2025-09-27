@@ -9,7 +9,9 @@
       <#if fieldConfig.formType == "INPUT">
         <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
+        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "SELECT">
+        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "SWITCH">
       <#elseif fieldConfig.formType == "RADIO">
       <#elseif fieldConfig.formType == "CHECK_BOX">
@@ -72,18 +74,24 @@
   let selectedRowKeys = ref([])
   // 列表选择配置
   const options = {
-  alert: {
-    show: false,
-    clear: () => {
-    selectedRowKeys = ref([])
-    }
-  },
-  rowSelection: {
-    onChange: (selectedRowKey, selectedRows) => {
-    selectedRowKeys.value = selectedRowKey
+    alert: {
+      show: false,
+      clear: () => {
+      selectedRowKeys = ref([])
+      }
+    },
+    rowSelection: {
+      onChange: (selectedRowKey, selectedRows) => {
+        selectedRowKeys.value = selectedRowKey
+      }
     }
   }
-  }
+
+  // 下拉框选项
+  const exampleOptions = [
+    { label: "选项一", value: 1 },
+    { label: "选项二", value: 2 }
+  ]
 
   const loadData = async (parameter) => {
 
