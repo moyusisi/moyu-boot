@@ -5,17 +5,20 @@
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInQuery == 1>
-      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldComment}">
+      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldComment}" tooltip="${fieldConfig.fieldComment}">
       <#if fieldConfig.formType == "INPUT">
         <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
         <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "SELECT">
         <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />
-      <#elseif fieldConfig.formType == "SWITCH">
       <#elseif fieldConfig.formType == "RADIO">
+        <a-radio-group v-model:value="queryFormData.${fieldConfig.fieldName}" option-type="button" :options="exampleOptions" />
+      <#--  <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />-->
       <#elseif fieldConfig.formType == "CHECK_BOX">
+        <a-checkbox-group v-model:value="queryFormData.${fieldConfig.fieldName}" :options="exampleOptions" />
       <#elseif fieldConfig.formType == "TEXT_AREA">
+        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
       <#elseif fieldConfig.formType == "DATE_TIME">
       </#if>
