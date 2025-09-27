@@ -417,8 +417,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         templates.add("templates/java/serviceImpl.java.ftl");
         templates.add("templates/java/controller.java.ftl");
         templates.add("templates/xml/mapper.xml.ftl");
-//        templates.add("templates/sql/sql.vm");
+        templates.add("templates/sql/mysql.sql.ftl");
         templates.add("templates/js/api.js.ftl");
+        templates.add("templates/vue/index.vue.ftl");
+        templates.add("templates/vue/addForm.vue.ftl");
+        templates.add("templates/vue/editForm.vue.ftl");
         return templates;
     }
 
