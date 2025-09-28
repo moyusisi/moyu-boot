@@ -62,7 +62,7 @@
              :row-key="(record) => record.id"
              :row-selection="rowSelection"
              :pagination="paginationRef"
-             @change="handleTableChange"
+             @change="onChange"
              bordered>
       <template #bodyCell="{ column, record }">
       </template>
@@ -176,13 +176,16 @@
       tableData.value = res.data.records
     })
   }
-
+  // 分页、排序、筛选等操作变化时，会触发 change 事件
+  const onChange = (pagination, filters, sorter) => {
+    loadData()
+  }
   // 删除
   const delete${entityName} = (record) => {
     let data = { ids: [record.id] }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      tableRef.value.refresh()
+      loadData()
     })
   }
   // 批量删除
@@ -194,9 +197,10 @@
     let data = { ids: selectedRowKeys.value }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      tableRef.value.refresh()
+      loadData()
     })
   }
+
 </script>
 
 <style scoped>
