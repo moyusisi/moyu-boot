@@ -155,6 +155,16 @@
   ]
   /***** 表格相关对象 end *****/
 
+  // 提交查询
+  const querySubmit = () => {
+    loadData()
+  }
+  // 重置
+  const reset = () => {
+    queryFormRef.value = {}
+    paginationRef.value.current = 1
+    loadData()
+  }
   // 加载数据
   const loadData = async (parameter) => {
     // 重新加载数据时，清空之前以选中的行
@@ -167,15 +177,6 @@
     })
   }
 
-  // 查询
-  const querySubmit = () => {
-    tableRef.value.refresh(true)
-  }
-  // 重置
-  const reset = () => {
-    queryFormRef.value.resetFields()
-    tableRef.value.refresh(true)
-  }
   // 删除
   const delete${entityName} = (record) => {
     let data = { ids: [record.id] }
@@ -187,7 +188,7 @@
   // 批量删除
   const batchDelete = (record) => {
     if (selectedRowKeys.value.length < 1) {
-      message.warning('请至少选择一条数据')
+      message.warning("请至少选择一条数据")
       return
     }
     let data = { ids: selectedRowKeys.value }
