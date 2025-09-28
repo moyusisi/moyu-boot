@@ -116,7 +116,7 @@
     // 总条数，需要通过接口获取
     total: 0,
     // 显示总记录数
-    showTotal: (total, range) => `共 ${total} 条 `,
+    showTotal: (total, range) => <#noparse>"共 ${total} 条 "</#noparse>,
     // 是否可改变每页显示条数
     showSizeChanger: true,
     // 只有一页或没有数据时隐藏分页栏
@@ -148,8 +148,8 @@
     },
       <#else>
     {
-      title: 'fieldComment',
-      dataIndex: 'fieldName',
+      title: '${fieldConfig.fieldComment}',
+      dataIndex: '${fieldConfig.fieldName}',
       align: 'center',
       resizable: true,
       ellipsis: true,
@@ -172,12 +172,12 @@
     loadData()
   }
   // 加载数据
-  const loadData = async (parameter) => {
+  const loadData = (parameter) => {
     // 重新加载数据时，清空之前以选中的行
     selectedRowKeys.value = []
     // 分页参数
     let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
-    ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
+    return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
       paginationRef.value.total = res.data.total
       tableData.value = res.data.records
     })
