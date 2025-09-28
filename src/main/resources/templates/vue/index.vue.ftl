@@ -63,8 +63,12 @@
              :row-selection="rowSelection"
              :pagination="paginationRef"
              @change="onChange"
+             @resizeColumn="onResizeColumn"
              bordered>
-      <template #bodyCell="{ column, record }">
+      <template #bodyCell="{ column, record, index }">
+        <template v-if="column.dataIndex === 'index'">
+          <span>{{ index + 1 }}</span>
+        </template>
       </template>
     </a-table>
   </a-card>
@@ -124,35 +128,37 @@
     },
   })
   // 表格列配置 TODO 根据字段生成
-  const columns = [
+  const columns = ref([
+    // 不需要序号可以删掉
     {
-      title: '表名称',
-      dataIndex: 'tableName',
+      title: '序号',
+      dataIndex: 'index',
+      align: 'center',
+      width: 50,
+    },
+<#if fieldList??>
+  <#list fieldList as fieldConfig>
+    <#if fieldConfig.showInList == 1>
+      <#if fieldConfig.fieldType == "Date">
+    {
+      title: "${fieldConfig.fieldComment}",
+      dataIndex: "${fieldConfig.fieldName}",
+      align: 'center',
+      width: 160,
+    },
+      <#else>
+    {
+      title: 'fieldComment',
+      dataIndex: 'fieldName',
       align: 'center',
       resizable: true,
-      width: 150
+      ellipsis: true,
     },
-    {
-      title: '表描述',
-      dataIndex: 'tableComment',
-      align: 'center',
-      resizable: true,
-      width: 200
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      align: 'center',
-      resizable: true,
-      width: 150
-    },
-    {
-      title: '变更时间',
-      dataIndex: 'updateTime',
-      align: 'center',
-      width: 160
-    }
-  ]
+      </#if>
+    </#if>
+  </#list>
+</#if>
+  ])
   /***** 表格相关对象 end *****/
 
   // 提交查询
@@ -179,6 +185,10 @@
   // 分页、排序、筛选等操作变化时，会触发 change 事件
   const onChange = (pagination, filters, sorter) => {
     loadData()
+  }
+  // 可伸缩列
+  const onResizeColumn = (w, column) => {
+    column.width = w
   }
   // 删除
   const delete${entityName} = (record) => {
