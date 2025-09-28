@@ -64,6 +64,7 @@
              :pagination="paginationRef"
              @change="onChange"
              @resizeColumn="onResizeColumn"
+             :scroll="{ x: true }"
              bordered>
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex === 'index'">
