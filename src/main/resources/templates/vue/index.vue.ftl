@@ -69,6 +69,18 @@
         <template v-if="column.dataIndex === 'index'">
           <span>{{ index + 1 }}</span>
         </template>
+        <template v-if="column.dataIndex === 'action'">
+          <a-space>
+            <a-tooltip title="编辑">
+              <a @click="configFormRef.onOpen(record)">编辑</a>
+            </a-tooltip>
+            <a-tooltip title="删除">
+              <a-popconfirm title="确定要删除吗？" @confirm="delete${entityName}(record)">
+                <a style="color:#FF4D4F;">删除</a>
+              </a-popconfirm>
+            </a-tooltip>
+          </a-space>
+        </template>
       </template>
     </a-table>
   </a-card>
@@ -158,6 +170,13 @@
     </#if>
   </#list>
 </#if>
+    // 单行操作，不需要可以删掉
+    {
+      title: '操作',
+      dataIndex: 'action',
+      align: 'center',
+      width: 100,
+    },
   ])
   /***** 表格相关对象 end *****/
 
