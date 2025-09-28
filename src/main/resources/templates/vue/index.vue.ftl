@@ -36,7 +36,9 @@
     </a-form>
   </a-card>
   <a-card size="small">
+    <#--  表格上方操作区  -->
     <a-row>
+      <#--  左侧按钮  -->
       <a-col :span="20" style="margin-bottom: 12px">
         <a-space wrap>
           <a-button type="primary" :icon="h(PlusOutlined)" @click="xx.onOpen(module)">新增</a-button>
@@ -47,10 +49,24 @@
           </a-popconfirm>
         </a-space>
       </a-col>
+      <#--  右侧按钮  -->
       <a-col :span="4" style="text-align: right">
         <a-button @click="addRows" :icon="h(PlusOutlined)" class="custom-btn">导入</a-button>
       </a-col>
     </a-row>
+    <#--  表格数据区  -->
+    <a-table size="small"
+             ref="tableRef"
+             :columns="columns"
+             :data-source="tableData"
+             :row-key="(record) => record.id"
+             :row-selection="rowSelection"
+             :pagination="paginationRef"
+             @change="handleTableChange"
+             bordered>
+      <template #bodyCell="{ column, record }">
+      </template>
+    </a-table>
   </a-card>
 </template>
 
@@ -60,59 +76,95 @@
   import { h } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import STable from "@/components/STable/index.vue"
 
+  // 查询表单相关对象
   const queryFormRef = ref()
   const queryFormData = ref({})
-  const addFormRef = ref()
-  const editFormRef = ref()
-  const tableRef = ref()
-  const toolConfig = { refresh: true, height: true, columnSetting: false, striped: false }
-  const columns = [
-    {
-      title: '显示名称',
-      dataIndex: 'name',
-      resizable: true,
-      width: 180
-    },
-    {
-      title: '接口地址',
-      dataIndex: 'path',
-      ellipsis: true,
-      width: 150
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      align: 'center',
-      width: 150
-    }
-  ]
-
-  let selectedRowKeys = ref([])
-  // 列表选择配置
-  const options = {
-    alert: {
-      show: false,
-      clear: () => {
-      selectedRowKeys = ref([])
-      }
-    },
-    rowSelection: {
-      onChange: (selectedRowKey, selectedRows) => {
-        selectedRowKeys.value = selectedRowKey
-      }
-    }
-  }
-
   // 下拉框选项
   const exampleOptions = [
     { label: "选项一", value: 1 },
     { label: "选项二", value: 2 }
   ]
+  // 其他页面操作
+  const addFormRef = ref()
+  const editFormRef = ref()
 
+  /***** 表格相关对象 start *****/
+  const tableRef = ref()
+  // 表格的数据源
+  const tableData = ref([])
+  // 已选中的行
+  const selectedRowKeys = ref([])
+  // 表格行选择配置
+  const rowSelection = ref({
+    selectedRowKeys: selectedRowKeys,
+    onChange: (selectedKeys, selectedRows) => {
+      selectedRowKeys.value = selectedKeys
+      // console.log('onChange,selectedKeys:', selectedKeys);
+    }
+  });
+  // 表格的分页配置
+  const paginationRef = ref({
+    // 当前页码
+    current: 1,
+    // 每页显示条数
+    pageSize: 10,
+    // 总条数，需要通过接口获取
+    total: 0,
+    // 显示总记录数
+    showTotal: (total, range) => `共 ${total} 条 `,
+    // 是否可改变每页显示条数
+    showSizeChanger: true,
+    // 只有一页或没有数据时隐藏分页栏
+    hideOnSinglePage: true,
+    onChange: (page, pageSize) => {
+      // 处理分页切换的逻辑
+      paginationRef.value.current = page
+      paginationRef.value.pageSize = pageSize
+    },
+  })
+  // 表格列配置 TODO 根据字段生成
+  const columns = [
+    {
+      title: '表名称',
+      dataIndex: 'tableName',
+      align: 'center',
+      resizable: true,
+      width: 150
+    },
+    {
+      title: '表描述',
+      dataIndex: 'tableComment',
+      align: 'center',
+      resizable: true,
+      width: 200
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      align: 'center',
+      resizable: true,
+      width: 150
+    },
+    {
+      title: '变更时间',
+      dataIndex: 'updateTime',
+      align: 'center',
+      width: 160
+    }
+  ]
+  /***** 表格相关对象 end *****/
+
+  // 加载数据
   const loadData = async (parameter) => {
-
+    // 重新加载数据时，清空之前以选中的行
+    selectedRowKeys.value = []
+    // 分页参数
+    let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
+    ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
+      paginationRef.value.total = res.data.total
+      tableData.value = res.data.records
+    })
   }
 
   // 查询
