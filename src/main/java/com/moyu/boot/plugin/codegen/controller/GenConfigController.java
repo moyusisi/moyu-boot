@@ -138,15 +138,14 @@ public class GenConfigController {
     private void buildResponse(HttpServletResponse response, byte[] data) {
         // 设置响应头信息
         response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"genCode.zip\"");
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
         // 设置响应内容类型为ZIP
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         // 将ZIP文件数据写入到HTTP响应中
         try (ServletOutputStream outputStream = response.getOutputStream()) {
             outputStream.write(data);
             outputStream.flush();
-            // 刷新输出流，确保所有数据都被发送到客户端
-            response.flushBuffer();
         } catch (IOException e) {
             log.error("写入zip文件失败", e);
             throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "下载失败");
