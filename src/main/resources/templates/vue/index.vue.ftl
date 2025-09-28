@@ -55,7 +55,7 @@
       </a-col>
     </a-row>
     <#--  表格数据区  -->
-    <a-table size="small"
+    <a-table size="middle"
              ref="tableRef"
              :columns="columns"
              :data-source="tableData"
@@ -72,7 +72,7 @@
         <template v-if="column.dataIndex === 'action'">
           <a-space>
             <a-tooltip title="编辑">
-              <a @click="configFormRef.onOpen(record)">编辑</a>
+              <a @click="editFormRef.onOpen(record)">编辑</a>
             </a-tooltip>
             <a-tooltip title="删除">
               <a-popconfirm title="确定要删除吗？" @confirm="delete${entityName}(record)">
@@ -179,6 +179,11 @@
     },
   ])
   /***** 表格相关对象 end *****/
+
+  // 加载完毕调用
+  onMounted(() => {
+    loadData()
+  })
 
   // 提交查询
   const querySubmit = () => {
