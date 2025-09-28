@@ -67,6 +67,12 @@
              :scroll="{ x: true }"
              bordered>
       <template #bodyCell="{ column, record, index }">
+        <!-- 长文本省略显示 -->
+        <template v-if="text && text.length > 24">
+          <a-tooltip :title="text">
+            <span class="large-text">{{ text }}</span>
+          </a-tooltip>
+        </template>
         <template v-if="column.dataIndex === 'index'">
           <span>{{ index + 1 }}</span>
         </template>
@@ -166,7 +172,7 @@
       dataIndex: '${fieldConfig.fieldName}',
       align: 'center',
       resizable: true,
-      ellipsis: true,
+      width: 150,
     },
       </#if>
     </#if>
@@ -247,5 +253,14 @@
   /** 直接后代选择器 **/
   .ant-form-inline > .ant-form-item {
     margin-bottom: 12px !important;
+  }
+  /** 长文本截断,超过200px省略(约26个字母，15个汉字的长度) **/
+  .large-text {
+    display: inline-block;
+    width: 200px;
+    overflow-x: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
   }
 </style>
