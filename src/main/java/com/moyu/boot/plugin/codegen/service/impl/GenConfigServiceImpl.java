@@ -500,7 +500,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         String className = genConfig.getEntityName();
         String packageName = genConfig.getPackageName();
         String moduleName = genConfig.getModuleName();
-        String javaPath = "main/java/" + packageName.replace(".", "/") + moduleName;
+        String javaPath = "main/java/" + packageName.replace(".", "/") + "/" + moduleName;
 
         String fileName = "";
 
