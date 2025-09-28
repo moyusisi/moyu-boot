@@ -124,6 +124,7 @@ public class GenConfigController {
     /**
      * 预览生成的代码
      */
+    @Log(response = false)
     @PostMapping("/download")
     public void downloadZip(@RequestBody GenConfigParam param, HttpServletResponse response) {
         Assert.notEmpty(param.getIds(), "ids不能为空");
