@@ -2,6 +2,7 @@ package com.moyu.boot.plugin.codegen.service.impl;
 
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.Template;
@@ -26,7 +27,6 @@ import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
-import com.moyu.boot.plugin.codegen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codegen.model.vo.FieldConfigVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
@@ -38,7 +38,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotNull;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service实现
@@ -204,13 +210,45 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
     @Override
     public Map<String, String> previewCode(GenConfigParam param) {
-        // code代码map
-        Map<String, String> codeMap = new LinkedHashMap<>();
         // 查询表配置
         GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getId, param.getId()));
         if (genConfig == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
+        return genCode(genConfig);
+    }
+
+    @Override
+    public byte[] downloadZip(GenConfigParam param) {
+        Assert.isTrue(param.getIds().size() <= 10, "下载内容过多，每次生成不能超过10个");
+        // 查询表配置
+        List<GenConfig> genConfigList = this.list(Wrappers.lambdaQuery(GenConfig.class).in(GenConfig::getId, param.getIds()));
+        if (CollectionUtils.isEmpty(genConfigList)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "暂无数据");
+        }
+        // 创建一个字节输出流来存储ZIP文件
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+        for (GenConfig genConfig : genConfigList) {
+            Map<String, String> codeMap = genCode(genConfig);
+            zipCode(genConfig, codeMap, zip);
+        }
+        try {
+            // 完成所有文件的添加
+            zip.finish();
+            zip.close();
+        } catch (IOException e) {
+            log.error("生成文件失败", e);
+        }
+        return outputStream.toByteArray();
+    }
+
+    /**
+     * 生成代码
+     */
+    private Map<String, String> genCode(@NotNull GenConfig genConfig) {
+        // code代码map
+        Map<String, String> codeMap = new LinkedHashMap<>();
         // 字段配置
         List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
         if (CollectionUtil.isEmpty(fieldList)) {
@@ -232,8 +270,30 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
             codeMap.put(simpleName, content);
         }
-
         return codeMap;
+    }
+
+    /**
+     * 将代码输出到zip流
+     */
+    private void zipCode(GenConfig genConfig, Map<String, String> codeMap, ZipOutputStream zip) {
+        if (CollectionUtils.isEmpty(codeMap)) {
+            return;
+        }
+        for (Map.Entry<String, String> entry : codeMap.entrySet()) {
+            String fileName = getFullFileName(entry.getKey(), genConfig);
+            try {
+                // 添加文件到ZIP文件
+                ZipEntry zipEntry = new ZipEntry(fileName);
+                zip.putNextEntry(zipEntry);
+                String code = entry.getValue();
+                zip.write(code.getBytes(StandardCharsets.UTF_8));
+                zip.flush();
+                zip.closeEntry();
+            } catch (IOException e) {
+                log.error("生成文件失败，表名:" + genConfig.getTableName(), e);
+            }
+        }
     }
 
     /**
@@ -392,16 +452,24 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 构建CodePreviewVO，不包含模板生成的内容
+     * 设置模板变量信息
      */
-    private CodePreviewVO buildPreviewVO(GenConfig genConfig, String templateName) {
-        CodePreviewVO previewVO = new CodePreviewVO();
-        // 代码文件名
-        previewVO.setFileName(templateName);
+    public static Map<String, Object> buildBindMap(GenConfig genConfig, List<GenField> fieldList) {
+        String packageName = genConfig.getPackageName();
+        String moduleName = genConfig.getModuleName();
+        String entityName = genConfig.getEntityName();
+        String entityDesc = genConfig.getEntityDesc();
 
-        // 代码路径
-        previewVO.setFilePath(templateName);
-        return previewVO;
+        Map<String, Object> bindMap = new HashMap<>();
+        bindMap.put("packageName", packageName);
+        bindMap.put("moduleName", moduleName);
+        bindMap.put("tableName", genConfig.getTableName());
+        bindMap.put("tableComment", genConfig.getTableComment());
+        bindMap.put("entityName", entityName);
+        bindMap.put("entityDesc", entityDesc);
+        bindMap.put("author", genConfig.getAuthor());
+        bindMap.put("fieldList", fieldList);
+        return bindMap;
     }
 
     /**
@@ -426,30 +494,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 设置模板变量信息
-     */
-    public static Map<String, Object> buildBindMap(GenConfig genConfig, List<GenField> fieldList) {
-        String packageName = genConfig.getPackageName();
-        String moduleName = genConfig.getModuleName();
-        String entityName = genConfig.getEntityName();
-        String entityDesc = genConfig.getEntityDesc();
-
-        Map<String, Object> bindMap = new HashMap<>();
-        bindMap.put("packageName", packageName);
-        bindMap.put("moduleName", moduleName);
-        bindMap.put("tableName", genConfig.getTableName());
-        bindMap.put("tableComment", genConfig.getTableComment());
-        bindMap.put("entityName", entityName);
-        bindMap.put("entityDesc", entityDesc);
-        bindMap.put("author", genConfig.getAuthor());
-        bindMap.put("fieldList", fieldList);
-        return bindMap;
-    }
-
-    /**
      * 获取代码文件的全路径文件名
      */
-    private String getFullFileName(String template, GenConfig genConfig) {
+    private String getFullFileName(String simpleName, GenConfig genConfig) {
         String className = genConfig.getEntityName();
         String packageName = genConfig.getPackageName();
         String moduleName = genConfig.getModuleName();
@@ -457,29 +504,31 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
         String fileName = "";
 
-        if (template.contains("controller.java.ftl")) {
+        if (simpleName.contains("controller.java")) {
             fileName = String.format("%s/controller/%sController.java", javaPath, className);
-        } else if (template.contains("service.java.ftl")) {
+        } else if (simpleName.contains("service.java")) {
             fileName = String.format("%s/service/%sService.java", javaPath, className);
-        } else if (template.contains("serviceImpl.java.ftl")) {
+        } else if (simpleName.contains("serviceImpl.java")) {
             fileName = String.format("%s/service/impl/%sServiceImpl.java", javaPath, className);
-        } else if (template.contains("mapper.java.ftl")) {
+        } else if (simpleName.contains("mapper.java")) {
             fileName = String.format("%s/mapper/%sMapper.java", javaPath, className);
-        } else if (template.contains("entity.java.ftl")) {
+        } else if (simpleName.contains("entity.java")) {
             fileName = String.format("%s/model/entity/%s.java", javaPath, className);
-        } else if (template.contains("param.java.ftl")) {
+        } else if (simpleName.contains("param.java")) {
             fileName = String.format("%s/model/param/%sParam.java", javaPath, className);
-        } else if (template.contains("vo.java.ftl")) {
+        } else if (simpleName.contains("vo.java")) {
             fileName = String.format("%s/model/vo/%sVO.java", javaPath, className);
-        } else if (template.contains("mapper.xml.ftl")) {
+        } else if (simpleName.contains("mapper.xml")) {
             fileName = String.format("main/resources/mapper/%sMapper.xml", className);
-        } else if (template.contains("api.js.ftl")) {
+        } else if (simpleName.contains("mysql.sql")) {
+            fileName = "sql/mysql/mysql.sql";
+        } else if (simpleName.contains("api.js")) {
             fileName = String.format("src/api/%s/%sApi.js", moduleName, className);
-        } else if (template.contains("index.vue.ftl")) {
+        } else if (simpleName.contains("index.vue")) {
             fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
-        } else if (template.contains("addForm.vue.ftl")) {
+        } else if (simpleName.contains("addForm.vue")) {
             fileName = String.format("src/views/%s/%s/addForm.vue", moduleName, className);
-        } else if (template.contains("editForm.vue.ftl")) {
+        } else if (simpleName.contains("editForm.vue")) {
             fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
         }
         return fileName;

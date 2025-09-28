@@ -4,6 +4,8 @@ package com.moyu.boot.plugin.codegen.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
@@ -11,12 +13,18 @@ import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -26,6 +34,7 @@ import java.util.Map;
  * @since 2025-09-15
  */
 @Log(jsonLog = true)
+@Slf4j
 @RestController
 @RequestMapping("/api/gen/config")
 public class GenConfigController {
@@ -116,9 +125,30 @@ public class GenConfigController {
      * 预览生成的代码
      */
     @PostMapping("/download")
-    public Result<?> downloadZip(@RequestBody GenConfigParam param) {
+    public void downloadZip(@RequestBody GenConfigParam param, HttpServletResponse response) {
         Assert.notEmpty(param.getIds(), "ids不能为空");
-        genConfigService.previewCode(param);
-        return Result.success();
+        byte[] data = genConfigService.downloadZip(param);
+        buildResponse(response, data);
+    }
+
+    /**
+     * 构造响应结果
+     */
+    private void buildResponse(HttpServletResponse response, byte[] data) {
+        // 设置响应头信息
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"genCode.zip\"");
+        // 设置响应内容类型为ZIP
+        response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        // 将ZIP文件数据写入到HTTP响应中
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
+            outputStream.write(data);
+            outputStream.flush();
+            // 刷新输出流，确保所有数据都被发送到客户端
+            response.flushBuffer();
+        } catch (IOException e) {
+            log.error("写入zip文件失败", e);
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "下载失败");
+        }
     }
 }
