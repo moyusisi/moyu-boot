@@ -30,7 +30,7 @@ CREATE TABLE `gen_field_config`
     `column_type`   VARCHAR(50)  NOT NULL COMMENT '列类型',
     `field_name`    VARCHAR(100) NOT NULL COMMENT '字段名称',
     `field_type`    VARCHAR(100) NOT NULL COMMENT '字段类型',
-    `field_comment` VARCHAR(255) COMMENT '字段描述',
+    `field_remark`  VARCHAR(255) COMMENT '字段描述',
     `field_sort`    INT COMMENT '字段排序',
     `max_length`    INT COMMENT '最大长度',
     `required`      TINYINT(5) DEFAULT '0' COMMENT '是否必填',

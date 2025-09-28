@@ -49,7 +49,7 @@ public class ${entityName}Param extends BasePageParam {
         && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
         && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
-    * ${fieldConfig.fieldComment}
+    * ${fieldConfig.fieldRemark}
     */
             <#if fieldConfig.required == 1 >
                 <#if fieldConfig.fieldType == 'String'>
@@ -69,7 +69,7 @@ public class ${entityName}Param extends BasePageParam {
         <#-- 时间范围控制多一个字段 -->
         <#if fieldConfig.queryType == "BETWEEN">
     /**
-    * ${fieldConfig.fieldComment}范围
+    * ${fieldConfig.fieldRemark}范围
     */
     private List<${fieldConfig.fieldType}> ${fieldConfig.fieldName}Range;
         </#if>

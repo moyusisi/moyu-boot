@@ -270,7 +270,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfig.setFieldName(StrUtil.toCamelCase(columnMetaData.getColumnName()));
         // 字段类型
         fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
-        fieldConfig.setFieldComment(columnMetaData.getColumnComment());
+        fieldConfig.setFieldRemark(columnMetaData.getColumnComment());
         fieldConfig.setMaxLength(columnMetaData.getMaxLength());
         // 必填和允许为空反着
         fieldConfig.setRequired(columnMetaData.getNullable() == 1 ? 0 : 1);
@@ -306,7 +306,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfigVO.setColumnType(genField.getColumnType());
         fieldConfigVO.setFieldName(genField.getFieldName());
         fieldConfigVO.setFieldType(genField.getFieldType());
-        fieldConfigVO.setFieldComment(genField.getFieldComment());
+        fieldConfigVO.setFieldRemark(genField.getFieldRemark());
         fieldConfigVO.setFieldSort(genField.getFieldSort());
         fieldConfigVO.setMaxLength(genField.getMaxLength());
         fieldConfigVO.setRequired(genField.getRequired() == 1);
@@ -332,7 +332,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genField.setColumnType(fieldConfigVO.getColumnType());
         genField.setFieldName(fieldConfigVO.getFieldName());
         genField.setFieldType(fieldConfigVO.getFieldType());
-        genField.setFieldComment(fieldConfigVO.getFieldComment());
+        genField.setFieldRemark(fieldConfigVO.getFieldRemark());
         genField.setFieldSort(fieldConfigVO.getFieldSort());
         genField.setMaxLength(fieldConfigVO.getMaxLength());
         genField.setRequired(Boolean.TRUE.equals(fieldConfigVO.getRequired()) ? 1 : 0);

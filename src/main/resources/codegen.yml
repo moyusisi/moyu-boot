@@ -8,7 +8,6 @@ codegen:
   author: moyusisi
   # 排除数据表
   excludeTables:
-    - gen_config
     - gen_field_config
   ## 模板配置
   templateConfigs:

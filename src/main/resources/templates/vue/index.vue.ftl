@@ -5,15 +5,15 @@
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInQuery == 1>
-      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldComment}" tooltip="${fieldConfig.fieldComment}">
+      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}">
       <#if fieldConfig.formType == "INPUT">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
-        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "SELECT" || fieldConfig.formType == "RADIO" || fieldConfig.formType == "CHECK_BOX">
-        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" :options="exampleOptions" allowClear />
+        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "TEXT_AREA">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldComment}" allowClear />
+        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
         <#if fieldConfig.queryType == "BETWEEN">
           <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" />
@@ -153,14 +153,14 @@
     <#if fieldConfig.showInList == 1>
       <#if fieldConfig.fieldType == "Date">
     {
-      title: "${fieldConfig.fieldComment}",
+      title: "${fieldConfig.fieldRemark}",
       dataIndex: "${fieldConfig.fieldName}",
       align: 'center',
       width: 160,
     },
       <#else>
     {
-      title: '${fieldConfig.fieldComment}',
+      title: '${fieldConfig.fieldRemark}',
       dataIndex: '${fieldConfig.fieldName}',
       align: 'center',
       resizable: true,

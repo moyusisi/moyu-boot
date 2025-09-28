@@ -31,7 +31,7 @@ public class ${entityName}VO {
     private Long id;
         <#else>
     /**
-     * ${fieldConfig.fieldComment}
+     * ${fieldConfig.fieldRemark}
      */
             <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")

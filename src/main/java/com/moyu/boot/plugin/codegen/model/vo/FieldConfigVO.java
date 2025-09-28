@@ -53,7 +53,7 @@ public class FieldConfigVO {
     /**
      * 字段描述
      */
-    private String fieldComment;
+    private String fieldRemark;
 
     /**
      * 字段排序
