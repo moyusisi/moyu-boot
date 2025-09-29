@@ -11,7 +11,7 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
-import com.alibaba.druid.sql.ast.statement.*;
+import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.util.JdbcConstants;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -40,6 +40,7 @@ import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -70,6 +71,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
     @Resource
     private CodegenProperties codegenProperties;
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
     @Override
     public PageData<GenConfig> pageList(GenConfigParam param) {
@@ -181,28 +185,38 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
     @Override
     public void importSql(String sql) {
-        List<SQLStatement> statementList = new ArrayList<>();
         // 校验格式
+        List<SQLStatement> statementList = new ArrayList<>();
         try {
             Assert.notEmpty(sql, "SQL不能为空");
             statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
         } catch (Exception e) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
         }
-        List<MySqlCreateTableStatement> createStatementList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(statementList)) {
+        List<MySqlCreateTableStatement> createStatementList;
+        if (CollectionUtils.isEmpty(statementList)) {
+            createStatementList = new ArrayList<>();
+        } else {
             createStatementList = statementList.stream().filter(statement -> statement instanceof MySqlCreateTableStatement).map(e -> (MySqlCreateTableStatement) e).collect(Collectors.toList());
         }
         Assert.isTrue(!createStatementList.isEmpty() && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
-        // TODO 生成配置
-        // 遍历建表语句生成代码并添加到zip
-        for (MySqlCreateTableStatement createTableStatement : createStatementList) {
-            // 表配置信息
-            GenConfig genConfig = parseTable(createTableStatement);
-            // TODO 先保存 genConfig，生成id后才能setTableId
-            List<GenField> fieldList = parseFieldList(createTableStatement);
-            // 保存代码生成配置
-        }
+        // 生成并保存配置, 放在一个事物中
+        transactionTemplate.execute((transactionStatus) -> {
+            // 遍历建表语句生成代码代码配置保存到db
+            for (MySqlCreateTableStatement createTableStatement : createStatementList) {
+                // 表配置信息
+                GenConfig genConfig = parseTable(createTableStatement);
+                // 先保存 genConfig，生成id后才能setTableId
+                this.save(genConfig);
+                Long tableId = genConfig.getId();
+                Assert.notNull(tableId, "从sql导入时，生成tableId失败");
+                List<GenField> fieldList = parseFieldList(createTableStatement, tableId);
+                genFieldService.saveBatch(fieldList);
+                // 保存代码生成配置
+            }
+            return null;
+        });
+
     }
 
     @Override
@@ -599,7 +613,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     /**
      * 通过表创建语句获取字段配置列表 sql -> entity
      */
-    private List<GenField> parseFieldList(MySqlCreateTableStatement createTableStatement) {
+    private List<GenField> parseFieldList(MySqlCreateTableStatement createTableStatement, Long tableId) {
         // 列信息
         List<GenField> fieldList = new ArrayList<>();
         // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则获取列的名称、类型和注释。
@@ -608,6 +622,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
                 // 列信息
                 GenField fieldConfig = new GenField();
+                fieldConfig.setTableId(tableId);
                 fieldConfig.setColumnName(removeQuotes(columnDefinition.getName().getSimpleName()));
                 fieldConfig.setColumnType(columnDefinition.getDataType().getName());
                 // 字段名
