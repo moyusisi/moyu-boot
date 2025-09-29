@@ -64,6 +64,11 @@ public class GenConfig {
     private String author;
 
     /**
+     * 来源类型，TABLE、SQL
+     */
+    private String sourceType;
+
+    /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)

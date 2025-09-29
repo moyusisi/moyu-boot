@@ -316,6 +316,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setPackageName(codegenProperties.getPackageName());
         genConfig.setModuleName(codegenProperties.getModuleName());
         genConfig.setAuthor(codegenProperties.getAuthor());
+        genConfig.setSourceType("TABLE");
         return genConfig;
     }
 
@@ -421,6 +422,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfigInfo.setEntityName(genConfig.getEntityName());
         genConfigInfo.setEntityDesc(genConfig.getEntityDesc());
         genConfigInfo.setAuthor(genConfig.getAuthor());
+        genConfigInfo.setSourceType(genConfig.getSourceType());
         List<FieldConfigVO> fieldConfigList = new ArrayList<>();
         if (CollectionUtil.isNotEmpty(fieldList)) {
             for (GenField field : fieldList) {
@@ -448,6 +450,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setEntityName(genConfigInfo.getEntityName());
         genConfig.setEntityDesc(genConfigInfo.getEntityDesc());
         genConfig.setAuthor(genConfigInfo.getAuthor());
+        genConfig.setSourceType(genConfigInfo.getSourceType());
         return genConfig;
     }
 

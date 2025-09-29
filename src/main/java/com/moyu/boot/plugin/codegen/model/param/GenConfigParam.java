@@ -85,4 +85,9 @@ public class GenConfigParam extends BasePageParam {
      */
     private String author;
 
+    /**
+     * 来源类型，TABLE、SQL
+     */
+    private String sourceType;
+
 }

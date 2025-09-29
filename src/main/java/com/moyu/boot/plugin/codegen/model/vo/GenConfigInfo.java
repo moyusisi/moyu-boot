@@ -66,6 +66,11 @@ public class GenConfigInfo {
     private String author;
 
     /**
+     * 来源类型，TABLE、SQL
+     */
+    private String sourceType;
+
+    /**
      * 创建时间
      */
     private Date createTime;
