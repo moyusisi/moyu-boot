@@ -11,6 +11,7 @@ import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.util.JdbcConstants;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -194,6 +195,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         }
         Assert.isTrue(!createStatementList.isEmpty() && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
         // TODO 生成配置
+        // 遍历建表语句生成代码并添加到zip
+        for (MySqlCreateTableStatement createTableStatement : createStatementList) {
+            // 表配置信息
+            GenConfig genConfig = parseTable(createTableStatement);
+            // TODO 先保存 genConfig，生成id后才能setTableId
+            List<GenField> fieldList = parseFieldList(createTableStatement);
+            // 保存代码生成配置
+        }
     }
 
     @Override
@@ -327,7 +336,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 生成默认的表配置
         GenConfig genConfig = new GenConfig();
         genConfig.setTableName(tableName);
-        // 表注释作为业务名称，去掉表字 例如：用户表 -> 用户
+        // 表注释作为实体描述，去掉表字 例如：用户表 -> 用户
         String tableComment = tableMetaData.getTableComment();
         if (ObjectUtil.isNotEmpty(tableComment)) {
             genConfig.setTableComment(tableComment);
@@ -405,6 +414,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         return fieldConfigVO;
     }
 
+    /**
+     * 字段配置 vo -> entity
+     */
     private GenField buildGenFieldConfig(FieldConfigVO fieldConfigVO) {
         if (fieldConfigVO == null) {
             return null;
@@ -558,6 +570,83 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
         }
         return fileName;
+    }
+
+    /**
+     * 解析创建表语句获取生成配置 sql -> entity
+     */
+    private GenConfig parseTable(MySqlCreateTableStatement createTableStatement) {
+        // 生成默认的表配置
+        GenConfig genConfig = new GenConfig();
+        String tableName = removeQuotes(createTableStatement.getName().getSimpleName());
+        genConfig.setTableName(tableName);
+        // 表注释作为实体描述，去掉表字 例如：用户表 -> 用户
+        String tableComment = removeQuotes(createTableStatement.getComment().toString());
+        if (ObjectUtil.isNotEmpty(tableComment)) {
+            genConfig.setTableComment(tableComment);
+            genConfig.setEntityDesc(tableComment.replace("表", "").trim());
+        }
+        //  根据表名生成实体类名 例如：sys_user -> SysUser
+        // lower_underscore 转 UpperCamel
+        genConfig.setEntityName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, tableName));
+        genConfig.setPackageName(codegenProperties.getPackageName());
+        genConfig.setModuleName(codegenProperties.getModuleName());
+        genConfig.setAuthor(codegenProperties.getAuthor());
+        genConfig.setSourceType("SQL");
+        return genConfig;
+    }
+
+    /**
+     * 通过表创建语句获取字段配置列表 sql -> entity
+     */
+    private List<GenField> parseFieldList(MySqlCreateTableStatement createTableStatement) {
+        // 列信息
+        List<GenField> fieldList = new ArrayList<>();
+        // 遍历表的元素列表，如果元素是SQLColumnDefinition类型，则获取列的名称、类型和注释。
+        createTableStatement.getTableElementList().forEach(tableElement -> {
+            if (tableElement instanceof SQLColumnDefinition) {
+                SQLColumnDefinition columnDefinition = (SQLColumnDefinition) tableElement;
+                // 列信息
+                GenField fieldConfig = new GenField();
+                fieldConfig.setColumnName(removeQuotes(columnDefinition.getName().getSimpleName()));
+                fieldConfig.setColumnType(columnDefinition.getDataType().getName());
+                // 字段名
+                fieldConfig.setFieldName(StrUtil.toCamelCase(fieldConfig.getColumnName()));
+                // 字段类型
+                fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
+                if (ObjectUtil.isNotEmpty(columnDefinition.getComment())) {
+                    fieldConfig.setFieldRemark(removeQuotes(columnDefinition.getComment().toString()));
+                }
+                // 默认非必填
+                fieldConfig.setRequired(0);
+                fieldConfig.setShowInList(1);
+                fieldConfig.setShowInForm(1);
+                fieldConfig.setShowInQuery(0);
+                // formType
+                if (fieldConfig.getColumnType().equals("date")) {
+                    fieldConfig.setFormType(FormTypeEnum.DATE.name());
+                } else if (fieldConfig.getColumnType().equals("datetime")) {
+                    fieldConfig.setFormType(FormTypeEnum.DATE_TIME.name());
+                } else {
+                    fieldConfig.setFormType(FormTypeEnum.INPUT.name());
+                }
+                // queryType
+                fieldConfig.setQueryType(QueryTypeEnum.EQ.name());
+                fieldList.add(fieldConfig);
+            }
+        });
+        return fieldList;
+    }
+
+    /**
+     * 去掉引号和反引号
+     */
+    private String removeQuotes(String str) {
+//        return SQLUtils.normalize(str);
+        if (str != null) {
+            str = str.replace("`", "").replace("'", "").replace("\"", "");
+        }
+        return str;
     }
 
 }
