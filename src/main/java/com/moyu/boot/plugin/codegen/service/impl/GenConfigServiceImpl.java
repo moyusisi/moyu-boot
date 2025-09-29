@@ -38,6 +38,7 @@ import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
 import com.moyu.boot.plugin.codegen.service.GenFieldService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -206,8 +207,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             for (MySqlCreateTableStatement createTableStatement : createStatementList) {
                 // 表配置信息
                 GenConfig genConfig = parseTable(createTableStatement);
-                // 先保存 genConfig，生成id后才能setTableId
-                this.save(genConfig);
+                try {
+                    // 先保存 genConfig，生成id后才能setTableId
+                    this.save(genConfig);
+                } catch (DuplicateKeyException e) {
+                    String detail = String.format("表%s的配置已存在，表名不能重复", genConfig.getTableName());
+                    throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, detail);
+                }
                 Long tableId = genConfig.getId();
                 Assert.notNull(tableId, "从sql导入时，生成tableId失败");
                 List<GenField> fieldList = parseFieldList(createTableStatement, tableId);
