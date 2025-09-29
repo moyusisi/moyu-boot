@@ -8,36 +8,5 @@ codegen:
   author: moyusisi
   # 排除数据表
   excludeTables:
+    - gen_config
     - gen_field_config
-  ## 模板配置
-  templateConfigs:
-    api:
-      templatePath: codegen/api.js.ftl
-      subPackageName: api
-    view:
-      templatePath: codegen/index.vue.ftl
-      subPackageName: views
-    controller:
-      templatePath: codegen/controller.java.ftl
-      subPackageName: controller
-    service:
-      templatePath: codegen/service.java.ftl
-      subPackageName: service
-    impl:
-      templatePath: codegen/serviceImpl.java.ftl
-      subPackageName: service.impl
-    mapper:
-      templatePath: codegen/mapper.java.ftl
-      subPackageName: mapper
-    xml:
-      templatePath: codegen/mapper.xml.ftl
-      subPackageName: mapper
-    entity:
-      templatePath: codegen/entity.java.ftl
-      subPackageName: model.entity
-    param:
-      templatePath: codegen/param.java.ftl
-      subPackageName: model.param
-    vo:
-      templatePath: codegen/vo.java.ftl
-      subPackageName: model.vo
