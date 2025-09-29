@@ -138,7 +138,10 @@ public class GenConfigController {
     private void buildResponse(HttpServletResponse response, byte[] data) {
         // 设置响应头信息
         response.setStatus(HttpServletResponse.SC_OK);
-        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"download.zip\"");
+        // 允许下载文件名暴露给外部，否则控制台能看到但response中取不到(默认只有6种Header可以暴露给外部)
+        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION);
+        // 设置下载文件名
+        response.addHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=download.zip");
         response.addHeader("Content-Length", "" + data.length);
         // 设置响应内容类型为ZIP
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
