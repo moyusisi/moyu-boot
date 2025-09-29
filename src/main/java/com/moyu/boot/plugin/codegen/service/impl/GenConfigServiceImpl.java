@@ -220,14 +220,16 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public void syncTable(String tableName) {
-        // tableName 均为唯一标识
-        GenConfig old = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getTableName, tableName));
-        // 表元数据
-        TableMetaData tableMetaData = dataBaseMapper.getTableMetaData(tableName);
+    public void resetTable(GenConfigParam param) {
+        GenConfig old = this.getById(param.getId());
+        if (old == null) {
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "同步数据失败，表结构已不存在");
+        }
+        // 通过表名获取表元数据
+        TableMetaData tableMetaData = dataBaseMapper.getTableMetaData(old.getTableName());
         // 列元数据
-        List<ColumnMetaData> columnList = dataBaseMapper.getTableColumns(tableMetaData.getTableName());
-        if (old == null || CollectionUtils.isEmpty(columnList)) {
+        List<ColumnMetaData> columnList = dataBaseMapper.getTableColumns(old.getTableName());
+        if (CollectionUtils.isEmpty(columnList)) {
             throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "同步数据失败，表结构已不存在");
         }
         // 构造表配置
@@ -628,7 +630,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 // 字段名
                 fieldConfig.setFieldName(StrUtil.toCamelCase(fieldConfig.getColumnName()));
                 // 字段类型
-                fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(fieldConfig.getColumnType()));
+                fieldConfig.setFieldType(JavaTypeEnum.getByColumnType(StrUtil.toLowerCase(fieldConfig.getColumnType())));
                 if (ObjectUtil.isNotEmpty(columnDefinition.getComment())) {
                     fieldConfig.setFieldRemark(removeQuotes(columnDefinition.getComment().toString()));
                 }

@@ -107,17 +107,17 @@ public class GenConfigController {
     @PostMapping("/importSql")
     public Result<?> importSql(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getSql(), "导入的sql不能为空");
-        genConfigService.importSql(param.getTableName());
+        genConfigService.importSql(param.getSql());
         return Result.success();
     }
 
     /**
-     * 同步表
+     * 重置表，重新生成配置
      */
-    @PostMapping("/syncTable")
-    public Result<?> syncTable(@RequestBody GenConfigParam param) {
-        Assert.notEmpty(param.getTableName(), "tableName不能为空");
-        genConfigService.syncTable(param.getTableName());
+    @PostMapping("/resetTable")
+    public Result<?> resetTable(@RequestBody GenConfigParam param) {
+        Assert.notNull(param.getId(), "id不能为空");
+        genConfigService.resetTable(param);
         return Result.success();
     }
 

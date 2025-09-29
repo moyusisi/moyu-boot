@@ -55,9 +55,9 @@ public interface GenConfigService extends IService<GenConfig> {
     void importSql(String sql);
 
     /**
-     * 同步表，相当于重新导入表
+     * 重置表，重新生成表配置
      */
-    void syncTable(String tableName);
+    void resetTable(GenConfigParam param);
 
     /**
      * 生成代码预览

@@ -12,7 +12,6 @@ CREATE TABLE `gen_config`
     `author`           VARCHAR(50) COMMENT '作者',
     `parent_menu_code` VARCHAR(64) DEFAULT '0' COMMENT '父菜单编码',
     `source_type`      VARCHAR(20) COMMENT '来源类型',
-    `remark`           TEXT COMMENT '备注',
 
     `create_time`      DATETIME    DEFAULT NULL COMMENT '创建时间',
     `update_time`      DATETIME    DEFAULT NULL COMMENT '修改时间',
