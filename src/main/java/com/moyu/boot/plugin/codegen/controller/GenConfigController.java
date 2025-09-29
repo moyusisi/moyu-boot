@@ -102,6 +102,16 @@ public class GenConfigController {
     }
 
     /**
+     * 从SQL导入
+     */
+    @PostMapping("/importSql")
+    public Result<?> importSql(@RequestBody GenConfigParam param) {
+        Assert.notEmpty(param.getSql(), "导入的sql不能为空");
+        genConfigService.importSql(param.getTableName());
+        return Result.success();
+    }
+
+    /**
      * 同步表
      */
     @PostMapping("/syncTable")

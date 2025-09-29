@@ -9,6 +9,10 @@ import cn.hutool.extra.template.Template;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLStatement;
+import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
+import com.alibaba.druid.util.JdbcConstants;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -43,6 +47,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -171,6 +176,24 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             }
         }
 
+    }
+
+    @Override
+    public void importSql(String sql) {
+        List<SQLStatement> statementList = new ArrayList<>();
+        // 校验格式
+        try {
+            Assert.notEmpty(sql, "SQL不能为空");
+            statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
+        } catch (Exception e) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
+        }
+        List<MySqlCreateTableStatement> createStatementList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(statementList)) {
+            createStatementList = statementList.stream().filter(statement -> statement instanceof MySqlCreateTableStatement).map(e -> (MySqlCreateTableStatement) e).collect(Collectors.toList());
+        }
+        Assert.isTrue(!createStatementList.isEmpty() && createStatementList.size() <= 10, "每次只能处理1~10个建表语句");
+        // TODO 生成配置
     }
 
     @Override

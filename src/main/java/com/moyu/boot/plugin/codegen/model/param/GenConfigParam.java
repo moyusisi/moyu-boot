@@ -37,6 +37,11 @@ public class GenConfigParam extends BasePageParam {
     private String searchKey;
 
     /**
+     * sql语句
+     */
+    private String sql;
+
+    /**
      * 要排除的表名
      */
     @JsonIgnore
