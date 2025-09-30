@@ -112,6 +112,6 @@
 </script>
 <style scoped>
   .ant-form-item {
-    margin-bottom: 12px !important;
+    /*margin-bottom: 12px !important;*/
   }
 </style>
