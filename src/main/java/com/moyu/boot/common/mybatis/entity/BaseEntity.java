@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 数据库表通用基础字段实体，需要此通用字段的实体可继承此类
@@ -15,6 +18,8 @@ import java.util.Date;
  */
 @Data
 public class BaseEntity implements Serializable {
+
+    public static Set<String> baseFieldSet = new HashSet<>(Arrays.asList("deleteFlag", "createTime", "updateTime", "createBy", "updateBy"));
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
