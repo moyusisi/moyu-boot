@@ -17,7 +17,7 @@
         <a-form ref="formRef" :model="formData" layout="inline">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
-          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
             <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
           </a-form-item>
   </#list>
@@ -51,7 +51,7 @@
 
   // 表单数据
   const formRef = ref()
-  const formData = ref()
+  const formData = ref({})
   const submitLoading = ref(false)
   const dataLoading = ref(false)
 
@@ -63,8 +63,8 @@
   // 打开抽屉
   const onOpen = (record) => {
     visible.value = true
-    title.value = "新增" + ${entityDesc}
-    <#--title.value = "编辑" + ${entityDesc}-->
+    title.value = "新增${entityDesc}"
+    <#--title.value = "编辑${entityDesc}" -->
     // 表单数据赋值
     loadData()
   }
@@ -77,11 +77,12 @@
   const loadData = () => {
     dataLoading.value = true
     // 组装请求参数
-    let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
+    let param = { }
     ${entityName?uncap_first}Api.${entityName?uncap_first}Detail(param).then((res) => {
       formData.value = res.data
     }).finally(() => {
       submitLoading.value = false
+      dataLoading.value = false
     })
   }
 
