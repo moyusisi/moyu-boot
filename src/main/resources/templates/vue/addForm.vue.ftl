@@ -1,27 +1,38 @@
 <template>
-    <a-drawer
-            :open="visible"
-            title="新增岗位(Group)"
-            :width="drawerWidth"
-            :closable="false"
-            :destroy-on-close="true"
-            @close="onClose"
-    >
-        <#--  上方操作区  -->
-        <template #extra>
-            <a-button type="primary" size="small" @click="onClose"><CloseOutlined /></a-button>
-        </template>
-        <#--  数据区  -->
-        <a-spin :spinning="dataLoading">
-        </a-spin>
-        <#--  底部操作区  -->
-        <template #footer>
-            <a-flex gap="small" justify="flex-end">
-                <a-button @click="onClose">关闭</a-button>
-                <a-button type="primary" :loading="submitLoading" @click="onSubmit">保存</a-button>
-            </a-flex>
-        </template>
-    </a-drawer>
+  <a-drawer
+          :open="visible"
+          title="新增岗位(Group)"
+          :width="drawerWidth"
+          :closable="false"
+          :destroy-on-close="true"
+          @close="onClose"
+  >
+    <#--  上方操作区  -->
+    <template #extra>
+        <a-button type="primary" size="small" @click="onClose"><CloseOutlined /></a-button>
+    </template>
+    <#--  数据区  -->
+    <a-spin :spinning="dataLoading">
+      <a-card  size="small">
+        <a-form ref="formRef" :model="formData" layout="inline">
+<#if fieldList??>
+  <#list fieldList as fieldConfig>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required>required</#if>
+            <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+          </a-form-item>
+  </#list>
+</#if>
+        </a-form>
+      </a-card>
+    </a-spin>
+      <#--  底部操作区  -->
+      <template #footer>
+        <a-flex gap="small" justify="flex-end">
+            <a-button @click="onClose">关闭</a-button>
+            <a-button type="primary" :loading="submitLoading" @click="onSubmit">保存</a-button>
+        </a-flex>
+      </template>
+  </a-drawer>
 </template>
 <script setup>
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
