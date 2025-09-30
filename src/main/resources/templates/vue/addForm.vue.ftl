@@ -13,15 +13,19 @@
     </template>
     <#--  数据区  -->
     <a-spin :spinning="dataLoading">
-      <a-card  size="small">
-        <a-form ref="formRef" :model="formData" layout="inline">
+      <a-card title="基本信息">
+        <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
+          <a-row :gutter="24">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
-          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
-            <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
-          </a-form-item>
+            <a-col :span="12">
+              <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
+                <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+              </a-form-item>
+            </a-col>
   </#list>
 </#if>
+          </a-row>
         </a-form>
       </a-card>
     </a-spin>
@@ -106,3 +110,8 @@
     onOpen
   })
 </script>
+<style scoped>
+  .ant-form-item {
+    margin-bottom: 12px !important;
+  }
+</style>
