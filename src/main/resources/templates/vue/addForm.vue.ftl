@@ -17,7 +17,7 @@
         <a-form ref="formRef" :model="formData" layout="inline">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
-          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required>required</#if>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>
             <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
           </a-form-item>
   </#list>
