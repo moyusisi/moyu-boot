@@ -2,18 +2,19 @@
   <!-- 上方选择区 -->
   <a-card size="small">
     <a-form ref="queryFormRef" :model="queryFormData" layout="inline">
+      <a-flex wrap="wrap" gap="small">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInQuery == 1>
-      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}">
+        <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}">
       <#if fieldConfig.formType == "INPUT">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
-        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+          <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "SELECT" || fieldConfig.formType == "RADIO" || fieldConfig.formType == "CHECK_BOX">
-        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
+          <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "TEXT_AREA">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
         <#if fieldConfig.queryType == "BETWEEN">
           <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" />
@@ -23,16 +24,17 @@
           <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm"/>
         </#if>
       </#if>
-      </a-form-item>
+        </a-form-item>
     </#if>
   </#list>
 </#if>
-      <a-form-item>
-        <a-space>
-          <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
-          <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
-        </a-space>
-      </a-form-item>
+        <a-form-item>
+          <a-flex gap="small">
+            <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
+            <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
+          </a-flex>
+        </a-form-item>
+      </a-flex>
     </a-form>
   </a-card>
   <a-card size="small">
