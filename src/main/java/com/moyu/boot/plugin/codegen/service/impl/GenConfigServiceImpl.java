@@ -22,6 +22,7 @@ import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.mybatis.entity.BaseEntity;
 import com.moyu.boot.plugin.codegen.config.CodegenProperties;
 import com.moyu.boot.plugin.codegen.enums.FormTypeEnum;
 import com.moyu.boot.plugin.codegen.enums.JavaTypeEnum;
@@ -391,7 +392,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfig.setRequired(columnMetaData.getNullable() == 1 ? 0 : 1);
 
         fieldConfig.setShowInList(1);
-        fieldConfig.setShowInForm(1);
+        if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
+            fieldConfig.setShowInForm(1);
+        } else {
+            fieldConfig.setShowInForm(0);
+        }
         fieldConfig.setShowInQuery(0);
         // formType
         if (fieldConfig.getColumnType().equals("date")) {
@@ -643,7 +648,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 // 默认非必填
                 fieldConfig.setRequired(0);
                 fieldConfig.setShowInList(1);
-                fieldConfig.setShowInForm(1);
+                if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
+                    fieldConfig.setShowInForm(1);
+                } else {
+                    fieldConfig.setShowInForm(0);
+                }
                 fieldConfig.setShowInQuery(0);
                 // formType
                 if (fieldConfig.getColumnType().equals("date")) {
