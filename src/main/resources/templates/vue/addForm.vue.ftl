@@ -1,7 +1,7 @@
 <template>
   <a-drawer
       :open="visible"
-      title="新增岗位(Group)"
+      :title="title"
       :width="drawerWidth"
       :closable="false"
       :destroy-on-close="true"
@@ -48,29 +48,31 @@
   // store
   const settingsStore = useSettingsStore()
 
+  const emit = defineEmits({ successful: null })
   // 默认是关闭状态
   const visible = ref(false)
   const title = ref()
-  const emit = defineEmits({ successful: null })
-
-  // 表单数据
-  const formRef = ref()
-  const formData = ref({})
-  const submitLoading = ref(false)
-  const dataLoading = ref(false)
-
   // 计算属性 抽屉宽度
   const drawerWidth = computed(() => {
     return settingsStore.menuCollapsed ? `calc(100% - 80px)` : `calc(100% - 210px)`
   })
 
+  // 表单数据
+  const formRef = ref()
+  const formData = ref({})
+  const dataLoading = ref(false)
+  const submitLoading = ref(false)
+
   // 打开抽屉
   const onOpen = (record) => {
     visible.value = true
-    title.value = "新增${entityDesc}"
-    <#--title.value = "编辑${entityDesc}" -->
-    // 表单数据赋值
-    loadData()
+    if (record) {
+      title.value = "编辑${entityDesc}"
+      // 表单数据赋值
+      loadData()
+    } else {
+      title.value = "新增${entityDesc}"
+    }
   }
   // 关闭抽屉
   const onClose = () => {
