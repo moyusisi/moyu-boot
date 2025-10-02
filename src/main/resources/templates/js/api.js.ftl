@@ -20,9 +20,9 @@ export default {
   add${entityName}(data) {
     return service.postJson('/api/${moduleName}/${entityName?uncap_first}/add', data)
   },
-  // 更新${entityDesc}
-  update${entityName}(data) {
-    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/update', data)
+  // 编辑${entityDesc}
+  edit${entityName}(data) {
+    return service.postJson('/api/${moduleName}/${entityName?uncap_first}/edit', data)
   },
   // 删除${entityDesc}，通过ids删除
   delete${entityName}(data) {
