@@ -393,9 +393,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
         fieldConfig.setShowInList(1);
         if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
-            fieldConfig.setShowInForm(1);
-        } else {
             fieldConfig.setShowInForm(0);
+        } else {
+            fieldConfig.setShowInForm(1);
         }
         fieldConfig.setShowInQuery(0);
         // formType
@@ -649,9 +649,9 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 fieldConfig.setRequired(0);
                 fieldConfig.setShowInList(1);
                 if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
-                    fieldConfig.setShowInForm(1);
-                } else {
                     fieldConfig.setShowInForm(0);
+                } else {
+                    fieldConfig.setShowInForm(1);
                 }
                 fieldConfig.setShowInQuery(0);
                 // formType
