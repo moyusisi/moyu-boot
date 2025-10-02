@@ -102,7 +102,7 @@ public class SysOrgController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
     @PostMapping("/edit")
-    public Result<String> update(@Validated @RequestBody SysOrgParam orgParam) {
+    public Result<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
         sysOrgService.update(orgParam);
         return Result.success();

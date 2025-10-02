@@ -79,7 +79,7 @@ public class SysUserController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/edit")
-    public Result<?> update(@Validated @RequestBody SysUserParam userParam) {
+    public Result<?> edit(@Validated @RequestBody SysUserParam userParam) {
         sysUserService.update(userParam);
         return Result.success();
     }
