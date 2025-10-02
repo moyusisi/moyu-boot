@@ -2,19 +2,19 @@
 DROP TABLE IF EXISTS `sys_org`;
 CREATE TABLE `sys_org`
 (
-    `id`          BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `parent_code` VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
     `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
-    `org_type`    TINYINT(5)    DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
-    `org_level`   TINYINT(5)    DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
+    `org_type`    TINYINT       DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
+    `org_level`   TINYINT       DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
-    `sort_num`    INT(10)       DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)    DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `sort_num`    INT           DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
     `remark`      TEXT          DEFAULT NULL comment '备注',
-    `deleted`     TINYINT(5)    DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
     `create_by`   VARCHAR(20)   DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
@@ -29,7 +29,7 @@ CREATE TABLE `sys_org`
 drop table if exists sys_user;
 create table sys_user
 (
-    `id`              BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`              BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `account`         VARCHAR(64)   DEFAULT NULL COMMENT '账号',
     `password`        VARCHAR(64)   DEFAULT NULL COMMENT '密码',
     `nick_name`       VARCHAR(64)   DEFAULT NULL COMMENT '昵称',
@@ -54,9 +54,9 @@ create table sys_user
     `last_login_time` DATETIME      DEFAULT NULL COMMENT '上次登陆时间',
     `pwd_update_time` DATETIME      DEFAULT NULL COMMENT '上次密码更新时间',
 
-    `status`          TINYINT(5)    DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `status`          TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `remark`          TEXT          DEFAULT NULL comment '备注',
-    `deleted`         TINYINT(5)    DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`         TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`     DATETIME      DEFAULT NULL COMMENT '创建时间',
     `create_by`       VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
     `update_time`     DATETIME      DEFAULT NULL COMMENT '修改时间',
@@ -72,15 +72,15 @@ create table sys_user
 drop table if exists sys_role;
 create table sys_role
 (
-    `id`          BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64) DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64) DEFAULT NULL COMMENT '编码',
 
-    `sort_num`    INT(10)     DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)  DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `sort_num`    INT         DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
     `ext_json`    TEXT        DEFAULT NULL COMMENT '扩展信息',
     `remark`      TEXT        DEFAULT NULL comment '备注',
-    `deleted`     TINYINT(5)  DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`     TINYINT     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME    DEFAULT NULL COMMENT '创建时间',
     `create_by`   VARCHAR(32) DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME    DEFAULT NULL COMMENT '修改时间',
@@ -95,20 +95,20 @@ create table sys_role
 drop table if exists sys_group;
 create table sys_group
 (
-    `id`          bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
     `org_code`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
-    `data_scope`  TINYINT(5)    DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
+    `data_scope`  TINYINT       DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
     `scope_set`   VARCHAR(1024) DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
-    `sort_num`    INT(10)       DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)    DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `sort_num`    INT           DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
     `remark`      TEXT          DEFAULT NULL comment '备注',
-    `deleted`     TINYINT(5)    DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
     `create_by`   VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
@@ -123,24 +123,24 @@ create table sys_group
 drop table if exists sys_resource;
 create table sys_resource
 (
-    `id`            BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `parent_code`   VARCHAR(64)  DEFAULT '0' COMMENT '父编码',
     `name`          VARCHAR(64)  DEFAULT NULL COMMENT '名称',
     `code`          VARCHAR(64)  DEFAULT NULL COMMENT '编码',
-    `resource_type` TINYINT(5)   DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
+    `resource_type` TINYINT      DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
     `path`          VARCHAR(64)  DEFAULT NULL COMMENT '路由地址',
     `component`     VARCHAR(64)  DEFAULT NULL COMMENT '组件地址',
     `permission`    VARCHAR(64)  DEFAULT NULL COMMENT '权限标识',
     `link`          VARCHAR(255) DEFAULT NULL COMMENT '链接地址',
     `icon`          VARCHAR(64)  DEFAULT NULL COMMENT '图标',
-    `visible`       TINYINT(5)   DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
+    `visible`       TINYINT      DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `module`        VARCHAR(64)  DEFAULT NULL COMMENT '归属模块',
 
-    `sort_num`      INT(10)      DEFAULT NULL COMMENT '排序顺序',
-    `status`        TINYINT(5)   DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `sort_num`      INT          DEFAULT NULL COMMENT '排序顺序',
+    `status`        TINYINT      DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
     `ext_json`      TEXT         DEFAULT NULL COMMENT '扩展信息',
     `remark`        TEXT         DEFAULT NULL comment '备注',
-    `deleted`       TINYINT(5)   DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`       TINYINT      DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME     DEFAULT NULL COMMENT '创建时间',
     `create_by`     VARCHAR(32)  DEFAULT NULL COMMENT '创建人',
     `update_time`   DATETIME     DEFAULT NULL COMMENT '修改时间',
@@ -155,11 +155,11 @@ create table sys_resource
 DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation`
 (
-    `id`            BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `object_id`     VARCHAR(64) DEFAULT NULL COMMENT '对象ID',
     `target_id`     VARCHAR(64) DEFAULT NULL COMMENT '目标ID',
-    `relation_type` TINYINT(5)  DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role)',
-    `deleted`       TINYINT(5)  DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `relation_type` TINYINT     DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role)',
+    `deleted`       TINYINT     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME    DEFAULT NULL COMMENT '创建时间',
     `create_by`     VARCHAR(32) DEFAULT NULL COMMENT '创建人',
     `update_time`   DATETIME    DEFAULT NULL COMMENT '修改时间',
