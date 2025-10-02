@@ -149,7 +149,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Set<Long> idSet = roleParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
     }
 

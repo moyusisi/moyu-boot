@@ -164,7 +164,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         Set<Long> idSet = resourceParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
         // 资源删除时,对应的role_has_menu也要删除
         clearRoleMenu(idSet);
@@ -209,7 +209,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         }
         // 逻辑删除
         UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
         // 资源删除时,对应的role_has_resource也要删除
         clearRoleMenu(idSet);

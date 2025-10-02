@@ -185,7 +185,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         Set<Long> idSet = orgParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
     }
 
@@ -227,7 +227,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         }
         // 逻辑删除
         UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
     }
 

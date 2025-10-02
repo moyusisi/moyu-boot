@@ -146,7 +146,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         Set<Long> idSet = scopeParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysScope> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
     }
 

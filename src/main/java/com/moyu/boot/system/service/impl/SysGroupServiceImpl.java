@@ -165,7 +165,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         Set<Long> idSet = groupParam.getIds();
         // 逻辑删除
         UpdateWrapper<SysGroup> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("delete_flag", 1);
+        updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
     }
 
