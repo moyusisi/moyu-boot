@@ -2,23 +2,23 @@
 DROP TABLE IF EXISTS `sys_org`;
 CREATE TABLE `sys_org`
 (
-    `id`          BIGINT(20)    NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(64)   NULL DEFAULT '0' COMMENT '父编码',
-    `name`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(64)   NULL DEFAULT NULL COMMENT '编码',
-    `org_type`    TINYINT(5)    NULL DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
-    `org_level`   TINYINT(5)    NULL DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
-    `org_path`    VARCHAR(1024) NULL DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
+    `id`          BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `parent_code` VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
+    `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
+    `org_type`    TINYINT(5)    DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
+    `org_level`   TINYINT(5)    DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
+    `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
-    `sort_num`    INT(10)       NULL DEFAULT NULL COMMENT '排序顺序',
-    `status`      TINYINT(5)    NULL DEFAULT 0 COMMENT '状态（0正常 1停用）',
-    `ext_json`    TEXT          NULL COMMENT '扩展信息',
-    `remark`      VARCHAR(200)  NULL DEFAULT NULL comment '备注',
-    `deleted`     TINYINT(5)    NULL DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time` DATETIME      NULL DEFAULT NULL COMMENT '创建时间',
-    `create_by`   VARCHAR(20)   NULL DEFAULT NULL COMMENT '创建人',
-    `update_time` DATETIME      NULL DEFAULT NULL COMMENT '修改时间',
-    `update_by`   VARCHAR(20)   NULL DEFAULT NULL COMMENT '修改人',
+    `sort_num`    INT(10)       DEFAULT NULL COMMENT '排序顺序',
+    `status`      TINYINT(5)    DEFAULT 0 COMMENT '状态（0正常 1停用）',
+    `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
+    `remark`      VARCHAR(200)  DEFAULT NULL comment '备注',
+    `deleted`     TINYINT(5)    DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
+    `create_by`   VARCHAR(20)   DEFAULT NULL COMMENT '创建人',
+    `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
+    `update_by`   VARCHAR(20)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
