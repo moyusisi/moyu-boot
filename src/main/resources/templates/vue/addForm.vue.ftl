@@ -29,13 +29,13 @@
         </a-form>
       </a-card>
     </a-spin>
-      <#--  底部操作区  -->
-      <template #footer>
-        <a-flex gap="small" justify="flex-end">
-            <a-button @click="onClose">关闭</a-button>
-            <a-button type="primary" :loading="submitLoading" @click="onSubmit">保存</a-button>
-        </a-flex>
-      </template>
+    <#--  底部操作区  -->
+    <template #footer>
+      <a-flex gap="small" justify="flex-end">
+        <a-button type="primary" danger @click="onClose"> 关闭</a-button>
+        <a-button type="primary" :loading="submitLoading" @click="onSubmit">保存</a-button>
+      </a-flex>
+    </template>
   </a-drawer>
 </template>
 <script setup>
@@ -97,7 +97,12 @@
     formRef.value.validate().then(() => {
       submitLoading.value = true
       // formData.value 加工处理 TODO add edit
-      ${entityName?uncap_first}Api.add${entityName}(formData.value).then((res) => {
+      let fun = ${entityName?uncap_first}Api.add${entityName}
+      if (formData.value.id) {
+        // 编辑
+        fun = ${entityName?uncap_first}Api.edit${entityName}
+      }
+      fun(formData.value).then((res) => {
         message.success(res.message)
         emit('successful')
         onClose()
