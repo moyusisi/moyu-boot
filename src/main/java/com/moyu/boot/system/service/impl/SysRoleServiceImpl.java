@@ -82,7 +82,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
                 // 非 ROOT 则排除
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
-                .eq(SysRole::getDeleteFlag, 0)
+                .eq(SysRole::getDeleted, 0)
                 .orderByAsc(SysRole::getSortNum);
         // 查询
         List<SysRole> roleList = this.list(queryWrapper);
@@ -99,7 +99,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
                 // 非 ROOT 则排除
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
-                .eq(SysRole::getDeleteFlag, 0)
+                .eq(SysRole::getDeleted, 0)
                 .orderByAsc(SysRole::getSortNum);
         // 分页查询
         Page<SysRole> page = new Page<>(roleParam.getPageNum(), roleParam.getPageSize());
@@ -127,7 +127,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 查询指定code
             SysRole role = this.getOne(new LambdaQueryWrapper<SysRole>()
                     .eq(SysRole::getCode, roleParam.getCode())
-                    .eq(SysRole::getDeleteFlag, 0));
+                    .eq(SysRole::getDeleted, 0));
             if (role != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
@@ -230,7 +230,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .eq(SysResource::getModule, roleParam.getModule())
                 // 指定菜单类型
                 .in(SysResource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.IFRAME.getCode(), ResourceTypeEnum.LINK.getCode(), ResourceTypeEnum.BUTTON.getCode())
-                .eq(SysResource::getDeleteFlag, 0));
+                .eq(SysResource::getDeleted, 0));
         // 本模块的所有权限
         List<String> allMenuCode = menuList.stream().map(SysResource::getCode).collect(Collectors.toList());
         // 如果本模块无任何可用资源，则不用授权

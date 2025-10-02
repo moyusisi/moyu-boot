@@ -66,7 +66,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .in(ObjectUtil.isNotEmpty(userParam.getCodeSet()), SysUser::getAccount, userParam.getCodeSet())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
-                .eq(SysUser::getDeleteFlag, 0);
+                .eq(SysUser::getDeleted, 0);
         // 查询
         List<SysUser> groupList = this.list(queryWrapper);
         return groupList;
@@ -90,7 +90,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .apply(ObjectUtil.isNotEmpty(deptCode), "find_in_set('" + deptCode + "', org_path)")
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
-                .eq(SysUser::getDeleteFlag, 0);
+                .eq(SysUser::getDeleted, 0);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
             // 指定的列名

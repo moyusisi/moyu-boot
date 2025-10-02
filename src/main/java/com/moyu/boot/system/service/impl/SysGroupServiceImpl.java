@@ -71,7 +71,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
-                .eq(SysGroup::getDeleteFlag, 0)
+                .eq(SysGroup::getDeleted, 0)
                 .orderByAsc(SysGroup::getSortNum);
         // 查询
         List<SysGroup> groupList = this.list(queryWrapper);
@@ -88,7 +88,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 .eq(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgCode, groupParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
-                .eq(SysGroup::getDeleteFlag, 0)
+                .eq(SysGroup::getDeleted, 0)
                 .orderByAsc(SysGroup::getSortNum);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
@@ -241,7 +241,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         List<SysGroup> groupList = this.list(Wrappers.lambdaQuery(SysGroup.class)
                 .in(SysGroup::getCode, groupSet)
                 .eq(SysGroup::getStatus, 0)
-                .eq(SysGroup::getDeleteFlag, 0)
+                .eq(SysGroup::getDeleted, 0)
         );
         return groupList;
     }

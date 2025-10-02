@@ -69,7 +69,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
                 .eq(StrUtil.isNotBlank(scopeParam.getOrgCode()), SysScope::getOrgCode, scopeParam.getOrgCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(scopeParam.getStatus()), SysScope::getStatus, scopeParam.getStatus())
-                .eq(SysScope::getDeleteFlag, 0)
+                .eq(SysScope::getDeleted, 0)
                 .orderByAsc(SysScope::getSortNum);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
@@ -256,7 +256,7 @@ public class SysScopeServiceImpl extends ServiceImpl<SysScopeMapper, SysScope> i
         LambdaQueryWrapper<SysScope> queryScopeWrapper = Wrappers.lambdaQuery(SysScope.class)
                 .in(SysScope::getCode, scopeSet)
                 .eq(SysScope::getStatus, 0)
-                .eq(SysScope::getDeleteFlag, 0);
+                .eq(SysScope::getDeleted, 0);
         List<SysScope> scopeList = this.list(queryScopeWrapper);
         if (ObjectUtil.isEmpty(scopeList)) {
             return scopes;

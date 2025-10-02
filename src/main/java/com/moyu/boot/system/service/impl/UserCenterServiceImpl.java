@@ -114,7 +114,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .eq(SysResource::getDeleteFlag, 0)
+                .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum)
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录

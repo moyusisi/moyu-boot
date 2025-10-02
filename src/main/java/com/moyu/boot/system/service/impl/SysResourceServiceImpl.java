@@ -74,7 +74,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getStatus()), SysResource::getStatus, resourceParam.getStatus())
-                .eq(SysResource::getDeleteFlag, 0)
+                .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum);
         // 查询
         List<SysResource> resourceList = this.list(queryWrapper);
@@ -96,7 +96,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getStatus()), SysResource::getStatus, resourceParam.getStatus())
-                .eq(SysResource::getDeleteFlag, 0)
+                .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum);
 
         // 分页查询
@@ -125,7 +125,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 查询指定code
             SysResource menu = this.getOne(new LambdaQueryWrapper<SysResource>()
                     .eq(SysResource::getCode, resourceParam.getCode())
-                    .eq(SysResource::getDeleteFlag, 0));
+                    .eq(SysResource::getDeleted, 0));
             if (menu != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
@@ -136,7 +136,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 查询所选父节点
             SysResource parentMenu = this.getOne(new LambdaQueryWrapper<SysResource>()
                     .eq(SysResource::getCode, resourceParam.getParentCode())
-                    .eq(SysResource::getDeleteFlag, 0));
+                    .eq(SysResource::getDeleted, 0));
             if (parentMenu == null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "指定的父节点不存在");
             }
@@ -180,7 +180,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .select(SysResource::getId, SysResource::getCode, SysResource::getParentCode)
                 // 指定模块(有模块的情况下要过滤)
                 .eq(ObjectUtil.isNotEmpty(resourceParam.getModule()), SysResource::getModule, resourceParam.getModule())
-                .eq(SysResource::getDeleteFlag, 0);
+                .eq(SysResource::getDeleted, 0);
         // 所有的菜单
         List<SysResource> resourceList = this.list(queryWrapper);
         // 待删除节点的code集合
@@ -237,7 +237,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .eq(SysResource::getDeleteFlag, 0)
+                .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum)
         );
         // 构建的树中仅包含部分字段

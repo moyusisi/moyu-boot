@@ -1,5 +1,5 @@
 -- 组织机构
-insert into moyu.sys_org (id, parent_code, name, code, org_type, org_level, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_org (id, parent_code, name, code, org_type, org_level, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, '2025-03-03 23:37:20', null, '2025-02-26 14:24:47', null),
         (2002, '10000000', '集团总部', '11000000', 1, 2, '10000000,0', 2, 0, null, null, 0, '2025-02-18 18:52:51', null, '2025-03-05 10:40:40', 'superAdmin'),
         (2003, '10000000', '北京公司', '12000000', 1, 2, '10000000,0', 4, 0, null, null, 0, '2025-03-04 22:30:14', 'superAdmin', '2025-03-05 10:41:11', 'superAdmin'),
@@ -13,24 +13,24 @@ values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, '202
         (2011, '16000000', '华南行政部', '16001000', 2, 2, '16000000,10000000,0', 84, 0, null, null, 0, '2025-03-05 10:40:01', 'superAdmin', '2025-03-05 10:41:51', 'superAdmin');
 
 -- 用户
-insert into moyu.sys_user (id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_user (id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, deleted, create_time, create_by, update_time, update_by)
 values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'superAdmin', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
         (102, 'bjAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
         (103, 'auditor', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
 
 -- 角色
-insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, '2025-02-26 17:00:16', null, '2025-02-26 17:00:16', ''),
         (120, '超级管理员', 'superAdmin', 2, 0, null, null, 0, '2025-02-26 17:00:16', null, '2025-02-26 17:00:38', ''),
         (130, '审计员', 'role_auditor', 4, 0, null, '', 0, '2025-02-26 17:00:16', null, '2025-02-26 17:00:16', '');
 
 -- 功能权限组
-insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  (1894925631903645700, '总部兼职岗', 'G1897207291765641216', '11000000', '集团总部', 3, '', '11000000,10000000,0', 2, 0, null, null, 0, '2025-03-05 11:02:14', 'superAdmin', '2025-03-06 13:10:51', 'superAdmin'),
         (1894925631903645701, '北京技术部岗', 'G1897478009027895296', '12002000', '北京技术部', 3, '', '12002000,12000000,10000000,0', 9, 0, null, null, 0, '2025-03-06 10:43:05', 'superAdmin', '2025-03-06 18:43:38', 'superAdmin');
 
 -- 菜单数据
-insert into moyu.sys_resource (id, parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, status, ext_json, remark, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_resource (id, parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', null, 'appstore-add-outlined', '', 1, null, 'sys_module', 1, 0, null, '', 0, null, null, '2025-02-19 22:22:35', null),
         (2002, '0', '业务模块', 'biz_module', 1, '/bizModule', null, 'profile-outlined', '', 1, null, null, 2, 0, null, '', 0, null, null, '2025-02-19 22:22:42', null),
 
@@ -129,7 +129,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', null, 'appsto
         (2089, 'menu_biz_org', '编辑机构', 'btn_biz_org_edit', 6, null, null, null, null, 1, null, 'biz_module', 6, 0, null, '', 0, null, null, null, null);
 
 -- 关系
-insert into moyu.sys_relation (id, object_id, target_id, relation_type, delete_flag, create_time, create_by, update_time, update_by)
+insert into moyu.sys_relation (id, object_id, target_id, relation_type, deleted, create_time, create_by, update_time, update_by)
 values  (1, 'ROOT', 'superAdmin', 1, 0, null, null, null, null),
         (2, 'superAdmin', 'superAdmin', 1, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),
         (3, 'superAdmin', 'menu_sys_org', 2, 0, '2025-03-05 20:12:30', 'superAdmin', '2025-03-05 20:12:30', 'superAdmin'),

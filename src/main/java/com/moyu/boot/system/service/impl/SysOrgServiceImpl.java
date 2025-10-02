@@ -72,7 +72,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                .eq(SysOrg::getDeleteFlag, 0)
+                .eq(SysOrg::getDeleted, 0)
                 .orderByAsc(SysOrg::getSortNum);
         // 查询
         List<SysOrg> orgList = this.list(queryWrapper);
@@ -95,7 +95,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .eq(ObjectUtil.isNotEmpty(parentCode), SysOrg::getParentCode, parentCode)
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                .eq(SysOrg::getDeleteFlag, 0)
+                .eq(SysOrg::getDeleted, 0)
                 .orderByAsc(SysOrg::getSortNum);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
@@ -159,7 +159,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             // 查询指定code
             SysOrg org = this.getOne(new LambdaQueryWrapper<SysOrg>()
                     .eq(SysOrg::getCode, orgParam.getCode())
-                    .eq(SysOrg::getDeleteFlag, 0));
+                    .eq(SysOrg::getDeleted, 0));
             if (org != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
@@ -197,7 +197,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         queryWrapper.lambda()
                 // 查询部分字段
                 .select(SysOrg::getId, SysOrg::getCode, SysOrg::getParentCode)
-                .eq(SysOrg::getDeleteFlag, 0);
+                .eq(SysOrg::getDeleted, 0);
         // 查询所有记录
         List<SysOrg> orgList = this.list(queryWrapper);
         // 待删除节点的code集合
@@ -296,7 +296,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         List<SysOrg> orgList = this.list(Wrappers.lambdaQuery(SysOrg.class)
                 // 查询部分字段
                 .select(SysOrg::getCode, SysOrg::getParentCode, SysOrg::getName, SysOrg::getSortNum, SysOrg::getOrgType)
-                .eq(SysOrg::getDeleteFlag, 0)
+                .eq(SysOrg::getDeleted, 0)
                 .orderByAsc(SysOrg::getSortNum)
         );
         // 构建树
