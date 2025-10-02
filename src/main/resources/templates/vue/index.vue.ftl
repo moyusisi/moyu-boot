@@ -43,7 +43,7 @@
       <#--  左侧按钮  -->
       <a-col :span="20" style="margin-bottom: 12px">
         <a-space wrap>
-          <a-button type="primary" :icon="h(PlusOutlined)" @click="xx.onOpen(module)">新增</a-button>
+          <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
           <a-popconfirm title="确定要批量删除吗？" :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
             <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
               批量删除
