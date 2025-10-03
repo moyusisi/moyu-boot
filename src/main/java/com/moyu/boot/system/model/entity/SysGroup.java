@@ -22,7 +22,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @TableName(value = "sys_group")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysGroup extends BaseEntity implements Serializable {
+public class SysGroup extends BaseEntity {
     /**
      * 主键id
      */
