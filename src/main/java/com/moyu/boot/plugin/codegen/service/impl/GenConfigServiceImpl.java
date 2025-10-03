@@ -424,7 +424,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             return;
         }
         for (CodePreviewVO codeVO : codeList) {
-            String fileName = codeVO.getCodeType() + File.separator + codeVO.getFileName();
+            String fileName = codeVO.getCodeType() + File.separator + codeVO.getPath() + File.separator + codeVO.getFileName();
             try {
                 // 添加文件到ZIP文件
                 ZipEntry zipEntry = new ZipEntry(fileName);
