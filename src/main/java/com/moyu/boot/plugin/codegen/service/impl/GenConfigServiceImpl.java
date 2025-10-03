@@ -33,6 +33,7 @@ import com.moyu.boot.plugin.codegen.model.bo.ColumnMetaData;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.entity.GenField;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codegen.model.vo.FieldConfigVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
@@ -48,6 +49,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -270,7 +272,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         if (genConfig == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-        return genCode(genConfig);
+        return genCodeMap(genConfig);
     }
 
     @Override
@@ -285,7 +287,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (GenConfig genConfig : genConfigList) {
-            Map<String, String> codeMap = genCode(genConfig);
+            Map<String, String> codeMap = genCodeMap(genConfig);
             zipCode(genConfig, codeMap, zip);
         }
         try {
@@ -301,7 +303,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     /**
      * 生成代码
      */
-    private Map<String, String> genCode(@NotNull GenConfig genConfig) {
+    private Map<String, String> genCodeMap(@NotNull GenConfig genConfig) {
         // code代码map
         Map<String, String> codeMap = new LinkedHashMap<>();
         // 字段配置
@@ -310,22 +312,104 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         // 获取所有模板文件名
-        List<String> templateList = getTemplateList();
+        Map<String, String> templateMap = getTemplateList();
         // 组装模板中用到的变量
         Map<String, Object> bindMap = buildBindMap(genConfig, fieldList);
         // 自动根据用户引入的模板引擎库的jar来自动选择使用的引擎
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("", TemplateConfig.ResourceMode.CLASSPATH));
         // 遍历模板文件
-        for (String templateName : templateList) {
-            Template template = engine.getTemplate(templateName);
+        for (Map.Entry<String, String> entry : templateMap.entrySet()) {
+            Template template = engine.getTemplate(entry.getValue());
             // 模板渲染后的内容
             String content = template.render(bindMap);
             // 模板名
-            String simpleName = templateName.replace(".ftl", "");
-            simpleName = simpleName.substring(simpleName.lastIndexOf("/") + 1);
-            codeMap.put(simpleName, content);
+            codeMap.put(entry.getKey(), content);
         }
         return codeMap;
+    }
+
+    /**
+     * 生成codePreviewVO
+     */
+    private List<CodePreviewVO> genCodePreviewList(GenConfig genConfig, Map<String, String> codeMap) {
+        List<CodePreviewVO> list = new ArrayList<>();
+        if (CollectionUtils.isEmpty(codeMap)) {
+            return list;
+        }
+        for (Map.Entry<String, String> entry : codeMap.entrySet()) {
+            CodePreviewVO vo = new CodePreviewVO();
+            vo.setCodeKey(entry.getKey());
+            vo.setContent(entry.getValue());
+            fillCodePreview(vo, genConfig);
+            list.add(vo);
+        }
+        return list;
+    }
+
+    /**
+     * 填充CodePreviewVO的字段
+     */
+    private void fillCodePreview(CodePreviewVO vo, GenConfig genConfig) {
+        String entityName = genConfig.getEntityName();
+        String packageName = genConfig.getPackageName();
+        String moduleName = genConfig.getModuleName();
+        String packagePath = (packageName + "." + moduleName).replace(".", File.separator);
+
+        String codeKey = vo.getCodeKey();
+        if (codeKey.contains("controller.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/controller", packagePath));
+            vo.setFileName(String.format("%sController.java", entityName));
+        } else if (codeKey.contains("service.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/service", packagePath));
+            vo.setFileName(String.format("%sService.java", entityName));
+        } else if (codeKey.contains("serviceImpl.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/service/impl", packagePath));
+            vo.setFileName(String.format("%sServiceImpl.java", entityName));
+        } else if (codeKey.contains("mapper.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/mapper", packagePath));
+            vo.setFileName(String.format("%sMapper.java", entityName));
+        } else if (codeKey.contains("entity.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/model/entity", packagePath));
+            vo.setFileName(String.format("%s.java", entityName));
+        } else if (codeKey.contains("param.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/model/param", packagePath));
+            vo.setFileName(String.format("%sParam.java", entityName));
+        } else if (codeKey.contains("vo.java")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/java/%s/model/vo", packagePath));
+            vo.setFileName(String.format("%sVO.java", entityName));
+        } else if (codeKey.contains("mapper.xml")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/resources/mapper/%s", moduleName));
+            vo.setFileName(String.format("%sMapper.xml", entityName));
+        } else if (codeKey.contains("mysql.sql")) {
+            vo.setCodeType("backend");
+            vo.setPath(String.format("src/main/sql/%s", moduleName));
+            vo.setPath("src/main/sql");
+            vo.setFileName(String.format("%s.sql", entityName));
+        } else if (codeKey.contains("api.js")) {
+            vo.setCodeType("frontend");
+            vo.setPath(String.format("src/api/%s", moduleName));
+            vo.setFileName(String.format("%sApi.js", entityName));
+        } else if (codeKey.contains("index.vue")) {
+            vo.setCodeType("frontend");
+            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setFileName("index.vue");
+        } else if (codeKey.contains("addForm.vue")) {
+            vo.setCodeType("frontend");
+            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setFileName("addForm.vue");
+        } else if (codeKey.contains("editForm.vue")) {
+            vo.setCodeType("frontend");
+            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setFileName("editForm.vue");
+        }
     }
 
     /**
@@ -538,24 +622,24 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 获取模板列表(从resources/templates开始的全路径)
+     * 获取模板资源(在resources中的文件)
      */
-    private List<String> getTemplateList() {
-        List<String> templates = new ArrayList<String>();
-        templates.add("templates/java/entity.java.ftl");
-        templates.add("templates/java/param.java.ftl");
-        templates.add("templates/java/vo.java.ftl");
-        templates.add("templates/java/mapper.java.ftl");
-        templates.add("templates/java/service.java.ftl");
-        templates.add("templates/java/serviceImpl.java.ftl");
-        templates.add("templates/java/controller.java.ftl");
-        templates.add("templates/xml/mapper.xml.ftl");
-        templates.add("templates/sql/mysql.sql.ftl");
-        templates.add("templates/js/api.js.ftl");
-        templates.add("templates/vue/index.vue.ftl");
-        templates.add("templates/vue/addForm.vue.ftl");
-        templates.add("templates/vue/editForm.vue.ftl");
-        return templates;
+    private Map<String, String> getTemplateList() {
+        Map<String, String> templateMap = new LinkedHashMap<>();
+        templateMap.put("entity.java", "templates/java/entity.java.ftl");
+        templateMap.put("param.java", "templates/java/param.java.ftl");
+        templateMap.put("vo.java", "templates/java/vo.java.ftl");
+        templateMap.put("mapper.java", "templates/java/mapper.java.ftl");
+        templateMap.put("service.java", "templates/java/service.java.ftl");
+        templateMap.put("serviceImpl.java", "templates/java/serviceImpl.java.ftl");
+        templateMap.put("controller.java", "templates/java/controller.java.ftl");
+        templateMap.put("mapper.xml", "templates/xml/mapper.xml.ftl");
+        templateMap.put("mysql.sql", "templates/sql/mysql.sql.ftl");
+        templateMap.put("api.js", "templates/js/api.js.ftl");
+        templateMap.put("index.vue", "templates/vue/index.vue.ftl");
+        templateMap.put("addForm.vue", "templates/vue/addForm.vue.ftl");
+        templateMap.put("editForm.vue", "templates/vue/editForm.vue.ftl");
+        return templateMap;
     }
 
     /**
