@@ -400,18 +400,18 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         } else if (codeKey.contains("api.js")) {
             vo.setCodeType("frontend");
             vo.setPath(String.format("src/api/%s", moduleName));
-            vo.setFileName(String.format("%sApi.js", entityName));
+            vo.setFileName(String.format("%sApi.js", StrUtil.lowerFirst(entityName)));
         } else if (codeKey.contains("index.vue")) {
             vo.setCodeType("frontend");
-            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
             vo.setFileName("index.vue");
         } else if (codeKey.contains("addForm.vue")) {
             vo.setCodeType("frontend");
-            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
             vo.setFileName("addForm.vue");
         } else if (codeKey.contains("editForm.vue")) {
             vo.setCodeType("frontend");
-            vo.setPath(String.format("src/views/%s/%s", moduleName, entityName));
+            vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
             vo.setFileName("editForm.vue");
         }
     }
