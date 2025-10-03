@@ -266,13 +266,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     @Override
-    public Map<String, String> previewCode(GenConfigParam param) {
+    public List<CodePreviewVO> previewCode(GenConfigParam param) {
         // 查询表配置
         GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getId, param.getId()));
         if (genConfig == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-        return genCodeMap(genConfig);
+        return genCodeList(genConfig);
     }
 
     @Override
@@ -287,8 +287,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ZipOutputStream zip = new ZipOutputStream(outputStream);
         for (GenConfig genConfig : genConfigList) {
-            Map<String, String> codeMap = genCodeMap(genConfig);
-            zipCode(genConfig, codeMap, zip);
+            List<CodePreviewVO> codeList = genCodeList(genConfig);
+            zipCode(codeList, zip);
         }
         try {
             // 完成所有文件的添加
@@ -303,29 +303,33 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     /**
      * 生成代码
      */
-    private Map<String, String> genCodeMap(@NotNull GenConfig genConfig) {
-        // code代码map
-        Map<String, String> codeMap = new LinkedHashMap<>();
+    private List<CodePreviewVO> genCodeList(@NotNull GenConfig genConfig) {
+        // code代码列表
+        List<CodePreviewVO> codeList = new ArrayList<>();
         // 字段配置
         List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
         if (CollectionUtil.isEmpty(fieldList)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
         // 获取所有模板文件名
-        Map<String, String> templateMap = getTemplateList();
+        Map<String, String> templateMap = getTemplateMap();
         // 组装模板中用到的变量
         Map<String, Object> bindMap = buildBindMap(genConfig, fieldList);
         // 自动根据用户引入的模板引擎库的jar来自动选择使用的引擎
         TemplateEngine engine = TemplateUtil.createEngine(new TemplateConfig("", TemplateConfig.ResourceMode.CLASSPATH));
         // 遍历模板文件
         for (Map.Entry<String, String> entry : templateMap.entrySet()) {
+            // 获取模板并渲染
             Template template = engine.getTemplate(entry.getValue());
-            // 模板渲染后的内容
             String content = template.render(bindMap);
-            // 模板名
-            codeMap.put(entry.getKey(), content);
+            // 构造 CodePreviewVO
+            CodePreviewVO vo = new CodePreviewVO();
+            vo.setCodeKey(entry.getKey());
+            vo.setContent(content);
+            fillCodePreview(vo, genConfig);
+            codeList.add(vo);
         }
-        return codeMap;
+        return codeList;
     }
 
     /**
@@ -415,22 +419,23 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     /**
      * 将代码输出到zip流
      */
-    private void zipCode(GenConfig genConfig, Map<String, String> codeMap, ZipOutputStream zip) {
-        if (CollectionUtils.isEmpty(codeMap)) {
+    private void zipCode(List<CodePreviewVO> codeList, ZipOutputStream zip) {
+        if (CollectionUtils.isEmpty(codeList)) {
             return;
         }
-        for (Map.Entry<String, String> entry : codeMap.entrySet()) {
-            String fileName = getFullFileName(entry.getKey(), genConfig);
+        for (CodePreviewVO codeVO : codeList) {
+            String fileName = codeVO.getCodeType() + File.separator + codeVO.getFileName();
             try {
                 // 添加文件到ZIP文件
                 ZipEntry zipEntry = new ZipEntry(fileName);
                 zip.putNextEntry(zipEntry);
-                String code = entry.getValue();
+                String code = codeVO.getContent();
                 zip.write(code.getBytes(StandardCharsets.UTF_8));
                 zip.flush();
                 zip.closeEntry();
             } catch (IOException e) {
-                log.error("生成文件失败，表名:" + genConfig.getTableName(), e);
+                log.error("生成代码文件Zip失败", e);
+                throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "生成代码文件Zip失败");
             }
         }
     }
@@ -624,7 +629,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     /**
      * 获取模板资源(在resources中的文件)
      */
-    private Map<String, String> getTemplateList() {
+    private Map<String, String> getTemplateMap() {
         Map<String, String> templateMap = new LinkedHashMap<>();
         templateMap.put("entity.java", "templates/java/entity.java.ftl");
         templateMap.put("param.java", "templates/java/param.java.ftl");

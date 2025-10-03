@@ -10,6 +10,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codegen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codegen.model.param.GenConfigParam;
+import com.moyu.boot.plugin.codegen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codegen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codegen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codegen.service.GenConfigService;
@@ -25,7 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 代码生成配置控制器
@@ -125,10 +126,10 @@ public class GenConfigController {
      * 预览生成的代码
      */
     @PostMapping("/preview")
-    public Result<Map<String, String>> preview(@RequestBody GenConfigParam param) {
+    public Result<List<CodePreviewVO>> preview(@RequestBody GenConfigParam param) {
         Assert.notNull(param.getId(), "id不能为空");
-        Map<String, String> codeMap = genConfigService.previewCode(param);
-        return Result.success(codeMap);
+        List<CodePreviewVO> codeList = genConfigService.previewCode(param);
+        return Result.success(codeList);
     }
 
     /**
