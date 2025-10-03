@@ -23,7 +23,8 @@ public class BaseEntity implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public static Set<String> baseFieldSet = new HashSet<>(Arrays.asList("id", "deleted", "createTime", "updateTime", "createBy", "updateBy"));
+    @TableField(exist = false)
+    public static final Set<String> baseFieldSet = new HashSet<>(Arrays.asList("id", "deleted", "createTime", "updateTime", "createBy", "updateBy"));
 
     /**
      * 主键id
