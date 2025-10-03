@@ -12,11 +12,17 @@ import lombok.Data;
 @Data
 public class CodePreviewVO {
     /**
-     * 文件路径 e.g. com.moyu.boot.system.model.entity
+     * 代码key，与模板文件名对应。 e.g. service.java、index.vue
      */
-    private String filePath;
-
-    private String filePackage;
+    private String codeKey;
+    /**
+     * 代码分类，标识生成的代码文件是前端还是后端。 e.g. frontend、backend
+     */
+    private String codeType;
+    /**
+     * 生成的代码文件相对路径(以src为起点) e.g. src/main/java/com/moyu/boot/system/model/entity
+     */
+    private String path;
 
     /**
      * 生成文件名称 e.g. SysUser.java
