@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.mybatis.entity.BaseEntity;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * 用户角色权限关系表
  *
@@ -19,7 +17,7 @@ import java.io.Serializable;
 @Data
 @TableName(value = "sys_relation")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysRelation extends BaseEntity implements Serializable {
+public class SysRelation extends BaseEntity {
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
