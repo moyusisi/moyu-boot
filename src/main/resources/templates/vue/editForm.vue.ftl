@@ -18,11 +18,32 @@
           <a-row :gutter="24">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
+    <#if fieldConfig.showInForm == 1>
             <a-col :span="12">
               <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
+      <#if fieldConfig.formType == "INPUT">
                 <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+      <#elseif fieldConfig.formType == "INPUT_NUMBER">
+                <a-input-number v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+      <#elseif fieldConfig.formType == "SELECT">
+                <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
+      <#elseif fieldConfig.formType == "RADIO">
+                <a-radio-group v-model:value="formData.${fieldConfig.fieldName}" option-type="button" button-style="solid">
+                  <a-radio value="1">选项1</a-radio>
+                  <a-radio value="2">选项2</a-radio>
+                </a-radio-group>
+      <#elseif fieldConfig.formType == "CHECK_BOX">
+                <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" mode="multiple" :options="exampleOptions" allowClear />
+      <#elseif fieldConfig.formType == "TEXT_AREA">
+                <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+      <#elseif fieldConfig.formType == "DATE">
+                <a-date-picker v-model:value="formData.${fieldConfig.fieldName}" valueFormat="YYYY-MM-DD"/>
+      <#elseif fieldConfig.formType == "DATE_TIME">
+                <a-date-picker v-model:value="formData.${fieldConfig.fieldName}" valueFormat="YYYY-MM-DD HH:mm:ss" show-time/>
+      </#if>
               </a-form-item>
             </a-col>
+    </#if>
   </#list>
 </#if>
           </a-row>
