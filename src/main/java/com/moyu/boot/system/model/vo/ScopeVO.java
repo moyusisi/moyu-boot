@@ -77,6 +77,7 @@ public class ScopeVO {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 创建人
@@ -85,6 +86,7 @@ public class ScopeVO {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 修改人

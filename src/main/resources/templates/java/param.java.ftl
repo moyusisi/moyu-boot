@@ -45,7 +45,7 @@ public class ${entityName}Param extends BasePageParam {
 
 <#if fieldList??>
     <#list fieldList as fieldConfig>
-        <#if fieldConfig.fieldName != "id"
+        <#if fieldConfig.fieldName != "id" && fieldConfig.fieldName != "deleted"
         && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
         && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
@@ -63,6 +63,8 @@ public class ${entityName}Param extends BasePageParam {
             </#if>
             <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+            <#elseif fieldConfig.fieldType == "Date">
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
             </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         </#if>

@@ -97,10 +97,6 @@ public class ScopeParam extends BasePageParam {
     @Size(max=65535, message="remark长度不能超过65535个字符")
     private String remark;
     /**
-    * 删除标志（0未删除  1已删除）
-    */
-    private Integer deleted;
-    /**
     * 创建时间范围
     */
     @JsonFormat(pattern="yyyy-MM-dd")

@@ -35,6 +35,8 @@ public class ${entityName}VO {
      */
             <#if fieldConfig.fieldType == 'LocalDateTime'>
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+            <#elseif fieldConfig.fieldType == "Date">
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
             </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         </#if>

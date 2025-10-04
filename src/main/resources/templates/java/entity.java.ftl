@@ -21,7 +21,7 @@ public class ${entityName} extends BaseEntity {
 
 <#if fieldList??>
     <#list fieldList as fieldConfig>
-        <#if fieldConfig.fieldName != "id"
+        <#if fieldConfig.fieldName != "id" && fieldConfig.fieldName != "deleted"
             && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
             && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
