@@ -69,9 +69,9 @@
              :pagination="paginationRef"
              @change="onChange"
              @resizeColumn="onResizeColumn"
-             :scroll="{ x: true }"
+             :scroll="{ x: 'max-content' }"
              bordered>
-      <template #bodyCell="{ column, record, index }">
+      <template #bodyCell="{ column, record, index, text }">
         <!-- 长文本省略显示 -->
         <template v-if="text && text.length > 24">
           <a-tooltip :title="text">
