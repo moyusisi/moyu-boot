@@ -40,6 +40,6 @@ public interface ${entityName}Mapper extends BaseMapper<${entityName}> {
    */
    @DataPermission(userColumn = "create_by")
    @Select("SELECT * FROM ${tableName} <#noparse>${ew.customSqlSegment}</#noparse> LIMIT 5")
-   List<${entityName}> selectLimit(@Param(Constants.WRAPPER) Wrapper<${entityName}> wrapper);
+   List<${entityName}VO> selectLimit(@Param(Constants.WRAPPER) Wrapper<${entityName}VO> wrapper);
 }
 
