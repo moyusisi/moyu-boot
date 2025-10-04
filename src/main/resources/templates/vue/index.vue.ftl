@@ -153,7 +153,7 @@
       paginationRef.value.pageSize = pageSize
     },
   })
-  // 表格列配置 TODO 根据字段生成
+  // 表格列配置
   const columns = ref([
     // 不需要序号可以删掉
     {
@@ -224,9 +224,13 @@
     selectedRowKeys.value = []
     // 分页参数
     let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
-    ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
+    return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
       paginationRef.value.total = res.data.total
       tableData.value = res.data.records
+      // res.data 为 {total, records}
+      return res.data
+    }).catch((err) => {
+      console.error(err)
     }).finally(() => {
       dataLoading.value = false
     })
