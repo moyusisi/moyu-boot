@@ -63,6 +63,7 @@
              ref="tableRef"
              :columns="columns"
              :data-source="tableData"
+             :loading="dataLoading"
              :row-key="(record) => record.id"
              :row-selection="rowSelection"
              :pagination="paginationRef"
@@ -121,6 +122,7 @@
   const tableRef = ref()
   // 表格的数据源
   const tableData = ref([])
+  const dataLoading = ref(false)
   // 已选中的行
   const selectedRowKeys = ref([])
   // 表格行选择配置
@@ -209,13 +211,16 @@
   }
   // 加载数据
   const loadData = (parameter) => {
+    dataLoading.value = true
     // 重新加载数据时，清空之前以选中的行
     selectedRowKeys.value = []
     // 分页参数
     let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
-    return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
+    ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
       paginationRef.value.total = res.data.total
       tableData.value = res.data.records
+    }).finally(() => {
+      dataLoading.value = false
     })
   }
   // 分页、排序、筛选等操作变化时，会触发 change 事件
