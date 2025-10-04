@@ -66,6 +66,10 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             </#if>
         </#if>
+        <#if fieldConfig.fieldName == 'deleted'>
+        // 仅查询未删除的
+        queryWrapper.eq(${entityName}::getDeleted, 0);
+        </#if>
     </#list>
 </#if>
         // TODO 是否需要排序
@@ -107,6 +111,10 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             </#if>
         </#if>
+        <#if fieldConfig.fieldName == 'deleted'>
+        // 仅查询未删除的
+        queryWrapper.eq(${entityName}::getDeleted, 0);
+        </#if>
     </#list>
 </#if>
         // TODO 是否需要排序
@@ -147,6 +155,10 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             <#elseif fieldConfig.queryType == 'IN'>
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             </#if>
+        </#if>
+        <#if fieldConfig.fieldName == 'deleted'>
+        // 仅查询未删除的
+        queryWrapper.eq(${entityName}::getDeleted, 0);
         </#if>
     </#list>
 </#if>
