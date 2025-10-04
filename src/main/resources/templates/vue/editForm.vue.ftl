@@ -35,7 +35,7 @@
       <#elseif fieldConfig.formType == "CHECK_BOX">
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" mode="multiple" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "TEXT_AREA">
-                <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+                <a-textarea v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
                 <a-date-picker v-model:value="formData.${fieldConfig.fieldName}" valueFormat="YYYY-MM-DD"/>
       <#elseif fieldConfig.formType == "DATE_TIME">
@@ -86,15 +86,15 @@
   const submitLoading = ref(false)
 
   // 打开抽屉
-  const onOpen = (record) => {
+  const onOpen = (row) => {
     visible.value = true
-    if (record) {
+    if (row) {
       edit.value = true
     }
     if (edit.value) {
       title.value = "编辑${entityDesc}"
       // 表单数据赋值
-      loadData()
+      loadData(row)
     } else {
       title.value = "新增${entityDesc}"
     }
@@ -105,10 +105,10 @@
     visible.value = false
   }
   // 加载数据
-  const loadData = () => {
+  const loadData = (row) => {
     dataLoading.value = true
     // 组装请求参数
-    let param = { }
+    let param = { id: row.id }
     ${entityName?uncap_first}Api.${entityName?uncap_first}Detail(param).then((res) => {
       formData.value = res.data
     }).finally(() => {
