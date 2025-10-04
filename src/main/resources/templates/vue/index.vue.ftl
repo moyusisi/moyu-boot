@@ -6,7 +6,7 @@
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInQuery == 1>
-        <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}">
+        <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
       <#if fieldConfig.formType == "INPUT">
           <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
@@ -146,7 +146,7 @@
     // 是否可改变每页显示条数
     showSizeChanger: true,
     // 只有一页或没有数据时隐藏分页栏
-    hideOnSinglePage: true,
+    // hideOnSinglePage: true,
     onChange: (page, pageSize) => {
       // 处理分页切换的逻辑
       paginationRef.value.current = page
