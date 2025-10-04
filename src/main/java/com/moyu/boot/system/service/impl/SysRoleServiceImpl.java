@@ -169,7 +169,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 查询所有菜单
         List<SysResource> menuList = sysResourceService.list(query);
 
-        // 所有的role-menu关系(menu.code->menu)
+        // 指定role的menu(menu.code->menu)
         Map<String, SysRelation> rmMap = new HashMap<>();
         sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
                         // 指定关系类型
