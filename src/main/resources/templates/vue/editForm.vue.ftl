@@ -29,8 +29,8 @@
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "RADIO">
                 <a-radio-group v-model:value="formData.${fieldConfig.fieldName}" option-type="button" button-style="solid">
-                  <a-radio value="1">选项1</a-radio>
-                  <a-radio value="2">选项2</a-radio>
+                  <a-radio :value="1">选项1</a-radio>
+                  <a-radio :value="2">选项2</a-radio>
                 </a-radio-group>
       <#elseif fieldConfig.formType == "CHECK_BOX">
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" mode="multiple" :options="exampleOptions" allowClear />
