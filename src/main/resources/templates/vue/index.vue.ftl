@@ -104,7 +104,7 @@
   import { h } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import EditForm from "./editForm.vue.ftl"
+  import EditForm from "./editForm.vue"
 
   // 查询表单相关对象
   const queryFormRef = ref()
