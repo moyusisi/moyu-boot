@@ -95,7 +95,7 @@
       </template>
     </a-table>
   </a-card>
-  <EditForm ref="editFormRef" @successful="loadData" />
+  <Form ref="editFormRef" @successful="loadData" />
 </template>
 
 <script setup>
@@ -104,7 +104,7 @@
   import { h } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import EditForm from "./editForm.vue"
+  import Form from "./form.vue"
 
   // 查询表单相关对象
   const queryFormRef = ref()
