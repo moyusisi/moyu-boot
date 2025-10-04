@@ -109,7 +109,7 @@ public class SysResourceController {
     /**
      * 编辑资源
      */
-    @PreAuthorize("hasAuthority('sys:resource:edit')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
