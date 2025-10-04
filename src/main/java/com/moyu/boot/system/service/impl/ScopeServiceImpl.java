@@ -1,10 +1,7 @@
 package com.moyu.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.lang.Assert;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -42,16 +39,17 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
     @Override
     public List<ScopeVO> list(ScopeParam param) {
         // 查询条件
-        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class)
-            // 指定name查询条件
-            .like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName())
-            // 指定code查询条件
-            .eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode())
-            // 指定createTime查询条件
-            .between(ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1)),
-                    Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))
-            // TODO 是否需要排序
-            .orderByDesc(Scope::getUpdateTime);
+        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class);
+        // 指定name查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
+        // 指定code查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定createTime查询条件
+        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
+            queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
+        }
+        // TODO 是否需要排序
+        queryWrapper.orderByDesc(Scope::getUpdateTime);
         // 查询
         List<Scope> scopeList = this.list(queryWrapper);
         // 转换为voList
@@ -62,16 +60,17 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
     @Override
     public PageData<ScopeVO> pageList(ScopeParam param) {
         // 查询条件
-        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class)
-            // 指定name查询条件
-            .like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName())
-            // 指定code查询条件
-            .eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode())
-            // 指定createTime查询条件
-            .between(ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1)),
-                    Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))
-            // TODO 是否需要排序
-            .orderByDesc(Scope::getUpdateTime);
+        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class);
+        // 指定name查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
+        // 指定code查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定createTime查询条件
+        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
+            queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
+        }
+        // TODO 是否需要排序
+        queryWrapper.orderByDesc(Scope::getUpdateTime);
         // 分页查询
         Page<Scope> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<Scope> scopePage = this.page(page, queryWrapper);
@@ -82,15 +81,15 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
     @Override
     public ScopeVO detail(ScopeParam param) {
         // 查询条件
-        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class)
-            // 指定name查询条件
-                .like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName())
-            // 指定code查询条件
-                .eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode())
-            // 指定createTime查询条件
-                .between(ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1)),
-                Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))
-;
+        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class);
+        // 指定name查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
+        // 指定code查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定createTime查询条件
+        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
+            queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
+        }
         // 查询
         Scope scope = this.getOne(queryWrapper);
         if (scope == null) {
@@ -135,8 +134,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
     }
 
     /**
-    * 实体对象生成展示对象 entity -> vo
-    */
+     * 实体对象生成展示对象 entity -> vo
+     */
     private ScopeVO buildScopeVO(Scope entity) {
         if (entity == null) {
             return null;
@@ -163,8 +162,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
     }
 
     /**
-    * 实体对象生成展示对象 entityList -> voList
-    */
+     * 实体对象生成展示对象 entityList -> voList
+     */
     private List<ScopeVO> buildScopeVOList(List<Scope> entityList) {
         List<ScopeVO> voList = new ArrayList<>();
         if(CollectionUtils.isEmpty(entityList)) {
