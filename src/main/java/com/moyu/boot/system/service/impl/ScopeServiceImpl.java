@@ -166,7 +166,7 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
      */
     private List<ScopeVO> buildScopeVOList(List<Scope> entityList) {
         List<ScopeVO> voList = new ArrayList<>();
-        if(CollectionUtils.isEmpty(entityList)) {
+        if (CollectionUtils.isEmpty(entityList)) {
             return voList;
         }
         for (Scope entity : entityList) {
