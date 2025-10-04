@@ -17,7 +17,7 @@
           <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
         <#if fieldConfig.queryType == "BETWEEN">
-          <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" />
+          <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" valueFormat="YYYY-MM-DD"/>
         </#if>
       <#elseif fieldConfig.formType == "DATE_TIME">
         <#if fieldConfig.queryType == "BETWEEN">
