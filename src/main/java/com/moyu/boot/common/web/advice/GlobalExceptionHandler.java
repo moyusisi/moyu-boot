@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
             // json格式参数进行参数类型转换时，参数转换失败则HttpMessageConversionException
             log.error(e.getMessage(), e);
             response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
-            response.setMessage(e.getMessage());
+            response.setMessage(ResultCodeEnum.INVALID_PARAMETER.getMessage() + ":参数转换异常");
         } else if (e instanceof BusinessException) {
             log.error(e.getMessage());
             response.setCode(((BusinessException) e).getCode());
