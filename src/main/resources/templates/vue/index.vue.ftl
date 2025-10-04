@@ -169,16 +169,24 @@
     {
       title: "${fieldConfig.fieldRemark}",
       dataIndex: "${fieldConfig.fieldName}",
-      align: 'center',
+      align: "center",
       width: 160,
     },
-      <#else>
+      <#elseif fieldConfig.fieldType == "String">
     {
-      title: '${fieldConfig.fieldRemark[0..*8]}',
-      dataIndex: '${fieldConfig.fieldName}',
-      align: 'center',
+      title: "${fieldConfig.fieldRemark[0..*8]}",
+      dataIndex: "${fieldConfig.fieldName}",
+      align: "center",
       resizable: true,
       width: 150,
+    },
+    <#else>
+    {
+      title: "${fieldConfig.fieldRemark[0..*8]}",
+      dataIndex: "${fieldConfig.fieldName}",
+      align: "center",
+      resizable: true,
+      width: 100,
     },
       </#if>
     </#if>
