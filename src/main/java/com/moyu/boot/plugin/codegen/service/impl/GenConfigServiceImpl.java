@@ -642,8 +642,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         templateMap.put("mysql.sql", "templates/sql/mysql.sql.ftl");
         templateMap.put("api.js", "templates/js/api.js.ftl");
         templateMap.put("index.vue", "templates/vue/index.vue.ftl");
-        templateMap.put("addForm.vue", "templates/vue/addForm.vue.ftl");
-        templateMap.put("editForm.vue", "templates/vue/editForm.vue.ftl");
+        templateMap.put("form.vue", "templates/vue/form.vue.ftl");
         return templateMap;
     }
 
@@ -680,10 +679,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             fileName = String.format("src/api/%s/%sApi.js", moduleName, className);
         } else if (simpleName.contains("index.vue")) {
             fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
-        } else if (simpleName.contains("addForm.vue")) {
-            fileName = String.format("src/views/%s/%s/addForm.vue", moduleName, className);
-        } else if (simpleName.contains("editForm.vue")) {
-            fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
+        } else if (simpleName.contains("form.vue")) {
+            fileName = String.format("src/views/%s/%s/form.vue", moduleName, className);
         }
         return fileName;
     }
