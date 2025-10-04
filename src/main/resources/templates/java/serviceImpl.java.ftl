@@ -212,7 +212,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
      */
     private List<${entityName}VO> build${entityName}VOList(List<${entityName}> entityList) {
         List<${entityName}VO> voList = new ArrayList<>();
-        if(CollectionUtils.isEmpty(entityList)) {
+        if (CollectionUtils.isEmpty(entityList)) {
             return voList;
         }
         for (${entityName} entity : entityList) {
