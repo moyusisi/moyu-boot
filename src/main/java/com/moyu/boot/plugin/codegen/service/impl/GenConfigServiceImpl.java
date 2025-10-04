@@ -645,45 +645,6 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     }
 
     /**
-     * 获取代码文件的全路径文件名
-     */
-    private String getFullFileName(String simpleName, GenConfig genConfig) {
-        String className = genConfig.getEntityName();
-        String packageName = genConfig.getPackageName();
-        String moduleName = genConfig.getModuleName();
-        String javaPath = "main/java/" + packageName.replace(".", "/") + "/" + moduleName;
-
-        String fileName = "";
-
-        if (simpleName.contains("controller.java")) {
-            fileName = String.format("%s/controller/%sController.java", javaPath, className);
-        } else if (simpleName.contains("service.java")) {
-            fileName = String.format("%s/service/%sService.java", javaPath, className);
-        } else if (simpleName.contains("serviceImpl.java")) {
-            fileName = String.format("%s/service/impl/%sServiceImpl.java", javaPath, className);
-        } else if (simpleName.contains("mapper.java")) {
-            fileName = String.format("%s/mapper/%sMapper.java", javaPath, className);
-        } else if (simpleName.contains("entity.java")) {
-            fileName = String.format("%s/model/entity/%s.java", javaPath, className);
-        } else if (simpleName.contains("param.java")) {
-            fileName = String.format("%s/model/param/%sParam.java", javaPath, className);
-        } else if (simpleName.contains("vo.java")) {
-            fileName = String.format("%s/model/vo/%sVO.java", javaPath, className);
-        } else if (simpleName.contains("mapper.xml")) {
-            fileName = String.format("main/resources/mapper/%sMapper.xml", className);
-        } else if (simpleName.contains("mysql.sql")) {
-            fileName = "sql/mysql/mysql.sql";
-        } else if (simpleName.contains("api.js")) {
-            fileName = String.format("src/api/%s/%sApi.js", moduleName, className);
-        } else if (simpleName.contains("index.vue")) {
-            fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
-        } else if (simpleName.contains("form.vue")) {
-            fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
-        }
-        return fileName;
-    }
-
-    /**
      * 解析创建表语句获取生成配置 sql -> entity
      */
     private GenConfig parseTable(MySqlCreateTableStatement createTableStatement) {
