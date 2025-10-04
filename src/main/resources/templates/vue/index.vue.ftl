@@ -250,10 +250,6 @@
 </script>
 
 <style scoped>
-  /** 后代选择器 **/
-  .ant-card-small .ant-form-inline {
-    margin-bottom: -12px !important;
-  }
   /** 直接后代选择器 **/
   .ant-form-inline > .ant-form-item {
     margin-bottom: 12px !important;
