@@ -59,6 +59,11 @@ public class GenConfig {
     private String entityDesc;
 
     /**
+     * 父菜单编码
+     */
+    private String parentMenuCode;
+
+    /**
      * 作者
      */
     private String author;

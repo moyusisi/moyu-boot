@@ -81,9 +81,9 @@ public class GenConfigParam extends BasePageParam {
     private String businessName;
 
     /**
-     * 父菜单ID
+     * 父菜单编码
      */
-    private Long parentMenuId;
+    private String parentMenuCode;
 
     /**
      * 作者

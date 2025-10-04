@@ -568,6 +568,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfigInfo.setModuleName(genConfig.getModuleName());
         genConfigInfo.setEntityName(genConfig.getEntityName());
         genConfigInfo.setEntityDesc(genConfig.getEntityDesc());
+        genConfigInfo.setParentMenuCode(genConfig.getParentMenuCode());
         genConfigInfo.setAuthor(genConfig.getAuthor());
         genConfigInfo.setSourceType(genConfig.getSourceType());
         List<FieldConfigVO> fieldConfigList = new ArrayList<>();
@@ -596,6 +597,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setModuleName(genConfigInfo.getModuleName());
         genConfig.setEntityName(genConfigInfo.getEntityName());
         genConfig.setEntityDesc(genConfigInfo.getEntityDesc());
+        genConfig.setParentMenuCode(genConfigInfo.getParentMenuCode());
         genConfig.setAuthor(genConfigInfo.getAuthor());
         genConfig.setSourceType(genConfigInfo.getSourceType());
         return genConfig;

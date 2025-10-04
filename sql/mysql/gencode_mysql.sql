@@ -8,13 +8,13 @@ CREATE TABLE `gen_config`
     `package_name`     VARCHAR(255) NOT NULL COMMENT '包名',
     `module_name`      VARCHAR(100) NOT NULL COMMENT '模块名',
     `entity_name`      VARCHAR(100) NOT NULL COMMENT '实体类名',
-    `entity_desc`      VARCHAR(100) COMMENT '实体类描述',
-    `author`           VARCHAR(50) COMMENT '作者',
-    `parent_menu_code` VARCHAR(64) DEFAULT '0' COMMENT '父菜单编码',
-    `source_type`      VARCHAR(20) COMMENT '来源类型',
+    `entity_desc`      VARCHAR(100) DEFAULT NULL COMMENT '实体类描述',
+    `author`           VARCHAR(50)  DEFAULT NULL COMMENT '作者',
+    `parent_menu_code` VARCHAR(64)  DEFAULT NULL COMMENT '父菜单编码',
+    `source_type`      VARCHAR(20)  DEFAULT NULL COMMENT '来源类型',
 
-    `create_time`      DATETIME    DEFAULT NULL COMMENT '创建时间',
-    `update_time`      DATETIME    DEFAULT NULL COMMENT '修改时间',
+    `create_time`      DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `update_time`      DATETIME     DEFAULT NULL COMMENT '修改时间',
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_table_name` (`table_name`)
 ) ENGINE = InnoDB COMMENT ='代码生成配置表'
