@@ -60,6 +60,7 @@
   // 表单数据
   const formRef = ref()
   const formData = ref({})
+  const edit = ref(false)
   const dataLoading = ref(false)
   const submitLoading = ref(false)
 
@@ -67,6 +68,9 @@
   const onOpen = (record) => {
     visible.value = true
     if (record) {
+      edit.value = true
+    }
+    if (edit.value) {
       title.value = "编辑${entityDesc}"
       // 表单数据赋值
       loadData()
