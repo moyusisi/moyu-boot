@@ -21,7 +21,7 @@
         </#if>
       <#elseif fieldConfig.formType == "DATE_TIME">
         <#if fieldConfig.queryType == "BETWEEN">
-          <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm"/>
+          <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" valueFormat="YYYY-MM-DD HH:mm:ss" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm"/>
         </#if>
       </#if>
         </a-form-item>
