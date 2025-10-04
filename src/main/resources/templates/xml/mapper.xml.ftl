@@ -66,11 +66,11 @@
                 AND ${fieldConfig.columnName} != <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
             </if>
             <#elseif fieldConfig.queryType == "BETWEEN">
-            <if test="param.${fieldConfig.fieldNameRange}[0] != null and param.${fieldConfig.fieldNameRange}[0] != ''">
-                AND ${fieldConfig.columnName} &gt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[0]}
+            <if test="param.${fieldConfig.fieldName}Range[0] != null and param.${fieldConfig.fieldName}Range[0] != ''">
+                AND ${fieldConfig.columnName} &gt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}Range[0]}
             </if>
-            <if test="param.${fieldConfig.fieldName}[1] != null and param.${fieldConfig.fieldName}[1] != ''">
-                AND ${fieldConfig.columnName} &lt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[1]}
+            <if test="param.${fieldConfig.fieldName}Range[1] != null and param.${fieldConfig.fieldName}Range[1] != ''">
+                AND ${fieldConfig.columnName} &lt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}Range[1]}
             </if>
             <#elseif fieldConfig.queryType == "IN">
                 AND ${fieldConfig.columnName} IN  <foreach collection="param.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
