@@ -103,5 +103,6 @@ public class ScopeParam extends BasePageParam {
     /**
     * 创建时间范围
     */
+    @JsonFormat(pattern="yyyy-MM-dd")
     private List<Date> createTimeRange;
 }
