@@ -213,7 +213,7 @@
   }
   // 重置
   const reset = () => {
-    queryFormRef.value = {}
+    queryFormRef.value.resetFields()
     paginationRef.value.current = 1
     loadData()
   }
