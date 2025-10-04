@@ -174,7 +174,7 @@
     },
       <#else>
     {
-      title: '${fieldConfig.fieldRemark}',
+      title: '${fieldConfig.fieldRemark[0..*8]}',
       dataIndex: '${fieldConfig.fieldName}',
       align: 'center',
       resizable: true,
