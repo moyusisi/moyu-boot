@@ -71,6 +71,11 @@ public class ${entityName}Param extends BasePageParam {
     /**
     * ${fieldConfig.fieldRemark}范围
     */
+            <#if fieldConfig.formType == "DATE">
+    @JsonFormat(pattern="yyyy-MM-dd")
+            <#elseif fieldConfig.formType == "DATE_TIME">
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+            </#if>
     private List<${fieldConfig.fieldType}> ${fieldConfig.fieldName}Range;
         </#if>
     </#list>
