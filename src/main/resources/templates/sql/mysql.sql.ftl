@@ -1,0 +1,10 @@
+-- 菜单
+insert into moyu.sys_resource (parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+values
+('${parentMenuCode}', '${entityDesc}', 'menu_${moduleName}_${entityName?uncap_first}', 3, '/${moduleName}/${entityName?uncap_first}/index', '${moduleName}/${entityName?uncap_first}/index', null, '', 1, null, '${moduleName}_module', 99, 0, null, '', 0, null, null, null, null),
+-- 按钮
+('menu_${moduleName}_${entityName?uncap_first}', '新增${entityDesc}', 'btn_${moduleName}_${entityName?uncap_first}_add', 6, '/api/${moduleName}/${entityName?uncap_first}/add', '', null, '${moduleName}:${entityName?uncap_first}:add', 1, null, '${moduleName}_module', 2, 0, null, null, 0, null, null, null, null),
+('menu_${moduleName}_${entityName?uncap_first}', '删除${entityDesc}', 'btn_${moduleName}_${entityName?uncap_first}_delete', 6, '/api/${moduleName}/${entityName?uncap_first}/delete', '', null, '${moduleName}:${entityName?uncap_first}:delete', 1, null, '${moduleName}_module', 2, 0, null, null, 0, null, null, null, null),
+('menu_${moduleName}_${entityName?uncap_first}', '修改${entityDesc}', 'btn_${moduleName}_${entityName?uncap_first}_edit', 6, '/api/${moduleName}/${entityName?uncap_first}/edit', '', null, '${moduleName}:${entityName?uncap_first}:edit', 1, null, '${moduleName}_module', 2, 0, null, null, 0, null, null, null, null),
+('menu_${moduleName}_${entityName?uncap_first}', '${entityDesc}详情', 'btn_${moduleName}_${entityName?uncap_first}_detail', 6, '/api/${moduleName}/${entityName?uncap_first}/detail', '', null, '${moduleName}:${entityName?uncap_first}:detail', 1, null, '${moduleName}_module', 2, 0, null, null, 0, null, null, null, null),
+('menu_${moduleName}_${entityName?uncap_first}', '${entityDesc}列表', 'btn_${moduleName}_${entityName?uncap_first}_page', 6, '/api/${moduleName}/${entityName?uncap_first}/page', '', null, '${moduleName}:${entityName?uncap_first}:page', 1, null, '${moduleName}_module', 2, 0, null, null, 0, null, null, null, null);

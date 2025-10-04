@@ -619,6 +619,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         bindMap.put("tableComment", genConfig.getTableComment());
         bindMap.put("entityName", entityName);
         bindMap.put("entityDesc", entityDesc);
+        bindMap.put("parentMenuCode", genConfig.getParentMenuCode());
         bindMap.put("author", genConfig.getAuthor());
         bindMap.put("fieldList", fieldList);
         return bindMap;
