@@ -48,24 +48,24 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         <#if fieldConfig.showInQuery == 1>
             // 指定${fieldConfig.fieldName}查询条件
             <#if fieldConfig.queryType == "LIKE">
-            .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'EQ'>
-            .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GT'>
-            .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GE'>
-            .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LT'>
-            .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LE'>
-            .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'NE'>
-            .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'BETWEEN'>
             .between(ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1)),
                     ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))
             <#elseif fieldConfig.queryType == 'IN'>
-            .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             </#if>
         </#if>
     </#list>
@@ -88,24 +88,24 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         <#if fieldConfig.showInQuery == 1>
             // 指定${fieldConfig.fieldName}查询条件
             <#if fieldConfig.queryType == "LIKE">
-            .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'EQ'>
-            .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GT'>
-            .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GE'>
-            .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LT'>
-            .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LE'>
-            .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'NE'>
-            .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'BETWEEN'>
             .between(ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1)),
                     ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))
             <#elseif fieldConfig.queryType == 'IN'>
-            .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+            .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             </#if>
         </#if>
     </#list>
@@ -128,24 +128,24 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         <#if fieldConfig.showInQuery == 1>
             // 指定${fieldConfig.fieldName}查询条件
             <#if fieldConfig.queryType == "LIKE">
-                .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'EQ'>
-                .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .eq(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GT'>
-                .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .gt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'GE'>
-                .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .ge(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LT'>
-                .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .lt(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'LE'>
-                .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .le(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'NE'>
-                .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             <#elseif fieldConfig.queryType == 'BETWEEN'>
                 .between(ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1)),
                 ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))
             <#elseif fieldConfig.queryType == 'IN'>
-                .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
+                .in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}())
             </#if>
         </#if>
     </#list>

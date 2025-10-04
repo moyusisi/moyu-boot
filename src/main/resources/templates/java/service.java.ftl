@@ -1,10 +1,13 @@
 package ${packageName}.${moduleName}.service;
 
+import com.moyu.boot.common.core.model.PageData;
 import ${packageName}.${moduleName}.model.entity.${entityName};
 import ${packageName}.${moduleName}.model.param.${entityName}Param;
 import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * ${entityDesc}服务类Service

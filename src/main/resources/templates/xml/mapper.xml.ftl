@@ -9,32 +9,69 @@
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.showInQuery == 1>
-            <#if fieldConfig.fieldType == "String">
-            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
-            <#else>
-            <if test="param.${fieldConfig.fieldName} != null">
-            </#if>
             <#if fieldConfig.queryType == "LIKE">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} LIKE CONCAT('%', <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}, '%')
+            </if>
             <#elseif fieldConfig.queryType == "EQ">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} = <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "GT">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} > <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "GE">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} >= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "LT">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} < <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "LE">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} <= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "NE">
+                <#if fieldConfig.fieldType == "String">
+            <if test="param.${fieldConfig.fieldName} != null and param.${fieldConfig.fieldName} != ''">
+                <#else>
+            <if test="param.${fieldConfig.fieldName} != null">
+                </#if>
                 AND ${fieldConfig.columnName} != <#noparse>#{</#noparse>param.${fieldConfig.fieldName}}
+            </if>
             <#elseif fieldConfig.queryType == "BETWEEN">
-                <if test="param.${fieldConfig.fieldNameRange}[0] != null and param.${fieldConfig.fieldNameRange}[0] != ''">
-                    AND ${fieldConfig.columnName} &gt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[0]}
-                </if>
-                <if test="param.${fieldConfig.fieldName}[1] != null and param.${fieldConfig.fieldName}[1] != ''">
-                    AND ${fieldConfig.columnName} &lt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[1]}
-                </if>
+            <if test="param.${fieldConfig.fieldNameRange}[0] != null and param.${fieldConfig.fieldNameRange}[0] != ''">
+                AND ${fieldConfig.columnName} &gt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[0]}
+            </if>
+            <if test="param.${fieldConfig.fieldName}[1] != null and param.${fieldConfig.fieldName}[1] != ''">
+                AND ${fieldConfig.columnName} &lt;= <#noparse>#{</#noparse>param.${fieldConfig.fieldName}[1]}
+            </if>
             <#elseif fieldConfig.queryType == "IN">
                 AND ${fieldConfig.columnName} IN  <foreach collection="param.${fieldConfig.fieldName}" item="item" open="(" close=")" separator=",">#{item}</foreach>
             </#if>
