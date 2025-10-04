@@ -44,6 +44,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         try {
             // 严格模式的插入填充，只有当字段为空时才进行填充，避免覆盖已有的值。
+            this.strictInsertFill(metaObject, DELETED, Integer.class, 0);
             this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
             this.strictInsertFill(metaObject, CREATE_BY, String.class, getUserId());
             this.strictInsertFill(metaObject, UPDATE_TIME, Date.class, new Date());
