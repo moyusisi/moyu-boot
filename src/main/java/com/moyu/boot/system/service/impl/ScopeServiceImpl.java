@@ -44,6 +44,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
         // 指定code查询条件
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定orgName查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOrgName()), Scope::getOrgName, param.getOrgName());
         // 指定createTime查询条件
         if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
             queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
@@ -65,6 +67,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
         // 指定code查询条件
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定orgName查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOrgName()), Scope::getOrgName, param.getOrgName());
         // 指定createTime查询条件
         if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
             queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
@@ -86,6 +90,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
         // 指定code查询条件
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
+        // 指定orgName查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOrgName()), Scope::getOrgName, param.getOrgName());
         // 指定createTime查询条件
         if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
             queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
@@ -128,9 +134,9 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 物理删除
-        this.removeByIds(idSet);
+//        this.removeByIds(idSet);
         // 逻辑删除
-        //this.update(Wrappers.lambdaUpdate(Scope.class).in(Scope::getId, idSet).set(Scope::getDeleteFlag, 1));
+        this.update(Wrappers.lambdaUpdate(Scope.class).in(Scope::getId, idSet).set(Scope::getDeleted, 1));
     }
 
     /**

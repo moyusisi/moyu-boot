@@ -396,7 +396,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             vo.setCodeType("backend");
             vo.setPath(String.format("src/main/sql/%s", moduleName));
             vo.setPath("src/main/sql");
-            vo.setFileName(String.format("%s.sql", entityName));
+            vo.setFileName(String.format("%s.sql", StrUtil.lowerFirst(entityName)));
         } else if (codeKey.contains("api.js")) {
             vo.setCodeType("frontend");
             vo.setPath(String.format("src/api/%s", moduleName));

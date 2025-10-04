@@ -188,9 +188,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 物理删除
-        this.removeByIds(idSet);
+        //this.removeByIds(idSet);
         // 逻辑删除
-        //this.update(Wrappers.lambdaUpdate(${entityName}.class).in(${entityName}::getId, idSet).set(${entityName}::getDeleteFlag, 1));
+        this.update(Wrappers.lambdaUpdate(${entityName}.class).in(${entityName}::getId, idSet).set(${entityName}::getDeleted, 1));
     }
 
     /**

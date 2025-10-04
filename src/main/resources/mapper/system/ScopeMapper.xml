@@ -12,6 +12,9 @@
             <if test="param.code != null and param.code != ''">
                 AND code = #{param.code}
             </if>
+            <if test="param.orgName != null and param.orgName != ''">
+                AND org_name LIKE CONCAT('%', #{param.orgName}, '%')
+            </if>
             <if test="param.createTimeRange[0] != null and param.createTimeRange[0] != ''">
                 AND create_time &gt;= #{param.createTimeRange[0]}
             </if>
