@@ -1,139 +1,127 @@
 <template>
-  <!-- 上方选择区 -->
-  <a-card size="small">
-    <a-form ref="queryFormRef" :model="queryFormData" layout="inline">
+  <a-drawer
+      :open="visible"
+      :title="title"
+      :width="drawerWidth"
+      :closable="false"
+      :destroy-on-close="true"
+      @close="onClose"
+  >
+    <#--  上方操作区  -->
+    <template #extra>
+        <a-button type="primary" size="small" @click="onClose"><CloseOutlined /></a-button>
+    </template>
+    <#--  数据区  -->
+    <a-spin :spinning="dataLoading">
+      <a-card title="基本信息">
+        <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
+          <a-row :gutter="24">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
-    <#if fieldConfig.showInQuery == 1>
-      <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark}" tooltip="${fieldConfig.fieldRemark}">
-      <#if fieldConfig.formType == "INPUT">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
-      <#elseif fieldConfig.formType == "INPUT_NUMBER">
-        <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
-      <#elseif fieldConfig.formType == "SELECT">
-        <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
-      <#elseif fieldConfig.formType == "RADIO">
-        <a-radio-group v-model:value="queryFormData.${fieldConfig.fieldName}" option-type="button" :options="exampleOptions" />
-      <#--  <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />-->
-      <#elseif fieldConfig.formType == "CHECK_BOX">
-        <a-checkbox-group v-model:value="queryFormData.${fieldConfig.fieldName}" :options="exampleOptions" />
-      <#elseif fieldConfig.formType == "TEXT_AREA">
-        <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
-      <#elseif fieldConfig.formType == "DATE">
-      <#elseif fieldConfig.formType == "DATE_TIME">
-      </#if>
-      </a-form-item>
-    </#if>
+            <a-col :span="12">
+              <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="${fieldConfig.fieldRemark}" <#if fieldConfig.required == 1>required</#if>>
+                <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+              </a-form-item>
+            </a-col>
   </#list>
 </#if>
-      <a-form-item>
-        <a-space>
-          <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
-          <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
-        </a-space>
-      </a-form-item>
-    </a-form>
-  </a-card>
-  <a-card size="small">
-  </a-card>
+          </a-row>
+        </a-form>
+      </a-card>
+    </a-spin>
+    <#--  底部操作区  -->
+    <template #footer>
+      <a-flex gap="small" justify="flex-end">
+        <a-button type="primary" danger @click="onClose"> 关闭</a-button>
+        <a-button type="primary" :loading="submitLoading" @click="onSubmit">保存</a-button>
+      </a-flex>
+    </template>
+  </a-drawer>
 </template>
-
 <script setup>
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
-  import { h } from "vue"
+  import { required } from '@/utils/formRules'
+  import { useSettingsStore } from "@/store";
   import { message } from "ant-design-vue"
-  import { PlusOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
-  import BatchDeleteButton from "@/components/BatchDeleteButton/index.vue"
-  import STable from "@/components/STable/index.vue"
 
-  const queryFormRef = ref()
-  const queryFormData = ref({})
-  const addFormRef = ref()
-  const editFormRef = ref()
-  const tableRef = ref()
-  const toolConfig = { refresh: true, height: true, columnSetting: false, striped: false }
-  const columns = [
-    {
-      title: '显示名称',
-      dataIndex: 'name',
-      resizable: true,
-      width: 180
-    },
-    {
-      title: '接口地址',
-      dataIndex: 'path',
-      ellipsis: true,
-      width: 150
-    },
-    {
-      title: '操作',
-      dataIndex: 'action',
-      align: 'center',
-      width: 150
+  // store
+  const settingsStore = useSettingsStore()
+
+  const emit = defineEmits({ successful: null })
+  // 默认是关闭状态
+  const visible = ref(false)
+  const title = ref()
+  // 计算属性 抽屉宽度
+  const drawerWidth = computed(() => {
+    return settingsStore.menuCollapsed ? `calc(100% - 80px)` : `calc(100% - 210px)`
+  })
+
+  // 表单数据
+  const formRef = ref()
+  const formData = ref({})
+  const edit = ref(false)
+  const dataLoading = ref(false)
+  const submitLoading = ref(false)
+
+  // 打开抽屉
+  const onOpen = (record) => {
+    visible.value = true
+    if (record) {
+      edit.value = true
     }
-  ]
-
-  let selectedRowKeys = ref([])
-  // 列表选择配置
-  const options = {
-    alert: {
-      show: false,
-      clear: () => {
-      selectedRowKeys = ref([])
-      }
-    },
-    rowSelection: {
-      onChange: (selectedRowKey, selectedRows) => {
-        selectedRowKeys.value = selectedRowKey
-      }
+    if (edit.value) {
+      title.value = "编辑${entityDesc}"
+      // 表单数据赋值
+      loadData()
+    } else {
+      title.value = "新增${entityDesc}"
     }
   }
-
-  // 下拉框选项
-  const exampleOptions = [
-    { label: "选项一", value: 1 },
-    { label: "选项二", value: 2 }
-  ]
-
-  const loadData = async (parameter) => {
-
+  // 关闭抽屉
+  const onClose = () => {
+    formRef.value = {}
+    visible.value = false
   }
-
-  // 查询
-  const querySubmit = () => {
-    tableRef.value.refresh(true)
-  }
-  // 重置
-  const reset = () => {
-    queryFormRef.value.resetFields()
-    tableRef.value.refresh(true)
-  }
-  // 删除
-  const delete${entityName} = (record) => {
-    let data = { ids: [record.id] }
-    ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
-      message.success(res.message)
-      tableRef.value.refresh()
+  // 加载数据
+  const loadData = () => {
+    dataLoading.value = true
+    // 组装请求参数
+    let param = { }
+    ${entityName?uncap_first}Api.${entityName?uncap_first}Detail(param).then((res) => {
+      formData.value = res.data
+    }).finally(() => {
+      submitLoading.value = false
+      dataLoading.value = false
     })
   }
-  // 批量删除
-  const batchDelete = (record) => {
-    let data = { ids: selectedRowKeys.value }
-    ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
-      message.success(res.message)
-      tableRef.value.refresh(true)
+
+  // 验证并提交数据
+  const onSubmit = () => {
+    formRef.value.validate().then(() => {
+      submitLoading.value = true
+      // formData.value 加工处理 TODO add edit
+      let fun = ${entityName?uncap_first}Api.add${entityName}
+      if (formData.value.id) {
+        // 编辑
+        fun = ${entityName?uncap_first}Api.edit${entityName}
+      }
+      fun(formData.value).then((res) => {
+        message.success(res.message)
+        emit('successful')
+        onClose()
+      }).finally(() => {
+        submitLoading.value = false
+      })
+    }).catch(() => {
     })
   }
+  // 调用这个函数将子组件的一些数据和方法暴露出去
+  defineExpose({
+    onOpen
+  })
 </script>
-
 <style scoped>
-  /** 后代选择器 **/
-  .ant-card-small .ant-form-inline {
-    margin-bottom: -12px !important;
-  }
-  /** 直接后代选择器 **/
-  .ant-form-inline > .ant-form-item {
-    margin-bottom: 12px !important;
+  .ant-form-item {
   }
 </style>

@@ -405,11 +405,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             vo.setCodeType("frontend");
             vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
             vo.setFileName("index.vue");
-        } else if (codeKey.contains("addForm.vue")) {
-            vo.setCodeType("frontend");
-            vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
-            vo.setFileName("addForm.vue");
-        } else if (codeKey.contains("editForm.vue")) {
+        } else if (codeKey.contains("form.vue")) {
             vo.setCodeType("frontend");
             vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
             vo.setFileName("editForm.vue");
@@ -642,7 +638,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         templateMap.put("mysql.sql", "templates/sql/mysql.sql.ftl");
         templateMap.put("api.js", "templates/js/api.js.ftl");
         templateMap.put("index.vue", "templates/vue/index.vue.ftl");
-        templateMap.put("form.vue", "templates/vue/form.vue.ftl");
+        templateMap.put("form.vue", "templates/vue/editForm.vue.ftl");
         return templateMap;
     }
 
@@ -680,7 +676,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         } else if (simpleName.contains("index.vue")) {
             fileName = String.format("src/views/%s/%s/index.vue", moduleName, className);
         } else if (simpleName.contains("form.vue")) {
-            fileName = String.format("src/views/%s/%s/form.vue", moduleName, className);
+            fileName = String.format("src/views/%s/%s/editForm.vue", moduleName, className);
         }
         return fileName;
     }
