@@ -9,10 +9,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 分组信息实体对象
+ * 分组实体对象
  *
  * @author moyusisi
- * @since 2025-10-04
+ * @since 2025-10-05
  */
 @Getter
 @Setter

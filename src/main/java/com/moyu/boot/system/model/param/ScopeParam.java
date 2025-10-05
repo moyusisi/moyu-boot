@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 分组信息请求参数(查询、修改)
+ * 分组请求参数(查询、修改)
  *
  * @author moyusisi
- * @since 2025-10-04
+ * @since 2025-10-05
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * 分组信息视图对象
+ * 分组视图对象
  *
  * @author moyusisi
- * @since 2025-10-04
+ * @since 2025-10-05
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

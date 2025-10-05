@@ -10,10 +10,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 
 /**
- * 分组信息服务类Service
+ * 分组服务类Service
  *
  * @author moyusisi
- * @since 2025-10-04
+ * @since 2025-10-05
  */
 public interface ScopeService extends IService<Scope> {
 

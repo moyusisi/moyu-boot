@@ -20,10 +20,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 分组信息控制器
+ * 分组控制器
  *
  * @author moyusisi
- * @since 2025-10-04
+ * @since 2025-10-05
  */
 @Log(jsonLog = true)
 @RestController
@@ -35,7 +35,7 @@ public class ScopeController {
     private ScopeService scopeService;
 
     /**
-     * 分组信息列表
+     * 分组列表
      */
 //    @PreAuthorize("hasAuthority('system:scope:list')")
     @PostMapping("/list")
@@ -45,7 +45,7 @@ public class ScopeController {
     }
 
     /**
-     * 分组信息分页列表
+     * 分组分页列表
      */
     //@PreAuthorize("hasAuthority('system:scope:page')")
     @PostMapping("/page")
@@ -56,7 +56,7 @@ public class ScopeController {
     }
 
     /**
-     * 分组信息详情
+     * 分组详情
      */
     //@PreAuthorize("hasAuthority('system:scope:detail')")
     @PostMapping("/detail")
@@ -66,7 +66,7 @@ public class ScopeController {
     }
 
     /**
-     * 新增分组信息
+     * 新增分组
      */
     //@PreAuthorize("hasAuthority('system:scope:add')")
     @PostMapping("/add")
@@ -76,7 +76,7 @@ public class ScopeController {
     }
 
     /**
-     * 修改分组信息
+     * 修改分组
      */
     //@PreAuthorize("hasAuthority('system:scope:edit')")
     @PostMapping("/edit")
