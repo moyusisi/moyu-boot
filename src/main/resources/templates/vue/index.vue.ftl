@@ -41,8 +41,7 @@
   </a-card>
   <a-card size="small">
     <#--  表格数据区  -->
-    <MTable size="middle"
-            ref="tableRef"
+    <MTable ref="tableRef"
             :columns="columns"
             :loadData="loadData"
             :row-key="(row) => row.id"
