@@ -38,11 +38,17 @@
     </a-form>
   </a-card>
   <a-card size="small">
-    <#--  表格上方操作区  -->
-    <a-row>
-      <#--  左侧按钮  -->
-      <a-col :span="20" style="margin-bottom: 12px">
-        <a-space wrap>
+    <#--  表格数据区  -->
+    <MTable size="middle"
+            ref="tableRef"
+            :columns="columns"
+            :loadData="loadData"
+            :row-key="(row) => row.id"
+            showRowSelection
+            @selectedChange="onSelectedChange"
+    >
+      <template #operator>
+        <a-space wrap style="margin-bottom: 6px">
           <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
           <a-popconfirm title="确定要批量删除吗？" :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
             <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
@@ -50,27 +56,7 @@
             </a-button>
           </a-popconfirm>
         </a-space>
-      </a-col>
-      <#--  右侧操作区  -->
-      <a-col :span="4">
-        <a-flex gap="small" class="tool-area" justify="flex-end" align="flex-start">
-          <a-button :icon="h(PlusOutlined)" class="custom-btn" @click="null">操作</a-button>
-        </a-flex>
-      </a-col>
-    </a-row>
-    <#--  表格数据区  -->
-    <a-table size="middle"
-             ref="tableRef"
-             :columns="columns"
-             :data-source="tableData"
-             :loading="dataLoading"
-             :row-key="(record) => record.id"
-             :row-selection="rowSelection"
-             :pagination="paginationRef"
-             @change="onChange"
-             @resizeColumn="onResizeColumn"
-             :scroll="{ x: 'max-content' }"
-             bordered>
+      </template>
       <template #bodyCell="{ column, record, index, text }">
         <!-- 长文本省略显示 -->
         <template v-if="text && text.length > 24">
@@ -94,18 +80,19 @@
           </a-space>
         </template>
       </template>
-    </a-table>
+    </MTable>
   </a-card>
-  <EditForm ref="editFormRef" @successful="loadData" />
+  <EditForm ref="editFormRef" @successful="tableRef.refresh()" />
 </template>
 
 <script setup>
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
-  import { h } from "vue"
+  import { h, ref } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
   import EditForm from "./editForm.vue"
+  import MTable from "@/components/MTable/index.vue"
 
   // 查询表单相关对象
   const queryFormRef = ref()
@@ -120,39 +107,8 @@
 
   /***** 表格相关对象 start *****/
   const tableRef = ref()
-  // 表格的数据源
-  const tableData = ref([])
-  const dataLoading = ref(false)
   // 已选中的行
   const selectedRowKeys = ref([])
-  // 表格行选择配置
-  const rowSelection = ref({
-    selectedRowKeys: selectedRowKeys,
-    onChange: (selectedKeys, selectedRows) => {
-      selectedRowKeys.value = selectedKeys
-      // console.log('onChange,selectedKeys:', selectedKeys);
-    }
-  });
-  // 表格的分页配置
-  const paginationRef = ref({
-    // 当前页码
-    current: 1,
-    // 每页显示条数
-    pageSize: 10,
-    // 总条数，需要通过接口获取
-    total: 0,
-    // 显示总记录数
-    showTotal: (total, range) => <#noparse>`共 ${total} 条 `,</#noparse>
-    // 是否可改变每页显示条数
-    showSizeChanger: true,
-    // 只有一页或没有数据时隐藏分页栏
-    // hideOnSinglePage: true,
-    onChange: (page, pageSize) => {
-      // 处理分页切换的逻辑
-      paginationRef.value.current = page
-      paginationRef.value.pageSize = pageSize
-    },
-  })
   // 表格列配置
   const columns = ref([
     // 不需要序号可以删掉
@@ -204,51 +160,43 @@
 
   // 加载完毕调用
   onMounted(() => {
-    loadData()
+
   })
 
   // 提交查询
   const querySubmit = () => {
-    loadData()
+    tableRef.value.refresh()
   }
   // 重置
   const reset = () => {
     queryFormRef.value.resetFields()
-    paginationRef.value.current = 1
-    loadData()
+    tableRef.value.refresh(true)
   }
   // 加载数据
   const loadData = (parameter) => {
-    dataLoading.value = true
     // 重新加载数据时，清空之前以选中的行
     selectedRowKeys.value = []
     // 分页参数
-    let param = { pageNum: paginationRef.value.current, pageSize: paginationRef.value.pageSize }
-    return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(Object.assign(param, queryFormData.value)).then((res) => {
-      paginationRef.value.total = res.data.total
-      tableData.value = res.data.records
+    let param = Object.assign(parameter, queryFormData.value)
+    return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(param).then((res) => {
       // res.data 为 {total, records}
       return res.data
     }).catch((err) => {
       console.error(err)
-    }).finally(() => {
-      dataLoading.value = false
     })
   }
-  // 分页、排序、筛选等操作变化时，会触发 change 事件
-  const onChange = (pagination, filters, sorter) => {
-    loadData()
+  // 选中行发生变化
+  const onSelectedChange = (selectedKeys, selectedRows) => {
+    selectedRowKeys.value = selectedKeys
+    // console.log('onSelectedChange,selectedKeys:', selectedKeys);
   }
-  // 可伸缩列
-  const onResizeColumn = (w, column) => {
-    column.width = w
-  }
+
   // 删除
   const delete${entityName} = (record) => {
     let data = { ids: [record.id] }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      loadData()
+      tableRef.value.refresh()
     })
   }
   // 批量删除
@@ -260,7 +208,7 @@
     let data = { ids: selectedRowKeys.value }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      loadData()
+      tableRef.value.refresh()
     })
   }
 
@@ -270,11 +218,6 @@
   /** 直接后代选择器 **/
   .ant-form-inline > .ant-form-item {
     margin-bottom: 12px !important;
-  }
-  /** 操作区 **/
-  .tool-area {
-    width: 100%;
-    height: 100%;
   }
   .custom-btn {
     background-color: #52C41AFF;
