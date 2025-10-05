@@ -51,7 +51,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', null, 'appsto
         (2036, 'dir_sys_resource', '菜单管理', 'menu_sys_menu', 3, '/sys/menu', 'sys/resource/menu/index', 'pic-left-outlined', '', 1, null, 'sys_module', 11, 0, null, '', 0, null, null, '2025-03-03 16:44:07', 'superAdmin'),
         (2037, 'dir_sys_resource', '接口管理', 'menu_sys_button', 3, '/sys/button', 'sys/resource/button/index', 'api-outlined', '', 1, null, 'sys_module', 12, 0, null, null, 0, '2025-03-02 10:46:19', 'superAdmin', '2025-03-05 20:02:09', 'superAdmin'),
 
-        (2038, 'dir_sys_dev', '代码生成', 'menu_sys_gen', 3, '/dev/gen/index', 'dev/gen/index', 'code-outlined', '', 1, null, 'sys_module', 12, 0, null, '', 0, null, null, '2025-02-19 22:51:28', null),
+        (2038, 'dir_sys_dev', '代码生成', 'menu_sys_gen', 3, '/dev/gen', 'dev/gen/index', 'code-outlined', '', 1, null, 'sys_module', 12, 0, null, '', 0, null, null, '2025-02-19 22:51:28', null),
         (2039, 'dir_sys_dev', '文件管理', 'menu_sys_file', 3, '/dev/file/index', 'dev/file/index', 'copy-outlined', null, 1, null, 'sys_module', 14, 0, null, '', 0, null, null, null, null),
         (2040, 'dir_sys_dev', '邮件推送', 'menu_sys_email', 3, '/dev/email/index', 'dev/email/index', 'send-outlined', null, 1, null, 'sys_module', 15, 0, null, '', 0, null, null, null, null),
         (2041, 'dir_sys_dev', '短信发送', 'menu_sys_sms', 3, '/dev/sms/index', 'dev/sms/index', 'mail-outlined', null, 1, null, 'sys_module', 16, 0, null, '', 0, null, null, null, null),
