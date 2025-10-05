@@ -88,22 +88,8 @@ public class ScopeServiceImpl extends ServiceImpl<ScopeMapper, Scope> implements
 
     @Override
     public ScopeVO detail(ScopeParam param) {
-        // 查询条件
-        LambdaQueryWrapper<Scope> queryWrapper = Wrappers.lambdaQuery(Scope.class);
-        // 指定name查询条件
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), Scope::getName, param.getName());
-        // 指定code查询条件
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), Scope::getCode, param.getCode());
-        // 指定orgName查询条件
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOrgName()), Scope::getOrgName, param.getOrgName());
-        // 仅查询未删除的
-        queryWrapper.eq(Scope::getDeleted, 0);
-        // 指定createTime查询条件
-        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
-            queryWrapper.between(Scope::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
-        }
         // 查询
-        Scope scope = this.getOne(queryWrapper);
+        Scope scope = this.getById(param.getId());
         if (scope == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
