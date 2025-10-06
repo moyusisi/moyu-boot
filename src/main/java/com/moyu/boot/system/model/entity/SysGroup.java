@@ -1,35 +1,21 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.mybatis.entity.BaseEntity;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 岗位信息表
+ * 岗位信息表(sys_group)实体对象
  *
- * @TableName sys_group
+ * @author moyusisi
+ * @since 2025-10-06
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 @TableName(value = "sys_group")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysGroup extends BaseEntity {
-    /**
-     * 主键id
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
-
     /**
      * 名称
      */

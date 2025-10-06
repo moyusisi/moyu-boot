@@ -85,7 +85,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
-    public PageData<SysGroup> pageList(SysGroupParam param) {
+    public PageData<SysGroupVO> pageList(SysGroupParam param) {
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class);
         // 指定name查询
@@ -124,11 +124,12 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 分页查询
         Page<SysGroup> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysGroup> groupPage = this.page(page, queryWrapper);
-        return new PageData<>(groupPage.getTotal(), groupPage.getRecords());
+        List<SysGroupVO> voList = buildGroupVOList(groupPage.getRecords());
+        return new PageData<>(groupPage.getTotal(), voList);
     }
 
     @Override
-    public SysGroup detail(SysGroupParam param) {
+    public SysGroupVO detail(SysGroupParam param) {
         // 查询条件 id、code均为唯一标识
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class);
         // 指定id查询
@@ -140,7 +141,9 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         if (sysGroup == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-        return sysGroup;
+        // 转换为vo
+        SysGroupVO vo = BeanUtil.copyProperties(sysGroup, SysGroupVO.class);
+        return vo;
     }
 
     @Override
@@ -371,9 +374,12 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public Set<String> groupDataScopes(String groupCode) {
+        // 通过唯一标识code查询group
+        SysGroup group = this.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode));
+        if (group == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+        }
         Set<String> scopes = new HashSet<>();
-        // 查询group
-        SysGroup group = detail(SysGroupParam.builder().code(groupCode).build());
 
         if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG.getCode())) {
             scopes.add(group.getOrgCode());
@@ -396,7 +402,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     /**
      * 实体对象生成展示对象 entityList -> voList
      */
-    private List<SysGroupVO> buildSysGroupVOList(List<SysGroup> entityList) {
+    private List<SysGroupVO> buildGroupVOList(List<SysGroup> entityList) {
         List<SysGroupVO> voList = new ArrayList<>();
         if (CollectionUtils.isEmpty(entityList)) {
             return voList;

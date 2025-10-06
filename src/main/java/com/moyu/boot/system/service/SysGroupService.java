@@ -5,6 +5,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public interface SysGroupService extends IService<SysGroup> {
     /**
      * 分页获取记录列表
      */
-    PageData<SysGroup> pageList(SysGroupParam param);
+    PageData<SysGroupVO> pageList(SysGroupParam param);
 
     /**
      * 获取记录详情
      */
-    SysGroup detail(SysGroupParam param);
+    SysGroupVO detail(SysGroupParam param);
 
     /**
      * 添加记录

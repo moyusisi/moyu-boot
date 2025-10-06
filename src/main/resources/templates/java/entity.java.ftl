@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * ${entityDesc}实体对象
+ * ${entityDesc}表(${tableName})实体对象
  *
  * @author ${author}
  * @since ${.now?string["yyyy-MM-dd"]}

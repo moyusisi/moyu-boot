@@ -10,6 +10,7 @@ import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysGroupService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,9 +42,9 @@ public class SysGroupController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:page')")
     @PostMapping("/page")
-    public Result<PageData<SysGroup>> pageList(@RequestBody SysGroupParam groupParam) {
+    public Result<PageData<SysGroupVO>> pageList(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(groupParam.getPageNum(), groupParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysGroup> page = sysGroupService.pageList(groupParam);
+        PageData<SysGroupVO> page = sysGroupService.pageList(groupParam);
         return Result.success(page);
     }
 
@@ -52,7 +53,7 @@ public class SysGroupController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:detail')")
     @PostMapping("/detail")
-    public Result<SysGroup> detail(@RequestBody SysGroupParam groupParam) {
+    public Result<SysGroupVO> detail(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
         return Result.success(sysGroupService.detail(groupParam));
     }
