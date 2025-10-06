@@ -1,7 +1,6 @@
 package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 
