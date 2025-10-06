@@ -475,8 +475,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfig.setMaxLength(columnMetaData.getMaxLength());
         // 必填和允许为空反着
         fieldConfig.setRequired(columnMetaData.getNullable() == 1 ? 0 : 1);
-
-        fieldConfig.setShowInList(1);
+        if ("deleted".equals(fieldConfig.getFieldName())) {
+            fieldConfig.setShowInList(0);
+        } else {
+            fieldConfig.setShowInList(1);
+        }
         if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
             fieldConfig.setShowInForm(0);
         } else {
@@ -693,7 +696,11 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 }
                 // 默认非必填
                 fieldConfig.setRequired(0);
-                fieldConfig.setShowInList(1);
+                if ("deleted".equals(fieldConfig.getFieldName())) {
+                    fieldConfig.setShowInList(0);
+                } else {
+                    fieldConfig.setShowInList(1);
+                }
                 if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
                     fieldConfig.setShowInForm(0);
                 } else {

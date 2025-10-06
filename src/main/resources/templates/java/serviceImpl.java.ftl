@@ -43,7 +43,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.showInQuery == 1>
-        // 指定${fieldConfig.fieldName}查询条件
+        // 指定${fieldConfig.fieldName}查询
             <#if fieldConfig.queryType == "LIKE">
         queryWrapper.like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'EQ'>
@@ -88,7 +88,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
 <#if fieldList??>
     <#list fieldList as fieldConfig>
         <#if fieldConfig.showInQuery == 1>
-        // 指定${fieldConfig.fieldName}查询条件
+        // 指定${fieldConfig.fieldName}查询
             <#if fieldConfig.queryType == "LIKE">
         queryWrapper.like(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'EQ'>

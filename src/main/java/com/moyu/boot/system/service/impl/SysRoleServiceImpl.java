@@ -76,17 +76,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public List<SysRoleVO> list(SysRoleParam param) {
-        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(param.getSearchKey()), SysRole::getName, param.getSearchKey())
-                // 指定code集合
-                .in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus())
-                // 非 ROOT 则排除
-                .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
-                .eq(SysRole::getDeleted, 0)
-                .orderByAsc(SysRole::getSortNum);
+        // 查询条件
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class);
+        // 指定name查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysRole::getName, param.getName());
+        // 指定code查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysRole::getCode, param.getCode());
+        // 指定codeSet集合查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet());
+        // 指定指定状态
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
+        // 非 ROOT 不可见ROOT
+        queryWrapper.ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        // 仅查询未删除的
+        queryWrapper.eq(SysRole::getDeleted, 0);
+        // 排序
+        queryWrapper.orderByAsc(SysRole::getSortNum);
         // 查询
         List<SysRole> roleList = this.list(queryWrapper);
         // 转换为voList
@@ -97,15 +102,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public PageData<SysRoleVO> pageList(SysRoleParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(param.getSearchKey()), SysRole::getName, param.getSearchKey())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus())
-                // 非 ROOT 则排除
-                .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
-                .eq(SysRole::getDeleted, 0)
-                .orderByAsc(SysRole::getSortNum);
+        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class);
+        // 指定name查询条件
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysRole::getName, param.getName());
+        // 指定code查询条件
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysRole::getCode, param.getCode());
+        // 指定codeSet集合
+        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet());
+        // 指定指定状态
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
+        // 非 ROOT 不可见ROOT
+        queryWrapper.ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        // 仅查询未删除的
+        queryWrapper.eq(SysRole::getDeleted, 0);
+        // 排序
+        queryWrapper.orderByAsc(SysRole::getSortNum);
         // 分页查询
         Page<SysRole> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysRole> rolePage = this.page(page, queryWrapper);
