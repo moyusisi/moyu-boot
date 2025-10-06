@@ -9,9 +9,9 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -66,17 +66,21 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public List<SysResource> list(SysResourceParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class)
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(param.getSearchKey()), SysResource::getName, param.getSearchKey())
-                // 指定资源类型
-                .eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType())
-                // 指定模块
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus())
-                .eq(SysResource::getDeleted, 0)
-                .orderByAsc(SysResource::getSortNum);
+        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        // 指定模块
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        // 指定资源类型
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
+        // 指定code查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysResource::getDeleted, 0);
+        // 指定排序
+        queryWrapper.orderByAsc(SysResource::getSortNum);
         // 查询
         List<SysResource> resourceList = this.list(queryWrapper);
         return resourceList;
@@ -84,22 +88,22 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public PageData<SysResource> pageList(SysResourceParam param) {
-        QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
         // 查询条件
-        queryWrapper.lambda()
-                // 查询部分字段
-//                .select(SysMenu::getCode, SysMenu::getName, SysMenu::getSortNum)
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(param.getSearchKey()), SysResource::getName, param.getSearchKey())
-                // 指定菜单类型
-                .eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType())
-                // 指定模块
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus())
-                .eq(SysResource::getDeleted, 0)
-                .orderByAsc(SysResource::getSortNum);
-
+        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        // 指定模块
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        // 指定资源类型 resourceType
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
+        // 指定code查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysResource::getDeleted, 0);
+        // 指定排序
+        queryWrapper.orderByAsc(SysResource::getSortNum);
         // 分页查询
         Page<SysResource> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysResource> menuPage = this.page(page, queryWrapper);
@@ -108,10 +112,10 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public SysResource detail(SysResourceParam param) {
-        LambdaQueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection().lambda()
-                .eq(ObjectUtil.isNotEmpty(param.getId()), SysResource::getId, param.getId())
-                .eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
-        // id、code均为唯一标识
+        // 查询条件 id、code均为唯一标识
+        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysResource::getId, param.getId());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
         SysResource sysResource = this.getOne(queryWrapper);
         if (sysResource == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
@@ -124,7 +128,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 若指定了唯一编码code，则必须全局唯一
         if (!Strings.isNullOrEmpty(param.getCode())) {
             // 查询指定code
-            SysResource menu = this.getOne(new LambdaQueryWrapper<SysResource>()
+            SysResource menu = this.getOne(Wrappers.lambdaQuery(SysResource.class)
                     .eq(SysResource::getCode, param.getCode())
                     .eq(SysResource::getDeleted, 0));
             if (menu != null) {
@@ -164,8 +168,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 逻辑删除
-        UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("deleted", 1);
+        LambdaUpdateWrapper<SysResource> updateWrapper = Wrappers.lambdaUpdate(SysResource.class);
+        updateWrapper.in(SysResource::getId, idSet).set(SysResource::getDeleted, 1);
         this.update(updateWrapper);
         // 资源删除时,对应的role_has_menu也要删除
         clearRoleMenu(idSet);
@@ -218,12 +222,16 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public void update(SysResourceParam param) {
-        SysResource oldMenu = this.detail(param);
+        // 通过主键id查询原有数据
+        SysResource old = this.getById(param.getId());
+        if (old == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+        }
         // 转换
-        SysResource updateMenu = buildSysMenu(param);
-        fillSysMenu(updateMenu);
-        updateMenu.setId(oldMenu.getId());
-        this.updateById(updateMenu);
+        SysResource toUpdate = BeanUtil.copyProperties(param, SysResource.class);
+        // 其他处理
+        toUpdate.setId(param.getId());
+        this.updateById(toUpdate);
     }
 
     @Override
