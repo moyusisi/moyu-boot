@@ -1,6 +1,8 @@
 package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Builder;
 import lombok.Getter;
@@ -52,8 +54,10 @@ public class SysRoleParam extends BasePageParam {
 
     //********** db中存在的字段 **********//
     /**
-     * 主键ID
+     * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -61,7 +65,6 @@ public class SysRoleParam extends BasePageParam {
      */
     @NotBlank(message = "角色名称name不能为空")
     private String name;
-
     /**
      * 编码
      */

@@ -1,5 +1,6 @@
 package com.moyu.boot.system.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -11,7 +12,7 @@ import java.util.Date;
  * 角色信息视图对象
  *
  * @author moyusisi
- * @since 2025-09-26
+ * @since 2025-10-06
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -50,10 +51,11 @@ public class SysRoleVO {
     /**
      * 删除标志（0未删除  1已删除）
      */
-    private Integer deleteFlag;
+    private Integer deleted;
     /**
      * 创建时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 创建人
@@ -62,6 +64,7 @@ public class SysRoleVO {
     /**
      * 修改时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 修改人
