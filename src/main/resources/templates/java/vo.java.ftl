@@ -29,7 +29,7 @@ public class ${entityName}VO {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-        <#else>
+        <#elseif fieldConfig.fieldName != "deleted">
     /**
      * ${fieldConfig.fieldRemark}
      */
