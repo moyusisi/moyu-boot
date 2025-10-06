@@ -178,7 +178,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     public List<SysRoleVO> userRoleList(String username, String searchKey) {
         // 查询用户所有的角色列表
         Set<String> codeSet = sysRoleService.userAllRoles(username);
-        return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).searchKey(searchKey).build());
+        return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).name(searchKey).build());
     }
 
     @Override

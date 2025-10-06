@@ -206,7 +206,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // roleSet
         Set<String> roleSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询角色(可指定搜索词)
-        List<SysRoleVO> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(groupParam.getSearchKey()).codeSet(roleSet).build());
+        List<SysRoleVO> roleList = sysRoleService.list(SysRoleParam.builder().name(groupParam.getSearchKey()).codeSet(roleSet).build());
         return roleList;
     }
 
