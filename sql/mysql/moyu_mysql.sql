@@ -73,8 +73,8 @@ drop table if exists sys_role;
 create table sys_role
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64) DEFAULT NULL COMMENT '名称',
-    `code`        VARCHAR(64) DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(64) DEFAULT NULL COMMENT '角色名称',
+    `code`        VARCHAR(64) DEFAULT NULL COMMENT '角色编码',
 
     `sort_num`    INT         DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
