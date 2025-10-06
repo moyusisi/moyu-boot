@@ -1,5 +1,5 @@
 <template>
-  <!-- 上方选择区 -->
+  <!-- 上方查询区 -->
   <a-card size="small">
     <a-form ref="queryFormRef" :model="queryFormData">
       <a-row :gutter="24">
@@ -10,9 +10,9 @@
           <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
       <#if fieldConfig.formType == "INPUT">
         <#if fieldConfig.queryType == "LIKE">
-          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
+            <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
         <#else>
-          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请输入${fieldConfig.fieldRemark}" allowClear />
+            <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请输入${fieldConfig.fieldRemark}" allowClear />
         </#if>
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
             <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
@@ -44,7 +44,7 @@
     </a-form>
   </a-card>
   <a-card size="small">
-    <#--  表格数据区  -->
+    <!--  表格数据区  -->
     <MTable ref="tableRef"
             :columns="columns"
             :loadData="loadData"
@@ -52,6 +52,7 @@
             showRowSelection
             @selectedChange="onSelectedChange"
     >
+      <!--  表格上方左侧操作区  -->
       <template #operator>
         <a-space wrap style="margin-bottom: 6px">
           <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
@@ -170,7 +171,7 @@
 
   // 提交查询
   const querySubmit = () => {
-    tableRef.value.refresh()
+    tableRef.value.refresh(true)
   }
   // 重置
   const reset = () => {

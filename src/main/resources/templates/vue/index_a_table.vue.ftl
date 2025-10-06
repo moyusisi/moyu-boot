@@ -1,5 +1,5 @@
 <template>
-  <!-- 上方选择区 -->
+  <!-- 上方查询区 -->
   <a-card size="small">
     <a-form ref="queryFormRef" :model="queryFormData">
       <a-row :gutter="24">
@@ -10,9 +10,9 @@
           <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
       <#if fieldConfig.formType == "INPUT">
         <#if fieldConfig.queryType == "LIKE">
-          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
+            <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
         <#else>
-          <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请输入${fieldConfig.fieldRemark}" allowClear />
+            <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请输入${fieldConfig.fieldRemark}" allowClear />
         </#if>
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
             <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
@@ -44,9 +44,9 @@
     </a-form>
   </a-card>
   <a-card size="small">
-    <#--  表格上方操作区  -->
+    <!--  表格上方操作区  -->
     <a-row>
-      <#--  左侧按钮  -->
+      <!--  左侧按钮  -->
       <a-col :span="20" style="margin-bottom: 12px">
         <a-space wrap>
           <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
@@ -57,14 +57,14 @@
           </a-popconfirm>
         </a-space>
       </a-col>
-      <#--  右侧操作区  -->
+      <!--  右侧操作区  -->
       <a-col :span="4">
         <a-flex gap="small" class="tool-area" justify="flex-end" align="flex-start">
           <a-button :icon="h(PlusOutlined)" class="custom-btn" @click="null">操作</a-button>
         </a-flex>
       </a-col>
     </a-row>
-    <#--  表格数据区  -->
+    <!--  表格数据区  -->
     <a-table size="middle"
              ref="tableRef"
              :columns="columns"
