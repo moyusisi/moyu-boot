@@ -69,7 +69,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 查询条件
         queryWrapper.lambda()
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
+                .like(StrUtil.isNotBlank(groupParam.getName()), SysGroup::getName, groupParam.getName())
                 // 指定状态
                 .eq(ObjectUtil.isNotEmpty(groupParam.getStatus()), SysGroup::getStatus, groupParam.getStatus())
                 .eq(SysGroup::getDeleted, 0)
@@ -84,7 +84,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 查询条件
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class)
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(groupParam.getSearchKey()), SysGroup::getName, groupParam.getSearchKey())
+                .like(StrUtil.isNotBlank(groupParam.getName()), SysGroup::getName, groupParam.getName())
                 // 指定orgCode
                 .eq(StrUtil.isNotBlank(groupParam.getOrgCode()), SysGroup::getOrgCode, groupParam.getOrgCode())
                 // 指定状态
