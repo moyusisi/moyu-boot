@@ -204,7 +204,7 @@
     })
   }
   // 批量删除
-  const batchDelete = (record) => {
+  const batchDelete = () => {
     if (selectedRowKeys.value.length < 1) {
       message.warning("请至少选择一条数据")
       return
