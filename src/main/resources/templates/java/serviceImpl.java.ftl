@@ -172,20 +172,6 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
     }
 
     /**
-     * 实体对象生成展示对象 entity -> vo
-     */
-    private ${entityName}VO build${entityName}VO(${entityName} entity) {
-        if (entity == null) {
-            return null;
-        }
-        ${entityName}VO vo = new ${entityName}VO();
-    <#list fieldList as fieldConfig>
-        vo.set${fieldConfig.fieldName?cap_first}(entity.get${fieldConfig.fieldName?cap_first}());
-    </#list>
-        return vo;
-    }
-
-    /**
      * 实体对象生成展示对象 entityList -> voList
      */
     private List<${entityName}VO> build${entityName}VOList(List<${entityName}> entityList) {
@@ -194,7 +180,8 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             return voList;
         }
         for (${entityName} entity : entityList) {
-            voList.add(build${entityName}VO(entity));
+            ${entityName}VO vo = BeanUtil.copyProperties(entity, ${entityName}VO.class);
+            voList.add(vo);
         }
         return voList;
     }

@@ -20,7 +20,7 @@ public interface ${entityName}Service extends IService<${entityName}> {
     /**
      * 获取记录列表(不分页，通过条件自行控制数量)
      */
-    List<${entityName}VO> list(${entityName}Param roleParam);
+    List<${entityName}VO> list(${entityName}Param param);
 
     /**
      * 分页获取记录列表

@@ -9,6 +9,7 @@ import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 import com.moyu.boot.system.service.UserCenterService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,7 +70,7 @@ public class UserCenterController {
      * 获取当前用户拥有的角色列表
      */
     @PostMapping("/userRoleList")
-    public Result<List<SysRole>> userRoleList(@RequestBody SysRoleParam roleParam) {
+    public Result<List<SysRoleVO>> userRoleList(@RequestBody SysRoleParam roleParam) {
         // 当前登陆用户username
         String username = SecurityUtils.getUsername();
         return Result.success(userCenterService.userRoleList(username, roleParam.getSearchKey()));

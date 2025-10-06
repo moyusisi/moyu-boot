@@ -30,6 +30,7 @@ import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -195,7 +196,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
-    public List<SysRole> groupRoleList(SysGroupParam groupParam) {
+    public List<SysRoleVO> groupRoleList(SysGroupParam groupParam) {
         // 查询指定group的所有role
         List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).objectId(groupParam.getCode()).build());
@@ -205,7 +206,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // roleSet
         Set<String> roleSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询角色(可指定搜索词)
-        List<SysRole> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(groupParam.getSearchKey()).codeSet(roleSet).build());
+        List<SysRoleVO> roleList = sysRoleService.list(SysRoleParam.builder().searchKey(groupParam.getSearchKey()).codeSet(roleSet).build());
         return roleList;
     }
 

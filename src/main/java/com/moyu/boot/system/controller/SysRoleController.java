@@ -10,6 +10,7 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysRoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -39,8 +40,8 @@ public class SysRoleController {
      * 获取角色列表
      */
     @PostMapping("/list")
-    public Result<List<SysRole>> list(@RequestBody SysRoleParam roleParam) {
-        List<SysRole> list = sysRoleService.list(roleParam);
+    public Result<List<SysRoleVO>> list(@RequestBody SysRoleParam roleParam) {
+        List<SysRoleVO> list = sysRoleService.list(roleParam);
         return Result.success(list);
     }
 
@@ -49,9 +50,9 @@ public class SysRoleController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
     @PostMapping("/page")
-    public Result<PageData<SysRole>> pageList(@RequestBody SysRoleParam roleParam) {
+    public Result<PageData<SysRoleVO>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysRole> page = sysRoleService.pageList(roleParam);
+        PageData<SysRoleVO> page = sysRoleService.pageList(roleParam);
         return Result.success(page);
     }
 
@@ -60,7 +61,7 @@ public class SysRoleController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:detail')")
     @PostMapping("/detail")
-    public Result<SysRole> detail(@RequestBody SysRoleParam roleParam) {
+    public Result<SysRoleVO> detail(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         return Result.success(sysRoleService.detail(roleParam));
     }

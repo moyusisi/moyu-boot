@@ -6,6 +6,7 @@ import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
 import java.util.Set;
@@ -52,7 +53,7 @@ public interface SysGroupService extends IService<SysGroup> {
     /**
      * group内角色列表
      */
-    List<SysRole> groupRoleList(SysGroupParam groupParam);
+    List<SysRoleVO> groupRoleList(SysGroupParam groupParam);
 
     /**
      * group内用户列表

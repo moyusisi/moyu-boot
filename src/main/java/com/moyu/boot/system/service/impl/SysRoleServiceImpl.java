@@ -38,6 +38,7 @@ import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysResourceService;
 import com.moyu.boot.system.service.SysRoleService;
@@ -45,15 +46,17 @@ import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
+ * 角色信息服务实现类
+ *
  * @author shisong
- * @description 针对表【sys_role(角色信息表)】的数据库操作Service实现
- * @createDate 2024-12-15 20:49:43
+ * @since 2024-12-15 20:49:43
  */
 @Slf4j
 @Service
@@ -72,43 +75,46 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysUserService sysUserService;
 
     @Override
-    public List<SysRole> list(SysRoleParam roleParam) {
+    public List<SysRoleVO> list(SysRoleParam param) {
         LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
+                .like(StrUtil.isNotBlank(param.getSearchKey()), SysRole::getName, param.getSearchKey())
                 // 指定code集合
-                .in(ObjectUtil.isNotEmpty(roleParam.getCodeSet()), SysRole::getCode, roleParam.getCodeSet())
+                .in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet())
                 // 指定状态
-                .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
+                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus())
                 // 非 ROOT 则排除
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
                 .eq(SysRole::getDeleted, 0)
                 .orderByAsc(SysRole::getSortNum);
         // 查询
         List<SysRole> roleList = this.list(queryWrapper);
-        return roleList;
+        // 转换为voList
+        List<SysRoleVO> voList = buildSysRoleVOList(roleList);
+        return voList;
     }
 
     @Override
-    public PageData<SysRole> pageList(SysRoleParam roleParam) {
+    public PageData<SysRoleVO> pageList(SysRoleParam param) {
         // 查询条件
         LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class)
                 // 关键词搜索
-                .like(StrUtil.isNotBlank(roleParam.getSearchKey()), SysRole::getName, roleParam.getSearchKey())
+                .like(StrUtil.isNotBlank(param.getSearchKey()), SysRole::getName, param.getSearchKey())
                 // 指定状态
-                .eq(ObjectUtil.isNotEmpty(roleParam.getStatus()), SysRole::getStatus, roleParam.getStatus())
+                .eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus())
                 // 非 ROOT 则排除
                 .ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE)
                 .eq(SysRole::getDeleted, 0)
                 .orderByAsc(SysRole::getSortNum);
         // 分页查询
-        Page<SysRole> page = new Page<>(roleParam.getPageNum(), roleParam.getPageSize());
+        Page<SysRole> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysRole> rolePage = this.page(page, queryWrapper);
-        return new PageData<>(rolePage.getTotal(), rolePage.getRecords());
+        List<SysRoleVO> voList = buildSysRoleVOList(rolePage.getRecords());
+        return new PageData<>(rolePage.getTotal(), voList);
     }
 
     @Override
-    public SysRole detail(SysRoleParam roleParam) {
+    public SysRoleVO detail(SysRoleParam roleParam) {
         LambdaQueryWrapper<SysRole> queryWrapper = new QueryWrapper<SysRole>().checkSqlInjection().lambda()
                 .eq(ObjectUtil.isNotEmpty(roleParam.getId()), SysRole::getId, roleParam.getId())
                 .eq(ObjectUtil.isNotEmpty(roleParam.getCode()), SysRole::getCode, roleParam.getCode());
@@ -117,23 +123,25 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (sysRole == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
         }
-        return sysRole;
+        // 转换为vo
+        SysRoleVO vo = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
+        return vo;
     }
 
     @Override
-    public void add(SysRoleParam roleParam) {
+    public void add(SysRoleParam param) {
         // 若指定了唯一编码code，则必须全局唯一
-        if (!Strings.isNullOrEmpty(roleParam.getCode())) {
+        if (!Strings.isNullOrEmpty(param.getCode())) {
             // 查询指定code
             SysRole role = this.getOne(new LambdaQueryWrapper<SysRole>()
-                    .eq(SysRole::getCode, roleParam.getCode())
+                    .eq(SysRole::getCode, param.getCode())
                     .eq(SysRole::getDeleted, 0));
             if (role != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 属性复制
-        SysRole role = BeanUtil.copyProperties(roleParam, SysRole.class);
+        SysRole role = BeanUtil.copyProperties(param, SysRole.class);
         role.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(role.getCode())) {
@@ -144,9 +152,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void deleteByIds(SysRoleParam roleParam) {
+    public void deleteByIds(SysRoleParam param) {
         // 待删除的id集合
-        Set<Long> idSet = roleParam.getIds();
+        Set<Long> idSet = param.getIds();
         // 逻辑删除
         UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("deleted", 1);
@@ -154,12 +162,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void update(SysRoleParam roleParam) {
-        SysRole oldRole = this.detail(roleParam);
+    public void update(SysRoleParam param) {
+        // 通过主键id查询原有数据
+        SysRole old = this.getById(param.getId());
+        if (old == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+        }
         // 属性复制
-        SysRole updateOrg = BeanUtil.copyProperties(roleParam, SysRole.class);
-        updateOrg.setId(oldRole.getId());
-        this.updateById(updateOrg);
+        SysRole toUpdate = BeanUtil.copyProperties(param, SysRole.class);
+        // 其他处理
+        toUpdate.setId(param.getId());
+        this.updateById(toUpdate);
     }
 
     @Override
@@ -366,6 +379,21 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
         });
         return permSet;
+    }
+
+    /**
+     * 实体对象生成展示对象 entityList -> voList
+     */
+    private List<SysRoleVO> buildSysRoleVOList(List<SysRole> entityList) {
+        List<SysRoleVO> voList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(entityList)) {
+            return voList;
+        }
+        for (SysRole entity : entityList) {
+            SysRoleVO vo = BeanUtil.copyProperties(entity, SysRoleVO.class);
+            voList.add(vo);
+        }
+        return voList;
     }
 }
 

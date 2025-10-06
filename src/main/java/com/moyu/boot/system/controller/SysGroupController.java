@@ -10,6 +10,7 @@ import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysGroupService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -93,9 +94,9 @@ public class SysGroupController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:roleList')")
     @PostMapping("/roleList")
-    public Result<List<SysRole>> roleList(@RequestBody SysGroupParam groupParam) {
+    public Result<List<SysRoleVO>> roleList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
-        List<SysRole> list = sysGroupService.groupRoleList(groupParam);
+        List<SysRoleVO> list = sysGroupService.groupRoleList(groupParam);
         return Result.success(list);
     }
 

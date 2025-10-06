@@ -49,10 +49,6 @@ public class SysRoleVO {
      */
     private String remark;
     /**
-     * 删除标志（0未删除  1已删除）
-     */
-    private Integer deleted;
-    /**
      * 创建时间
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")

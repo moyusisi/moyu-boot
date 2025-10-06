@@ -6,79 +6,81 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
 import java.util.Set;
 
 /**
+ * 角色信息服务类Service
+ *
  * @author shisong
- * @description 针对表【sys_role(角色信息表)】的数据库操作Service
- * @createDate 2024-12-15 20:49:43
+ * @since 2024-12-15 20:49:43
  */
 public interface SysRoleService extends IService<SysRole> {
 
     /**
-     * 获取记录列表
+     * 获取记录列表(不分页，通过条件自行控制数量)
      */
-    List<SysRole> list(SysRoleParam roleParam);
+    List<SysRoleVO> list(SysRoleParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<SysRole> pageList(SysRoleParam roleParam);
+    PageData<SysRoleVO> pageList(SysRoleParam param);
 
     /**
-     * 获取记录详情
+     * 获取记录详情(通过主键或唯一键)
      */
-    SysRole detail(SysRoleParam roleParam);
+    SysRoleVO detail(SysRoleParam param);
 
     /**
      * 添加记录
      */
-    void add(SysRoleParam roleParam);
+    void add(SysRoleParam param);
 
     /**
      * 通过ids删除记录
      */
-    void deleteByIds(SysRoleParam roleParam);
+    void deleteByIds(SysRoleParam param);
 
     /**
      * 修改记录
      */
-    void update(SysRoleParam roleParam);
+    void update(SysRoleParam param);
 
     /**
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
      *
-     * @param roleParam 角色code必须传
+     * @param param 角色code必须传
      */
-    List<Tree<String>> treeForGrant(SysRoleParam roleParam);
+    List<Tree<String>> treeForGrant(SysRoleParam param);
 
     /**
      * 角色授权，ROLE_HAS_MENU
      *
-     * @param roleParam 角色code，授权module必须传
+     * @param param 角色code，授权module必须传
      */
-    void grantMenu(SysRoleParam roleParam);
+    void grantMenu(SysRoleParam param);
 
     /**
      * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
      */
-    List<SysUser> roleUserList(SysRoleParam roleParam);
+    List<SysUser> roleUserList(SysRoleParam param);
 
     /**
      * 角色新增用户，ROLE_HAS_USER
      *
-     * @param roleParam 角色code，用户集合 codeSet
+     * @param param 角色code，用户集合 codeSet
      */
-    void roleAddUser(SysRoleParam roleParam);
+    void roleAddUser(SysRoleParam param);
 
     /**
      * 角色删除用户，ROLE_HAS_USER
      *
-     * @param roleParam 角色code，用户集合 codeSet
+     * @param param 角色code，用户集合 codeSet
      */
-    void roleDeleteUser(SysRoleParam roleParam);
+    void roleDeleteUser(SysRoleParam param);
 
     /**
      * 获取指定用户所有的角色，包括 userRole + userGroupRole

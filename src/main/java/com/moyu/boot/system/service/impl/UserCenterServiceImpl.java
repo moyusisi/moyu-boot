@@ -32,6 +32,7 @@ import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.GroupInfo;
 import com.moyu.boot.system.model.vo.Meta;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 import com.moyu.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -174,7 +175,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<SysRole> userRoleList(String username, String searchKey) {
+    public List<SysRoleVO> userRoleList(String username, String searchKey) {
         // 查询用户所有的角色列表
         Set<String> codeSet = sysRoleService.userAllRoles(username);
         return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).searchKey(searchKey).build());

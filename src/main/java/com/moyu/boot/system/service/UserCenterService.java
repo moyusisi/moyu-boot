@@ -2,6 +2,7 @@ package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.moyu.boot.system.model.entity.SysRole;
+import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public interface UserCenterService {
     /**
      * 获取用户所有的角色列表
      */
-    List<SysRole> userRoleList(String username, String searchKey);
+    List<SysRoleVO> userRoleList(String username, String searchKey);
 
     /**
      * 当前用户切换岗位重新生成token
