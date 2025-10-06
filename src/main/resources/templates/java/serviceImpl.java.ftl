@@ -3,8 +3,7 @@ package ${packageName}.${moduleName}.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -72,7 +71,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         </#if>
     </#list>
 </#if>
-        // TODO 是否需要排序
+        // TODO 指定排序
         queryWrapper.orderByDesc(${entityName}::getUpdateTime);
         // 查询
         List<${entityName}> ${entityName?uncap_first}List = this.list(queryWrapper);
@@ -117,7 +116,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         </#if>
     </#list>
 </#if>
-        // TODO 是否需要排序
+        // TODO 指定排序
         queryWrapper.orderByDesc(${entityName}::getUpdateTime);
         // 分页查询
         Page<${entityName}> page = new Page<>(param.getPageNum(), param.getPageSize());

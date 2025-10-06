@@ -3,7 +3,6 @@ package com.moyu.boot.system.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysGroup;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.vo.SysRoleVO;
@@ -12,53 +11,54 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 角色组服务类Service
+ *
  * @author shisong
- * @description 针对表【sys_pos(岗位信息表)】的数据库操作Service
- * @createDate 2024-12-20 14:29:15
+ * @since 2024-12-20 14:29:15
  */
 public interface SysGroupService extends IService<SysGroup> {
 
     /**
      * 获取记录列表
      */
-    List<SysGroup> list(SysGroupParam groupParam);
+    List<SysGroup> list(SysGroupParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<SysGroup> pageList(SysGroupParam groupParam);
+    PageData<SysGroup> pageList(SysGroupParam param);
 
     /**
      * 获取记录详情
      */
-    SysGroup detail(SysGroupParam groupParam);
+    SysGroup detail(SysGroupParam param);
 
     /**
      * 添加记录
      */
-    void add(SysGroupParam groupParam);
+    void add(SysGroupParam param);
 
     /**
      * 通过ids删除记录
      */
-    void deleteByIds(SysGroupParam groupParam);
+    void deleteByIds(SysGroupParam param);
 
     /**
      * 修改记录
      */
-    void update(SysGroupParam groupParam);
+    void update(SysGroupParam param);
 
     ////// group 通过 relation 管理的数据
 
     /**
      * group内角色列表
      */
-    List<SysRoleVO> groupRoleList(SysGroupParam groupParam);
+    List<SysRoleVO> groupRoleList(SysGroupParam param);
 
     /**
      * group内用户列表
      */
-    List<SysUser> groupUserList(SysGroupParam groupParam);
+    List<SysUser> groupUserList(SysGroupParam param);
 
     /**
      * 用户所属的group列表
@@ -68,22 +68,22 @@ public interface SysGroupService extends IService<SysGroup> {
     /**
      * group新增角色
      */
-    void groupAddRole(SysGroupParam groupParam);
+    void groupAddRole(SysGroupParam param);
 
     /**
      * group删除角色
      */
-    void groupDeleteRole(SysGroupParam groupParam);
+    void groupDeleteRole(SysGroupParam param);
 
     /**
      * group新增用户
      */
-    void groupAddUser(SysGroupParam groupParam);
+    void groupAddUser(SysGroupParam param);
 
     /**
      * group删除用户
      */
-    void groupDeleteUser(SysGroupParam groupParam);
+    void groupDeleteUser(SysGroupParam param);
 
     /**
      * 获取指定group的数据范围集合
