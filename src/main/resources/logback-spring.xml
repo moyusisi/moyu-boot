@@ -74,13 +74,13 @@
 
     <!-- 兜底日志 -->
     <root level="INFO">
-        <!-- 本地环境输出控制台 -->
-        <springProfile name="local">
-            <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="consoleAppender"/>
+        <!-- 生产环境. -->
+        <springProfile name="prod">
+            <appender-ref ref="infoAppender"/>
+            <appender-ref ref="errorAppender"/>
+            <appender-ref ref="rootAppender"/>
         </springProfile>
-        <appender-ref ref="infoAppender"/>
-        <appender-ref ref="errorAppender"/>
-        <appender-ref ref="rootAppender"/>
     </root>
 
 </configuration>
