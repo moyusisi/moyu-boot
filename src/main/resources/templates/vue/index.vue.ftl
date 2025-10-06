@@ -180,8 +180,6 @@
   }
   // 加载数据
   const loadData = (parameter) => {
-    // 重新加载数据时，清空之前以选中的行
-    selectedRowKeys.value = []
     // 分页参数
     let param = Object.assign(parameter, queryFormData.value)
     return ${entityName?uncap_first}Api.${entityName?uncap_first}Page(param).then((res) => {
