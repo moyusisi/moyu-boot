@@ -16,19 +16,39 @@ import java.util.List;
 public interface SysOrgService extends IService<SysOrg> {
 
     /**
-     * 查询指定orgCode的下属组织机构code列表(包含本身)
+     * 查询组织列表(不分页，通过条件自行控制数量)
      */
-    List<String> childrenCodeList(String orgCode);
-
-    /**
-     * 查询组织列表
-     */
-    List<SysOrg> list(SysOrgParam sysOrgParam);
+    List<SysOrg> list(SysOrgParam param);
 
     /**
      * 分页获取组织列表
      */
-    PageData<SysOrg> pageList(SysOrgParam sysOrgParam);
+    PageData<SysOrg> pageList(SysOrgParam param);
+
+    /**
+     * 获取组织机构详情(通过主键或唯一键)
+     */
+    SysOrg detail(SysOrgParam param);
+
+    /**
+     * 添加组织机构
+     */
+    void add(SysOrgParam param);
+
+    /**
+     * 修改组织机构
+     */
+    void update(SysOrgParam param);
+
+    /**
+     * 通过ids删除，且不会集联删除
+     */
+    void deleteByIds(SysOrgParam param);
+
+    /**
+     * 查询指定orgCode的下属组织机构code列表(包含本身)
+     */
+    List<String> childrenCodeList(String orgCode);
 
     /**
      * 组织机构树（会有多颗树）
@@ -45,28 +65,8 @@ public interface SysOrgService extends IService<SysOrg> {
     Tree<String> singleTree();
 
     /**
-     * 获取组织机构详情
-     */
-    SysOrg detail(SysOrgParam orgParam);
-
-    /**
-     * 添加组织机构
-     */
-    void add(SysOrgParam orgParam);
-
-    /**
-     * 通过ids删除，且不会集联删除
-     */
-    void deleteByIds(SysOrgParam orgParam);
-
-    /**
      * 通过codes删除，会集联删除树的所有节点
      */
-    void deleteTree(SysOrgParam orgParam);
-
-    /**
-     * 修改组织机构
-     */
-    void update(SysOrgParam orgParam);
+    void deleteTree(SysOrgParam param);
 
 }

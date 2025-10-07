@@ -53,15 +53,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     private Tree<String> rootTree;
 
     @Override
-    public List<String> childrenCodeList(String orgCode) {
-        List<String> codeList = new ArrayList<>();
-        List<SysOrg> orgList = this.baseMapper.selectChildren(orgCode);
-        orgList.forEach(e -> codeList.add(e.getCode()));
-//        this.baseMapper.selectAll(Wrappers.lambdaQuery(SysOrg.class).eq(SysOrg::getCode, orgCode));
-        return codeList;
-    }
-
-    @Override
     public List<SysOrg> list(SysOrgParam orgParam) {
         QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
         // 查询条件
@@ -123,22 +114,6 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         return new PageData<>(orgPage.getTotal(), orgPage.getRecords());
     }
 
-    /**
-     * 组织机构(树太大需要加缓存)
-     */
-    @Override
-    public List<Tree<String>> tree() {
-        return singleTree().getChildren();
-    }
-
-    @Override
-    public Tree<String> singleTree() {
-//        if (ObjectUtil.isEmpty(rootTree)) {
-//            rootTree = loadRootTree();
-//        }
-        return loadRootTree();
-    }
-
     @Override
     public SysOrg detail(SysOrgParam orgParam) {
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
@@ -187,6 +162,31 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("deleted", 1);
         this.update(updateWrapper);
+    }
+
+    @Override
+    public List<String> childrenCodeList(String orgCode) {
+        List<String> codeList = new ArrayList<>();
+        List<SysOrg> orgList = this.baseMapper.selectChildren(orgCode);
+        orgList.forEach(e -> codeList.add(e.getCode()));
+//        this.baseMapper.selectAll(Wrappers.lambdaQuery(SysOrg.class).eq(SysOrg::getCode, orgCode));
+        return codeList;
+    }
+
+    /**
+     * 组织机构(树太大需要加缓存)
+     */
+    @Override
+    public List<Tree<String>> tree() {
+        return singleTree().getChildren();
+    }
+
+    @Override
+    public Tree<String> singleTree() {
+//        if (ObjectUtil.isEmpty(rootTree)) {
+//            rootTree = loadRootTree();
+//        }
+        return loadRootTree();
     }
 
     @Override
