@@ -49,48 +49,47 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public List<SysUser> list(SysUserParam userParam) {
-        // 查询指定的组织所有的children
+    public List<SysUser> list(SysUserParam param) {
+        // 查询指定的组织所有的children，包含本身
         List<String> childrenCode = new ArrayList<>();
-        if (StrUtil.isNotBlank(userParam.getOrgCode())) {
-            childrenCode = sysOrgService.childrenCodeList(userParam.getOrgCode());
+        if (StrUtil.isNotBlank(param.getOrgCode())) {
+            childrenCode = sysOrgService.childrenCodeList(param.getOrgCode());
         }
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection();
         // 查询条件
-        queryWrapper.lambda()
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 指定orgCode
-                .in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode)
-                // 指定account集合
-                .in(ObjectUtil.isNotEmpty(userParam.getCodeSet()), SysUser::getAccount, userParam.getCodeSet())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
-                .eq(SysUser::getDeleted, 0);
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
+        // 指定orgCode时查询所属组织
+        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysUser::getDeleted, 0);
         // 查询
-        List<SysUser> groupList = this.list(queryWrapper);
-        return groupList;
+        List<SysUser> userList = this.list(queryWrapper);
+        return userList;
     }
 
     @Override
-    public PageData<SysUser> pageList(SysUserParam userParam) {
-        String deptCode = userParam.getOrgCode();
-        // 查询指定的组织所有的children
+    public PageData<SysUser> pageList(SysUserParam param) {
+        String deptCode = param.getOrgCode();
+        // 查询指定的组织所有的children，包含本身
         List<String> childrenCode = new ArrayList<>();
         if (StrUtil.isNotBlank(deptCode)) {
             childrenCode = sysOrgService.childrenCodeList(deptCode);
         }
-
         // 查询条件
-        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class)
-                // 关键词搜索(name nickname staff_code)
-                .like(StrUtil.isNotBlank(userParam.getSearchKey()), SysUser::getName, userParam.getSearchKey())
-                // 指定orgCode
-                .in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode)
-                .apply(ObjectUtil.isNotEmpty(deptCode), "find_in_set('" + deptCode + "', org_path)")
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(userParam.getStatus()), SysUser::getStatus, userParam.getStatus())
-                .eq(SysUser::getDeleted, 0);
+        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
+        // 指定orgCode查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
+        // 指定orgCode查询(与上面的in等价)
+        queryWrapper.apply(ObjectUtil.isNotEmpty(deptCode), "find_in_set('" + deptCode + "', org_path)");
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysUser::getDeleted, 0);
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
             // 指定的列名
@@ -113,16 +112,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             log.debug("数据权限为:{}, 已追加过滤条件", DataScopeEnum.getByCode(dataScope));
         }
         // 分页查询
-        Page<SysUser> page = new Page<>(userParam.getPageNum(), userParam.getPageSize());
+        Page<SysUser> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysUser> groupPage = this.page(page, queryWrapper);
         return new PageData<>(groupPage.getTotal(), groupPage.getRecords());
     }
 
     @Override
-    public SysUser detail(SysUserParam userParam) {
+    public SysUser detail(SysUserParam param) {
         LambdaQueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection().lambda()
-                .eq(ObjectUtil.isNotEmpty(userParam.getId()), SysUser::getId, userParam.getId())
-                .eq(ObjectUtil.isNotEmpty(userParam.getAccount()), SysUser::getAccount, userParam.getAccount());
+                .eq(ObjectUtil.isNotEmpty(param.getId()), SysUser::getId, param.getId())
+                .eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // id、code均为唯一标识
         SysUser SysUser = this.getOne(queryWrapper);
         if (SysUser == null) {
@@ -132,18 +131,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void add(SysUserParam userParam) {
+    public void add(SysUserParam param) {
         // 若指定了唯一编码code，则必须全局唯一
-        if (!Strings.isNullOrEmpty(userParam.getAccount())) {
+        if (!Strings.isNullOrEmpty(param.getAccount())) {
             // 查询指定code
             SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
-                    .eq(SysUser::getAccount, userParam.getAccount()));
+                    .eq(SysUser::getAccount, param.getAccount()));
             if (user != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "此账号已存在，请更换账号");
             }
         }
         // 属性复制
-        SysUser user = BeanUtil.copyProperties(userParam, SysUser.class);
+        SysUser user = BeanUtil.copyProperties(param, SysUser.class);
         user.setId(null);
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {
@@ -164,16 +163,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void update(SysUserParam userParam) {
-        SysUser oldUser = this.detail(userParam);
+    public void update(SysUserParam param) {
+        SysUser oldUser = this.detail(param);
         // 属性复制
-        SysUser updateUser = BeanUtil.copyProperties(userParam, SysUser.class);
+        SysUser updateUser = BeanUtil.copyProperties(param, SysUser.class);
         updateUser.setId(oldUser.getId());
         // 若新指定了直属组织，则设置所属组织
         if (ObjectUtil.notEqual(oldUser.getOrgCode(), updateUser.getOrgCode()) && ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {
             // 获取组织结构树
             Tree<String> rootTree = sysOrgService.singleTree();
-            Tree<String> orgNode = rootTree.getNode(userParam.getOrgCode());
+            Tree<String> orgNode = rootTree.getNode(param.getOrgCode());
             // 设置直属机构名称
             updateUser.setOrgName(orgNode.getName().toString());
             // 组织机构层级路径,逗号分隔,父节点在后
@@ -184,9 +183,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void deleteByIds(SysUserParam userParam) {
+    public void deleteByIds(SysUserParam param) {
         // 待删除的id集合
-        Set<Long> idSet = userParam.getIds();
+        Set<Long> idSet = param.getIds();
         // 逻辑删除
         UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
         updateWrapper.in("id", idSet).set("deleted", 1);
@@ -194,18 +193,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void updatePassword(SysUserParam userParam) {
+    public void updatePassword(SysUserParam param) {
         // 先查原有数据
-        SysUser oldUser = this.detail(userParam);
+        SysUser oldUser = this.detail(param);
         this.update(new LambdaUpdateWrapper<SysUser>()
                 .eq(SysUser::getId, oldUser.getId())
-                .set(SysUser::getPassword, passwordEncoder.encode(userParam.getPassword())));
+                .set(SysUser::getPassword, passwordEncoder.encode(param.getPassword())));
     }
 
     @Override
-    public void resetPassword(SysUserParam userParam) {
+    public void resetPassword(SysUserParam param) {
         // 先查原有数据
-        SysUser oldUser = this.detail(userParam);
+        SysUser oldUser = this.detail(param);
         this.update(new LambdaUpdateWrapper<SysUser>()
                 .eq(SysUser::getId, oldUser.getId())
                 .set(SysUser::getPassword, passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD)));

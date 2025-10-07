@@ -238,7 +238,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         Set<String> userSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
-                .searchKey(param.getSearchKey())
+                .name(param.getSearchKey())
                 .orgCode(param.getOrgCode())
                 .codeSet(userSet).build());
         return userList;

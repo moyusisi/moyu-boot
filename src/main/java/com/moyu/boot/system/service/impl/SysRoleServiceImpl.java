@@ -355,7 +355,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
-                .searchKey(roleParam.getSearchKey())
+                .name(roleParam.getSearchKey())
                 .orgCode(roleParam.getOrgCode())
                 .codeSet(userSet).build());
         return userList;
