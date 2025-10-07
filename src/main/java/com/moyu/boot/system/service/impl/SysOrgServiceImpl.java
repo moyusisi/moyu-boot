@@ -8,7 +8,6 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -53,18 +52,19 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     private Tree<String> rootTree;
 
     @Override
-    public List<SysOrg> list(SysOrgParam orgParam) {
-        QueryWrapper<SysOrg> queryWrapper = new QueryWrapper<SysOrg>().checkSqlInjection();
+    public List<SysOrg> list(SysOrgParam param) {
         // 查询条件
-        queryWrapper.lambda()
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
-                // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(orgParam.getParentCode()), SysOrg::getParentCode, orgParam.getParentCode())
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                .eq(SysOrg::getDeleted, 0)
-                .orderByAsc(SysOrg::getSortNum);
+        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class);
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysOrg::getName, param.getName());
+        // 指定parentCode查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getParentCode()), SysOrg::getParentCode, param.getParentCode());
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysOrg::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysOrg::getDeleted, 0);
+        // 指定排序
+        queryWrapper.orderByAsc(SysOrg::getSortNum);
         // 查询
         List<SysOrg> orgList = this.list(queryWrapper);
         return orgList;
@@ -74,20 +74,23 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      * 获取组织分页
      */
     @Override
-    public PageData<SysOrg> pageList(SysOrgParam orgParam) {
-        String parentCode = orgParam.getParentCode();
+    public PageData<SysOrg> pageList(SysOrgParam param) {
+        String parentCode = param.getParentCode();
         // 查询条件
-        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
-                // 关键词搜索
-                .like(StrUtil.isNotBlank(orgParam.getSearchKey()), SysOrg::getName, orgParam.getSearchKey())
-                // 指定父节点 = 父节点+直接子节点
-                //.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode))
-                // 指定父节点
-                .eq(ObjectUtil.isNotEmpty(parentCode), SysOrg::getParentCode, parentCode)
-                // 指定状态
-                .eq(ObjectUtil.isNotEmpty(orgParam.getStatus()), SysOrg::getStatus, orgParam.getStatus())
-                .eq(SysOrg::getDeleted, 0)
-                .orderByAsc(SysOrg::getSortNum);
+        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class);
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysOrg::getName, param.getName());
+        // 指定父节点查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(parentCode), SysOrg::getParentCode, parentCode);
+        // 指定父节点查询(包括本身) = parentCode or code
+//        queryWrapper.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode));
+        // 指定status查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysOrg::getStatus, param.getStatus());
+        // 仅查询未删除的
+        queryWrapper.eq(SysOrg::getDeleted, 0);
+        // 指定排序
+        queryWrapper.orderByAsc(SysOrg::getSortNum);
+
         // 非ROOT则限制数据权限
         if (!SecurityUtils.isRoot()) {
             // 指定的列名
@@ -109,17 +112,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             }
         }
         // 分页查询
-        Page<SysOrg> page = new Page<>(orgParam.getPageNum(), orgParam.getPageSize());
+        Page<SysOrg> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);
         return new PageData<>(orgPage.getTotal(), orgPage.getRecords());
     }
 
     @Override
-    public SysOrg detail(SysOrgParam orgParam) {
-        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class)
-                .eq(ObjectUtil.isNotEmpty(orgParam.getId()), SysOrg::getId, orgParam.getId())
-                .eq(ObjectUtil.isNotEmpty(orgParam.getCode()), SysOrg::getCode, orgParam.getCode());
-        // id、code均为唯一标识
+    public SysOrg detail(SysOrgParam param) {
+        // 查询条件 id、code均为唯一标识
+        LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class);
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysOrg::getId, param.getId());
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysOrg::getCode, param.getCode());
         SysOrg sysOrg = this.getOne(queryWrapper);
         if (sysOrg == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
@@ -128,19 +131,19 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     @Override
-    public void add(SysOrgParam orgParam) {
+    public void add(SysOrgParam param) {
         // 若指定了唯一编码code，则必须全局唯一
-        if (!Strings.isNullOrEmpty(orgParam.getCode())) {
+        if (!Strings.isNullOrEmpty(param.getCode())) {
             // 查询指定code
-            SysOrg org = this.getOne(new LambdaQueryWrapper<SysOrg>()
-                    .eq(SysOrg::getCode, orgParam.getCode())
+            SysOrg org = this.getOne(Wrappers.lambdaQuery(SysOrg.class)
+                    .eq(SysOrg::getCode, param.getCode())
                     .eq(SysOrg::getDeleted, 0));
             if (org != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 组装SysOrg
-        SysOrg org = buildSysOrg(orgParam);
+        SysOrg org = buildSysOrg(param);
         org.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(org.getCode())) {
@@ -149,19 +152,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         }
         // 组织机构层级路径,逗号分隔,父节点在后(不包含本节点)
         Tree<String> rootTree = singleTree();
-        List<String> list = TreeUtil.getParentsId(rootTree.getNode(orgParam.getParentCode()), true);
+        List<String> list = TreeUtil.getParentsId(rootTree.getNode(param.getParentCode()), true);
         org.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         this.save(org);
     }
 
     @Override
-    public void deleteByIds(SysOrgParam orgParam) {
+    public void deleteByIds(SysOrgParam param) {
         // 待删除的id集合
-        Set<Long> idSet = orgParam.getIds();
+        Set<Long> idSet = param.getIds();
         // 逻辑删除
-        UpdateWrapper<SysOrg> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("deleted", 1);
-        this.update(updateWrapper);
+        this.update(Wrappers.lambdaUpdate(SysOrg.class).in(SysOrg::getId, idSet).set(SysOrg::getDeleted, 1));
     }
 
     @Override
