@@ -17,32 +17,32 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 获取记录列表
      */
-    List<SysUser> list(SysUserParam userParam);
+    List<SysUser> list(SysUserParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<SysUser> pageList(SysUserParam userParam);
+    PageData<SysUser> pageList(SysUserParam param);
 
     /**
      * 获取记录详情
      */
-    SysUser detail(SysUserParam userParam);
+    SysUser detail(SysUserParam param);
 
     /**
      * 添加记录
      */
-    void add(SysUserParam userParam);
-
-    /**
-     * 通过ids删除记录
-     */
-    void deleteByIds(SysUserParam userParam);
+    void add(SysUserParam param);
 
     /**
      * 修改记录
      */
-    void update(SysUserParam userParam);
+    void update(SysUserParam param);
+
+    /**
+     * 通过ids删除记录
+     */
+    void deleteByIds(SysUserParam param);
 
     /**
      * 重置用户密码

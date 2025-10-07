@@ -164,16 +164,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
-    public void deleteByIds(SysUserParam userParam) {
-        // 待删除的id集合
-        Set<Long> idSet = userParam.getIds();
-        // 逻辑删除
-        UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("deleted", 1);
-        this.update(updateWrapper);
-    }
-
-    @Override
     public void update(SysUserParam userParam) {
         SysUser oldUser = this.detail(userParam);
         // 属性复制
@@ -191,6 +181,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             updateUser.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
         this.updateById(updateUser);
+    }
+
+    @Override
+    public void deleteByIds(SysUserParam userParam) {
+        // 待删除的id集合
+        Set<Long> idSet = userParam.getIds();
+        // 逻辑删除
+        UpdateWrapper<SysUser> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.in("id", idSet).set("deleted", 1);
+        this.update(updateWrapper);
     }
 
     @Override
