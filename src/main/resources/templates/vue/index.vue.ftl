@@ -35,10 +35,12 @@
   </#list>
 </#if>
         <a-col :span="6">
-          <a-flex gap="small">
-            <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
-            <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
-          </a-flex>
+          <a-form-item>
+            <a-flex gap="small">
+              <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
+              <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
+            </a-flex>
+          </a-form-item>
         </a-col>
       </a-row>
     </a-form>
