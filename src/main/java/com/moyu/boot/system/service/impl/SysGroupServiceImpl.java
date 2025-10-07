@@ -132,11 +132,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     public SysGroupVO detail(SysGroupParam param) {
         // 查询条件 id、code均为唯一标识
         LambdaQueryWrapper<SysGroup> queryWrapper = Wrappers.lambdaQuery(SysGroup.class);
-        // 指定id查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysGroup::getId, param.getId());
-        // 指定code查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysGroup::getCode, param.getCode());
-        // id、code均为唯一标识
         SysGroup sysGroup = this.getOne(queryWrapper);
         if (sysGroup == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
