@@ -1,31 +1,19 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.mybatis.entity.BaseEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 用户角色权限关系表
  *
  * @TableName sys_relation
  */
-@Data
+@Getter
+@Setter
 @TableName(value = "sys_relation")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysRelation extends BaseEntity {
-    /**
-     * 主键id
-     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
-     */
-    @TableId(value = "id", type = IdType.AUTO)
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long id;
-
     /**
      * 对象ID
      */
