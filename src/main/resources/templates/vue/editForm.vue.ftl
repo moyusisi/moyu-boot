@@ -25,7 +25,7 @@
       <#if fieldConfig.formType == "INPUT">
                 <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
-                <a-input-number v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+                <a-input-number v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :max="100" />
       <#elseif fieldConfig.formType == "SELECT">
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "RADIO">
@@ -64,8 +64,8 @@
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
   import { required } from '@/utils/formRules'
-  import { useSettingsStore } from "@/store";
   import { message } from "ant-design-vue"
+  import { useSettingsStore } from "@/store"
 
   // store
   const settingsStore = useSettingsStore()
@@ -85,6 +85,11 @@
   const edit = ref(false)
   const dataLoading = ref(false)
   const submitLoading = ref(false)
+  // 下拉框选项
+  const exampleOptions = [
+    { label: "选项一", value: 1 },
+    { label: "选项二", value: 2 }
+  ]
 
   // 打开抽屉
   const onOpen = (row) => {
@@ -102,7 +107,7 @@
   }
   // 关闭抽屉
   const onClose = () => {
-    formRef.value = {}
+    formData.value = {}
     visible.value = false
   }
   // 加载数据
@@ -113,7 +118,6 @@
     ${entityName?uncap_first}Api.${entityName?uncap_first}Detail(param).then((res) => {
       formData.value = res.data
     }).finally(() => {
-      submitLoading.value = false
       dataLoading.value = false
     })
   }
@@ -122,12 +126,12 @@
   const onSubmit = () => {
     formRef.value.validate().then(() => {
       submitLoading.value = true
-      // formData.value 加工处理 TODO add edit
+      // formData.value 加工处理 add/edit
       let fun = ${entityName?uncap_first}Api.add${entityName}
-      if (formData.value.id) {
-        // 编辑
+      if (edit.value) {
         fun = ${entityName?uncap_first}Api.edit${entityName}
       }
+      // add/edit 发送不同请求
       fun(formData.value).then((res) => {
         message.success(res.message)
         emit('successful')
