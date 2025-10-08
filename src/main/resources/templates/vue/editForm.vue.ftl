@@ -8,11 +8,11 @@
       :destroy-on-close="true"
       @close="onClose"
   >
-    <#--  上方操作区  -->
+    <!--  上方操作区  -->
     <template #extra>
         <a-button type="primary" size="small" @click="onClose"><CloseOutlined /></a-button>
     </template>
-    <#--  数据区  -->
+    <!--  数据区  -->
     <a-spin :spinning="dataLoading">
       <a-card title="基本信息">
         <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
@@ -51,7 +51,7 @@
         </a-form>
       </a-card>
     </a-spin>
-    <#--  底部操作区  -->
+    <!--  底部操作区  -->
     <template #footer>
       <a-flex gap="small" justify="flex-end">
         <a-button type="primary" danger @click="onClose"> 关闭</a-button>
