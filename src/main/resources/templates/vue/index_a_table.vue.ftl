@@ -51,7 +51,7 @@
       <!--  左侧按钮  -->
       <a-col :span="20" style="margin-bottom: 12px">
         <a-space wrap>
-          <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
+          <a-button type="primary" :icon="h(PlusOutlined)" @click="formRef.onOpen()">新增</a-button>
           <a-popconfirm title="确定要批量删除吗？" :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
             <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
               批量删除
@@ -92,7 +92,7 @@
         <template v-if="column.dataIndex === 'action'">
           <a-space>
             <a-tooltip title="编辑">
-              <a @click="editFormRef.onOpen(record)">编辑</a>
+              <a @click="formRef.onOpen(record)">编辑</a>
             </a-tooltip>
             <a-tooltip title="删除">
               <a-popconfirm title="确定要删除吗？" @confirm="delete${entityName}(record)">
@@ -104,7 +104,7 @@
       </template>
     </a-table>
   </a-card>
-  <EditForm ref="editFormRef" @successful="loadData" />
+  <EditForm ref="formRef" @successful="loadData" />
 </template>
 
 <script setup>
@@ -113,7 +113,7 @@
   import { h } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import EditForm from "./editForm.vue"
+  import EditForm from "./form.vue"
 
   // 查询表单相关对象
   const queryFormRef = ref()
@@ -124,7 +124,7 @@
     { label: "选项二", value: 2 }
   ]
   // 其他页面操作
-  const editFormRef = ref()
+  const formRef = ref()
 
   /***** 表格相关对象 start *****/
   const tableRef = ref()

@@ -57,7 +57,7 @@
       <!--  表格上方左侧操作区  -->
       <template #operator>
         <a-space wrap style="margin-bottom: 6px">
-          <a-button type="primary" :icon="h(PlusOutlined)" @click="editFormRef.onOpen()">新增</a-button>
+          <a-button type="primary" :icon="h(PlusOutlined)" @click="formRef.onOpen()">新增</a-button>
           <a-popconfirm :title=" '确定要删除这 ' + selectedRowKeys.length + ' 条数据吗？' " :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
             <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
               批量删除
@@ -78,7 +78,7 @@
         <template v-if="column.dataIndex === 'action'">
           <a-space>
             <a-tooltip title="编辑">
-              <a @click="editFormRef.onOpen(record)">编辑</a>
+              <a @click="formRef.onOpen(record)">编辑</a>
             </a-tooltip>
             <a-tooltip title="删除">
               <a-popconfirm title="确定要删除吗？" @confirm="delete${entityName}(record)">
@@ -90,7 +90,7 @@
       </template>
     </MTable>
   </a-card>
-  <EditForm ref="editFormRef" @successful="tableRef.refresh()" />
+  <EditForm ref="formRef" @successful="tableRef.refresh()" />
 </template>
 
 <script setup>
@@ -99,7 +99,7 @@
   import { h, ref } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import EditForm from "./editForm.vue"
+  import EditForm from "./form.vue"
   import MTable from "@/components/MTable/index.vue"
 
   // 查询表单相关对象
@@ -111,7 +111,7 @@
     { label: "选项二", value: 2 }
   ]
   // 其他页面操作
-  const editFormRef = ref()
+  const formRef = ref()
 
   /***** 表格相关对象 start *****/
   const tableRef = ref()
