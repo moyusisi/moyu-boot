@@ -14,8 +14,8 @@
     </template>
     <!--  数据区  -->
     <a-spin :spinning="dataLoading">
-      <a-card title="基本信息">
-        <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
+      <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
+        <a-card title="基本信息">
           <a-row :gutter="24">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
@@ -48,8 +48,8 @@
   </#list>
 </#if>
           </a-row>
-        </a-form>
-      </a-card>
+        </a-card>
+      </a-form>
     </a-spin>
     <!--  底部操作区  -->
     <template #footer>
@@ -79,10 +79,11 @@
     return settingsStore.menuCollapsed ? `calc(100% - 80px)` : `calc(100% - 210px)`
   })
 
+  // 是否为编辑
+  const edit = ref(false)
   // 表单数据
   const formRef = ref()
   const formData = ref({})
-  const edit = ref(false)
   const dataLoading = ref(false)
   const submitLoading = ref(false)
   // 下拉框选项
@@ -96,18 +97,17 @@
     visible.value = true
     if (row) {
       edit.value = true
-    }
-    if (edit.value) {
       title.value = "编辑${entityDesc}"
       // 表单数据赋值
       loadData(row)
     } else {
+      edit.value = false
       title.value = "新增${entityDesc}"
     }
   }
   // 关闭抽屉
   const onClose = () => {
-    formData.value = {}
+    formRef.value.resetFields()
     visible.value = false
   }
   // 加载数据

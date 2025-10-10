@@ -90,7 +90,7 @@
       </template>
     </MTable>
   </a-card>
-  <EditForm ref="formRef" @successful="tableRef.refresh()" />
+  <Form ref="formRef" @successful="tableRef.refresh()" />
 </template>
 
 <script setup>
@@ -99,7 +99,7 @@
   import { h, ref } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import EditForm from "./form.vue"
+  import Form from "./form.vue"
   import MTable from "@/components/MTable/index.vue"
 
   // 查询表单相关对象
