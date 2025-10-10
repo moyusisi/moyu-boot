@@ -408,7 +408,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         } else if (codeKey.contains("form.vue")) {
             vo.setCodeType("frontend");
             vo.setPath(String.format("src/views/%s/%s", moduleName, StrUtil.lowerFirst(entityName)));
-            vo.setFileName("editForm.vue");
+            vo.setFileName("form.vue");
         }
     }
 
@@ -644,7 +644,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         templateMap.put("mysql.sql", "templates/sql/mysql.sql.ftl");
         templateMap.put("api.js", "templates/js/api.js.ftl");
         templateMap.put("index.vue", "templates/vue/index.vue.ftl");
-        templateMap.put("form.vue", "templates/vue/editForm.vue.ftl");
+        templateMap.put("form.vue", "templates/vue/form.vue.ftl");
         return templateMap;
     }
 
