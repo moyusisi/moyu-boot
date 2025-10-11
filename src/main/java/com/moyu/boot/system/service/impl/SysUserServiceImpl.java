@@ -61,6 +61,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
         // 指定orgCode时查询所属组织
         queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
+        // 指定codeSet查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysUser::getAccount, param.getCodeSet());
         // 指定status查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
         // 仅查询未删除的
