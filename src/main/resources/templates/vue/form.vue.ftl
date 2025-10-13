@@ -94,7 +94,6 @@
 
   // 打开抽屉
   const onOpen = (row) => {
-    visible.value = true
     if (row) {
       edit.value = true
       title.value = "编辑${entityDesc}"
@@ -103,6 +102,8 @@
     } else {
       edit.value = false
       title.value = "新增${entityDesc}"
+      // 数据就绪之后显示
+      visible.value = true
     }
   }
   // 关闭抽屉
@@ -119,6 +120,8 @@
       formData.value = res.data
     }).finally(() => {
       dataLoading.value = false
+      // 数据就绪之后显示
+      visible.value = true
     })
   }
 
