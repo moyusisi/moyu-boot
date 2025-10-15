@@ -71,6 +71,11 @@ public class FieldConfigVO {
     private Boolean required;
 
     /**
+     * 较长时是否省略显示并提示
+     */
+    private Boolean ellipsis;
+
+    /**
      * 是否在列表显示
      */
     private Boolean showInList;

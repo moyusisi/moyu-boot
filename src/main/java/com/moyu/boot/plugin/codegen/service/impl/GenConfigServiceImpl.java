@@ -518,6 +518,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         fieldConfigVO.setFieldSort(genField.getFieldSort());
         fieldConfigVO.setMaxLength(genField.getMaxLength());
         fieldConfigVO.setRequired(genField.getRequired() == 1);
+        fieldConfigVO.setEllipsis(genField.getEllipsis() == 1);
         fieldConfigVO.setShowInList(genField.getShowInList() == 1);
         fieldConfigVO.setShowInForm(genField.getShowInForm() == 1);
         fieldConfigVO.setShowInQuery(genField.getShowInQuery() == 1);
@@ -547,6 +548,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genField.setFieldSort(fieldConfigVO.getFieldSort());
         genField.setMaxLength(fieldConfigVO.getMaxLength());
         genField.setRequired(Boolean.TRUE.equals(fieldConfigVO.getRequired()) ? 1 : 0);
+        genField.setEllipsis(Boolean.TRUE.equals(fieldConfigVO.getEllipsis()) ? 1 : 0);
         genField.setShowInList(Boolean.TRUE.equals(fieldConfigVO.getShowInList()) ? 1 : 0);
         genField.setShowInForm(Boolean.TRUE.equals(fieldConfigVO.getShowInForm()) ? 1 : 0);
         genField.setShowInQuery(Boolean.TRUE.equals(fieldConfigVO.getShowInQuery()) ? 1 : 0);

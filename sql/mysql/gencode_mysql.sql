@@ -35,6 +35,7 @@ CREATE TABLE `gen_field_config`
     `field_sort`    INT COMMENT '字段排序',
     `max_length`    INT COMMENT '最大长度',
     `required`      TINYINT(5) DEFAULT '0' COMMENT '是否必填',
+    `ellipsis`      TINYINT(5) DEFAULT '0' COMMENT '是否省略显示并提示',
     `show_in_list`  TINYINT(5) DEFAULT '0' COMMENT '是否在列表显示',
     `show_in_form`  TINYINT(5) DEFAULT '0' COMMENT '是否在表单显示',
     `show_in_query` TINYINT(5) DEFAULT '0' COMMENT '是否在查询条件显示',
