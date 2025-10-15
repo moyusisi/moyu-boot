@@ -79,6 +79,11 @@ public class GenField {
     private Integer showInList;
 
     /**
+     * 是否较长时省略显示并提示
+     */
+    private Integer ellipsis;
+
+    /**
      * 是否在表单显示
      */
     private Integer showInForm;

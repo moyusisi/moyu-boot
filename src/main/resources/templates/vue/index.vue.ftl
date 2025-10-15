@@ -66,15 +66,21 @@
         </a-space>
       </template>
       <template #bodyCell="{ column, record, index, text }">
-        <!-- 长文本省略显示 -->
-        <template v-if="text && text.length > 24">
-          <a-tooltip :title="text">
-            <span class="large-text">{{ text }}</span>
-          </a-tooltip>
-        </template>
         <template v-if="column.dataIndex === 'index'">
           <span>{{ index + 1 }}</span>
         </template>
+<#if fieldList??>
+  <#list fieldList as fieldConfig>
+    <#if fieldConfig.showInList == 1 && fieldConfig.ellipsis == 1>
+        <template v-if="column.dataIndex === '${fieldConfig.fieldName}'">
+          <!-- 长文本省略提示 -->
+          <a-tooltip :title="text" placement="topLeft">
+            <span>{{ text }}</span>
+          </a-tooltip>
+        </template>
+    </#if>
+  </#list>
+</#if>
         <template v-if="column.dataIndex === 'action'">
           <a-space>
             <a-tooltip title="编辑">
@@ -142,9 +148,12 @@
       dataIndex: "${fieldConfig.fieldName}",
       align: "center",
       resizable: true,
+        <#if fieldConfig.ellipsis == 1>
+      ellipsis: true,
+        </#if>
       width: 150,
     },
-    <#else>
+      <#else>
     {
       title: "${fieldConfig.fieldRemark[0..*8]}",
       dataIndex: "${fieldConfig.fieldName}",
@@ -237,14 +246,5 @@
     background-color: #79D84B;
     border-color: #79D84B;
     color: #fff;
-  }
-  /** 长文本截断,超过200px省略(约26个字母，15个汉字的长度) **/
-  .large-text {
-    display: inline-block;
-    width: 200px;
-    overflow-x: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    cursor: pointer;
   }
 </style>
