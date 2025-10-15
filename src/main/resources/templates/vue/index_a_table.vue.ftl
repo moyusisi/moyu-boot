@@ -77,7 +77,7 @@
              :pagination="paginationRef"
              @change="onChange"
              @resizeColumn="onResizeColumn"
-             :scroll="{ x: 'max-content' }"
+             :scroll="{ x: tableWidth }"
              bordered>
       <template #bodyCell="{ column, record, index, text }">
         <!-- 长文本省略显示 -->
@@ -113,7 +113,16 @@
   import { h } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
+  import { useSettingsStore } from "@/store"
   import Form from "./form.vue"
+
+  // store
+  const settingsStore = useSettingsStore()
+
+  // 计算属性 表格宽度 超过宽度则会出现x轴上的scroll
+  const tableWidth = computed(() => {
+    return settingsStore.menuCollapsed ? `calc(100% - 80px -24px)` : `calc(100% - 210px -24px)`
+  })
 
   // 查询表单相关对象
   const queryFormRef = ref()
