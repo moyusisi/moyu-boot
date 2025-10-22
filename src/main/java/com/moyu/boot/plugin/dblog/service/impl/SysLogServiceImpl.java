@@ -62,7 +62,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
             queryWrapper.between(SysLog::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
         }
         // TODO 指定排序
-        queryWrapper.orderByDesc(SysLog::getUpdateTime);
+        queryWrapper.orderByDesc(SysLog::getCreateTime);
         // 查询
         List<SysLog> sysLogList = this.list(queryWrapper);
         // 转换为voList
@@ -97,7 +97,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
             queryWrapper.between(SysLog::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
         }
         // TODO 指定排序
-        queryWrapper.orderByDesc(SysLog::getUpdateTime);
+        queryWrapper.orderByDesc(SysLog::getCreateTime);
         // 分页查询
         Page<SysLog> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysLog> sysLogPage = this.page(page, queryWrapper);

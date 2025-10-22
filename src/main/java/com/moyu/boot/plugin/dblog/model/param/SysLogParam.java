@@ -97,4 +97,8 @@ public class SysLogParam extends BasePageParam {
     */
     @JsonFormat(pattern="yyyy-MM-dd")
     private List<Date> createTimeRange;
+    /**
+     * 操作人ID
+     */
+    private String createBy;
 }

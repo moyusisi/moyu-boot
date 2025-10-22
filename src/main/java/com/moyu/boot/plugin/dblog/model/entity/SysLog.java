@@ -17,7 +17,13 @@ import java.util.Date;
 @Getter
 @Setter
 @TableName("sys_log")
-public class SysLog extends BaseEntity {
+public class SysLog {
+
+    /**
+     * 主键id
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     /**
     * 请求路径地址
@@ -59,5 +65,23 @@ public class SysLog extends BaseEntity {
     * 执行耗时(ms)
     */
     private Long executionTime;
+
+    /**
+     * 删除标志（0未删除  1已删除）
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Integer deleted;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    /**
+     * 创建人
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private String createBy;
 
 }
