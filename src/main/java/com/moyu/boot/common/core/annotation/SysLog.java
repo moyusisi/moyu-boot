@@ -25,12 +25,12 @@ public @interface SysLog {
     String module() default "";
 
     /**
-     * 业务,用于记录哪个业务
+     * 业务,用于记录哪个业务, 无值则切面中会赋值短类名
      */
     String business() default "";
 
     /**
-     * 操作,用于记录对应业务的什么操作, 如controller的某方法
+     * 操作,用于记录对应业务的什么操作, 无值则切面中会赋值方法名
      */
     String operate() default "";
 
