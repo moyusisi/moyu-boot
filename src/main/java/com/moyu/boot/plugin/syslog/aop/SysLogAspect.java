@@ -94,7 +94,7 @@ public class SysLogAspect {
         String operate = logAnnotation.operate();
         if (StrUtil.isEmpty(business)) {
             // business为空时，取值类名
-            business = joinPoint.getSignature().getDeclaringTypeName();
+            business = joinPoint.getSignature().getDeclaringType().getSimpleName();
         }
         if (StrUtil.isEmpty(operate)) {
             // business为空时，取值方法名
