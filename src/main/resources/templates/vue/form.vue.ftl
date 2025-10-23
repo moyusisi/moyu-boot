@@ -25,7 +25,7 @@
       <#if fieldConfig.formType == "INPUT">
                 <a-input v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
-                <a-input-number v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :max="100" />
+                <a-input-number v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" />
       <#elseif fieldConfig.formType == "SELECT">
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
       <#elseif fieldConfig.formType == "RADIO">

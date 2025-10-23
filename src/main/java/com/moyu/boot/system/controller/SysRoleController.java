@@ -40,6 +40,7 @@ public class SysRoleController {
      * 获取角色列表
      */
     @PostMapping("/list")
+    @SysLog(module = "system", value = "查询全部角色列表")
     public Result<List<SysRoleVO>> list(@RequestBody SysRoleParam roleParam) {
         List<SysRoleVO> list = sysRoleService.list(roleParam);
         return Result.success(list);
@@ -62,6 +63,7 @@ public class SysRoleController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:detail')")
     @PostMapping("/detail")
+    @SysLog(module = "system", value = "查询角色详情")
     public Result<SysRoleVO> detail(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         return Result.success(sysRoleService.detail(roleParam));
@@ -72,6 +74,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:add')")
     @PostMapping("/add")
+    @SysLog(module = "system", value = "新增角色")
     public Result<String> add(@Validated @RequestBody SysRoleParam roleParam) {
         sysRoleService.add(roleParam);
         return Result.success();
@@ -82,6 +85,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:delete')")
     @PostMapping("/delete")
+    @SysLog(module = "system", value = "删除角色")
     public Result<String> delete(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getIds(), "删除列表ids不能为空");
         sysRoleService.deleteByIds(roleParam);
@@ -93,6 +97,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:edit')")
     @PostMapping("/edit")
+    @SysLog(module = "system", value = "修改角色")
     public Result<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         sysRoleService.update(roleParam);
@@ -103,6 +108,7 @@ public class SysRoleController {
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
      */
     @PostMapping("/menuTreeForGrant")
+    @SysLog(module = "system", value = "获取菜单树")
     public Result<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         return Result.success(sysRoleService.treeForGrant(roleParam));
@@ -113,6 +119,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
     @PostMapping("/grantMenu")
+    @SysLog(module = "system", value = "给角色授权菜单资源")
     public Result<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getModule(), "模块module不能为空");
@@ -126,6 +133,7 @@ public class SysRoleController {
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
     @PostMapping("/userList")
+    @SysLog(module = "system", value = "查询角色包含的用户列表")
     public Result<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
         List<SysUser> list = sysRoleService.roleUserList(roleParam);
@@ -137,6 +145,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:addUser')")
     @PostMapping("/roleAddUser")
+    @SysLog(module = "system", value = "角色中新增用户")
     public Result<?> roleAddUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
@@ -149,6 +158,7 @@ public class SysRoleController {
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:deleteUser')")
     @PostMapping("/roleDeleteUser")
+    @SysLog(module = "system", value = "角色中删除用户")
     public Result<?> roleDeleteUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getCodeSet(), "指定集合codeSet不能为空");
