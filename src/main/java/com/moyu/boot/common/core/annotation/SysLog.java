@@ -4,7 +4,7 @@ package com.moyu.boot.common.core.annotation;
 import java.lang.annotation.*;
 
 /**
- * 持久化日志，记录在sys_log表中
+ * 持久化日志的注解，记录在sys_log表中
  * 仅支持在方法上加注解，用于记录Controller的操作
  *
  * @author shisong

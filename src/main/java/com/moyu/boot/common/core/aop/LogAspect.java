@@ -12,10 +12,13 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * 打印参数和返回值的AOP, 拦截 Log 注解
@@ -63,11 +66,12 @@ public class LogAspect {
         // 切点处的方法签名, 有参数形如 Hello.hello(..); 无参数形如: Hello.hello()
         String signature = joinPoint.getSignature().toShortString();
         // 请求参数
+        List<Object> params = filterArgs(joinPoint.getArgs());
         String request = "";
         if (log.jsonLog()) {
-            request = objectMapper.writeValueAsString(joinPoint.getArgs());
+            request = objectMapper.writeValueAsString(params);
         } else {
-            request = Arrays.toString(joinPoint.getArgs());
+            request = params.toString();
         }
         // 打印请求参数
         if (log.request() && !log.exceptionOnly()) {
@@ -97,4 +101,39 @@ public class LogAspect {
         }
         return returnObject;
     }
+
+
+    /**
+     * 过滤参数列表，去掉那些不应被处理的对象
+     */
+    private List<Object> filterArgs(Object[] args) {
+        List<Object> params = new ArrayList<>();
+        if (args != null) {
+            for (Object param : args) {
+                if (!shouldSkip(param)) {
+                    params.add(param);
+                }
+            }
+        }
+        return params;
+    }
+
+    /**
+     * 判断是否应跳过(有些对象不应处理)
+     */
+    private boolean shouldSkip(Object obj) {
+        Class<?> clazz = obj.getClass();
+        if (clazz.isArray()) {
+            // 是否有继承关系
+            return MultipartFile.class.isAssignableFrom(clazz.getComponentType());
+        } else if (Collection.class.isAssignableFrom(clazz)) {
+            Collection<?> collection = (Collection<?>) obj;
+            return collection.stream().anyMatch(item -> item instanceof MultipartFile);
+        } else if (Map.class.isAssignableFrom(clazz)) {
+            Map<?, ?> map = (Map<?, ?>) obj;
+            return map.values().stream().anyMatch(value -> value instanceof MultipartFile);
+        }
+        return obj instanceof MultipartFile || obj instanceof HttpServletRequest || obj instanceof HttpServletResponse;
+    }
+
 }
