@@ -19,7 +19,7 @@ public interface UserCenterService {
     UserInfo currentUserInfo(String username);
 
     /**
-     * 获取用户菜单树
+     * 获取用户菜单树(不含按钮)
      */
     List<Tree<String>> userMenu(String username);
 

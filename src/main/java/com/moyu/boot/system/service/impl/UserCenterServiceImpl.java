@@ -24,10 +24,7 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.enums.StatusEnum;
-import com.moyu.boot.system.model.entity.SysGroup;
-import com.moyu.boot.system.model.entity.SysResource;
-import com.moyu.boot.system.model.entity.SysRole;
-import com.moyu.boot.system.model.entity.SysUser;
+import com.moyu.boot.system.model.entity.*;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
@@ -107,15 +104,19 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<Tree<String>> userMenu(String username) {
+        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        if (!optUser.isPresent()){
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+        }
+        Set<String> roleSet = optUser.get().getRoles();
         // 用户有权限的资源code集合(含按钮)
-        Set<String> permSet = sysRelationService.userMenu(username);
+        Set<String> permSet = sysRelationService.rolePerm(roleSet);
 
-        // 查询所有可用的菜单(不含按钮)
-        List<SysResource> allMenuList = sysResourceService.list(new LambdaQueryWrapper<SysResource>()
-                // 不能已停用
-                .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
+        // 查询所有的菜单(不含按钮)
+        List<SysResource> allMenuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum)
         );
@@ -131,7 +132,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getResourceType())) {
                 userMenuList.add(sysMenu);
             } else {
-                // 菜单，有权限才添加
+                // 叶子结点有权限才添加(菜单、内链、外链等)
                 if (permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }

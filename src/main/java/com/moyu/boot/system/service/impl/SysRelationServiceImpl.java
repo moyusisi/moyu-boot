@@ -44,10 +44,9 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         Set<String> groupSet = new HashSet<>();
         // 查询用户归属的所有分组
         this.list(Wrappers.lambdaQuery(SysRelation.class)
-                // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
-                // 查询group
+                // user查group
                 .select(SysRelation::getObjectId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
                 // 指定用户
                 .eq(SysRelation::getTargetId, account)
         ).forEach(e -> groupSet.add(e.getObjectId()));
@@ -55,11 +54,10 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         Set<String> roleSet = new HashSet<>();
         if (ObjectUtil.isNotEmpty(groupSet)) {
             // 查询分组的所有角色
-            list(new LambdaQueryWrapper<SysRelation>()
-                    // 关系类型
-                    .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
-                    // 查询role
+            this.list(Wrappers.lambdaQuery(SysRelation.class)
+                    // group查role
                     .select(SysRelation::getTargetId)
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
                     // 指定group
                     .in(SysRelation::getObjectId, groupSet)
             ).forEach(e -> roleSet.add(e.getTargetId()));
@@ -105,7 +103,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                 .select(SysRelation::getTargetId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
                 .eq(SysRelation::getObjectId, roleCode)
-        ).forEach(e -> userSet.add(e.getObjectId()));
+        ).forEach(e -> userSet.add(e.getTargetId()));
         return userSet;
     }
 
@@ -129,7 +127,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                 .select(SysRelation::getTargetId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .eq(SysRelation::getObjectId, roleCode)
-        ).forEach(e -> permSet.add(e.getObjectId()));
+        ).forEach(e -> permSet.add(e.getTargetId()));
         return permSet;
     }
 
@@ -142,7 +140,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                     .select(SysRelation::getTargetId)
                     .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                     .in(SysRelation::getObjectId, roleSet)
-            ).forEach(e -> permSet.add(e.getObjectId()));
+            ).forEach(e -> permSet.add(e.getTargetId()));
         }
         return permSet;
     }
@@ -155,7 +153,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
                 .select(SysRelation::getTargetId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
                 .eq(SysRelation::getObjectId, groupCode)
-        ).forEach(e -> roleSet.add(e.getObjectId()));
+        ).forEach(e -> roleSet.add(e.getTargetId()));
         return roleSet;
     }
 
@@ -178,25 +176,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         Set<String> groupRoleSet = userGroupRole(account);
         // 两种方式的role集合放在一起
         roleSet.addAll(groupRoleSet);
-        return roleMenu(roleSet);
-    }
-
-    @Override
-    public Set<String> roleMenu(Set<String> roleSet) {
-        // 资源集
-        Set<String> menuSet = new HashSet<>();
-        if (ObjectUtil.isNotEmpty(roleSet)) {
-            // 查询角色的所有资源菜单
-            list(new LambdaQueryWrapper<SysRelation>()
-                    // 关系类型
-                    .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
-                    // 查询menu
-                    .select(SysRelation::getTargetId)
-                    // 指定role
-                    .in(SysRelation::getObjectId, roleSet)
-            ).forEach(e -> menuSet.add(e.getTargetId()));
-        }
-        return menuSet;
+        return rolePerm(roleSet);
     }
 }
 
