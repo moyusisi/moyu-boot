@@ -1,30 +1,25 @@
-package com.moyu.boot.plugin.dblog.service.impl;
+package com.moyu.boot.plugin.syslog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.dblog.mapper.SysLogMapper;
-import com.moyu.boot.plugin.dblog.model.entity.SysLog;
-import com.moyu.boot.plugin.dblog.model.param.SysLogParam;
-import com.moyu.boot.plugin.dblog.model.vo.SysLogVO;
-import com.moyu.boot.plugin.dblog.service.SysLogService;
+import com.moyu.boot.plugin.syslog.mapper.SysLogMapper;
+import com.moyu.boot.plugin.syslog.model.entity.SysLog;
+import com.moyu.boot.plugin.syslog.model.param.SysLogParam;
+import com.moyu.boot.plugin.syslog.model.vo.SysLogVO;
+import com.moyu.boot.plugin.syslog.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**

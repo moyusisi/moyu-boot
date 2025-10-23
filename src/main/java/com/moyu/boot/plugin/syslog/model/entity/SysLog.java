@@ -1,11 +1,9 @@
-package com.moyu.boot.plugin.dblog.model.entity;
+package com.moyu.boot.plugin.syslog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.moyu.boot.common.mybatis.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**

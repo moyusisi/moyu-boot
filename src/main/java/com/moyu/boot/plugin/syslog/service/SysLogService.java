@@ -1,10 +1,9 @@
-package com.moyu.boot.plugin.dblog.service;
+package com.moyu.boot.plugin.syslog.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.dblog.model.entity.SysLog;
-import com.moyu.boot.plugin.dblog.model.param.SysLogParam;
-import com.moyu.boot.plugin.dblog.model.vo.SysLogVO;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.moyu.boot.plugin.syslog.model.entity.SysLog;
+import com.moyu.boot.plugin.syslog.model.param.SysLogParam;
+import com.moyu.boot.plugin.syslog.model.vo.SysLogVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

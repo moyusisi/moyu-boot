@@ -1,7 +1,6 @@
-package com.moyu.boot.plugin.dblog.model.param;
+package com.moyu.boot.plugin.syslog.model.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,7 +8,6 @@ import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Data;
 
 import javax.validation.constraints.*;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;

@@ -1,15 +1,13 @@
-package com.moyu.boot.plugin.dblog.controller;
+package com.moyu.boot.plugin.syslog.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.dblog.model.entity.SysLog;
-import com.moyu.boot.plugin.dblog.model.param.SysLogParam;
-import com.moyu.boot.plugin.dblog.model.vo.SysLogVO;
-import com.moyu.boot.plugin.dblog.service.SysLogService;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.moyu.boot.plugin.syslog.model.param.SysLogParam;
+import com.moyu.boot.plugin.syslog.model.vo.SysLogVO;
+import com.moyu.boot.plugin.syslog.service.SysLogService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

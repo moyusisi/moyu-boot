@@ -1,13 +1,11 @@
-package com.moyu.boot.plugin.dblog.model.vo;
+package com.moyu.boot.plugin.syslog.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
