@@ -1,6 +1,7 @@
 package com.moyu.boot.plugin.dblog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -53,15 +54,18 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
         // 指定responseContent查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
-        // 仅查询未删除的
-        queryWrapper.eq(SysLog::getDeleted, 0);
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定createTime查询
         if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
-            queryWrapper.between(SysLog::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
+            Date startTime = param.getCreateTimeRange().get(0);
+            Date endTime = param.getCreateTimeRange().get(1);
+            // 如果是日期范围，则endTime应为当日的结尾
+            endTime = DateUtil.endOfDay(endTime);
+            queryWrapper.between(SysLog::getCreateTime, startTime, endTime);
         }
-        // TODO 指定排序
+        // 仅查询未删除的
+        queryWrapper.eq(SysLog::getDeleted, 0);
         queryWrapper.orderByDesc(SysLog::getCreateTime);
         // 查询
         List<SysLog> sysLogList = this.list(queryWrapper);
@@ -88,15 +92,18 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
         // 指定responseContent查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
-        // 仅查询未删除的
-        queryWrapper.eq(SysLog::getDeleted, 0);
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定createTime查询
         if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
-            queryWrapper.between(SysLog::getCreateTime, param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1));
+            Date startTime = param.getCreateTimeRange().get(0);
+            Date endTime = param.getCreateTimeRange().get(1);
+            // 如果是日期范围，则endTime应为当日的结尾
+            endTime = DateUtil.endOfDay(endTime);
+            queryWrapper.between(SysLog::getCreateTime, startTime, endTime);
         }
-        // TODO 指定排序
+        // 仅查询未删除的
+        queryWrapper.eq(SysLog::getDeleted, 0);
         queryWrapper.orderByDesc(SysLog::getCreateTime);
         // 分页查询
         Page<SysLog> page = new Page<>(param.getPageNum(), param.getPageSize());

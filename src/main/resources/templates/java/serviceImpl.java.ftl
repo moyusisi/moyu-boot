@@ -1,6 +1,7 @@
 package ${packageName}.${moduleName}.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -59,7 +60,13 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         queryWrapper.ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'BETWEEN'>
         if (param.get${fieldConfig.fieldName?cap_first}Range() != null && param.get${fieldConfig.fieldName?cap_first}Range().size() > 1 && ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))) {
-            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1));
+            Date startTime = param.get${fieldConfig.fieldName?cap_first}Range().get(0);
+            Date endTime = param.get${fieldConfig.fieldName?cap_first}Range().get(1);
+                <#if fieldConfig.formType == "DATE">
+            // 如果是日期范围，则endTime应为当日的结尾
+            endTime = DateUtil.endOfDay(endTime);
+                </#if>
+            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, startTime, endTime);
         }
             <#elseif fieldConfig.queryType == 'IN'>
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
@@ -104,7 +111,13 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         queryWrapper.ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'BETWEEN'>
         if (param.get${fieldConfig.fieldName?cap_first}Range() != null && param.get${fieldConfig.fieldName?cap_first}Range().size() > 1 && ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))) {
-            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1));
+            Date startTime = param.get${fieldConfig.fieldName?cap_first}Range().get(0);
+            Date endTime = param.get${fieldConfig.fieldName?cap_first}Range().get(1);
+                <#if fieldConfig.formType == "DATE">
+            // 如果是日期范围，则endTime应为当日的结尾
+            endTime = DateUtil.endOfDay(endTime);
+                </#if>
+            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, startTime, endTime);
         }
             <#elseif fieldConfig.queryType == 'IN'>
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
