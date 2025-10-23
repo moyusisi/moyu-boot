@@ -5,9 +5,9 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.SysRoleVO;
@@ -49,6 +49,7 @@ public class SysRoleController {
      * 分页获取角色列表
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
+    @SysLog(module = "system", value = "分页查询角色列表")
     @PostMapping("/page")
     public Result<PageData<SysRoleVO>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");

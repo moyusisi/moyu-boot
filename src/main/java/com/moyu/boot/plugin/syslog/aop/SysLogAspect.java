@@ -103,7 +103,7 @@ public class SysLogAspect {
         sysLog.setModule(logAnnotation.module());
         sysLog.setBusiness(business);
         sysLog.setOperate(operate);
-        sysLog.setContent(logAnnotation.content());
+        sysLog.setContent(logAnnotation.value());
 
         // 数据参数
         sysLog.setRequestUrl(request.getRequestURI());

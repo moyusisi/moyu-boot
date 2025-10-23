@@ -14,6 +14,9 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Documented
 public @interface SysLog {
+    /**
+     * 日志内容，对应content
+     */
     String value() default "";
 
     /**
@@ -30,11 +33,6 @@ public @interface SysLog {
      * 操作,用于记录对应业务的什么操作, 如controller的某方法
      */
     String operate() default "";
-
-    /**
-     * 内容，用于自定义内容，便于日志搜索
-     */
-    String content() default "";
 
     /**
      * 是否记录请求参数, 默认为true
