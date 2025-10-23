@@ -175,11 +175,11 @@ DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`
 (
     `id`               BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `request_url`      VARCHAR(255) COMMENT '请求路径地址',
     `module`           VARCHAR(50)  DEFAULT NULL COMMENT '系统/模块',
     `business`         VARCHAR(50)  DEFAULT NULL COMMENT '业务',
     `operate`          VARCHAR(50)  DEFAULT NULL COMMENT '操作/接口',
     `content`          VARCHAR(255) DEFAULT NULL COMMENT '内容说明',
+    `request_url`      VARCHAR(255) DEFAULT NULL COMMENT '请求路径地址',
     `request_content`  TEXT         DEFAULT NULL comment '请求参数',
     `response_content` TEXT         DEFAULT NULL comment '返回结果',
     `start_time`       DATETIME     DEFAULT NULL COMMENT '开始时间',

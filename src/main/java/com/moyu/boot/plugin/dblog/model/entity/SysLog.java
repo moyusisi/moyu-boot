@@ -26,10 +26,6 @@ public class SysLog {
     private Long id;
 
     /**
-    * 请求路径地址
-    */
-    private String requestUrl;
-    /**
     * 系统/模块
     */
     private String module;
@@ -45,6 +41,10 @@ public class SysLog {
     * 内容说明
     */
     private String content;
+    /**
+     * 请求路径地址
+     */
+    private String requestUrl;
     /**
     * 请求参数
     */

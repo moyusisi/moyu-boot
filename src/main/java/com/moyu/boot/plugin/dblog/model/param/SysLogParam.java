@@ -44,11 +44,6 @@ public class SysLogParam extends BasePageParam {
     private Long id;
 
     /**
-    * 请求路径地址
-    */
-    @Size(max=255, message="requestUrl长度不能超过255个字符")
-    private String requestUrl;
-    /**
     * 系统/模块
     */
     @Size(max=50, message="module长度不能超过50个字符")
@@ -68,6 +63,11 @@ public class SysLogParam extends BasePageParam {
     */
     @Size(max=255, message="content长度不能超过255个字符")
     private String content;
+    /**
+     * 请求路径地址
+     */
+    @Size(max=255, message="requestUrl长度不能超过255个字符")
+    private String requestUrl;
     /**
     * 请求参数
     */
