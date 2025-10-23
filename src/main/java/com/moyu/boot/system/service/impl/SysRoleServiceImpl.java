@@ -190,17 +190,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public List<Tree<String>> treeForGrant(SysRoleParam roleParam) {
         // 模块编码
         SysResourceParam query = SysResourceParam.builder().module(roleParam.getModule()).status(StatusEnum.ENABLE.getCode()).build();
-        // 查询所有菜单
+        // 查询所有资源(包括菜单按钮)
         List<SysResource> menuList = sysResourceService.list(query);
 
-        // 指定role的menu(menu.code->menu)
-        Map<String, SysRelation> rmMap = new HashMap<>();
-        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
-                        // 指定关系类型
-                        .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
-                        // 指定哪个role
-                        .eq(SysRelation::getObjectId, roleParam.getCode()))
-                .forEach(e -> rmMap.put(e.getTargetId(), e));
+        // role已经拥有的资源权限
+        Set<String> permSet = sysRelationService.rolePerm(roleParam.getCode());
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
         Multimap<String, SysResource> allButtonMap = ArrayListMultimap.create();
@@ -208,7 +202,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         menuList.stream().filter(e -> ResourceTypeEnum.BUTTON.getCode().equals(e.getResourceType()))
                 .forEach(e -> {
                     allButtonMap.put(e.getParentCode(), e);
-                    if (rmMap.containsKey(e.getCode())) {
+                    if (permSet.contains(e.getCode())) {
                         grantButtonMap.put(e.getParentCode(), e.getCode());
                     }
                 });
@@ -226,7 +220,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     } else {
                         extMap.put("resourceType", e.getResourceType());
                         // rm关系中存在，表示有权限
-                        extMap.put("checked", rmMap.containsKey(e.getCode()));
+                        extMap.put("checked", permSet.contains(e.getCode()));
                         // 将把包含的按钮加进来
                         extMap.put("allButtonList", allButtonMap.get(e.getCode()));
                         extMap.put("grantButtonList", grantButtonMap.get(e.getCode()));
