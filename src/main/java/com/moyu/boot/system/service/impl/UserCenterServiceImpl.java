@@ -196,7 +196,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         sysGroupService.groupRoleList(SysGroupParam.builder().code(group.getCode()).build())
                 .forEach(e -> roleSet.add(e.getCode()));
         // 权限集
-        Set<String> permSet = sysRoleService.rolePerms(roleSet);
+        Set<String> permSet = sysRelationService.rolePerm(roleSet);
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username(username).roles(roleSet).perms(permSet)

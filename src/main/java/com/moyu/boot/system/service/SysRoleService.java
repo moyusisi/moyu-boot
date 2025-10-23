@@ -20,6 +20,13 @@ import java.util.Set;
 public interface SysRoleService extends IService<SysRole> {
 
     /**
+     * 所有人都拥有的默认角色
+     */
+    default String defaultRole() {
+        return "r_default";
+    }
+
+    /**
      * 获取记录列表(不分页，通过条件自行控制数量)
      */
     List<SysRoleVO> list(SysRoleParam param);

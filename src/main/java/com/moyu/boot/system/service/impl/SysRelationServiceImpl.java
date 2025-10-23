@@ -3,6 +3,7 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysRelationMapper;
@@ -42,7 +43,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         // 用户所属分组
         Set<String> groupSet = new HashSet<>();
         // 查询用户归属的所有分组
-        list(new LambdaQueryWrapper<SysRelation>()
+        this.list(Wrappers.lambdaQuery(SysRelation.class)
                 // 关系类型
                 .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
                 // 查询group
@@ -96,35 +97,78 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
-    public Set<String> userRole(String account) {
+    public Set<String> roleUser(String roleCode) {
         // 用户角色集合
-        Set<String> roleSet = new HashSet<>();
-        // 查询用户归属的所有分组
-        list(new LambdaQueryWrapper<SysRelation>()
-                // 查询role
-                .select(SysRelation::getObjectId)
-                // 关系类型
+        Set<String> userSet = new HashSet<>();
+        // role查user
+        this.list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getTargetId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
-                // 指定用户
+                .eq(SysRelation::getObjectId, roleCode)
+        ).forEach(e -> userSet.add(e.getObjectId()));
+        return userSet;
+    }
+
+    @Override
+    public Set<String> userRole(String account) {
+        Set<String> roleSet = new HashSet<>();
+        // user查role
+        this.list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getObjectId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
                 .eq(SysRelation::getTargetId, account)
         ).forEach(e -> roleSet.add(e.getObjectId()));
         return roleSet;
     }
 
     @Override
-    public Set<String> roleUser(String roleCode) {
-        // 用户角色集合
-        Set<String> userSet = new HashSet<>();
-        // 查询用户归属的所有分组
-        list(new LambdaQueryWrapper<SysRelation>()
-                // 查询user
+    public Set<String> rolePerm(String roleCode) {
+        Set<String> permSet = new HashSet<>();
+        // role查perm
+        this.list(Wrappers.lambdaQuery(SysRelation.class)
                 .select(SysRelation::getTargetId)
-                // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
-                // 指定角色
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .eq(SysRelation::getObjectId, roleCode)
-        ).forEach(e -> userSet.add(e.getTargetId()));
-        return userSet;
+        ).forEach(e -> permSet.add(e.getObjectId()));
+        return permSet;
+    }
+
+    @Override
+    public Set<String> rolePerm(Set<String> roleSet) {
+        Set<String> permSet = new HashSet<>();
+        if (ObjectUtil.isNotEmpty(roleSet)) {
+            // role查perm
+            this.list(Wrappers.lambdaQuery(SysRelation.class)
+                    .select(SysRelation::getTargetId)
+                    .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                    .in(SysRelation::getObjectId, roleSet)
+            ).forEach(e -> permSet.add(e.getObjectId()));
+        }
+        return permSet;
+    }
+
+    @Override
+    public Set<String> groupRole(String groupCode) {
+        Set<String> roleSet = new HashSet<>();
+        // group查role
+        list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getTargetId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
+                .eq(SysRelation::getObjectId, groupCode)
+        ).forEach(e -> roleSet.add(e.getObjectId()));
+        return roleSet;
+    }
+
+    @Override
+    public Set<String> roleGroup(String roleCode) {
+        Set<String> groupSet = new HashSet<>();
+        // role查group
+        list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getObjectId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_ROLE.getCode())
+                .eq(SysRelation::getTargetId, roleCode)
+        ).forEach(e -> groupSet.add(e.getObjectId()));
+        return groupSet;
     }
 
     @Override

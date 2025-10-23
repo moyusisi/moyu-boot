@@ -20,9 +20,10 @@ values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQf
 
 -- 角色
 insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, null, null, null, ''),
-        (120, '超级管理员', 'r_superAdmin', 2, 0, null, null, 0, null, null, null, ''),
-        (130, '审计员', 'r_auditor', 4, 0, null, '', 0, null, null, null, '');
+values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, null),
+        (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, null, null, null, null),
+        (120, '超级管理员', 'r_superAdmin', 2, 0, null, null, 0, null, null, null, null),
+        (130, '审计员', 'r_auditor', 4, 0, null, '', 0, null, null, null, null);
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
