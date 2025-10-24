@@ -377,6 +377,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 全部资源集
         Set<String> menuSet = sysRelationService.rolePerm(roleSet);
+        if (ObjectUtil.isEmpty(menuSet)) {
+            return permSet;
+        }
         // 获取资源上的权限标识
         sysResourceService.list(Wrappers.lambdaQuery(SysResource.class).in(SysResource::getCode, menuSet)).forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
