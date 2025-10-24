@@ -189,22 +189,24 @@ public class UserCenterServiceImpl implements UserCenterService {
     public String switchUserGroup(String groupCode) {
         String username = SecurityUtils.getUsername();
         // 通过唯一标识code查询group
-        SysGroup group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode));
+        SysGroup group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
         if (group == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "切换失败，未查到岗位数据");
         }
-        // 角色集
-        Set<String> roleSet = sysRoleService.userAllRoles(username);
-        // 添加group中的角色
-        sysGroupService.groupRoleList(SysGroupParam.builder().code(group.getCode()).build())
-                .forEach(e -> roleSet.add(e.getCode()));
-        // 权限集
-        Set<String> permSet = sysRelationService.rolePerm(roleSet);
+        // 岗位角色 group-role
+        Set<String> roleSet = sysRelationService.groupRole(group.getCode());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder().enabled(true)
-                .username(username).roles(roleSet).perms(permSet)
-                .orgCode(group.getOrgCode()).groupCode(group.getCode())
-                .dataScope(group.getDataScope()).build();
+                .username(username).groupCode(group.getCode())
+                // orgCode随岗位变化
+                .orgCode(group.getOrgCode())
+                // 岗位关联的角色
+                .roles(roleSet)
+                // 岗位权限 权限标识集合(仅接口,无菜单)
+                .perms(sysRoleService.rolePerms(roleSet))
+                // 岗位关联的数据权限
+                .dataScope(group.getDataScope())
+                .build();
         // 自定义数据权限集合
         if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
             loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
