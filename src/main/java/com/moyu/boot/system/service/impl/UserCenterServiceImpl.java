@@ -10,7 +10,6 @@ import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -24,7 +23,9 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.enums.StatusEnum;
-import com.moyu.boot.system.model.entity.*;
+import com.moyu.boot.system.model.entity.SysGroup;
+import com.moyu.boot.system.model.entity.SysResource;
+import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
@@ -105,7 +106,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public List<Tree<String>> userMenu(String username) {
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
-        if (!optUser.isPresent()){
+        if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
         }
         Set<String> roleSet = optUser.get().getRoles();
@@ -113,7 +114,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
 
         // 查询所有的菜单(不含按钮)
-        List<SysResource> allMenuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
@@ -122,7 +123,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysResource> userMenuList = CollectionUtil.newArrayList();
-        allMenuList.forEach(sysMenu -> {
+        menuList.forEach(sysMenu -> {
             if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getResourceType())) {
                 // path为空则设置为随机字符串
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
@@ -133,7 +134,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 userMenuList.add(sysMenu);
             } else {
                 // 叶子结点有权限才添加(菜单、内链、外链等)
-                if (permSet.contains(sysMenu.getCode())) {
+                if (SecurityUtils.isRoot() || permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }
             }
@@ -150,10 +151,11 @@ public class UserCenterServiceImpl implements UserCenterService {
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
                 Meta meta = (Meta) tree.get("meta");
                 String metaType = meta.getType();
-                // 不是目录
+                // 叶子结点不是目录
                 boolean notDir = !ResourceTypeEnum.DIR.name().equalsIgnoreCase(metaType) && !ResourceTypeEnum.MODULE.name().equalsIgnoreCase(metaType);
                 // 有权限的菜单叶子节点才符合要求
-                return notDir && permSet.contains(tree.getId());
+//                return notDir && permSet.contains(tree.getId());
+                return notDir;
             } else {
                 return false;
             }
