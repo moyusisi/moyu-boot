@@ -9,7 +9,6 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -353,19 +352,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .orgCode(roleParam.getOrgCode())
                 .codeSet(userSet).build());
         return userList;
-    }
-
-    @Override
-    public Set<String> userAllRoles(String account) {
-        Set<String> roleSet = new HashSet<>();
-        // 直接授权的角色
-        Set<String> userRoleSet = sysRelationService.userRole(account);
-        // 分组授权的角色
-        Set<String> groupRoleSet = sysRelationService.userGroupRole(account);
-        // 全部角色
-        roleSet.addAll(userRoleSet);
-        roleSet.addAll(groupRoleSet);
-        return roleSet;
     }
 
     @Override

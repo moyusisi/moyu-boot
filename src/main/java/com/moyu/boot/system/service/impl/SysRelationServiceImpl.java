@@ -169,15 +169,6 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         return groupSet;
     }
 
-    @Override
-    public Set<String> userMenu(String account) {
-        // 用户的角色集
-        Set<String> roleSet = userRole(account);
-        Set<String> groupRoleSet = userGroupRole(account);
-        // 两种方式的role集合放在一起
-        roleSet.addAll(groupRoleSet);
-        return rolePerm(roleSet);
-    }
 }
 
 

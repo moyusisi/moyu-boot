@@ -29,7 +29,7 @@ public interface UserCenterService {
     List<Tree<String>> userOrgTree(String username);
 
     /**
-     * 获取用户所有的角色列表
+     * 获取用户拥有的角色列表
      */
     List<SysRoleVO> userRoleList(String username, String searchKey);
 

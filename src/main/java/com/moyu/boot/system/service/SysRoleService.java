@@ -90,11 +90,6 @@ public interface SysRoleService extends IService<SysRole> {
     void roleDeleteUser(SysRoleParam param);
 
     /**
-     * 获取指定用户所有的角色，包括 userRole + userGroupRole
-     */
-    Set<String> userAllRoles(String account);
-
-    /**
      * 获取指定角色的权限标识
      */
     Set<String> rolePerms(Set<String> roleSet);

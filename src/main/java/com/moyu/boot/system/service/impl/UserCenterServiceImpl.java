@@ -26,7 +26,6 @@ import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysUser;
-import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.GroupInfo;
@@ -109,7 +108,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
         }
-        Set<String> roleSet = optUser.get().getRoles();
+        Set<String> roleSet = SecurityUtils.getRoles();
         // 用户有权限的资源code集合(含按钮)
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
 
@@ -180,9 +179,17 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<SysRoleVO> userRoleList(String username, String searchKey) {
-        // 查询用户所有的角色列表
-        Set<String> codeSet = sysRoleService.userAllRoles(username);
-        return sysRoleService.list(SysRoleParam.builder().codeSet(codeSet).name(searchKey).build());
+        if (SecurityUtils.isRoot()) {
+            return sysRoleService.list(SysRoleParam.builder().name(searchKey).build());
+        }
+        // 当前登陆用户
+        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        if (!optUser.isPresent()) {
+            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+        }
+        // 当前用户的角色
+        Set<String> roleSet = SecurityUtils.getRoles();
+        return sysRoleService.list(SysRoleParam.builder().codeSet(roleSet).name(searchKey).build());
     }
 
     @Override
