@@ -137,7 +137,6 @@ create table sys_resource
     `module`        VARCHAR(64)  DEFAULT NULL COMMENT '归属模块',
 
     `sort_num`      INT          DEFAULT NULL COMMENT '排序顺序',
-    `status`        TINYINT      DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
     `ext_json`      TEXT         DEFAULT NULL COMMENT '扩展信息',
     `remark`        TEXT         DEFAULT NULL comment '备注',
     `deleted`       TINYINT      DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
