@@ -4,8 +4,9 @@ package com.moyu.boot.system.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.Result;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.service.SysUserService;
@@ -36,6 +37,7 @@ public class SysUserController {
      * 分页获取角色列表
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
+    @SysLog(module = "system", value = "分页查询用户列表")
     @PostMapping("/page")
     public Result<PageData<SysUser>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -47,6 +49,7 @@ public class SysUserController {
      * 获取详情
      */
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:detail')")
+    @SysLog(module = "system", value = "查询用户详情")
     @PostMapping("/detail")
     public Result<SysUser> detail(@RequestBody SysUserParam userParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(userParam.getId(), userParam.getAccount()), "id和account不能同时为空");
@@ -56,6 +59,7 @@ public class SysUserController {
     /**
      * 添加
      */
+    @SysLog(module = "system", value = "新增用户")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
@@ -66,6 +70,7 @@ public class SysUserController {
     /**
      * 删除
      */
+    @SysLog(module = "system", value = "删除用户")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysUserParam sysUserParam) {
@@ -77,6 +82,7 @@ public class SysUserController {
     /**
      * 编辑
      */
+    @SysLog(module = "system", value = "修改用户信息")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysUserParam userParam) {
@@ -87,6 +93,7 @@ public class SysUserController {
     /**
      * 修改密码
      **/
+    @SysLog(module = "system", request = false, value = "修改密码")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/updatePwd")
     public Result<?> updatePassword(@RequestBody SysUserParam userParam) {
@@ -98,6 +105,7 @@ public class SysUserController {
     /**
      * 重置密码
      **/
+    @SysLog(module = "system", value = "重制密码")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/resetPwd")
     public Result<?> resetPassword(@RequestBody SysUserParam sysUserParam) {

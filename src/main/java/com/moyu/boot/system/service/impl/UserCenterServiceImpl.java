@@ -245,6 +245,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                     meta.setTitle(menu.getName());
                     // metaType 使用字符串
                     meta.setType(resourceType.name().toLowerCase());
+                    meta.setKeepAlive(true);
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.setHidden(true);
