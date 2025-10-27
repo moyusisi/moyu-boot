@@ -20,7 +20,7 @@ import java.util.Set;
 public interface SysGroupService extends IService<SysGroup> {
 
     /**
-     * 获取记录列表
+     * 获取记录列表(不分页，不限制数据权限)
      */
     List<SysGroup> list(SysGroupParam param);
 

@@ -7,7 +7,6 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.util.SecurityUtils;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.SysRoleVO;
@@ -73,9 +72,7 @@ public class UserCenterController {
     @SysLog(module = "system", value = "获取当前用户的角色列表")
     @PostMapping("/userRoleList")
     public Result<List<SysRoleVO>> userRoleList(@RequestBody SysRoleParam roleParam) {
-        // 当前登陆用户username
-        String username = SecurityUtils.getUsername();
-        return Result.success(userCenterService.userRoleList(username, roleParam.getSearchKey()));
+        return Result.success(userCenterService.userRoleList(roleParam.getSearchKey()));
     }
 
     /**

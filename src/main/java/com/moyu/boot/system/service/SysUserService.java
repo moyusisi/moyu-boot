@@ -15,7 +15,7 @@ import java.util.List;
 public interface SysUserService extends IService<SysUser> {
 
     /**
-     * 获取记录列表
+     * 获取记录列表(不分页，不限制数据权限)
      */
     List<SysUser> list(SysUserParam param);
 

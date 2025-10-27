@@ -178,8 +178,9 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<SysRoleVO> userRoleList(String username, String searchKey) {
+    public List<SysRoleVO> userRoleList(String searchKey) {
         if (SecurityUtils.isRoot()) {
+            // root拥有所有角色
             return sysRoleService.list(SysRoleParam.builder().name(searchKey).build());
         }
         // 当前登陆用户

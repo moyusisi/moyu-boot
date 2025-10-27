@@ -27,12 +27,12 @@ public interface SysRoleService extends IService<SysRole> {
     }
 
     /**
-     * 获取记录列表(不分页，通过条件自行控制数量)
+     * 获取记录列表(不分页，不限制数据权限)
      */
     List<SysRoleVO> list(SysRoleParam param);
 
     /**
-     * 分页获取记录列表
+     * 分页获取记录列表(角色无需限制数据权限)
      */
     PageData<SysRoleVO> pageList(SysRoleParam param);
 

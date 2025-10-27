@@ -29,9 +29,9 @@ public interface UserCenterService {
     List<Tree<String>> userOrgTree(String username);
 
     /**
-     * 获取用户拥有的角色列表
+     * 当前用户拥有的岗位角色列表
      */
-    List<SysRoleVO> userRoleList(String username, String searchKey);
+    List<SysRoleVO> userRoleList(String searchKey);
 
     /**
      * 当前用户切换岗位重新生成token

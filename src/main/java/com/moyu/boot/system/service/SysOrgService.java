@@ -16,7 +16,7 @@ import java.util.List;
 public interface SysOrgService extends IService<SysOrg> {
 
     /**
-     * 查询组织列表(不分页，通过条件自行控制数量)
+     * 查询组织列表(不分页，不限制数据权限)
      */
     List<SysOrg> list(SysOrgParam param);
 
