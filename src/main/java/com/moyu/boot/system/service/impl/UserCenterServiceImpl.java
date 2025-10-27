@@ -116,7 +116,6 @@ public class UserCenterServiceImpl implements UserCenterService {
         List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 .eq(SysResource::getDeleted, 0)
                 .orderByAsc(SysResource::getSortNum)
         );

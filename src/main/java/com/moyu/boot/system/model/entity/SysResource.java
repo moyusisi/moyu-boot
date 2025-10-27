@@ -91,11 +91,6 @@ public class SysResource extends BaseEntity {
     private Integer sortNum;
 
     /**
-     * 使用状态（0正常 1停用）
-     */
-    private Integer status;
-
-    /**
      * 扩展信息
      */
     private String extJson;

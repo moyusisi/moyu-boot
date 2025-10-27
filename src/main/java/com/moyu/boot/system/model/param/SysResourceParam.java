@@ -121,14 +121,6 @@ public class SysResourceParam extends BasePageParam {
     private Integer sortNum;
 
     /**
-     * 使用状态（0正常 1停用）
-     */
-    @NotNull(message = "使用状态status不能为空")
-    @Min(value = 0, message = "使用状态status有效取值范围为[0,1]")
-    @Max(value = 1, message = "使用状态status有效取值范围为[0,1]")
-    private Integer status;
-
-    /**
      * 扩展信息
      */
     private String extJson;

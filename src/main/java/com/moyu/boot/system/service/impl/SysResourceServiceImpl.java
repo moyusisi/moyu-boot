@@ -56,7 +56,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public List<Tree<String>> tree(SysResourceParam param) {
         // 查询条件(可指定module、status)
-        SysResourceParam query = SysResourceParam.builder().module(param.getModule()).status(param.getStatus()).build();
+        SysResourceParam query = SysResourceParam.builder().module(param.getModule()).build();
         // 查询所有资源
         List<SysResource> resourceList = this.list(query);
         // 构建树中包含记录的所有字段
@@ -76,8 +76,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
         // 指定code查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
-        // 指定status查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus());
         // 仅查询未删除的
         queryWrapper.eq(SysResource::getDeleted, 0);
         // 指定排序
@@ -101,8 +99,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
         // 指定path查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
-        // 指定status查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysResource::getStatus, param.getStatus());
         // 仅查询未删除的
         queryWrapper.eq(SysResource::getDeleted, 0);
         // 指定排序
@@ -245,8 +241,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 .select(SysResource::getCode, SysResource::getParentCode, SysResource::getName, SysResource::getSortNum, SysResource::getId)
                 // 指定模块
                 .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
-                // 不能已停用
-                .ne(SysResource::getStatus, StatusEnum.DISABLE.getCode())
                 // 不能是按钮
                 .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .eq(SysResource::getDeleted, 0)
@@ -278,7 +272,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResource.setVisible(param.getVisible());
         sysResource.setModule(param.getModule());
         sysResource.setSortNum(param.getSortNum());
-        sysResource.setStatus(param.getStatus());
         sysResource.setExtJson(param.getExtJson());
         sysResource.setRemark(param.getRemark());
         return sysResource;

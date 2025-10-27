@@ -188,7 +188,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Tree<String>> treeForGrant(SysRoleParam roleParam) {
         // 模块编码
-        SysResourceParam query = SysResourceParam.builder().module(roleParam.getModule()).status(StatusEnum.ENABLE.getCode()).build();
+        SysResourceParam query = SysResourceParam.builder().module(roleParam.getModule()).build();
         // 查询所有资源(包括菜单按钮)
         List<SysResource> menuList = sysResourceService.list(query);
 
