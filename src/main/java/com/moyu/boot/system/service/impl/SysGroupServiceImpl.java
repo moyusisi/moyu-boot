@@ -214,13 +214,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public List<SysRoleVO> groupRoleList(SysGroupParam param) {
         // 查询指定group的所有role
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).objectId(param.getCode()).build());
-        if (ObjectUtil.isEmpty(list)) {
+        Set<String> roleSet = sysRelationService.groupRole(param.getCode());
+        if (ObjectUtil.isEmpty(roleSet)) {
             return new ArrayList<>();
         }
-        // roleSet
-        Set<String> roleSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询角色(可指定搜索词)
         List<SysRoleVO> roleList = sysRoleService.list(SysRoleParam.builder().name(param.getSearchKey()).codeSet(roleSet).build());
         return roleList;
@@ -229,13 +226,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public List<SysUser> groupUserList(SysGroupParam param) {
         // 查询指定group的所有user
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).objectId(param.getCode()).build());
-        if (ObjectUtil.isEmpty(list)) {
+        Set<String> userSet = sysRelationService.groupUser(param.getCode());
+        if (ObjectUtil.isEmpty(userSet)) {
             return new ArrayList<>();
         }
-        // userSet
-        Set<String> userSet = list.stream().map(SysRelation::getTargetId).collect(Collectors.toSet());
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
                 .name(param.getSearchKey())
@@ -247,13 +241,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public List<SysGroup> userGroupList(String username) {
         // 查询指定user的所有group
-        List<SysRelation> list = sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).targetId(username).build());
-        if (ObjectUtil.isEmpty(list)) {
+        Set<String> groupSet = sysRelationService.userGroup(username);
+        if (ObjectUtil.isEmpty(groupSet)) {
             return new ArrayList<>();
         }
-        // groupSet
-        Set<String> groupSet = list.stream().map(SysRelation::getObjectId).collect(Collectors.toSet());
         // 查询岗位分组
         List<SysGroup> groupList = this.list(Wrappers.lambdaQuery(SysGroup.class)
                 .in(SysGroup::getCode, groupSet)
@@ -265,26 +256,23 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public void groupAddRole(SysGroupParam param) {
-        String objectId = param.getCode();
-        Set<String> targetSet = param.getCodeSet();
-        if (ObjectUtil.isEmpty(targetSet)) {
+        String groupCode = param.getCode();
+        Set<String> roleSet = param.getCodeSet();
+        if (ObjectUtil.isEmpty(roleSet)) {
             return;
         }
-        Set<String> oldSet = new HashSet<>();
         // 查询指定group包含的role，放入oldSet
-        sysRelationService.list(SysRelationParam.builder().objectId(objectId).targetSet(targetSet)
-                .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
-        ).forEach(e -> oldSet.add(e.getTargetId()));
+        Set<String> oldRoleSet = sysRelationService.groupRole(groupCode);
         // 从target中删除已经存在的
-        targetSet.removeAll(oldSet);
+        roleSet.removeAll(oldRoleSet);
         // 再次判断要新增的内容为空则返回
-        if (ObjectUtil.isEmpty(targetSet)) {
+        if (ObjectUtil.isEmpty(roleSet)) {
             return;
         }
         List<SysRelation> addList = new ArrayList<>();
-        targetSet.forEach(code -> {
+        roleSet.forEach(code -> {
             SysRelation entity = new SysRelation();
-            entity.setObjectId(objectId);
+            entity.setObjectId(groupCode);
             entity.setTargetId(code);
             entity.setRelationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode());
             addList.add(entity);
