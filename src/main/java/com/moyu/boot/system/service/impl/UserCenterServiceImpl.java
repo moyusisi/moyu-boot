@@ -22,7 +22,6 @@ import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
-import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysUser;
