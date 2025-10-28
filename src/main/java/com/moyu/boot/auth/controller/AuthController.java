@@ -1,10 +1,11 @@
 package com.moyu.boot.auth.controller;
 
 
-import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.auth.model.param.UserLoginParam;
 import com.moyu.boot.auth.service.LoginService;
+import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
+import com.moyu.boot.common.core.model.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class AuthController {
     /**
      * 用户登陆
      */
+    @SysLog(module = "auth", value = "用户登录")
     @PostMapping("/login")
     public Result<String> userLogin(@Validated UserLoginParam loginParam) {
         String token = loginService.login(loginParam);
@@ -38,8 +40,9 @@ public class AuthController {
     /**
      * 用户注销登陆(若不自定义，则需要在springSecurity中配置)
      */
+    @SysLog(module = "auth", value = "退出登录")
     @PostMapping("/logout")
-    public Result<String> userLogout(UserLoginParam loginParam) {
+    public Result<?> userLogout(UserLoginParam loginParam) {
         return Result.success();
     }
 
