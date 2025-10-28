@@ -177,10 +177,10 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<SysRoleVO> userRoleList(String searchKey) {
+    public List<SysRoleVO> userRoleList(String roleName) {
         if (SecurityUtils.isRoot()) {
             // root拥有所有角色
-            return sysRoleService.list(SysRoleParam.builder().name(searchKey).build());
+            return sysRoleService.list(SysRoleParam.builder().name(roleName).build());
         }
         // 当前登陆用户
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
@@ -189,7 +189,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         }
         // 当前用户的角色
         Set<String> roleSet = SecurityUtils.getRoles();
-        return sysRoleService.list(SysRoleParam.builder().codeSet(roleSet).name(searchKey).build());
+        return sysRoleService.list(SysRoleParam.builder().codeSet(roleSet).name(roleName).build());
     }
 
     @Override

@@ -105,7 +105,7 @@ public class SysUserController {
     /**
      * 重置密码
      **/
-    @SysLog(module = "system", value = "重制密码")
+    @SysLog(module = "system", value = "重置密码")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/resetPwd")
     public Result<?> resetPassword(@RequestBody SysUserParam sysUserParam) {

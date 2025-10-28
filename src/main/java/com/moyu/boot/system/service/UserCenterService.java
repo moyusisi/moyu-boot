@@ -31,7 +31,7 @@ public interface UserCenterService {
     /**
      * 当前用户拥有的岗位角色列表
      */
-    List<SysRoleVO> userRoleList(String searchKey);
+    List<SysRoleVO> userRoleList(String roleName);
 
     /**
      * 当前用户切换岗位重新生成token
