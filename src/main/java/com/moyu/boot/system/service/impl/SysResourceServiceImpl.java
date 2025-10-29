@@ -9,6 +9,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -20,11 +21,9 @@ import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.syslog.model.entity.SysLog;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
-import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysResourceMapper;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
@@ -288,6 +287,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 非模块必须指定parentCode及module
             Assert.notEmpty(menu.getParentCode(), "上级菜单parentCode不能为空");
             Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
+            if (StrUtil.isEmpty(menu.getComponent())) {
+                menu.setComponent("Layout");
+            }
         }
         if (Objects.equals(ResourceTypeEnum.DIR, resourceType)) {
             // 目录的组件、权限为空
