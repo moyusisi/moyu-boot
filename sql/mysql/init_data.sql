@@ -33,8 +33,8 @@ values  (1894925631903645700, '总部兼职岗', 'g_zongbu', '11000000', '集团
 
 -- 菜单数据
 insert into moyu.sys_resource (id, parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', null, 'appstore-add-outlined', '', 1, null, 'sys_module', 1, null, '', 0, null, null, null, null),
-        (2002, '0', '业务模块', 'biz_module', 1, '/bizModule', null, 'profile-outlined', '', 1, null, null, 2, null, '', 0, null, null, null, null),
+values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'appstore-add-outlined', '', 1, null, 'sys_module', 1, null, '', 0, null, null, null, null),
+        (2002, '0', '业务模块', 'biz_module', 1, '/bizModule', 'Layout', 'profile-outlined', '', 1, null, null, 2, null, '', 0, null, null, null, null),
 
         (2003, 'sys_module', '组织架构', 'dir_sys_org', 2, '/org', null, 'apartment-outlined', '', 1, null, 'sys_module', 10, null, '', 0, null, null, null, null),
         (2004, 'sys_module', '权限控制', 'dir_sys_perm', 2, '/perm', null, 'user-switch-outlined', '', 1, null, 'sys_module', 20, null, '', 0, null, null, null, null),
