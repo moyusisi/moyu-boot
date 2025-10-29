@@ -15,8 +15,9 @@ values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, null
 -- 用户
 insert into moyu.sys_user (id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, deleted, create_time, create_by, update_time, update_by)
 values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '超管', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        (102, 'bjAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        (103, 'auditor', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
+        (102, 'rAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
+        (103, 'bjAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
+        (104, 'auditor', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
 
 -- 角色
 insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
@@ -132,7 +133,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
 
 -- 关系
 insert into moyu.sys_relation (id, object_id, target_id, relation_type, deleted, create_time, create_by, update_time, update_by)
-values  (1, 'ROOT', 'superAdmin', 1, 0, null, null, null, null),
+values  (1, 'ROOT', 'rAdmin', 1, 0, null, null, null, null),
         (2, 'r_superAdmin', 'superAdmin', 1, 0, null, null, null, null),
 
         (3, 'r_superAdmin', 'menu_sys_org', 2, 0, null, null, null, null),
