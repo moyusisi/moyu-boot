@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 前后端不分离的vue项目需要此处理
- * 针对vue router中的history模式拦截器，url匹配不到任何静态资源或者在白名单（即此url交由vue处理）时，则应该返回index.html
+ * 针对vue router中的history模式拦截器，url匹配不到任何控制器时，则应该返回index.html
  *
  * @author shisong
  * @since 2019-12-31

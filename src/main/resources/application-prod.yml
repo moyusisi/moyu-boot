@@ -36,4 +36,5 @@ custom:
     ignore-list:
       - /static/**
       - /public/**
+      - /assets/**
       - /**/*.ico
