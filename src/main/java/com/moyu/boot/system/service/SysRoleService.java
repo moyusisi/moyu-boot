@@ -20,7 +20,7 @@ import java.util.Set;
 public interface SysRoleService extends IService<SysRole> {
 
     /**
-     * 所有人都拥有的默认角色
+     * 所有人都拥有的默认角色，无需关联用户也拥有
      */
     default String defaultRole() {
         return "r_default";
@@ -74,6 +74,11 @@ public interface SysRoleService extends IService<SysRole> {
      * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
      */
     List<SysUser> roleUserList(SysRoleParam param);
+
+    /**
+     * 用户直接关联的角色, 仅包含 ROLE_HAS_USER 关系直接指定的用户。
+     */
+    Set<String> userRoles(String username);
 
     /**
      * 角色新增用户，ROLE_HAS_USER

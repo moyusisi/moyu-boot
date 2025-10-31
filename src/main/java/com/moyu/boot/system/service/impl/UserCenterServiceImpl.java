@@ -84,6 +84,8 @@ public class UserCenterServiceImpl implements UserCenterService {
                 .build();
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(username);
+        SysGroup defaultGroup = sysGroupService.userDefaultGroup(username);
+        groupList.add(defaultGroup);
         if (ObjectUtil.isNotEmpty(groupList)) {
             Tree<String> orgTree = sysOrgService.singleTree();
             List<GroupInfo> groupInfoList = new ArrayList<>();
@@ -194,13 +196,22 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public String switchUserGroup(String groupCode) {
         String username = SecurityUtils.getUsername();
-        // 通过唯一标识code查询group
-        SysGroup group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
-        if (group == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "切换失败，未查到岗位数据");
+        SysGroup group = null;
+        Set<String> roleSet = null;
+        if (sysGroupService.defaultGroup().equals(groupCode)) {
+            // 默认岗位
+            group = sysGroupService.userDefaultGroup(username);
+            // 直接角色
+            roleSet = sysRoleService.userRoles(username);
+        } else {
+            // 通过唯一标识code查询group
+            group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
+            if (group == null) {
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "切换失败，未查到岗位数据");
+            }
+            // 岗位角色 group-role
+            roleSet = sysRelationService.groupRole(group.getCode());
         }
-        // 岗位角色 group-role
-        Set<String> roleSet = sysRelationService.groupRole(group.getCode());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username(username).groupCode(group.getCode())

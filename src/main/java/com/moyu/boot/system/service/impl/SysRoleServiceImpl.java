@@ -27,7 +27,6 @@ import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
-import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysRoleMapper;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
@@ -352,6 +351,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .orgCode(roleParam.getOrgCode())
                 .codeSet(userSet).build());
         return userList;
+    }
+
+    @Override
+    public Set<String> userRoles(String username) {
+        // 用户直接拥有的角色 ROLE_HAS_USER 关系
+        Set<String> roleSet = sysRelationService.userRole(username);
+        // 添加默认角色
+        roleSet.add(defaultRole());
+        return roleSet;
     }
 
     @Override

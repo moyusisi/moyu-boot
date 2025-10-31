@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * 角色组服务实现类
@@ -355,6 +354,19 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
+    }
+
+    @Override
+    public SysGroup userDefaultGroup(String username) {
+        // 查询用户entity
+        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
+        SysGroup group = new SysGroup();
+        group.setCode(defaultGroup());
+        group.setName("系统默认");
+        group.setOrgCode(user.getOrgCode());
+        group.setOrgName(user.getOrgName());
+        group.setDataScope(DataScopeEnum.SELF.getCode());
+        return group;
     }
 
     @Override

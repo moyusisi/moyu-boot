@@ -72,11 +72,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     private LoginUser buildUserDetails(SysUser sysUser) {
         // 用户直接拥有的角色 ROLE_HAS_USER 关系
-        Set<String> roleSet = sysRelationService.userRole(sysUser.getAccount());
-        // 添加默认角色
-        roleSet.add(sysRoleService.defaultRole());
-        // 权限标识集合(仅接口,无菜单)
-        Set<String> permSet = sysRoleService.rolePerms(roleSet);
+        Set<String> roleSet = sysRoleService.userRoles(sysUser.getAccount());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
@@ -84,7 +80,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .enabled(sysUser.getStatus() == 0)
                 // 默认岗位权限(默认角色+直接拥有的角色)
                 .roles(roleSet)
-                .perms(permSet)
+                // 权限标识集合(仅接口,无菜单)
+                .perms(sysRoleService.rolePerms(roleSet))
+                // 默认岗位
+                .groupCode(sysGroupService.defaultGroup())
                 .orgCode(sysUser.getOrgCode())
                 .dataScope(DataScopeEnum.SELF.getCode())
                 .build();
@@ -99,7 +98,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 有岗位则覆盖默认的岗位权限
         if (group != null) {
             // 岗位角色 group-role
-            loginUser.setRoles(sysRelationService.groupRole(group.getCode()));
+            roleSet = sysRelationService.groupRole(group.getCode());
+            loginUser.setRoles(roleSet);
             // 岗位权限 权限标识集合(仅接口,无菜单)
             loginUser.setPerms(sysRoleService.rolePerms(roleSet));
             // 当前岗位

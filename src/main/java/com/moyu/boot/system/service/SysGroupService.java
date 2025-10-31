@@ -20,6 +20,13 @@ import java.util.Set;
 public interface SysGroupService extends IService<SysGroup> {
 
     /**
+     * 未分配任何分组时为默认分组，默认分组包含用户直接关联的所有角色(ROLE_HAS_USER)
+     */
+    default String defaultGroup() {
+        return "g_default";
+    }
+
+    /**
      * 获取记录列表(不分页，不限制数据权限)
      */
     List<SysGroup> list(SysGroupParam param);
@@ -85,6 +92,11 @@ public interface SysGroupService extends IService<SysGroup> {
      * group删除用户
      */
     void groupDeleteUser(SysGroupParam param);
+
+    /**
+     * 用户默认的分组(根据用户生成,并非持久化的分组)
+     */
+    SysGroup userDefaultGroup(String username);
 
     /**
      * 获取指定group的数据范围集合
