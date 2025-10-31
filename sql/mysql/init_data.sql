@@ -24,7 +24,8 @@ insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, d
 values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, null),
         (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, null, null, null, null),
         (120, '超级管理员', 'r_superAdmin', 2, 0, null, null, 0, null, null, null, null),
-        (130, '审计员', 'r_auditor', 4, 0, null, '', 0, null, null, null, null);
+        (130, '角色管理员', 'r_roleAdmin', 3, 0, null, '', 0, null, null, null, null),
+        (140, '审计员', 'r_auditor', 4, 0, null, '', 0, null, null, null, null);
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, data_scope, scope_set, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
@@ -150,6 +151,17 @@ values  (1, 'ROOT', 'rAdmin', 1, 0, null, null, null, null),
         (14, 'r_superAdmin', 'menu_sys_log_visit', 2, 0, null, null, null, null),
         (15, 'r_superAdmin', 'menu_sys_log_op', 2, 0, null, null, null, null),
         (16, 'r_superAdmin', 'menu_biz_pos', 2, 0, null, null, null, null),
+
+        (21, 'r_roleAdmin', 'menu_sys_role', 2, 0, null, null, null, null),
+        (22, 'r_roleAdmin', 'btn_sys_role_add', 2, 0, null, null, null, null),
+        (23, 'r_roleAdmin', 'btn_sys_role_delete', 2, 0, null, null, null, null),
+        (24, 'r_roleAdmin', 'btn_sys_role_edit', 2, 0, null, null, null, null),
+        (25, 'r_roleAdmin', 'btn_sys_role_list', 2, 0, null, null, null, null),
+        (26, 'r_roleAdmin', 'btn_sys_role_detail', 2, 0, null, null, null, null),
+        (27, 'r_roleAdmin', 'btn_sys_role_userList', 2, 0, null, null, null, null),
+        (28, 'r_roleAdmin', 'btn_sys_role_addUser', 2, 0, null, null, null, null),
+        (29, 'r_roleAdmin', 'btn_sys_role_deleteUser', 2, 0, null, null, null, null),
+        (30, 'r_roleAdmin', 'btn_sys_role_grantMenu', 2, 0, null, null, null, null),
 
         (31, 'r_auditor', 'menu_sys_org', 2, 0, null, null, null, null),
         (32, 'r_auditor', 'menu_sys_user', 2, 0, null, null, null, null),
