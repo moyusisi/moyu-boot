@@ -136,8 +136,10 @@
   // 查询表单相关对象
   const queryFormRef = ref()
   const queryFormData = ref({})
+  <#if (totalQuery > 3)>
   // 是否展示更多搜索条件
   const showMore = ref(false)
+  </#if>
   // 下拉框选项
   const exampleOptions = [
     { label: "选项一", value: 1 },
