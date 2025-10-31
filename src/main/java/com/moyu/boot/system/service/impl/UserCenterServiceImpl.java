@@ -34,6 +34,7 @@ import com.moyu.boot.system.model.vo.UserInfo;
 import com.moyu.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -112,7 +113,10 @@ public class UserCenterServiceImpl implements UserCenterService {
         Set<String> roleSet = SecurityUtils.getRoles();
         // 用户有权限的资源code集合(含按钮)
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
-
+        //  无任何权限直接返回
+        if (CollectionUtils.isEmpty(permSet)) {
+            return Lists.newArrayList();
+        }
         // 查询所有的菜单(不含按钮)
         List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 // 不能是按钮
