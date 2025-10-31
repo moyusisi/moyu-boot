@@ -4,11 +4,23 @@
     <a-form ref="queryFormRef" :model="queryFormData">
       <a-row :gutter="24">
 <#if fieldList??>
+  <#assign totalQuery = 0>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInQuery == 1>
+      <#assign totalQuery = totalQuery + 1>
+    </#if>
+  </#list>
+  <#assign countQuery = 0>
+  <#list fieldList as fieldConfig>
+    <#if fieldConfig.showInQuery == 1>
+      <#assign countQuery = countQuery + 1>
+      <#if (countQuery <= 3)>
         <a-col :span="6">
+      <#else>
+        <a-col :span="6" v-if="showMore">
+      </#if>
           <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
-      <#if fieldConfig.formType == "INPUT">
+      <#if (fieldConfig.formType == "INPUT" || fieldConfig.formType == "TEXT_AREA")>
         <#if fieldConfig.queryType == "LIKE">
             <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
         <#else>
@@ -18,8 +30,6 @@
             <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "SELECT" || fieldConfig.formType == "RADIO" || fieldConfig.formType == "CHECK_BOX">
             <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
-      <#elseif fieldConfig.formType == "TEXT_AREA">
-            <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
       <#elseif fieldConfig.formType == "DATE">
         <#if fieldConfig.queryType == "BETWEEN">
             <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" valueFormat="YYYY-MM-DD"/>
@@ -31,9 +41,8 @@
       </#if>
           </a-form-item>
         </a-col>
-    </#if>
-  </#list>
-</#if>
+      <#if (totalQuery <= 3 && countQuery == totalQuery)>
+      <#-- 少于等于3个条件时,最后一个条件之后添加查询按钮 -->
         <a-col :span="6">
           <a-form-item>
             <a-flex gap="small">
@@ -42,6 +51,22 @@
             </a-flex>
           </a-form-item>
         </a-col>
+      <#-- 大于3个条件时,条件3后插入查询按钮 -->
+      <#elseif (totalQuery > 3 && countQuery == 3)>
+        <a-col :span="6">
+          <a-form-item>
+            <a-flex gap="small">
+              <a-button type="primary" :icon="h(SearchOutlined)" @click="querySubmit">查询</a-button>
+              <a-button :icon="h(RedoOutlined)" @click="reset">重置</a-button>
+              <a-button v-if="!showMore" type="link" @click="showMore = !showMore">更多条件<DownOutlined /></a-button>
+              <a-button v-else type="link"  @click="showMore = !showMore">收起<UpOutlined /></a-button>
+            </a-flex>
+          </a-form-item>
+        </a-col>
+      </#if>
+    </#if>
+  </#list>
+</#if>
       </a-row>
     </a-form>
   </a-card>
@@ -103,7 +128,7 @@
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
   import { h, ref } from "vue"
-  import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined } from "@ant-design/icons-vue"
+  import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined, DownOutlined, UpOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
   import Form from "./form.vue"
   import MTable from "@/components/MTable/index.vue"
@@ -111,6 +136,8 @@
   // 查询表单相关对象
   const queryFormRef = ref()
   const queryFormData = ref({})
+  // 是否展示更多搜索条件
+  const showMore = ref(false)
   // 下拉框选项
   const exampleOptions = [
     { label: "选项一", value: 1 },
