@@ -81,7 +81,7 @@
     >
       <!--  表格上方左侧操作区  -->
       <template #operator>
-        <a-space wrap style="margin-bottom: 6px">
+        <a-space wrap style="margin-bottom: 8px">
           <a-button type="primary" :icon="h(PlusOutlined)" @click="formRef.onOpen()">新增</a-button>
           <a-popconfirm :title=" '确定要删除这 ' + selectedRowKeys.length + ' 条数据吗？' " :disabled ="selectedRowKeys.length < 1" @confirm="batchDelete">
             <a-button danger :icon="h(DeleteOutlined)" :disabled="selectedRowKeys.length < 1">
