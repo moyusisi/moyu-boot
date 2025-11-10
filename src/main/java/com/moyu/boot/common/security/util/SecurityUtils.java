@@ -23,7 +23,7 @@ import java.util.Set;
 public class SecurityUtils {
 
     /**
-     * 获取Authentication
+     * 获取认证信息:Authentication
      */
     private static Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
@@ -33,16 +33,16 @@ public class SecurityUtils {
      * 获取当前登录用户信息
      **/
     public static Optional<LoginUser> getLoginUser() {
-        Optional<LoginUser> loginUser = Optional.empty();
+        Optional<LoginUser> optUser = Optional.empty();
         Authentication authentication = getAuthentication();
         if (authentication != null) {
-            // 以登录用户为 LoginUser，未登录用户为username
+            // 用户凭证，已登录用户为 LoginUser，未登录用户为username
             Object principal = authentication.getPrincipal();
             if (principal instanceof LoginUser) {
-                loginUser = Optional.of((LoginUser) principal);
+                optUser = Optional.of((LoginUser) principal);
             }
         }
-        return loginUser;
+        return optUser;
     }
 
 
