@@ -3,7 +3,6 @@ package com.moyu.boot.common.security.config;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,8 +23,7 @@ public class SecurityProperties {
     /**
      * 是否启用鉴权功能(false等同于全加白)
      */
-    @Value("${custom.security.enabled:true}")
-    private Boolean enabled;
+    private Boolean enabled = Boolean.TRUE;
 
     /**
      * 白名单，Security AuthorizationFilter 过滤器直接放行的路径

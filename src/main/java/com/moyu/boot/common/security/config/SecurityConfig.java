@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * WebSecurityConfigurerAdapter已废弃，替代方案如下:
+ * 使用 SecurityFilterChain Bean 配置 HttpSecurity
+ * 使用 WebSecurityCustomizer Bean 来配置 WebSecurity
+ *
  * @author shisong
  * @since 2025-01-24
  */
