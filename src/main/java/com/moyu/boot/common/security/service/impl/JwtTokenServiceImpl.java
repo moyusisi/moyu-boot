@@ -15,11 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
+ * jwt 令牌服务类
+ *
  * @author shisong
  * @since 2025-11-11
  */
 @Service
-@ConditionalOnProperty(value = "custom.security.token.type", havingValue = "jwt")
+@ConditionalOnProperty(value = "custom.security.session.type", havingValue = "jwt")
 public class JwtTokenServiceImpl implements TokenService {
 
     @Override
