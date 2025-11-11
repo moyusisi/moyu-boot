@@ -2,7 +2,7 @@ package com.moyu.boot.auth.controller;
 
 
 import com.moyu.boot.auth.model.param.UserLoginParam;
-import com.moyu.boot.auth.service.LoginService;
+import com.moyu.boot.auth.service.AuthService;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;
@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 public class AuthController {
 
     @Resource
-    private LoginService loginService;
+    private AuthService authService;
 
     /**
      * 用户登陆
@@ -33,7 +33,7 @@ public class AuthController {
     @SysLog(module = "auth", value = "用户登录")
     @PostMapping("/login")
     public Result<String> userLogin(@Validated UserLoginParam loginParam) {
-        String token = loginService.login(loginParam);
+        String token = authService.login(loginParam);
         return Result.success(token);
     }
 

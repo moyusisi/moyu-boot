@@ -22,7 +22,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Service
-public class LoginService {
+public class AuthService {
 
     @Resource
     private AuthenticationManager authenticationManager;
