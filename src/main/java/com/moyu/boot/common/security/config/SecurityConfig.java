@@ -1,9 +1,10 @@
 package com.moyu.boot.common.security.config;
 
 
-import com.moyu.boot.common.security.filter.JwtTokenAuthenticationFilter;
+import com.moyu.boot.common.security.filter.TokenAuthenticationFilter;
 import com.moyu.boot.common.security.handler.AuthExceptionEntryPoint;
 import com.moyu.boot.common.security.handler.CustomAccessDeniedHandler;
+import com.moyu.boot.common.security.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -33,6 +34,9 @@ public class SecurityConfig {
 
     @Resource
     private SecurityProperties properties;
+
+    @Resource
+    private TokenService tokenService;
 
     /**
      * 跨域过滤器配置
@@ -90,9 +94,9 @@ public class SecurityConfig {
         http.httpBasic().disable();
 
         // 添加Token认证解析过滤器
-        http.addFilterBefore(new JwtTokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         // 添加CORS filter
-        http.addFilterBefore(corsFilter(), JwtTokenAuthenticationFilter.class);
+        http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
 
         // 异常处理。若有@ExceptionHandler处理AccessDeniedException和AuthenticationException此处配置不会起到作用
         http.exceptionHandling()

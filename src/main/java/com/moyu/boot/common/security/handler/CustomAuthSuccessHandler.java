@@ -29,7 +29,7 @@ public class CustomAuthSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        String token = TokenService.generateToken(loginUser);
+        String token = ""; // tokenService.generateToken(loginUser);
         // 认证成功直接返回json数据
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());

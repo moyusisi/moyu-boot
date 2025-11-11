@@ -1,10 +1,10 @@
 package com.moyu.boot.auth.service;
 
 
+import com.moyu.boot.auth.model.param.UserLoginParam;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
-import com.moyu.boot.auth.model.param.UserLoginParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
@@ -26,6 +26,9 @@ public class AuthService {
 
     @Resource
     private AuthenticationManager authenticationManager;
+
+    @Resource
+    private TokenService tokenService;
 
     /**
      * 用户登陆
@@ -59,6 +62,6 @@ public class AuthService {
         }
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 生成token
-        return TokenService.generateToken(loginUser);
+        return tokenService.generateToken(loginUser);
     }
 }

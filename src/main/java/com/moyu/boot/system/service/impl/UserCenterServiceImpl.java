@@ -66,6 +66,9 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Resource
     private SysRelationService sysRelationService;
 
+    @Resource
+    private TokenService tokenService;
+
     @Override
     public UserInfo currentUserInfo(String username) {
         // 查询用户entity
@@ -232,7 +235,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
             loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
         }
-        return TokenService.generateToken(loginUser);
+        return tokenService.generateToken(loginUser);
     }
 
     /**
