@@ -29,6 +29,7 @@ public class JwtTokenServiceImpl implements TokenService {
 
         // 连缀写法追加多个
         StpUtil.login(loginUser.getUsername(), new SaLoginParameter()
+                // 记录在 Token 上的扩展参数，只在 jwt 模式下生效
                 .setExtra("username", loginUser.getUsername())
                 .setExtra("orgCode", loginUser.getOrgCode())
                 .setExtra("groupCode", loginUser.getGroupCode())
@@ -37,14 +38,12 @@ public class JwtTokenServiceImpl implements TokenService {
                 .setExtra("dataScope", loginUser.getDataScope())
                 .setExtra("scopes", loginUser.getScopes())
         );
-
         return StpUtil.getTokenValue();
     }
 
     @Override
     public Authentication parseToken() {
-        StpUtil.isLogin();
-        // 获取 jwt Token 的扩展信息, 只在jwt模式下生效
+        // 获取 jwt Token 的扩展参数, 只在jwt模式下生效
         Object roles = StpUtil.getExtra("roles");
         Object perms = StpUtil.getExtra("perms");
         Object dataScope = StpUtil.getExtra("dataScope");

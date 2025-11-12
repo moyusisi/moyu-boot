@@ -36,4 +36,10 @@ public interface TokenService {
      */
     Authentication parseToken();
 
+    /**
+     * 置 Token 失效
+     */
+    default void invalidateToken(String token) {
+        // 默认空实现，不做操作
+    }
 }

@@ -5,6 +5,7 @@ import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.jwt.StpLogicJwtForStateless;
 import cn.dev33.satoken.stp.StpLogic;
 import com.moyu.boot.common.security.service.TokenService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -46,6 +47,7 @@ public class SaTokenConfigure {
 
     // Sa-Token 整合 jwt https://sa-token.cc/doc.html#/plugin/jwt-extend
     @Bean
+    @ConditionalOnProperty(value = "custom.security.session.type", havingValue = "jwt")
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForStateless();
     }

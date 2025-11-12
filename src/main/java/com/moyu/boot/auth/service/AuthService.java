@@ -1,6 +1,8 @@
 package com.moyu.boot.auth.service;
 
 
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.auth.model.param.UserLoginParam;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
@@ -9,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -64,4 +67,18 @@ public class AuthService {
         // 生成token
         return tokenService.generateToken(loginUser);
     }
+
+    /**
+     * 注销登录
+     */
+    public void logout() {
+        String token = StpUtil.getTokenValue();
+        if (StrUtil.isNotBlank(token)) {
+            // 置token失效
+            tokenService.invalidateToken(token);
+            // 清除Security上下文
+            SecurityContextHolder.clearContext();
+        }
+    }
+
 }

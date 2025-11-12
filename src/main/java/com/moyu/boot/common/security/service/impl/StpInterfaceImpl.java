@@ -1,4 +1,4 @@
-package com.moyu.boot.auth.service;
+package com.moyu.boot.common.security.service.impl;
 
 
 import cn.dev33.satoken.stp.StpInterface;
@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 自定义权限加载接口实现类，用户登录成功之后补充用户权限信息
+ * Sa-Token 的权限加载接口实现类，每次调用鉴权代码时才会执行
  *
  * @author shisong
  * @since 2025-11-11
@@ -27,7 +27,7 @@ public class StpInterfaceImpl implements StpInterface {
         list.add("user.add");
         list.add("user.update");
         list.add("user.get");
-         list.add("user.delete");
+        list.add("user.delete");
         list.add("art.*");
         return list;
     }

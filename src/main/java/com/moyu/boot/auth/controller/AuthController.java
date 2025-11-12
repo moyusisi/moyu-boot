@@ -43,6 +43,7 @@ public class AuthController {
     @SysLog(module = "auth", value = "退出登录")
     @PostMapping("/logout")
     public Result<?> userLogout(UserLoginParam loginParam) {
+        authService.logout();
         return Result.success();
     }
 

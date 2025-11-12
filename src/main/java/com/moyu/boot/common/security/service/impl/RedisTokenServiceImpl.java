@@ -1,9 +1,13 @@
 package com.moyu.boot.common.security.service.impl;
 
 
+import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.StpUtil;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +17,32 @@ import org.springframework.stereotype.Service;
  * @author shisong
  * @since 2025-11-11
  */
+@Slf4j
 @Service
 @ConditionalOnProperty(value = "custom.security.session.type", havingValue = "redis")
 public class RedisTokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(LoginUser loginUser) {
-        return "";
+        // 登录
+        StpUtil.login(loginUser.getUsername());
+        // 将登录用户信息进行缓存
+        StpUtil.getTokenSession().set("loginUser", loginUser);
+        return StpUtil.getTokenValue();
     }
 
     @Override
     public Authentication parseToken() {
-        return null;
+        // 从会话中获取缓存的数据
+        LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get("loginUser");
+        // 初始化authorities后才可使用springSecurity鉴权
+        loginUser.initAuthorities();
+        // 根据登录用户信息生成认证信息
+        return new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+    }
+
+    @Override
+    public void invalidateToken(String token) {
+        StpUtil.logoutByTokenValue(token);
     }
 }

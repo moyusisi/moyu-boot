@@ -24,7 +24,7 @@ spring:
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
-    password: shisong
+    # password:
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -46,8 +46,8 @@ custom:
     enabled: true
     # 会话配置
     session:
-      # 认证策略类型
-      type: jwt
+      # 认证策略类型 jwt redis
+      type: redis
     # 白名单列表，仅跳过 AuthorizationFilter 过滤器，还是会走其他过滤器(CSRF、CORS等)
     white-list:
       # 认证授权类
