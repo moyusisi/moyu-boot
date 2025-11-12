@@ -1,6 +1,7 @@
 package com.moyu.boot.common.security.advice;
 
 
+import cn.dev33.satoken.exception.*;
 import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -44,5 +45,13 @@ public class AuthExceptionHandler {
         int code = HttpStatus.UNAUTHORIZED.value();
         String message = "未认证，无法访问：" + request.getRequestURI();
         return new Result<>(code, message);
+    }
+
+    // sa权限认证的相关异常(SaTokenException的子类)
+    @ExceptionHandler({NotRoleException.class, NotPermissionException.class, NotLoginException.class, DisableServiceException.class})
+    public Result<?> handlerException(SaTokenException e) {
+        log.error("权限校验不通过", e);
+        int code = HttpStatus.UNAUTHORIZED.value();
+        return new Result<>(code, e.getMessage());
     }
 }
