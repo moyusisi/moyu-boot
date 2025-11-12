@@ -1,8 +1,8 @@
 package com.moyu.boot.common.security.service.impl;
 
 
-import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,14 @@ public class RedisTokenServiceImpl implements TokenService {
     @Override
     public String generateToken(LoginUser loginUser) {
         // 登录
-        StpUtil.login(loginUser.getUsername());
+        StpUtil.login(loginUser.getUsername(), new SaLoginParameter()
+                // 是否在登录后将 Token 写入到响应头
+                .setIsWriteHeader(true)
+                // 是否允许同一账号多地同时登录（为 false 时新登录挤掉旧登录）
+                .setIsConcurrent(false)
+                // extra只在 jwt 模式下生效，传入的 extra 参数将被忽略
+                .setExtra("username", loginUser.getUsername())
+        );
         // 将登录用户信息进行缓存
         StpUtil.getTokenSession().set("loginUser", loginUser);
         return StpUtil.getTokenValue();

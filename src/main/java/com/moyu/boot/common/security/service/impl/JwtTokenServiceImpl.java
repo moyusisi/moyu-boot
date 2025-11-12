@@ -29,6 +29,8 @@ public class JwtTokenServiceImpl implements TokenService {
 
         // 连缀写法追加多个
         StpUtil.login(loginUser.getUsername(), new SaLoginParameter()
+                // 是否在登录后将 Token 写入到响应头
+                .setIsWriteHeader(true)
                 // 记录在 Token 上的扩展参数，只在 jwt 模式下生效
                 .setExtra("username", loginUser.getUsername())
                 .setExtra("orgCode", loginUser.getOrgCode())
