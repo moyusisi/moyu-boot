@@ -73,7 +73,7 @@ public class AuthService {
      */
     public void logout() {
         String token = StpUtil.getTokenValue();
-        if (StrUtil.isNotBlank(token)) {
+        if (StrUtil.isNotEmpty(token)) {
             // 置token失效
             tokenService.invalidateToken(token);
             // 清除Security上下文
