@@ -143,6 +143,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
+        <!-- Sa-Token插件：权限缓存与业务缓存分离(即多个redis缓存) -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-alone-redis</artifactId>
+            <version>1.44.0</version>
+        </dependency>
     </dependencies>
 
     <build>

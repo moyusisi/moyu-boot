@@ -15,8 +15,46 @@ spring:
     password: shisong
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    # redis配置
+  # 业务redis配置
   redis:
+    # Redis数据库索引（默认为0）
+    database: 0
+    # Redis服务器地址
+    host: 127.0.0.1
+    # Redis服务器连接端口
+    port: 6379
+    # Redis服务器连接密码（默认为空）
+    # password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池最大连接数
+        max-active: 200
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+        # 连接池中的最大空闲连接
+        max-idle: 10
+        # 连接池中的最小空闲连接
+        min-idle: 0
+
+# Sa-Token 配置
+sa-token:
+  # Token名称
+  token-name: Authorization
+  # token 提交时的前缀
+  token-prefix: Bearer
+  # jwt格式的token秘钥，至少256-bit(32-byte)，如：7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC
+  jwt-secret-key: 7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC
+  # Token有效期 3天
+  timeout: 259200
+  # Token风格
+  token-style: uuid
+
+  # 配置 Sa-Token 单独使用的 Redis 连接
+  alone-redis:
+    # Redis模式(默认单体)
+    # pattern: single
     # Redis数据库索引（默认为0）
     database: 1
     # Redis服务器地址
@@ -25,7 +63,7 @@ spring:
     port: 6379
     # Redis服务器连接密码（默认为空）
     # password:
-    # 连接超时时间
+    # 连接超时时间（毫秒）
     timeout: 10s
     lettuce:
       pool:

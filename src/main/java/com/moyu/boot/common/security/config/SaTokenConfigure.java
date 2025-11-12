@@ -8,7 +8,8 @@ import com.moyu.boot.common.security.service.TokenService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+
+import javax.annotation.Resource;
 
 /**
  * Sa-Token 配置类
@@ -19,11 +20,9 @@ import org.springframework.context.annotation.Primary;
 @Configuration
 public class SaTokenConfigure {
 
-    // Sa-Token 参数配置，参考文档：https://sa-token.cc
-    @Bean
-    @Primary
-    public SaTokenConfig getSaTokenConfigPrimary() {
-        SaTokenConfig config = new SaTokenConfig();
+    // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc
+    @Resource
+    public void configSaToken(SaTokenConfig config) {
         // token 名称（同时也是 cookie 名称）
         config.setTokenName(TokenService.TOKEN_NAME);
         // 指定 token 提交时的前缀
@@ -38,11 +37,8 @@ public class SaTokenConfigure {
         config.setIsShare(false);
         // token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
         config.setTokenStyle("simple-uuid");
-        // jwt秘钥
-        config.setJwtSecretKey(TokenService.TOKEN_SECRET);
         // 是否输出操作日志
         config.setIsLog(true);
-        return config;
     }
 
     // Sa-Token 整合 jwt https://sa-token.cc/doc.html#/plugin/jwt-extend
