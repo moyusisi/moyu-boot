@@ -32,7 +32,8 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         log.warn("未授权访问：{}", request.getRequestURI());
-        String responseBody = new ObjectMapper().writeValueAsString(new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED));
+        Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+        String responseBody = new ObjectMapper().writeValueAsString(result);
         PrintWriter printWriter = response.getWriter();
         printWriter.print(responseBody);
         printWriter.flush();

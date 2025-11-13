@@ -4,6 +4,7 @@ package com.moyu.boot.common.security.handler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -25,6 +26,7 @@ import java.nio.charset.StandardCharsets;
  * @author shisong
  * @since 2025-01-05
  */
+@Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
@@ -34,8 +36,9 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        // 登录异常
-        String responseBody = new ObjectMapper().writeValueAsString(new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION));
+        // 登录异常，需要重新登录
+        Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+        String responseBody = new ObjectMapper().writeValueAsString(result);
         PrintWriter printWriter = response.getWriter();
         printWriter.print(responseBody);
         printWriter.flush();

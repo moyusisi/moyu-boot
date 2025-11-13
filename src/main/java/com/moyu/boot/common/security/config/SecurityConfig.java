@@ -100,7 +100,7 @@ public class SecurityConfig {
         // 添加CORS filter
         http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
 
-        // 异常处理。若有@ExceptionHandler处理AccessDeniedException和AuthenticationException此处配置不会起到作用
+        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
         http.exceptionHandling()
                 // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
