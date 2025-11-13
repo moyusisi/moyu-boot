@@ -1,6 +1,5 @@
 package com.moyu.boot.system.config;
 
-import cn.dev33.satoken.interceptor.SaInterceptor;
 import com.moyu.boot.system.interceptor.VueHistoryInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -31,9 +30,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加用户vue后处理拦截器
         registry.addInterceptor(vueHistoryInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/api/**", "/static/**", "/public/**");
-        // 注册 Sa-Token 拦截器，打开注解式鉴权功能 https://sa-token.cc/doc.html#/use/at-check
-        registry.addInterceptor(new SaInterceptor()).addPathPatterns("/**")
                 .excludePathPatterns("/api/**", "/static/**", "/public/**");
     }
 }

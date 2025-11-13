@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * HttpSecurity#exceptionHandling()处理认证异常(AuthenticationEntryPoint)和授权异常(AccessDeniedHandler)是在Filter层，
- * 当存在全局异常处理类@ExceptionHandler(Exception.class)时会先于Filter层处理，导致HttpSecurity中的配置无法处理
- * <a href="https://developer.aliyun.com/article/1477570">参考这里</a>
+ * HttpSecurity#exceptionHandling()处理认证异常(AuthenticationEntryPoint)和授权异常(AccessDeniedHandler)是在Filter层
+ * 此处的异常处理类@ExceptionHandler仅处理RestController中的异常
+ * 使用SpringSecurity的@PreAuthorize 或 SaToken的@SaCheckPermission 进行权限校验时，会被此Advice处理
  * <p>
  * 此处定义高优先级的Advice，仅处理Spring Security的认证异常和授权异常，避免被其他ExceptionHandler处理
  *
@@ -58,9 +58,9 @@ public class AuthExceptionHandler {
     }
 
     // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
-    // sa权限认证的相关异常(SaTokenException的子类)也一起处理
+    // sa权限认证的相关异常(SaTokenException的子类)也一起处理(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
     @ExceptionHandler({AccessDeniedException.class, NotLoginException.class, NotRoleException.class, NotPermissionException.class})
-    public Result<?> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+    public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
         log.warn("未授权访问：{}", request.getRequestURI());
         return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
     }
