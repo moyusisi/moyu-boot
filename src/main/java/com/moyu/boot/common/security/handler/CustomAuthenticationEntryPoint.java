@@ -36,7 +36,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        // 登录异常，需要重新登录
+        // 登录失效，需要重新登录
         Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
         String responseBody = new ObjectMapper().writeValueAsString(result);
         PrintWriter printWriter = response.getWriter();
