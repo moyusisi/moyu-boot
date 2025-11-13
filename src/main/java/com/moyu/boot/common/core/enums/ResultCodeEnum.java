@@ -46,6 +46,8 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
     USER_LOGIN_CHECK_ERROR("A0220", "用户身份校验失败"),
     // 一般需要重新登录
     USER_LOGIN_EXPIRED("A0230", "用户登录已过期"),
+    USER_LOGIN_REPLACED("A0231", "用户被顶替下线"),
+    USER_LOGIN_KICKOUT("A0232", "用户被强制下线"),
     /**
      * 二级宏观错误码
      */
