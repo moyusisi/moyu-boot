@@ -10,12 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.AccountExpiredException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -41,20 +36,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(AuthenticationException.class)
     public Result<?> authenticationException(AuthenticationException e) {
         // 登录异常
-        Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
-        // 登录异常细化
-        if (e instanceof UsernameNotFoundException) {
-            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_NOT_EXIST);
-        } else if (e instanceof LockedException) {
-            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_FROZEN);
-        } else if (e instanceof DisabledException) {
-            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_DISABLED);
-        } else if (e instanceof AccountExpiredException) {
-            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_EXPIRED);
-        } else if (e instanceof BadCredentialsException) {
-            result = new Result<>(ResultCodeEnum.USER_PASSWORD_ERROR);
-        }
-        return result;
+        return new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
     }
 
     // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
