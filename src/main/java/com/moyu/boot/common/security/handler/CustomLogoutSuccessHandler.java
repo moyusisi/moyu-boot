@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
- * 注销登录处理类, 用于 httpSecurity.logout() 指定
+ * 自定义注销登录处理类, 用于使用 httpSecurity.logout() 时指定
  *
  * @author shisong
  * @since 2024-12-27
@@ -32,7 +32,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
         if (optUser.isPresent()) {
             LoginUser loginUser = optUser.get();
-            // 删除用户缓存记录 TODO
+            // 清除用户缓存
             // 记录用户退出日志
             log.info("退出登录:{}", loginUser.getUsername());
         }

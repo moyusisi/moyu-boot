@@ -6,7 +6,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -16,17 +16,19 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义的认证失败处理类。认证失败时不需要页面跳转，只需要返回json数据告诉前端即可。
- * 与5.2中新增的AuthenticationEntryPointFailureHandler通过AuthenticationEntryPoint方式实现AuthenticationFailureHandler等效
- * <a href="https://blog.csdn.net/weixin_43831002/article/details/126131233">参考阅读</a>
+ * 自定义认证异常(登录异常)处理，未认证访问的情况处理
+ * <p>
+ * AuthenticationFailureHandler接口的实现类是AuthenticationEntryPointFailureHandler，
+ * 它通过AuthenticationEntryPoint进行处理
+ * <a href="https://blog.csdn.net/weixin_43831002/article/details/126131233">(参考)</a>
  *
  * @author shisong
- * @since 2024-12-30
+ * @since 2025-01-05
  */
-public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         // 认证失败直接返回json数据告诉前端
         response.setStatus(HttpServletResponse.SC_OK);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());

@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义的认证成功处理类。认证成功直接返回json数据告诉前端登陆成功(可用于 httpSecurity.formLogin()指定)
+ * 自定义认证成功处理类。用于使用 httpSecurity.formLogin() 时指定，可直接返回json数据
  * <a href="https://blog.csdn.net/weixin_43831002/article/details/126131233">参考阅读</a>
  *
  * @author shisong

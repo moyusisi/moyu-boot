@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 授权异常处理，无权限访问时的处理
+ * 自定义鉴权异常(未授权访问)处理器，无权限访问时的处理
  * 使用@PreAuthorize进行权限校验时，不通过就会进入自定义的异常
  *
  * @author shisong
