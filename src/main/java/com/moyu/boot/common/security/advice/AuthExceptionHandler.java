@@ -40,6 +40,7 @@ public class AuthExceptionHandler {
     // security的认证异常(AuthenticationException及子类) 先于security AccessDeniedHandler 处理
     @ExceptionHandler(AuthenticationException.class)
     public Result<?> authenticationException(AuthenticationException e) {
+        // 登录异常
         Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
         // 登录异常细化
         if (e instanceof UsernameNotFoundException) {

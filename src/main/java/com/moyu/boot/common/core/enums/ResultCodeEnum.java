@@ -44,7 +44,7 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
     USER_ACCOUNT_EXPIRED("A0204", "用户账户已过期"),
     USER_PASSWORD_ERROR("A0210", "用户名或密码错误"),
     USER_LOGIN_CHECK_ERROR("A0220", "用户身份校验失败"),
-    // 这个一般需要重新登录
+    // 一般需要重新登录
     USER_LOGIN_EXPIRED("A0230", "用户登录已过期"),
     /**
      * 二级宏观错误码
