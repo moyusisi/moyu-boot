@@ -187,8 +187,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public List<SysRoleVO> userRoleList(String roleName) {
         // 当前登陆用户
-        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
-        if (!optUser.isPresent()) {
+        if (!SecurityUtils.getLoginUser().isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
         if (SecurityUtils.isRoot()) {
