@@ -5,7 +5,6 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.system.constant.SysConstants;
-import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
@@ -20,7 +19,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * 用户信息加载服务的自定义实现类
@@ -53,15 +55,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info("加载{}的用户信息", username);
         // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
         SysUser sysUser = sysUserService.detail(SysUserParam.builder().account(username).build());
+//        SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
-            throw new UsernameNotFoundException("用户不存在");
-        } else if (sysUser.getDeleted() == 1) {
-            log.info("登录用户:{}已被删除", username);
-            throw new UsernameNotFoundException("用户不存在");
-        } else if (Objects.equals(sysUser.getStatus(), StatusEnum.DISABLE.getCode())) {
-            log.info("登录用户:{}已被停用", username);
-            throw new UsernameNotFoundException("用户不存在");
+            throw new UsernameNotFoundException("用户账号不存在");
         }
         // 创建 UserDetails
         return buildUserDetails(sysUser);
