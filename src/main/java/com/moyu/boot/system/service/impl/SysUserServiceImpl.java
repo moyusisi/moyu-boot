@@ -127,7 +127,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // id、code均为唯一标识
         SysUser SysUser = this.getOne(queryWrapper);
         if (SysUser == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         return SysUser;
     }
@@ -140,7 +140,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
                     .eq(SysUser::getAccount, param.getAccount()));
             if (user != null) {
-                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "此账号已存在，请更换账号");
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "此账号已存在，请更换账号");
             }
         }
         // 属性复制

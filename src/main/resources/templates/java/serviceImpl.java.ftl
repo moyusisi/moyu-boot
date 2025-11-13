@@ -143,7 +143,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 查询
         ${entityName} ${entityName?uncap_first} = this.getById(param.getId());
         if (${entityName?uncap_first} == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
         ${entityName}VO vo = BeanUtil.copyProperties(${entityName?uncap_first}, ${entityName}VO.class);
@@ -164,7 +164,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 通过主键id查询原有数据
         ${entityName} old = this.getById(param.getId());
         if (old == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
         ${entityName} toUpdate = BeanUtil.copyProperties(param, ${entityName}.class);

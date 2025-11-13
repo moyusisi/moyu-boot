@@ -135,7 +135,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysGroup::getCode, param.getCode());
         SysGroup sysGroup = this.getOne(queryWrapper);
         if (sysGroup == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
         SysGroupVO vo = BeanUtil.copyProperties(sysGroup, SysGroupVO.class);
@@ -186,7 +186,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 通过主键id查询原有数据
         SysGroup oldGroup = this.getById(param.getId());
         if (oldGroup == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
         SysGroup updateGroup = BeanUtil.copyProperties(param, SysGroup.class);
@@ -374,7 +374,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 通过唯一标识code查询group
         SysGroup group = this.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode));
         if (group == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         Set<String> scopes = new HashSet<>();
 

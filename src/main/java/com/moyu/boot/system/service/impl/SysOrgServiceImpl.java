@@ -125,7 +125,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysOrg::getCode, param.getCode());
         SysOrg sysOrg = this.getOne(queryWrapper);
         if (sysOrg == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         return sysOrg;
     }
@@ -139,7 +139,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                     .eq(SysOrg::getCode, param.getCode())
                     .eq(SysOrg::getDeleted, 0));
             if (org != null) {
-                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 组装SysOrg
@@ -210,7 +210,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 .map(SysOrg::getId)
                 .collect(Collectors.toSet());
         if (CollectionUtils.isEmpty(idSet)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "删除失败,未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败,未查到指定数据");
         }
 
         // 循环查找子节点,并加入到待删除集合

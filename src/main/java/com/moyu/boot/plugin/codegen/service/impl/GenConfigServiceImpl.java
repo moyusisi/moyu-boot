@@ -103,7 +103,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // id、tableName 均为唯一标识
         GenConfig genConfig = this.getOne(queryWrapper);
         if (genConfig == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 字段配置
         List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
@@ -116,7 +116,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     public void saveConfig(GenConfigInfo genConfigInfo) {
         List<FieldConfigVO> fieldConfigList = genConfigInfo.getFieldConfigList();
         if (CollectionUtil.isEmpty(fieldConfigList)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "字段配置不能为空");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "字段配置不能为空");
         }
 
         // 新生成的表配置
@@ -195,7 +195,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
             Assert.notEmpty(sql, "SQL不能为空");
             statementList = SQLUtils.parseStatements(sql, JdbcConstants.MYSQL, true);
         } catch (Exception e) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER.getCode(), "SQL语句语法错误：" + e.getMessage());
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode(), "SQL语句语法错误：" + e.getMessage());
         }
         List<MySqlCreateTableStatement> createStatementList;
         if (CollectionUtils.isEmpty(statementList)) {
@@ -215,7 +215,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                     this.save(genConfig);
                 } catch (DuplicateKeyException e) {
                     String detail = String.format("表%s的配置已存在，表名不能重复", genConfig.getTableName());
-                    throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, detail);
+                    throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, detail);
                 }
                 Long tableId = genConfig.getId();
                 Assert.notNull(tableId, "从sql导入时，生成tableId失败");
@@ -232,14 +232,14 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     public void resetTable(GenConfigParam param) {
         GenConfig old = this.getById(param.getId());
         if (old == null) {
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "同步数据失败，表结构已不存在");
+            throw new BusinessException(ResultCodeEnum.TABLE_NOT_EXIST, "同步数据失败，表结构已不存在");
         }
         // 通过表名获取表元数据
         TableMetaData tableMetaData = dataBaseMapper.getTableMetaData(old.getTableName());
         // 列元数据
         List<ColumnMetaData> columnList = dataBaseMapper.getTableColumns(old.getTableName());
         if (CollectionUtils.isEmpty(columnList)) {
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "同步数据失败，表结构已不存在");
+            throw new BusinessException(ResultCodeEnum.TABLE_NOT_EXIST, "同步数据失败，表结构已不存在");
         }
         // 构造表配置
         GenConfig genConfig = buildGenTableConfig(tableMetaData);
@@ -270,7 +270,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 查询表配置
         GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getId, param.getId()));
         if (genConfig == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         return genCodeList(genConfig);
     }
@@ -281,7 +281,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 查询表配置
         List<GenConfig> genConfigList = this.list(Wrappers.lambdaQuery(GenConfig.class).in(GenConfig::getId, param.getIds()));
         if (CollectionUtils.isEmpty(genConfigList)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "暂无数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "暂无数据");
         }
         // 创建一个字节输出流来存储ZIP文件
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -309,7 +309,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 字段配置
         List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
         if (CollectionUtil.isEmpty(fieldList)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 获取所有模板文件名
         Map<String, String> templateMap = getTemplateMap();
@@ -431,7 +431,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 zip.closeEntry();
             } catch (IOException e) {
                 log.error("生成代码文件Zip失败", e);
-                throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "生成代码文件Zip失败");
+                throw new BusinessException(ResultCodeEnum.SYSTEM_ERROR, "生成代码文件Zip失败");
             }
         }
     }

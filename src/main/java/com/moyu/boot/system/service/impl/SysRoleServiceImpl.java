@@ -130,7 +130,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // id、code均为唯一标识
         SysRole sysRole = this.getOne(queryWrapper);
         if (sysRole == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
         SysRoleVO vo = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
@@ -146,7 +146,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                     .eq(SysRole::getCode, param.getCode())
                     .eq(SysRole::getDeleted, 0));
             if (role != null) {
-                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "唯一编码重复，请更换或留空自动生成");
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "唯一编码重复，请更换或留空自动生成");
             }
         }
         // 属性复制
@@ -175,7 +175,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 通过主键id查询原有数据
         SysRole old = this.getById(param.getId());
         if (old == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
         SysRole toUpdate = BeanUtil.copyProperties(param, SysRole.class);

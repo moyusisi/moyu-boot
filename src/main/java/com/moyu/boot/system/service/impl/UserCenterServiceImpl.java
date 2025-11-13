@@ -76,7 +76,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 当前登陆用户
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
         if (!optUser.isPresent()) {
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+            throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
         LoginUser loginUser = optUser.get();
         // 构造用户信息视图对象
@@ -111,7 +111,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     public List<Tree<String>> userMenu(String username) {
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
         if (!optUser.isPresent()) {
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+            throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
         Set<String> roleSet = SecurityUtils.getRoles();
         // 用户有权限的资源code集合(含按钮)
@@ -186,14 +186,14 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<SysRoleVO> userRoleList(String roleName) {
-        if (SecurityUtils.isRoot()) {
-            // root拥有所有角色
-            return sysRoleService.list(SysRoleParam.builder().name(roleName).build());
-        }
         // 当前登陆用户
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
         if (!optUser.isPresent()) {
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "用户未登录");
+            throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
+        }
+        if (SecurityUtils.isRoot()) {
+            // root拥有所有角色
+            return sysRoleService.list(SysRoleParam.builder().name(roleName).build());
         }
         // 当前用户的角色
         Set<String> roleSet = SecurityUtils.getRoles();
@@ -214,7 +214,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             // 通过唯一标识code查询group
             group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
             if (group == null) {
-                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "切换失败，未查到岗位数据");
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "切换失败，未查到岗位数据");
             }
             // 岗位角色 group-role
             roleSet = sysRelationService.groupRole(group.getCode());

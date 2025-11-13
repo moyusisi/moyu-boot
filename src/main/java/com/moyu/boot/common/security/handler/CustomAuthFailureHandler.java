@@ -2,8 +2,8 @@ package com.moyu.boot.common.security.handler;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -31,8 +32,10 @@ public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        int code = HttpStatus.UNAUTHORIZED.value();
-        String message = "认证失败";
-        response.getWriter().print(new ObjectMapper().writeValueAsString(new Result<>(code, message)));
+        // 登录异常
+        String responseBody = new ObjectMapper().writeValueAsString(new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION));
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print(responseBody);
+        printWriter.flush();
     }
 }

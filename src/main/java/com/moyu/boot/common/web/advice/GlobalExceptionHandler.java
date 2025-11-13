@@ -54,30 +54,30 @@ public class GlobalExceptionHandler {
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(";"));
             log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
+            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
             response.setMessage(message);
         } else if (e instanceof ConstraintViolationException) {
             // Spring校验违反约束异常(ConstraintViolationException extends ValidationException)，如 @Size、@Min、@Max
             String message = "参数错误:" + e.getMessage();
             log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
+            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
             response.setMessage(e.getMessage());
         } else if (e instanceof IllegalArgumentException) {
             // 业务校验中的参数异常 IllegalArgumentException，如 hutool中的Assert.isTrue
             String message = "参数错误:" + e.getMessage();
             log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
+            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
             response.setMessage(message);
         } else if (e instanceof ServletRequestBindingException) {
             // ServletRequestBindingException是请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失
             log.error(e.getMessage(), e);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
-            response.setMessage(ResultCodeEnum.INVALID_PARAMETER.getMessage());
+            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
+            response.setMessage(ResultCodeEnum.INVALID_PARAMETER_ERROR.getMessage());
         } else if (e instanceof HttpMessageConversionException) {
             // json格式参数进行参数类型转换时，参数转换失败则HttpMessageConversionException
             log.error(e.getMessage(), e);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER.getCode());
-            response.setMessage(ResultCodeEnum.INVALID_PARAMETER.getMessage() + ":参数转换异常");
+            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
+            response.setMessage(ResultCodeEnum.INVALID_PARAMETER_ERROR.getMessage() + ":参数转换异常");
         } else if (e instanceof BusinessException) {
             log.error(e.getMessage());
             response.setCode(((BusinessException) e).getCode());

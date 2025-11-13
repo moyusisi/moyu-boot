@@ -8,12 +8,12 @@ import java.util.StringJoiner;
 
 /**
  * <p>使用举例:</p>
- * <p>1. 构造方法: {@link #BusinessException(int, String)}, {@link #BusinessException(IResultCode)}和{@link #BaseException(ResultCodeEnum, String)}
+ * <p>1. 构造方法: {@link #BusinessException(String, String)}, {@link #BusinessException(IResultCode)}和{@link #BaseException(ResultCodeEnum, String)}
  * <pre>
  * throw new BaseException(code, message); // 自定义响应码和响应描述信息
  * throw new BaseException(ResultCodeEnum.SYSTEM_ERROR); // 抛出某类型的异常
  * throw new BaseException(ResultCodeEnum.BUSINESS_ERROR, "rpc调用异常");  // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "业务异常:rpc调用异常"
- * throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, "userId不能为空"); // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "参数错误:userId不能为空"
+ * throw new BaseException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "userId不能为空"); // 抛出某类型的异常, 并加上具体描述, 最终描述信息将变成: "参数错误:userId不能为空"
  * </pre></p>
  *
  * <p>2. 异常的使用场景
@@ -26,7 +26,7 @@ import java.util.StringJoiner;
  *     Preconditions.checkNotNull(request, "请求参数不能为空");    // 抛出 NullPointerException
  *     Preconditions.checkArgument(!Strings.isNullOrEmpty(mobile), "mobile不能为空");   // 抛出 IllegalArgumentException
  * } catch (Exception e) {
- *     throw new BaseException(ResultCodeEnum.INVALID_PARAMETER, e.getMessage());
+ *     throw new BaseException(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
  * }
  * </pre></p>
  *
@@ -37,12 +37,12 @@ public class BusinessException extends RuntimeException {
     private static final long serialVersionUID = 4067917628321917086L;
 
     /**
-     * 错误码, 错误码采用int类型
+     * 错误码, 参考ResultCodeEnum
      */
-    private int code;
+    private String code;
     private String message;
 
-    public BusinessException(int code, String message) {
+    public BusinessException(String code, String message) {
         super(message);
         this.code = code;
         this.message = message;
@@ -71,11 +71,11 @@ public class BusinessException extends RuntimeException {
     }
 
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

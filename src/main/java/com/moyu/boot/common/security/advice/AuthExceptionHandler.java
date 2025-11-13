@@ -1,14 +1,21 @@
 package com.moyu.boot.common.security.advice;
 
 
-import cn.dev33.satoken.exception.*;
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
+import cn.dev33.satoken.exception.NotRoleException;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -30,28 +37,30 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice(annotations = RestController.class)
 public class AuthExceptionHandler {
 
-    // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
-    @ExceptionHandler(AccessDeniedException.class)
-    public Result<?> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
-        int code = HttpStatus.FORBIDDEN.value();
-        log.error("权限不足", e);
-        String message = "权限不足，无法访问：" + request.getRequestURI();
-        return new Result<>(code, message);
-    }
-
     // security的认证异常(AuthenticationException及子类) 先于security AccessDeniedHandler 处理
     @ExceptionHandler(AuthenticationException.class)
-    public Result<?> authenticationException(HttpServletRequest request, AuthenticationException e) {
-        int code = HttpStatus.UNAUTHORIZED.value();
-        String message = "未认证，无法访问：" + request.getRequestURI();
-        return new Result<>(code, message);
+    public Result<?> authenticationException(AuthenticationException e) {
+        Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
+        // 登录异常细化
+        if (e instanceof UsernameNotFoundException) {
+            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_NOT_EXIST);
+        } else if (e instanceof LockedException) {
+            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_FROZEN);
+        } else if (e instanceof DisabledException) {
+            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_DISABLED);
+        } else if (e instanceof AccountExpiredException) {
+            result = new Result<>(ResultCodeEnum.USER_ACCOUNT_EXPIRED);
+        } else if (e instanceof BadCredentialsException) {
+            result = new Result<>(ResultCodeEnum.USER_PASSWORD_ERROR);
+        }
+        return result;
     }
 
-    // sa权限认证的相关异常(SaTokenException的子类)
-    @ExceptionHandler({NotRoleException.class, NotPermissionException.class, NotLoginException.class, DisableServiceException.class})
-    public Result<?> handlerException(SaTokenException e) {
-        log.error("权限校验不通过", e);
-        int code = HttpStatus.UNAUTHORIZED.value();
-        return new Result<>(code, e.getMessage());
+    // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
+    // sa权限认证的相关异常(SaTokenException的子类)也一起处理
+    @ExceptionHandler({AccessDeniedException.class, NotLoginException.class, NotRoleException.class, NotPermissionException.class})
+    public Result<?> accessDeniedException(HttpServletRequest request, AccessDeniedException e) {
+        log.warn("未授权访问：{}", request.getRequestURI());
+        return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
     }
 }

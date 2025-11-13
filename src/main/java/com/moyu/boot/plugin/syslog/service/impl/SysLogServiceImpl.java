@@ -113,7 +113,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 查询
         SysLog sysLog = this.getById(param.getId());
         if (sysLog == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "未查到指定数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
         SysLogVO vo = BeanUtil.copyProperties(sysLog, SysLogVO.class);
@@ -134,7 +134,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 通过主键id查询原有数据
         SysLog old = this.getById(param.getId());
         if (old == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER, "更新失败，未查到原数据");
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
         SysLog toUpdate = BeanUtil.copyProperties(param, SysLog.class);

@@ -162,7 +162,7 @@ public class GenConfigController {
             outputStream.flush();
         } catch (IOException e) {
             log.error("写入zip文件失败", e);
-            throw new BusinessException(ResultCodeEnum.BUSINESS_ERROR, "下载失败");
+            throw new BusinessException(ResultCodeEnum.SYSTEM_ERROR, "下载失败");
         }
     }
 }

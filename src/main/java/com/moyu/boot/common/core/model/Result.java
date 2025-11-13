@@ -15,8 +15,6 @@ import java.util.StringJoiner;
  *     Result<T> response = Result.success();
  * 自定义响应码和响应描述信息:
  *     Result<T> response = new Result<T>(code, message);
- * 自定义响应码和响应描述信息:
- *     Result<T> response = new Result<T>(code, message);
  * 通过数据创建对象:
  *     Result<T> response = new Result<T>(code, message, data);
  * </pre>
@@ -30,7 +28,7 @@ public class Result<T> implements Serializable {
     /**
      * 响应码
      */
-    private Integer code;
+    private String code;
 
     /**
      * 响应信息
@@ -43,19 +41,33 @@ public class Result<T> implements Serializable {
     private T data;
 
     /**
-     * 创建响应码为 SUCCESS_CODE 的对象
+     * 返回无数据的成功响应对象
      */
     public static <T> Result<T> success() {
         return new Result<>(ResultCodeEnum.SUCCESS);
     }
 
     /**
-     * 返回成功的响应
+     * 返回成功响应对象
      */
     public static <T> Result<T> success(T data) {
         Result<T> response = success();
         response.setData(data);
         return response;
+    }
+
+    /**
+     * 返回无数据的错误响应对象
+     */
+    public static <T> Result<T> failed() {
+        return new Result<>(ResultCodeEnum.SYSTEM_ERROR);
+    }
+
+    /**
+     * 返回错误响应对象
+     */
+    public static <T> Result<T> failed(String message) {
+        return new Result<>(ResultCodeEnum.SYSTEM_ERROR.getCode(), message);
     }
 
     public Result() {
@@ -66,12 +78,12 @@ public class Result<T> implements Serializable {
         this.data = data;
     }
 
-    public Result(int code, String message) {
+    public Result(String code, String message) {
         this.code = code;
         this.message = message;
     }
 
-    public Result(int code, String message, T data) {
+    public Result(String code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -82,11 +94,20 @@ public class Result<T> implements Serializable {
         this.message = resultCode.getMessage();
     }
 
-    public Integer getCode() {
+    public Result(IResultCode resultCode, String detail) {
+        this.code = resultCode.getCode();
+        String message = resultCode.getMessage();
+        if (detail != null && !detail.isEmpty()) {
+            message = message + ":" + detail;
+        }
+        this.message = message;
+    }
+
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

@@ -12,7 +12,7 @@ public interface IResultCode {
     /**
      * 获取响应码
      */
-    int getCode();
+    String getCode();
 
     /**
      * 获取相应描述信息
