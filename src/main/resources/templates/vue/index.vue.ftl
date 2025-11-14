@@ -94,6 +94,13 @@
         <template v-if="column.dataIndex === 'index'">
           <span>{{ index + 1 }}</span>
         </template>
+        <template v-if="column.dataIndex === 'id'">
+          <!-- 唯一键点击查看详情 -->
+          <a-tooltip :title="text" placement="topLeft">
+            <!--<a style="text-decoration: underline;" @click="detailRef.onOpen(record)">{{ text }}</a>-->
+            <a @click="detailRef.onOpen(record)">{{ text }}</a>
+          </a-tooltip>
+        </template>
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInList == 1 && fieldConfig.ellipsis == 1>
@@ -121,7 +128,8 @@
       </template>
     </MTable>
   </a-card>
-  <Form ref="formRef" @successful="tableRef.refresh()" />
+  <Form ref="formRef" @successful="tableRef.refresh()"/>
+  <Detail ref="detailRef"/>
 </template>
 
 <script setup>
@@ -130,8 +138,9 @@
   import { h, ref } from "vue"
   import { PlusOutlined, DeleteOutlined, RedoOutlined, SearchOutlined, DownOutlined, UpOutlined } from "@ant-design/icons-vue"
   import { message } from "ant-design-vue"
-  import Form from "./form.vue"
   import MTable from "@/components/MTable/index.vue"
+  import Form from "./form.vue"
+  import Detail from "./detail.vue"
 
   // 查询表单相关对象
   const queryFormRef = ref()
@@ -147,6 +156,7 @@
   ]
   // 其他页面操作
   const formRef = ref()
+  const detailRef = ref()
 
   /***** 表格相关对象 start *****/
   const tableRef = ref()
