@@ -44,7 +44,9 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
         // 认证，会调用 UserDetailsServiceImpl#loadUserByUsername
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
-        // 认证失败会抛出 AuthenticationException, 认证成功获取主体
+        // 放到Security上下文中(认证失败会抛出AuthenticationException，不会往下走)
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        // 认证成功获取已认证的用户主体
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();
         // 生成token
         return tokenService.generateToken(loginUser);

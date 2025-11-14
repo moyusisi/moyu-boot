@@ -61,7 +61,7 @@ public class SysLogAspect {
      */
     @Around("logPointcut() && @annotation(logAnnotation)")
     public Object logHandler(ProceedingJoinPoint joinPoint, com.moyu.boot.common.core.annotation.SysLog logAnnotation) throws Throwable {
-        // 先从上下文中获取当前用户(可能为空)
+        // 先从上下文中获取当前用户，防止被清理(可能为空)
         String username = SecurityUtils.getUsername();
         Object result = null;
         Exception exception = null;
@@ -73,7 +73,7 @@ public class SysLogAspect {
             throw e;
         } finally {
             try {
-                this.saveLog(joinPoint, logAnnotation, result, exception, start);
+                this.saveLog(joinPoint, logAnnotation, result, exception, username, start);
             } catch (Exception e) {
                 log.error("日志插件出现异常", e);
             }
@@ -81,8 +81,10 @@ public class SysLogAspect {
         return result;
     }
 
-    private void saveLog(final JoinPoint joinPoint, com.moyu.boot.common.core.annotation.SysLog logAnnotation, Object result, final Exception e, long start) throws Exception {
+    private void saveLog(final JoinPoint joinPoint, com.moyu.boot.common.core.annotation.SysLog logAnnotation, Object result, final Exception e, String username, long start) throws Exception {
         SysLog sysLog = new SysLog();
+        // 操作人
+        sysLog.setCreateBy(username);
         // 业务时间
         sysLog.setStartTime(new Date(start));
         long end = System.currentTimeMillis();
