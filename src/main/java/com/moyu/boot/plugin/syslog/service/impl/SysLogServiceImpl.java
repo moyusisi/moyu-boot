@@ -19,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -52,17 +55,17 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
-        // 指定createTime查询
-        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
-            Date startTime = param.getCreateTimeRange().get(0);
-            Date endTime = param.getCreateTimeRange().get(1);
+        // 指定startTime范围查询
+        if (param.getStartTimeRange() != null && param.getStartTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getStartTimeRange().get(0), param.getStartTimeRange().get(1))) {
+            Date startTime = param.getStartTimeRange().get(0);
+            Date endTime = param.getStartTimeRange().get(1);
             // 如果是日期范围，则endTime应为当日的结尾
             endTime = DateUtil.endOfDay(endTime);
-            queryWrapper.between(SysLog::getCreateTime, startTime, endTime);
+            queryWrapper.between(SysLog::getStartTime, startTime, endTime);
         }
         // 仅查询未删除的
         queryWrapper.eq(SysLog::getDeleted, 0);
-        queryWrapper.orderByDesc(SysLog::getCreateTime);
+        queryWrapper.orderByDesc(SysLog::getStartTime);
         // 查询
         List<SysLog> sysLogList = this.list(queryWrapper);
         // 转换为voList
@@ -90,17 +93,17 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
-        // 指定createTime查询
-        if (param.getCreateTimeRange() != null && param.getCreateTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getCreateTimeRange().get(0), param.getCreateTimeRange().get(1))) {
-            Date startTime = param.getCreateTimeRange().get(0);
-            Date endTime = param.getCreateTimeRange().get(1);
+        // 指定startTime范围查询
+        if (param.getStartTimeRange() != null && param.getStartTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getStartTimeRange().get(0), param.getStartTimeRange().get(1))) {
+            Date startTime = param.getStartTimeRange().get(0);
+            Date endTime = param.getStartTimeRange().get(1);
             // 如果是日期范围，则endTime应为当日的结尾
             endTime = DateUtil.endOfDay(endTime);
-            queryWrapper.between(SysLog::getCreateTime, startTime, endTime);
+            queryWrapper.between(SysLog::getStartTime, startTime, endTime);
         }
         // 仅查询未删除的
         queryWrapper.eq(SysLog::getDeleted, 0);
-        queryWrapper.orderByDesc(SysLog::getCreateTime);
+        queryWrapper.orderByDesc(SysLog::getStartTime);
         // 分页查询
         Page<SysLog> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysLog> sysLogPage = this.page(page, queryWrapper);

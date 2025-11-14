@@ -82,6 +82,11 @@ public class SysLogParam extends BasePageParam {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     /**
+     * 时间范围(startTime的范围)
+     */
+    @JsonFormat(pattern="yyyy-MM-dd")
+    private List<Date> startTimeRange;
+    /**
     * 结束时间
     */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
@@ -90,11 +95,6 @@ public class SysLogParam extends BasePageParam {
     * 执行耗时(ms)
     */
     private Long executionTime;
-    /**
-    * 记录时间范围
-    */
-    @JsonFormat(pattern="yyyy-MM-dd")
-    private List<Date> createTimeRange;
     /**
      * 操作人ID
      */
