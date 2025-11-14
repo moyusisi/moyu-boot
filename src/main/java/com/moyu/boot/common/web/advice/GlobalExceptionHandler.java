@@ -7,18 +7,26 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
+import javax.servlet.ServletException;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.stream.Collectors;
 
 /**
+ * 全局异常处理器
  * <p>@ControllerAdvice和@RestControllerAdvice都可以指向控制器的一个子集</p>
  * <pre>
  *   如:
@@ -39,55 +47,147 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     /**
-     * 异常捕捉处理
-     * 若为ControllerAdvice     处理异常后返回本函数的返回值
-     * 若为RestControllerAdvice 处理异常后返回本函数的返回值的restful结果(就像加了@ResponseBody一样)
+     * 绑定异常(MethodArgumentNotValidException extends BindException)
+     * <p>
+     * 使用 @Valid 或者 @Validated 进行参数验证时绑定失败会触发
      */
-    @ExceptionHandler(value = Exception.class)
-    public Result<?> exceptionHandler(Exception e) {
-        Result<?> response = new Result<>();
-        if (e instanceof BindException) {
-            // Spring验证异常(MethodArgumentNotValidException extends BindException)
-            // 单个字段错误会返回MethodArgumentNotValidException，多个字段错误会把所有错误信息拼在一起返回BindException
-            BindingResult bindingResult = ((BindException) e).getBindingResult();
-            String message = "参数错误:" + bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.joining(";"));
-            log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
-            response.setMessage(message);
-        } else if (e instanceof ConstraintViolationException) {
-            // Spring校验违反约束异常(ConstraintViolationException extends ValidationException)，如 @Size、@Min、@Max
-            String message = "参数错误:" + e.getMessage();
-            log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
-            response.setMessage(e.getMessage());
-        } else if (e instanceof IllegalArgumentException) {
-            // 业务校验中的参数异常 IllegalArgumentException，如 hutool中的Assert.isTrue
-            String message = "参数错误:" + e.getMessage();
-            log.error(message);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
-            response.setMessage(message);
-        } else if (e instanceof ServletRequestBindingException) {
-            // ServletRequestBindingException是请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失
-            log.error(e.getMessage(), e);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
-            response.setMessage(ResultCodeEnum.INVALID_PARAMETER_ERROR.getMessage());
-        } else if (e instanceof HttpMessageConversionException) {
-            // json格式参数进行参数类型转换时，参数转换失败则HttpMessageConversionException
-            log.error(e.getMessage(), e);
-            response.setCode(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode());
-            response.setMessage(ResultCodeEnum.INVALID_PARAMETER_ERROR.getMessage() + ":参数转换异常");
-        } else if (e instanceof BusinessException) {
-            log.error(e.getMessage());
-            response.setCode(((BusinessException) e).getCode());
-            response.setMessage(e.getMessage());
-        } else {
-            log.error("系统异常", e);
-            response.setCode(ResultCodeEnum.SYSTEM_ERROR.getCode());
-            response.setMessage(ResultCodeEnum.SYSTEM_ERROR.getMessage());
+    @ExceptionHandler(BindException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(BindException e) {
+        log.error("绑定异常:{}", e.getMessage());
+        // 单个字段错误会返回MethodArgumentNotValidException，多个字段错误会把所有错误信息拼在一起返回BindException
+        String message = e.getAllErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.joining(";"));
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, message);
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 违反约束条件异常(ConstraintViolationException extends ValidationException)
+     * <p>
+     * 使用 @Valid 或者 @Validated 进行参数验证时，违反如 @Size、@Min、@Max等约束条件会触发
+     */
+    @ExceptionHandler(ConstraintViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(ConstraintViolationException e) {
+        log.error("违反约束条件异常:{}", e.getMessage());
+        String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, message);
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 参数绑定异常(MissingServletRequestParameterException extends ServletRequestBindingException)
+     * <p>
+     * 请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失(parameter、header、cookie、path等)
+     */
+    @ExceptionHandler(ServletRequestBindingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(ServletRequestBindingException e) {
+        log.error("参数绑定异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 参数类型不匹配的异常 MethodArgumentTypeMismatchException
+     * <p>
+     * 当请求参数类型不匹配时的异常，如Controller中@RequestParam指定的字段与传参不一致
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(MethodArgumentTypeMismatchException e) {
+        log.error("参数类型错误异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 参数转换异常 HttpMessageConversionException
+     * <p>
+     * 如json格式参数进行参数类型转换时，参数转换失败则抛出异常。
+     */
+    @ExceptionHandler(HttpMessageConversionException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(HttpMessageConversionException e) {
+        log.error("参数转换异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 接口不存在
+     * <p>
+     * 当客户端请求一个不存在的路径时，会抛出 NoHandlerFoundException 异常
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Result<?> exceptionHandler(NoHandlerFoundException e) {
+        log.error("访问接口不存在异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INTERFACE_NOT_EXIST);
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * Servlet异常(此异常范围较大)
+     * <p>
+     * 当 Servlet 请求处理时发生的异常。
+     */
+    @ExceptionHandler(ServletException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(ServletException e) {
+        log.error("Servlet异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 非法参数异常
+     * <p>
+     * 一些断言工具中会抛出的异常,如 Assert.notEmpty
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(IllegalArgumentException e) {
+        log.error("参数绑定异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 业务异常
+     * <p>
+     * 业务逻辑发生异常时主动抛出
+     */
+    @ExceptionHandler(BusinessException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(BusinessException e) {
+        log.error(e.getMessage());
+        Result<?> result = new Result<>(e.getCode(), e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 其他未捕获异常
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> exceptionHandler(Exception e) throws Exception {
+        // 将认证鉴权异常异常继续抛出，不在此处理
+        if (e instanceof AccessDeniedException || e instanceof AuthenticationException) {
+            throw e;
         }
-        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(response));
-        return response;
+        log.error("系统异常", e);
+        Result<?> result = Result.failed(e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
     }
 }

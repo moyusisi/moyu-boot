@@ -86,6 +86,10 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
      */
     MIDDLEWARE_SERVICE_ERROR("C0100", "中间件服务出错"),
     RPC_SERVICE_ERROR("C0110", "RPC 服务出错"),
+
+    RPC_SERVICE_NOT_FOUND("C0111", "RPC 服务未找到"),
+    INTERFACE_NOT_EXIST("C0113", "接口不存在"),
+
     MESSAGE_SERVICE_ERROR("C0120", "消息服务出错"),
     CACHE_SERVICE_ERROR("C0130", "缓存服务出错"),
     CONFIGURATION_SERVICE_ERROR("C0140", "配置服务出错"),
