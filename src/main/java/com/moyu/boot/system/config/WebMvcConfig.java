@@ -30,6 +30,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加用户vue后处理拦截器
         registry.addInterceptor(vueHistoryInterceptor).addPathPatterns("/**")
-                .excludePathPatterns("/api/**", "/static/**", "/public/**");
+                .excludePathPatterns("/api/**", "/static/**", "/public/**", "/assets/**");
     }
 }
