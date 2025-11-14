@@ -117,7 +117,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 用户有权限的资源code集合(含按钮)
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
         //  无任何权限直接返回
-        if (CollectionUtils.isEmpty(permSet)) {
+        if (CollectionUtils.isEmpty(permSet) && !SecurityUtils.isRoot()) {
             return Lists.newArrayList();
         }
         // 查询所有的菜单(不含按钮)
