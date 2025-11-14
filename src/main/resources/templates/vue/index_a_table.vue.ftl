@@ -108,6 +108,13 @@
         <template v-if="column.dataIndex === 'index'">
           <span>{{ index + 1 }}</span>
         </template>
+        <template v-if="column.dataIndex === 'id'">
+          <!-- 唯一键点击查看详情 -->
+          <a-tooltip :title="text" placement="topLeft">
+            <!--<a style="text-decoration: underline;" @click="detailRef.onOpen(record)">{{ text }}</a>-->
+            <a @click="detailRef.onOpen(record)">{{ text }}</a>
+          </a-tooltip>
+        </template>
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInList == 1 && fieldConfig.ellipsis == 1>
