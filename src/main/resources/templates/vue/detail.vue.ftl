@@ -110,7 +110,10 @@
     onOpen
   })
 </script>
+
 <style scoped>
-  .ant-form-item {
+  /** 后代选择器 **/
+  .ant-card .ant-form-item {
+    margin-bottom: 12px !important;
   }
 </style>
