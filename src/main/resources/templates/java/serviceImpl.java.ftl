@@ -59,15 +59,16 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             <#elseif fieldConfig.queryType == 'NE'>
         queryWrapper.ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'BETWEEN'>
-        if (param.get${fieldConfig.fieldName?cap_first}Range() != null && param.get${fieldConfig.fieldName?cap_first}Range().size() > 1 && ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))) {
-            Date startTime = param.get${fieldConfig.fieldName?cap_first}Range().get(0);
-            Date endTime = param.get${fieldConfig.fieldName?cap_first}Range().get(1);
+        ${fieldConfig.fieldType} start = param.get${fieldConfig.fieldName?cap_first}1();
+        ${fieldConfig.fieldType} end = param.get${fieldConfig.fieldName?cap_first}2();
                 <#if fieldConfig.formType == "DATE">
-            // 如果是日期范围，则endTime应为当日的结尾
-            endTime = DateUtil.endOfDay(endTime);
+        // 如果是日期范围，则endTime应为当日的结尾
+        end = DateUtil.endOfDay(end);
                 </#if>
-            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, startTime, endTime);
-        }
+        // 范围查询-起始
+        queryWrapper.ge(ObjectUtil.isNotEmpty(start), ${entityName}::get${fieldConfig.fieldName?cap_first}, start);
+        // 范围查询-截止
+        queryWrapper.le(ObjectUtil.isNotEmpty(end), ${entityName}::get${fieldConfig.fieldName?cap_first}, end);
             <#elseif fieldConfig.queryType == 'IN'>
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             </#if>
@@ -110,15 +111,16 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             <#elseif fieldConfig.queryType == 'NE'>
         queryWrapper.ne(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             <#elseif fieldConfig.queryType == 'BETWEEN'>
-        if (param.get${fieldConfig.fieldName?cap_first}Range() != null && param.get${fieldConfig.fieldName?cap_first}Range().size() > 1 && ObjectUtil.isAllNotEmpty(param.get${fieldConfig.fieldName?cap_first}Range().get(0), param.get${fieldConfig.fieldName?cap_first}Range().get(1))) {
-            Date startTime = param.get${fieldConfig.fieldName?cap_first}Range().get(0);
-            Date endTime = param.get${fieldConfig.fieldName?cap_first}Range().get(1);
+        ${fieldConfig.fieldType} start = param.get${fieldConfig.fieldName?cap_first}1();
+        ${fieldConfig.fieldType} end = param.get${fieldConfig.fieldName?cap_first}2();
                 <#if fieldConfig.formType == "DATE">
-            // 如果是日期范围，则endTime应为当日的结尾
-            endTime = DateUtil.endOfDay(endTime);
+        // 如果是日期范围，则endTime应为当日的结尾
+        end = DateUtil.endOfDay(end);
                 </#if>
-            queryWrapper.between(${entityName}::get${fieldConfig.fieldName?cap_first}, startTime, endTime);
-        }
+        // 范围查询-起始
+        queryWrapper.ge(ObjectUtil.isNotEmpty(start), ${entityName}::get${fieldConfig.fieldName?cap_first}, start);
+        // 范围查询-截止
+        queryWrapper.le(ObjectUtil.isNotEmpty(end), ${entityName}::get${fieldConfig.fieldName?cap_first}, end);
             <#elseif fieldConfig.queryType == 'IN'>
         queryWrapper.in(ObjectUtil.isNotEmpty(param.get${fieldConfig.fieldName?cap_first}()), ${entityName}::get${fieldConfig.fieldName?cap_first}, param.get${fieldConfig.fieldName?cap_first}());
             </#if>

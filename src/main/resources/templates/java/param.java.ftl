@@ -68,17 +68,26 @@ public class ${entityName}Param extends BasePageParam {
             </#if>
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         </#if>
-        <#-- 时间范围控制多一个字段 -->
+        <#-- 范围控制多两个个字段 -->
         <#if fieldConfig.queryType == "BETWEEN">
     /**
-    * ${fieldConfig.fieldRemark}范围
+    * ${fieldConfig.fieldRemark}-起始
     */
             <#if fieldConfig.formType == "DATE">
     @JsonFormat(pattern="yyyy-MM-dd")
             <#elseif fieldConfig.formType == "DATE_TIME">
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
             </#if>
-    private List<${fieldConfig.fieldType}> ${fieldConfig.fieldName}Range;
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName}1;
+    /**
+    * ${fieldConfig.fieldRemark}-截止
+    */
+            <#if fieldConfig.formType == "DATE">
+    @JsonFormat(pattern="yyyy-MM-dd")
+            <#elseif fieldConfig.formType == "DATE_TIME">
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+            </#if>
+    private ${fieldConfig.fieldType} ${fieldConfig.fieldName}2;
         </#if>
     </#list>
 </#if>

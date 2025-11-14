@@ -82,6 +82,16 @@ public class SysLogParam extends BasePageParam {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     /**
+     * 开始时间-起始
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date startTime1;
+    /**
+     * 开始时间-截止
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private Date startTime2;
+    /**
      * 时间范围(startTime的范围)
      */
     @JsonFormat(pattern="yyyy-MM-dd")
