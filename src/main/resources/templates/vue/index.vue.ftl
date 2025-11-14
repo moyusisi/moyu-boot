@@ -19,27 +19,51 @@
       <#else>
         <a-col :span="6" v-if="showMore">
       </#if>
-          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
       <#if (fieldConfig.formType == "INPUT" || fieldConfig.formType == "TEXT_AREA")>
         <#if fieldConfig.queryType == "LIKE">
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
             <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="搜索${fieldConfig.fieldRemark}" allowClear />
+          </a-form-item>
         <#else>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
             <a-input v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请输入${fieldConfig.fieldRemark}" allowClear />
+          </a-form-item>
         </#if>
       <#elseif fieldConfig.formType == "INPUT_NUMBER">
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
             <a-input-number v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" allowClear />
+          </a-form-item>
       <#elseif fieldConfig.formType == "SELECT" || fieldConfig.formType == "RADIO" || fieldConfig.formType == "CHECK_BOX">
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
             <a-select v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" allowClear />
+          </a-form-item>
       <#elseif fieldConfig.formType == "DATE">
         <#if fieldConfig.queryType == "BETWEEN">
-            <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" valueFormat="YYYY-MM-DD"/>
+          <a-form-item name="${fieldConfig.fieldName}1" label="起始日期">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}1" placeholder="起始日期" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
+          <a-form-item name="${fieldConfig.fieldName}2" label="截止日期">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}2" placeholder="截止日期" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
+        <#else>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请选择日期" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
         </#if>
       <#elseif fieldConfig.formType == "DATE_TIME">
         <#if fieldConfig.queryType == "BETWEEN">
-            <a-range-picker v-model:value="queryFormData.${fieldConfig.fieldName}Range" valueFormat="YYYY-MM-DD HH:mm:ss" :show-time="{ format: 'HH:mm' }" format="YYYY-MM-DD HH:mm"/>
+          <a-form-item name="${fieldConfig.fieldName}1" label="起始时间">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}1" placeholder="起始时间" :showTime="{ format: 'HH:mm:ss' }" format="YYYY-MM-DD HH:mm:ss" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
+          <a-form-item name="${fieldConfig.fieldName}2" label="截止时间">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}2" placeholder="截止时间" :showTime="{ format: 'HH:mm:ss' }" format="YYYY-MM-DD HH:mm:ss" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
+        <#else>
+          <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}">
+            <a-date-picker v-model:value="queryFormData.${fieldConfig.fieldName}" placeholder="请选择时间" :showTime="{ format: 'HH:mm:ss' }" format="YYYY-MM-DD HH:mm:ss" valueFormat="YYYY-MM-DD HH:mm:ss"/>
+          </a-form-item>
         </#if>
       </#if>
-          </a-form-item>
         </a-col>
       <#if (totalQuery <= 3 && countQuery == totalQuery)>
       <#-- 少于等于3个条件时,最后一个条件之后添加查询按钮 -->
