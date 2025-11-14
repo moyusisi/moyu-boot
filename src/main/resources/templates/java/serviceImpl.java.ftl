@@ -114,7 +114,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         ${fieldConfig.fieldType} start = param.get${fieldConfig.fieldName?cap_first}1();
         ${fieldConfig.fieldType} end = param.get${fieldConfig.fieldName?cap_first}2();
                 <#if fieldConfig.formType == "DATE">
-        // 如果是日期范围，则endTime应为当日的结尾
+        // 如果是日期，则endTime应为当日的结尾
         end = DateUtil.endOfDay(end);
                 </#if>
         // 范围查询-起始

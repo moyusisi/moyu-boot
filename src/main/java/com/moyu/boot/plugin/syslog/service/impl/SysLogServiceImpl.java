@@ -1,7 +1,6 @@
 package com.moyu.boot.plugin.syslog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -56,13 +55,14 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定startTime范围查询
-        if (param.getStartTimeRange() != null && param.getStartTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getStartTimeRange().get(0), param.getStartTimeRange().get(1))) {
-            Date startTime = param.getStartTimeRange().get(0);
-            Date endTime = param.getStartTimeRange().get(1);
-            // 如果是日期范围，则endTime应为当日的结尾
-            endTime = DateUtil.endOfDay(endTime);
-            queryWrapper.between(SysLog::getStartTime, startTime, endTime);
-        }
+        Date start = param.getStartTime1();
+        // 如果是日期，则end应为当日的结尾
+        // end = DateUtil.endOfDay(end);
+        Date end = param.getStartTime2();
+        // 范围查询-起始
+        queryWrapper.ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
+        // 范围查询-截止
+        queryWrapper.le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
         // 仅查询未删除的
         queryWrapper.eq(SysLog::getDeleted, 0);
         queryWrapper.orderByDesc(SysLog::getStartTime);
@@ -94,13 +94,14 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 指定createBy查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定startTime范围查询
-        if (param.getStartTimeRange() != null && param.getStartTimeRange().size() > 1 && ObjectUtil.isAllNotEmpty(param.getStartTimeRange().get(0), param.getStartTimeRange().get(1))) {
-            Date startTime = param.getStartTimeRange().get(0);
-            Date endTime = param.getStartTimeRange().get(1);
-            // 如果是日期范围，则endTime应为当日的结尾
-            endTime = DateUtil.endOfDay(endTime);
-            queryWrapper.between(SysLog::getStartTime, startTime, endTime);
-        }
+        Date start = param.getStartTime1();
+        // 如果是日期，则end应为当日的结尾
+        // end = DateUtil.endOfDay(end);
+        Date end = param.getStartTime2();
+        // 范围查询-起始
+        queryWrapper.ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
+        // 范围查询-截止
+        queryWrapper.le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
         // 仅查询未删除的
         queryWrapper.eq(SysLog::getDeleted, 0);
         queryWrapper.orderByDesc(SysLog::getStartTime);
