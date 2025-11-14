@@ -32,7 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice(annotations = RestController.class)
 public class AuthExceptionHandler {
 
-    // security的认证异常(AuthenticationException及子类) 先于security AccessDeniedHandler 处理
+    // security的认证异常(AuthenticationException及子类)
     @ExceptionHandler(AuthenticationException.class)
     public Result<?> authenticationException(AuthenticationException e) {
         // 登录异常
