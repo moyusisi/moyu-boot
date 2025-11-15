@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.moyu.boot.plugin.codegen.mapper.DataBaseMapper">
+<mapper namespace="com.moyu.boot.plugin.codeGen2.mapper.DataBaseMapper">
 
     <!-- 查询数据库表分页 -->
     <select id="getTablePage" resultType="com.moyu.boot.plugin.codeGen.model.vo.TableMetaData">
