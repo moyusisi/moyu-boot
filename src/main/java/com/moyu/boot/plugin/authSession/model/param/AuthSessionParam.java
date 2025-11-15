@@ -27,7 +27,13 @@ public class AuthSessionParam extends BasePageParam {
     private String searchKey;
 
     /**
-     * 用户名/账号
+     * 账号
      */
-    private String username;
+    private String account;
+
+    /**
+     * 姓名
+     */
+    private String name;
+
 }

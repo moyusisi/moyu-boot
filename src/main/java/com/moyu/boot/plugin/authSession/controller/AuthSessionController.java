@@ -6,7 +6,7 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.plugin.authSession.model.service.AuthSessionService;
+import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;

@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.authSession.model.service;
+package com.moyu.boot.plugin.authSession.service;
 
 
 import com.moyu.boot.common.core.model.PageData;

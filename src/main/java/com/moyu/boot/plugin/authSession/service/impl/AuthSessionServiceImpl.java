@@ -1,13 +1,14 @@
-package com.moyu.boot.plugin.authSession.model.service.impl;
+package com.moyu.boot.plugin.authSession.service.impl;
 
 
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.plugin.authSession.model.service.AuthSessionService;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -47,11 +48,12 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
             long sessionTimeOut = saSession.timeout();
             if (sessionTimeOut == -1) {
-                vo.setSessionTimeout("永久");
+                vo.setSessionTimeout("永不过期");
             } else {
                 vo.setSessionTimeout(sessionTimeOut + "秒");
             }
+            voList.add(vo);
         });
-        return null;
+        return new PageData<>(Convert.toLong(voList.size()), voList);
     }
 }
