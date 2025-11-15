@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.sysLog1.model.param;
+package com.moyu.boot.plugin.sysLog.model.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

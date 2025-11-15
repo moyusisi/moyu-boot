@@ -1,13 +1,13 @@
-package com.moyu.boot.plugin.sysLog1.mapper;
+package com.moyu.boot.plugin.sysLog.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.common.mybatis.annotation.DataPermission;
-import com.moyu.boot.plugin.sysLog1.model.entity.SysLog;
-import com.moyu.boot.plugin.sysLog1.model.param.SysLogParam;
-import com.moyu.boot.plugin.sysLog1.model.vo.SysLogVO;
+import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
+import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
+import com.moyu.boot.plugin.sysLog.model.vo.SysLogVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
