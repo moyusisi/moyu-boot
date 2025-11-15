@@ -4,6 +4,7 @@ package com.moyu.boot.plugin.codeGen.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
@@ -46,6 +47,7 @@ public class GenConfigController {
     /**
      * 分页获取代码生成配置列表
      */
+    @SysLog(module = "system", business = "代码生成", value = "查询代码生成配置列表")
     @PostMapping("/page")
     public Result<PageData<GenConfig>> pageList(@RequestBody GenConfigParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -56,6 +58,7 @@ public class GenConfigController {
     /**
      * 查询生成代码配置(无则生成)
      */
+    @SysLog(module = "system", business = "代码生成", value = "查询代码生成配置详情")
     @PostMapping("/detail")
     public Result<GenConfigInfo> configDetail(@RequestBody GenConfigParam param) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(param.getId(), param.getTableName()), "id和tableName不能同时为空");
@@ -66,6 +69,7 @@ public class GenConfigController {
     /**
      * 保存生成代码配置
      */
+    @SysLog(module = "system", business = "代码生成", value = "保存代码生成配置")
     @PostMapping("/save")
     public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
         Assert.notNull(param.getId(), "id不能为空");
@@ -76,6 +80,7 @@ public class GenConfigController {
     /**
      * 删除生成代码配置
      */
+    @SysLog(module = "system", business = "代码生成", value = "删除代码生成配置")
     @PostMapping("/delete")
     public Result<?> deleteConfig(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
@@ -86,6 +91,7 @@ public class GenConfigController {
     /**
      * 分页查询数据库中的表，以便导入
      */
+    @SysLog(module = "system", business = "代码生成", value = "查询可导入的表")
     @PostMapping("/tablePage")
     public Result<PageData<TableMetaData>> tablePageList(@RequestBody GenConfigParam param) {
         PageData<TableMetaData> page = genConfigService.tablePageList(param);
@@ -95,6 +101,7 @@ public class GenConfigController {
     /**
      * 导入表
      */
+    @SysLog(module = "system", business = "代码生成", value = "通过导入表来生成配置")
     @PostMapping("/import")
     public Result<?> importTable(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getTableNameSet(), "tableNameSet不能为空");
@@ -105,6 +112,7 @@ public class GenConfigController {
     /**
      * 从SQL导入
      */
+    @SysLog(module = "system", business = "代码生成", value = "通过解析SQL来生成配置")
     @PostMapping("/importSql")
     public Result<?> importSql(@RequestBody GenConfigParam param) {
         Assert.notEmpty(param.getSql(), "导入的sql不能为空");
@@ -115,6 +123,7 @@ public class GenConfigController {
     /**
      * 重置表，重新生成配置
      */
+    @SysLog(module = "system", business = "代码生成", value = "通过表重新生成配置")
     @PostMapping("/resetTable")
     public Result<?> resetTable(@RequestBody GenConfigParam param) {
         Assert.notNull(param.getId(), "id不能为空");
@@ -125,6 +134,7 @@ public class GenConfigController {
     /**
      * 预览生成的代码
      */
+    @SysLog(module = "system", business = "代码生成", value = "预览生成的代码")
     @PostMapping("/preview")
     public Result<List<CodePreviewVO>> preview(@RequestBody GenConfigParam param) {
         Assert.notNull(param.getId(), "id不能为空");
@@ -133,8 +143,9 @@ public class GenConfigController {
     }
 
     /**
-     * 预览生成的代码
+     * 下载生成的代码
      */
+    @SysLog(module = "system", business = "代码生成", value = "下载生成的代码")
     @Log(response = false)
     @PostMapping("/download")
     public void downloadZip(@RequestBody GenConfigParam param, HttpServletResponse response) {
