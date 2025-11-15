@@ -27,8 +27,8 @@ public class SaTokenConfigure {
         config.setTokenName(TokenService.TOKEN_NAME);
         // 指定 token 提交时的前缀
         config.setTokenPrefix(TokenService.TOKEN_PREFIX);
-        // token 有效期（单位：秒），默认3天，-1代表永不过期
-        config.setTimeout(3 * 24 * 60 * 60);
+        // token 有效期（单位：秒），默认2天，-1代表永不过期
+        config.setTimeout(2 * 24 * 60 * 60);
         // token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
         config.setActiveTimeout(-1);
         // 是否允许同一账号多地同时登录（为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
