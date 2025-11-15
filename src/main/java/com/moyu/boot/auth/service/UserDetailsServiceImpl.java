@@ -73,6 +73,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
+                .name(sysUser.getName())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
                 // 默认岗位权限(默认角色+直接拥有的角色)

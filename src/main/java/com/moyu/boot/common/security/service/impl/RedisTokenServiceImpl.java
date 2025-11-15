@@ -31,7 +31,9 @@ public class RedisTokenServiceImpl implements TokenService {
                 // extra只在 jwt 模式下生效，传入的 extra 参数将被忽略
                 .setExtra("username", loginUser.getUsername())
         );
-        // 将登录用户信息进行缓存
+        // 账户相关的信息缓存到Account-Session中
+        StpUtil.getSession().set("name", loginUser.getName());
+        // 将登录用户信息缓存到Token-Session中
         StpUtil.getTokenSession().set("loginUser", loginUser);
         return StpUtil.getTokenValue();
     }

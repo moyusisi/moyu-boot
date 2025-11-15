@@ -32,6 +32,10 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 用户姓名
+     */
+    private String name;
+    /**
      * 当前组织机构(与当前岗位有关)
      */
     private String orgCode;

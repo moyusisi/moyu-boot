@@ -43,6 +43,7 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             SaSession saSession = StpUtil.getSessionByLoginId(loginId, false);
             AuthSessionVO vo = new AuthSessionVO();
             vo.setAccount(loginId);
+            vo.setName(saSession.get("name", null));
             // sessionId为 Authorization:login:session:loginId
             vo.setSessionId(saSession.getId());
             vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
@@ -52,6 +53,8 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             } else {
                 vo.setSessionTimeout(sessionTimeOut + "秒");
             }
+            // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
+            vo.setTokenCount(saSession.getTerminalList().size());
             voList.add(vo);
         });
         return new PageData<>(Convert.toLong(voList.size()), voList);
