@@ -1,13 +1,13 @@
-package com.moyu.boot.plugin.syslog.controller;
+package com.moyu.boot.plugin.sysLog1.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.syslog.model.param.SysLogParam;
-import com.moyu.boot.plugin.syslog.model.vo.SysLogVO;
-import com.moyu.boot.plugin.syslog.service.SysLogService;
+import com.moyu.boot.plugin.sysLog1.model.param.SysLogParam;
+import com.moyu.boot.plugin.sysLog1.model.vo.SysLogVO;
+import com.moyu.boot.plugin.sysLog1.service.SysLogService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

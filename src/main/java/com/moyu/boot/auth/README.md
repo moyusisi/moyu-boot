@@ -8,5 +8,5 @@
 * 对接第三方认证服务(SSO、OAuth) TODO
 
 ### 说明
-通过SpringSecurity实现
+通过SpringSecurity实现，使用Sa-Token颁发令牌
 

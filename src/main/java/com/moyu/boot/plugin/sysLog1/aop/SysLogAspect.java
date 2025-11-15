@@ -1,11 +1,11 @@
-package com.moyu.boot.plugin.syslog.aop;
+package com.moyu.boot.plugin.sysLog1.aop;
 
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.security.util.SecurityUtils;
-import com.moyu.boot.plugin.syslog.model.entity.SysLog;
-import com.moyu.boot.plugin.syslog.service.SysLogService;
+import com.moyu.boot.plugin.sysLog1.model.entity.SysLog;
+import com.moyu.boot.plugin.sysLog1.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
