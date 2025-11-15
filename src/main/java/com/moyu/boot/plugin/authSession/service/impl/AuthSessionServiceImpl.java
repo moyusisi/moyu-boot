@@ -89,6 +89,7 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                     }).collect(Collectors.toList());
 
             vo.setTokenCount(tokenInfoList.size());
+            vo.setTokenList(tokenInfoList);
             vo.setLatestLoginTime(tokenInfoList.get(vo.getTokenCount() - 1).getCreateTime());
             voList.add(vo);
         });
