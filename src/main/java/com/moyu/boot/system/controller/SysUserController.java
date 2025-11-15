@@ -59,8 +59,8 @@ public class SysUserController {
     /**
      * 添加
      */
-    @SysLog(module = "system", value = "新增用户")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:add')")
+    @SysLog(module = "system", value = "新增用户", response = true)
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
         sysUserService.add(sysUserParam);
@@ -70,8 +70,8 @@ public class SysUserController {
     /**
      * 删除
      */
-    @SysLog(module = "system", value = "删除用户")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:delete')")
+    @SysLog(module = "system", value = "删除用户", response = true)
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getIds(), "删除列表ids不能为空");
@@ -82,8 +82,8 @@ public class SysUserController {
     /**
      * 编辑
      */
-    @SysLog(module = "system", value = "修改用户信息")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
+    @SysLog(module = "system", value = "修改用户信息", response = true)
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysUserParam userParam) {
         sysUserService.update(userParam);
@@ -93,8 +93,8 @@ public class SysUserController {
     /**
      * 修改密码
      **/
-    @SysLog(module = "system", request = false, value = "修改密码")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
+    @SysLog(module = "system", value = "修改密码", request = false)
     @PostMapping("/updatePwd")
     public Result<?> updatePassword(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getAccount(), userParam.getPassword()), "account、password都不能为空");
@@ -105,8 +105,8 @@ public class SysUserController {
     /**
      * 重置密码
      **/
-    @SysLog(module = "system", value = "重置密码")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
+    @SysLog(module = "system", value = "重置密码", response = true)
     @PostMapping("/resetPwd")
     public Result<?> resetPassword(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getAccount(), "account不能为空");

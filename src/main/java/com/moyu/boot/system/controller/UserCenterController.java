@@ -67,7 +67,7 @@ public class UserCenterController {
     }
 
     /**
-     * 获取当前用户拥有的角色列表
+     * 获取当前用户拥有的角色列表(用于将当前用户角色赋予group)
      */
     @SysLog(module = "system", value = "获取当前用户的角色列表")
     @PostMapping("/userRoleList")
