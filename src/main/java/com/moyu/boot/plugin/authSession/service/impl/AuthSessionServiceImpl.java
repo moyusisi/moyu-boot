@@ -2,10 +2,12 @@ package com.moyu.boot.plugin.authSession.service.impl;
 
 
 import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.session.SaTerminalInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.core.util.CommonTimeUtils;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
@@ -51,10 +53,12 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             if (sessionTimeOut == -1) {
                 vo.setSessionTimeout("永不过期");
             } else {
-                vo.setSessionTimeout(sessionTimeOut + "秒");
+                vo.setSessionTimeout(CommonTimeUtils.countdownFormat(sessionTimeOut));
             }
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
-            vo.setTokenCount(saSession.getTerminalList().size());
+            List<SaTerminalInfo> terminalList = saSession.getTerminalList();
+            vo.setTokenCount(terminalList.size());
+            vo.setLatestLoginTime(new Date(terminalList.get(vo.getTokenCount() - 1).getCreateTime()));
             voList.add(vo);
         });
         return new PageData<>(Convert.toLong(voList.size()), voList);
