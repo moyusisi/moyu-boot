@@ -43,7 +43,7 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             SaSession saSession = StpUtil.getSessionByLoginId(loginId, false);
             AuthSessionVO vo = new AuthSessionVO();
             vo.setAccount(loginId);
-            vo.setName(saSession.get("name", null));
+            vo.setName(saSession.get("name", ""));
             // sessionId为 Authorization:login:session:loginId
             vo.setSessionId(saSession.getId());
             vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
