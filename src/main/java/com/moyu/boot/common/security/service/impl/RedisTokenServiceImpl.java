@@ -28,8 +28,6 @@ public class RedisTokenServiceImpl implements TokenService {
         StpUtil.login(loginUser.getUsername(), new SaLoginParameter()
                 // 是否在登录后将 Token 写入到响应头
                 .setIsWriteHeader(true)
-                // 是否允许同一账号多地同时登录（为 false 时新登录挤掉旧登录）
-                .setIsConcurrent(false)
                 // extra只在 jwt 模式下生效，传入的 extra 参数将被忽略
                 .setExtra("username", loginUser.getUsername())
         );
