@@ -1,10 +1,12 @@
 package com.moyu.boot.plugin.authSession.service.impl;
 
 
+import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.session.SaTerminalInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.util.CommonTimeUtils;
@@ -57,8 +59,37 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             }
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
             List<SaTerminalInfo> terminalList = saSession.getTerminalList();
-            vo.setTokenCount(terminalList.size());
-            vo.setLatestLoginTime(new Date(terminalList.get(vo.getTokenCount() - 1).getCreateTime()));
+
+            List<AuthSessionVO.SignTokenInfo> tokenInfoList = terminalList.stream()
+                    .filter(terminalInfo -> {
+                        // 获取指定 token 剩余有效时间（单位: 秒，返回 -1 代表永久有效，-2 代表没有这个值）
+                        long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
+                        // 过滤掉不存在的
+                        return tokenTimeout != -2;
+                    })
+                    .map(terminalInfo -> {
+                        AuthSessionVO.SignTokenInfo tokenInfo = new AuthSessionVO.SignTokenInfo();
+                        tokenInfo.setTokenValue(terminalInfo.getTokenValue());
+                        tokenInfo.setTokenDevice(terminalInfo.getDeviceType());
+                        tokenInfo.setCreateTime(new Date(terminalInfo.getCreateTime()));
+                        long tokenTimeoutConfig = SaManager.getConfig().getTimeout();
+                        long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
+                        if (tokenTimeout == -1) {
+                            tokenInfo.setTokenTimeout("永不过期");
+                            tokenInfo.setTokenTimeoutPercent(100d);
+                        } else {
+                            tokenInfo.setTokenTimeout(CommonTimeUtils.countdownFormat(tokenTimeout));
+                            if (tokenTimeoutConfig == -1) {
+                                tokenInfo.setTokenTimeoutPercent(1d);
+                            } else {
+                                tokenInfo.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, tokenTimeoutConfig));
+                            }
+                        }
+                        return tokenInfo;
+                    }).collect(Collectors.toList());
+
+            vo.setTokenCount(tokenInfoList.size());
+            vo.setLatestLoginTime(tokenInfoList.get(vo.getTokenCount() - 1).getCreateTime());
             voList.add(vo);
         });
         return new PageData<>(Convert.toLong(voList.size()), voList);

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 会话视图对象
@@ -78,4 +79,39 @@ public class AuthSessionVO {
      */
     private Integer tokenCount;
 
+    /**
+     * 令牌数量
+     */
+    private List<SignTokenInfo> tokenList;
+
+    /**
+     * 令牌信息
+     **/
+    @Data
+    public static class SignTokenInfo {
+
+        /**
+         * token值
+         */
+        private String tokenValue;
+
+        /**
+         * 登录设备
+         */
+        private String tokenDevice;
+
+        /**
+         * token剩余有效期
+         */
+        private String tokenTimeout;
+
+        /**
+         * token剩余有效期百分比
+         */
+        private Double tokenTimeoutPercent;
+        /**
+         * 令牌创建时间
+         */
+        private Date createTime;
+    }
 }
