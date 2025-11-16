@@ -17,7 +17,7 @@ public interface AuthSessionService {
     /**
      * 统计分析
      */
-    AuthSessionAnalysisVO analysis();
+    AuthSessionAnalysisVO analyse();
 
     /**
      * 分页获取记录列表

@@ -9,7 +9,6 @@ import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
-import com.moyu.boot.plugin.sysLog.service.SysLogService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,18 +29,14 @@ import javax.annotation.Resource;
 public class AuthSessionController {
 
     @Resource
-    private SysLogService sysLogService;
-
-    @Resource
     private AuthSessionService authSessionService;
-
 
     /**
      * 分页查询会话列表
      */
-    @PostMapping("/analysis")
-    public Result<AuthSessionAnalysisVO> analysis() {
-        AuthSessionAnalysisVO vo = authSessionService.analysis();
+    @PostMapping("/analyse")
+    public Result<AuthSessionAnalysisVO> analyse() {
+        AuthSessionAnalysisVO vo = authSessionService.analyse();
         return Result.success(vo);
     }
 

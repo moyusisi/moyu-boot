@@ -28,4 +28,9 @@ public class AuthSessionAnalysisVO {
      * 最大签发令牌数
      */
     private Integer maxTokenCount;
+
+    /**
+     * 今日签发令牌数
+     */
+    private Integer todayTokenCount;
 }
