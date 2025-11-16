@@ -130,9 +130,13 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2145, 'menu_sys_button', '按钮列表', 'btn_sys_button_list', 6, '/api/sys/resource/page', '', null, 'sys:resource:page', 1, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
         (2146, 'menu_sys_button', '按钮详情', 'btn_sys_button_detail', 6, '/api/sys/resource/detail', '', null, 'sys:resource:detail', 1, null, 'sys_module', 303005, null, null, 0, null, null, null, null),
 
-        (2147, 'menu_biz_org', '新增机构', 'btn_biz_org_add', 6, null, null, null, null, 1, null, 'biz_module', 511001, null, '', 0, null, null, null, null),
-        (2148, 'menu_biz_org', '删除机构', 'btn_biz_org_del', 6, null, null, null, null, 1, null, 'biz_module', 511002, null, '', 0, null, null, null, null),
-        (2149, 'menu_biz_org', '编辑机构', 'btn_biz_org_edit', 6, null, null, null, null, 1, null, 'biz_module', 511003, null, '', 0, null, null, null, null);
+        (2147, 'menu_sys_session', '强制退出', 'btn_sys_session_delete', 6, '/api/auth/session/delete', '', null, 'auth:session:delete', 1, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
+        (2148, 'menu_sys_session', '强退令牌', 'btn_sys_session_deleteToken', 6, '/api/auth/session/deleteToken', '', null, 'auth:session:deleteToken', 1, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
+        (2149, 'menu_sys_session', '会话列表', 'btn_sys_session_list', 6, '/api/auth/session/page', '', null, 'auth:session:page', 1, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
+
+        (2201, 'menu_biz_org', '新增机构', 'btn_biz_org_add', 6, null, null, null, null, 1, null, 'biz_module', 511001, null, '', 0, null, null, null, null),
+        (2202, 'menu_biz_org', '删除机构', 'btn_biz_org_del', 6, null, null, null, null, 1, null, 'biz_module', 511002, null, '', 0, null, null, null, null),
+        (2203, 'menu_biz_org', '编辑机构', 'btn_biz_org_edit', 6, null, null, null, null, 1, null, 'biz_module', 511003, null, '', 0, null, null, null, null);
 
 -- 关系
 insert into moyu.sys_relation (id, object_id, target_id, relation_type, deleted, create_time, create_by, update_time, update_by)
