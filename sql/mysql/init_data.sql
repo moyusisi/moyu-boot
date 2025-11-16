@@ -61,7 +61,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2041, 'dir_sys_dev', '短信发送', 'menu_sys_sms', 3, '/dev/sms/index', 'dev/sms/index', 'mail-outlined', null, 1, null, 'sys_module', 4040, null, '', 0, null, null, null, null),
         (2042, 'dir_sys_dev', '站内信息', 'menu_sys_message', 3, '/dev/message/index', 'dev/message/index', 'message-outlined', null, 1, null, 'sys_module', 4050, null, '', 0, null, null, null, null),
 
-        (2043, 'dir_sys_ops', '会话管理', 'menu_sys_session', 3, '/auth/monitor', '/auth/monitor/index', 'bars-outlined', null, 1, null, 'sys_module', 5002, null, '', 0, null, null, null, null),
+        (2043, 'dir_sys_ops', '会话管理', 'menu_sys_session', 3, '/auth/monitor', 'auth/monitor/index', 'bars-outlined', null, 1, null, 'sys_module', 5002, null, '', 0, null, null, null, null),
         (2044, 'dir_sys_ops', '系统日志', 'menu_sys_log', 3, '/ops/sys/log', 'system/log/index', 'bars-outlined', null, 1, null, 'sys_module', 5004, null, '', 0, null, null, null, null),
         (2045, 'dir_sys_ops', '三方用户', 'menu_sys_third', 3, '/auth/third', 'auth/third/index', 'team-outlined', null, 1, null, 'sys_module', 5010, null, '', 0, null, null, null, null),
         (2046, 'dir_sys_ops', '任务调度', 'menu_sys_job', 3, '/dev/job', 'dev/job/index', 'field-time-outlined', null, 1, null, 'sys_module', 5020, null, '', 0, null, null, null, null),
