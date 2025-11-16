@@ -287,11 +287,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             // 非模块必须指定parentCode及module
             Assert.notEmpty(menu.getParentCode(), "上级菜单parentCode不能为空");
             Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
+        }
+        if (Objects.equals(ResourceTypeEnum.MODULE, resourceType)) {
+            // 模块要设置布局
             if (StrUtil.isEmpty(menu.getComponent())) {
                 menu.setComponent("Layout");
             }
-        }
-        if (Objects.equals(ResourceTypeEnum.DIR, resourceType)) {
+        } else if (Objects.equals(ResourceTypeEnum.DIR, resourceType)) {
             // 目录的组件、权限为空
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
         } else if (Objects.equals(ResourceTypeEnum.MENU, resourceType)) {
