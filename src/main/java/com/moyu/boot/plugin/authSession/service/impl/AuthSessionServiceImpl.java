@@ -9,11 +9,12 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.core.util.CommonTimeUtils;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,25 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class AuthSessionServiceImpl implements AuthSessionService {
+
+    @Override
+    public AuthSessionAnalysisVO analysis() {
+        AuthSessionAnalysisVO vo = new AuthSessionAnalysisVO();
+        vo.setMaxTokenCount(0);
+        List<String> sessionList = StpUtil.searchSessionId("", 0, -1, true);
+        vo.setSessionTotalCount(sessionList.size());
+        int tokenTotalCount = 0;
+        for (String sessionId : sessionList) {
+            SaSession saSession = StpUtil.getSessionBySessionId(sessionId);
+            int tokenCount = saSession.getTerminalList().size();
+            if (tokenCount > vo.getMaxTokenCount()) {
+                vo.setMaxTokenCount(tokenCount);
+            }
+            tokenTotalCount = tokenTotalCount + tokenCount;
+        }
+        vo.setTokenTotalCount(tokenTotalCount);
+        return vo;
+    }
 
     @Override
     public PageData<AuthSessionVO> pageList(AuthSessionParam param) {
@@ -51,12 +71,8 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             // sessionId为 Authorization:login:session:loginId
             vo.setSessionId(saSession.getId());
             vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
-            long sessionTimeOut = saSession.timeout();
-            if (sessionTimeOut == -1) {
-                vo.setSessionTimeout("永不过期");
-            } else {
-                vo.setSessionTimeout(CommonTimeUtils.countdownFormat(sessionTimeOut));
-            }
+            vo.setSessionTimeout(saSession.timeout());
+            vo.setDeadline(LocalDateTime.now().plusSeconds(Convert.toInt(saSession.timeout())).toDate());
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
             List<SaTerminalInfo> terminalList = saSession.getTerminalList();
             List<AuthSessionVO.SignTokenInfo> tokenInfoList = terminalList.stream()
@@ -73,11 +89,12 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                         tokenInfo.setCreateTime(new Date(terminalInfo.getCreateTime()));
                         long tokenTimeoutConfig = SaManager.getConfig().getTimeout();
                         long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
+                        tokenInfo.setTokenTimeout(tokenTimeout);
                         if (tokenTimeout == -1) {
-                            tokenInfo.setTokenTimeout("永不过期");
+                            tokenInfo.setDeadline(LocalDateTime.now().plusDays(100).toDate());
                             tokenInfo.setTokenTimeoutPercent(100d);
                         } else {
-                            tokenInfo.setTokenTimeout(CommonTimeUtils.countdownFormat(tokenTimeout));
+                            tokenInfo.setDeadline(LocalDateTime.now().plusSeconds(Convert.toInt(tokenTimeout)).toDate());
                             if (tokenTimeoutConfig == -1) {
                                 tokenInfo.setTokenTimeoutPercent(1d);
                             } else {

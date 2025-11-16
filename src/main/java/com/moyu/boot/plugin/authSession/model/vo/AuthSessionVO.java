@@ -70,9 +70,15 @@ public class AuthSessionVO {
     private Date sessionCreateTime;
 
     /**
-     * 会话剩余有效期
+     * 会话剩余有效期(s)
      */
-    private String sessionTimeout;
+    private Long sessionTimeout;
+
+    /**
+     * 会话剩余有效期(s)
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date deadline;
 
     /**
      * 令牌数量
@@ -101,9 +107,15 @@ public class AuthSessionVO {
         private String tokenDevice;
 
         /**
-         * token剩余有效期
+         * token剩余有效期(s)
          */
-        private String tokenTimeout;
+        private Long tokenTimeout;
+
+        /**
+         * 会话剩余有效期(s)
+         */
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date deadline;
 
         /**
          * token剩余有效期百分比

@@ -34,6 +34,16 @@ public class AuthSessionController {
     @Resource
     private AuthSessionService authSessionService;
 
+
+    /**
+     * 分页查询会话列表
+     */
+    @PostMapping("/analysis")
+    public Result<PageData<AuthSessionVO>> analysis() {
+        PageData<AuthSessionVO> pageList = authSessionService.analysis();
+        return Result.success(pageList);
+    }
+
     /**
      * 分页查询会话列表
      */

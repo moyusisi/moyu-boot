@@ -3,6 +3,7 @@ package com.moyu.boot.plugin.authSession.service;
 
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 
 /**
@@ -12,6 +13,11 @@ import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
  * @since 2025-11-15
  */
 public interface AuthSessionService {
+
+    /**
+     * 统计分析
+     */
+    AuthSessionAnalysisVO analysis();
 
     /**
      * 分页获取记录列表
