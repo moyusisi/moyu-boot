@@ -3,6 +3,7 @@ package com.moyu.boot.plugin.authSession.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
@@ -43,6 +44,7 @@ public class AuthSessionController {
     /**
      * 分页查询会话列表
      */
+    @SysLog(module = "system", business = "会话管理", value = "查询会话列表")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:page')")
     @PostMapping("/page")
     public Result<PageData<AuthSessionVO>> pageList(@RequestBody AuthSessionParam param) {
@@ -54,6 +56,7 @@ public class AuthSessionController {
     /**
      * 移除session(强退所有)
      */
+    @SysLog(module = "system", business = "会话管理", value = "强退会话")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:delete')")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody AuthSessionParam param) {
@@ -65,6 +68,7 @@ public class AuthSessionController {
     /**
      * 移除token(强退指定token)
      */
+    @SysLog(module = "system", business = "会话管理", value = "强退令牌")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:deleteToken')")
     @PostMapping("/deleteToken")
     public Result<?> deleteToken(@RequestBody AuthSessionParam param) {
