@@ -59,7 +59,6 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             }
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
             List<SaTerminalInfo> terminalList = saSession.getTerminalList();
-
             List<AuthSessionVO.SignTokenInfo> tokenInfoList = terminalList.stream()
                     .filter(terminalInfo -> {
                         // 获取指定 token 剩余有效时间（单位: 秒，返回 -1 代表永久有效，-2 代表没有这个值）
@@ -94,5 +93,15 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             voList.add(vo);
         });
         return new PageData<>(Convert.toLong(voList.size()), voList);
+    }
+
+    @Override
+    public void removeSession(AuthSessionParam param) {
+        param.getCodes().forEach(StpUtil::logout);
+    }
+
+    @Override
+    public void removeToken(AuthSessionParam param) {
+        param.getCodes().forEach(StpUtil::logoutByTokenValue);
     }
 }

@@ -4,8 +4,6 @@ package com.moyu.boot.plugin.authSession.service;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
-import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
-import com.moyu.boot.plugin.sysLog.model.vo.SysLogVO;
 
 /**
  * 会话管理服务类Service
@@ -20,4 +18,13 @@ public interface AuthSessionService {
      */
     PageData<AuthSessionVO> pageList(AuthSessionParam param);
 
+    /**
+     * 移除session(强退所有)
+     */
+    void removeSession(AuthSessionParam param);
+
+    /**
+     * 移除token(强退指定token)
+     */
+    void removeToken(AuthSessionParam param);
 }

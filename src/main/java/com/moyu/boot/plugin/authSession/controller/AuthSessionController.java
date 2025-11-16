@@ -6,9 +6,8 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
-import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
+import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +35,7 @@ public class AuthSessionController {
     private AuthSessionService authSessionService;
 
     /**
-     * 分野查询会话列表
+     * 分页查询会话列表
      */
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:page')")
     @PostMapping("/page")
@@ -47,14 +46,24 @@ public class AuthSessionController {
     }
 
     /**
-     * 删除数据
+     * 移除session(强退所有)
      */
-    //@PreAuthorize("hasAuthority('sys:log:delete')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:delete')")
     @PostMapping("/delete")
-    public Result<?> delete(@RequestBody SysLogParam param) {
-        Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
-        sysLogService.deleteByIds(param);
+    public Result<?> delete(@RequestBody AuthSessionParam param) {
+        Assert.notEmpty(param.getCodes(), "删除列表codes不能为空");
+        authSessionService.removeSession(param);
         return Result.success();
     }
 
+    /**
+     * 移除token(强退指定token)
+     */
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:deleteToken')")
+    @PostMapping("/deleteToken")
+    public Result<?> deleteToken(@RequestBody AuthSessionParam param) {
+        Assert.notEmpty(param.getCodes(), "删除列表codes不能为空");
+        authSessionService.removeToken(param);
+        return Result.success();
+    }
 }
