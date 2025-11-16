@@ -39,8 +39,8 @@ public class SysGroupController {
     /**
      * 分页获取角色列表
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:page')")
     @SysLog(module = "system", value = "分页查询岗位列表")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:page')")
     @PostMapping("/page")
     public Result<PageData<SysGroupVO>> pageList(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(groupParam.getPageNum(), groupParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -51,8 +51,8 @@ public class SysGroupController {
     /**
      * 获取详情
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:detail')")
     @SysLog(module = "system", value = "查询岗位详情", response = true)
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:detail')")
     @PostMapping("/detail")
     public Result<SysGroupVO> detail(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
@@ -62,8 +62,8 @@ public class SysGroupController {
     /**
      * 添加
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:add')")
     @SysLog(module = "system", value = "新增岗位", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysGroupParam groupParam) {
         sysGroupService.add(groupParam);
@@ -73,8 +73,8 @@ public class SysGroupController {
     /**
      * 删除
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:delete')")
     @SysLog(module = "system", value = "删除岗位", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getIds(), "删除列表ids不能为空");
@@ -85,8 +85,8 @@ public class SysGroupController {
     /**
      * 编辑
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:edit')")
     @SysLog(module = "system", value = "修改岗位", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysGroupParam groupParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(groupParam.getId(), groupParam.getCode()), "id和code不能同时为空");
@@ -97,9 +97,9 @@ public class SysGroupController {
     /**
      * 查询指定分组的角色列表
      */
+    @SysLog(module = "system", value = "查询岗位内的角色列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:roleList')")
     @PostMapping("/roleList")
-    @SysLog(module = "system", value = "查询岗位内的角色列表")
     public Result<List<SysRoleVO>> roleList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         List<SysRoleVO> list = sysGroupService.groupRoleList(groupParam);
@@ -109,9 +109,9 @@ public class SysGroupController {
     /**
      * 分组内新增角色
      */
+    @SysLog(module = "system", value = "岗位内添加角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:addRole')")
     @PostMapping("/addRole")
-    @SysLog(module = "system", value = "岗位内添加角色", response = true)
     public Result<?> addRole(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
         Assert.notEmpty(groupParam.getCodeSet(), "指定集合codeSet不能为空");
@@ -122,8 +122,8 @@ public class SysGroupController {
     /**
      * 分组内移除角色
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteRole')")
     @SysLog(module = "system", value = "岗位内移除角色", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteRole')")
     @PostMapping("/deleteRole")
     public Result<?> deleteRole(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
@@ -135,8 +135,8 @@ public class SysGroupController {
     /**
      * 查询指定分组的角色列表
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
     @SysLog(module = "system", value = "查询岗位内的用户列表")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
     @PostMapping("/userList")
     public Result<List<SysUser>> userList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
@@ -147,8 +147,8 @@ public class SysGroupController {
     /**
      * 分组内新增角色
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:addUser')")
     @SysLog(module = "system", value = "岗位内的添加用户", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:addUser')")
     @PostMapping("/addUser")
     public Result<?> addUser(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
@@ -160,8 +160,8 @@ public class SysGroupController {
     /**
      * 分组内移除角色
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteUser')")
     @SysLog(module = "system", value = "岗位内的移除用户", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteUser')")
     @PostMapping("/deleteUser")
     public Result<?> deleteUser(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");

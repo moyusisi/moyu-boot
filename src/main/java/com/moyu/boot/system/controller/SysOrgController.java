@@ -38,8 +38,8 @@ public class SysOrgController {
     /**
      * 分页获取组织列表
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @SysLog(module = "system", value = "分页查询组织列表")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @PostMapping("/page")
     public Result<PageData<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -60,8 +60,8 @@ public class SysOrgController {
     /**
      * 获取详情
      */
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
     @SysLog(module = "system", value = "查询组织详情")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
     @PostMapping("/detail")
     public Result<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
@@ -71,8 +71,8 @@ public class SysOrgController {
     /**
      * 添加
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:add')")
     @SysLog(module = "system", value = "新增组织机构", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysOrgParam orgParam) {
         sysOrgService.add(orgParam);
@@ -82,8 +82,8 @@ public class SysOrgController {
     /**
      * 删除
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:delete')")
     @SysLog(module = "system", value = "删除组织机构", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
@@ -94,8 +94,8 @@ public class SysOrgController {
     /**
      * 删除树,会集联删除
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:deleteTree')")
     @SysLog(module = "system", value = "删除组织机构树", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:deleteTree')")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
@@ -106,8 +106,8 @@ public class SysOrgController {
     /**
      * 编辑
      */
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
     @SysLog(module = "system", value = "修改组织机构", response = true)
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");

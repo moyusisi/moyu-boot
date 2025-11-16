@@ -56,7 +56,7 @@ public class AuthSessionController {
     /**
      * 移除session(强退所有)
      */
-    @SysLog(module = "system", business = "会话管理", value = "强退会话")
+    @SysLog(module = "system", business = "会话管理", value = "强退会话", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:delete')")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody AuthSessionParam param) {
@@ -68,7 +68,7 @@ public class AuthSessionController {
     /**
      * 移除token(强退指定token)
      */
-    @SysLog(module = "system", business = "会话管理", value = "强退令牌")
+    @SysLog(module = "system", business = "会话管理", value = "强退令牌", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:deleteToken')")
     @PostMapping("/deleteToken")
     public Result<?> deleteToken(@RequestBody AuthSessionParam param) {
