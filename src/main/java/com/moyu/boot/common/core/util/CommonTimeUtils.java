@@ -25,11 +25,11 @@ public class CommonTimeUtils {
         long minutes = (seconds % (ONE_MINUTE_SECONDS * ONE_MINUTE_SECONDS)) / ONE_MINUTE_SECONDS;
         long second = seconds % ONE_MINUTE_SECONDS;
         if (days > 0) {
-            result = days + "天" + hours + "小时" + minutes + "分钟" + second + "秒";
+            result = days + "天" + hours + "小时" + minutes + "分" + second + "秒";
         } else if (hours > 0) {
-            result = hours + "小时" + minutes + "分钟" + second + "秒";
+            result = hours + "小时" + minutes + "分" + second + "秒";
         } else if (minutes > 0) {
-            result = minutes + "分钟" + second + "秒";
+            result = minutes + "分" + second + "秒";
         } else {
             result = second + "秒";
         }
