@@ -6,6 +6,7 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
@@ -39,9 +40,9 @@ public class AuthSessionController {
      * 分页查询会话列表
      */
     @PostMapping("/analysis")
-    public Result<PageData<AuthSessionVO>> analysis() {
-        PageData<AuthSessionVO> pageList = authSessionService.analysis();
-        return Result.success(pageList);
+    public Result<AuthSessionAnalysisVO> analysis() {
+        AuthSessionAnalysisVO vo = authSessionService.analysis();
+        return Result.success(vo);
     }
 
     /**
