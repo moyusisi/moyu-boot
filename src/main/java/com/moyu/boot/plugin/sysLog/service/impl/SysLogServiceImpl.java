@@ -38,8 +38,8 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     public List<SysLogVO> list(SysLogParam param) {
         // 查询条件
         LambdaQueryWrapper<SysLog> queryWrapper = Wrappers.lambdaQuery(SysLog.class);
-        // 指定requestUrl查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
+        // 指定id查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
         // 指定module查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
@@ -48,6 +48,8 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getOperate()), SysLog::getOperate, param.getOperate());
         // 指定content查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getContent()), SysLog::getContent, param.getContent());
+        // 指定requestUrl查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
         // 指定requestContent查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
         // 指定responseContent查询
@@ -77,6 +79,8 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     public PageData<SysLogVO> pageList(SysLogParam param) {
         // 查询条件
         LambdaQueryWrapper<SysLog> queryWrapper = Wrappers.lambdaQuery(SysLog.class);
+        // 指定id查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
         // 指定module查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
