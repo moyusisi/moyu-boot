@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * 菜单类型，SysResource实体中resourceType字段对应的取值范围
+ * 资源类型，SysResource实体中resourceType字段对应的取值范围
  *
  * @author shisong
  * @since 2024-12-11
@@ -26,7 +26,7 @@ public enum ResourceTypeEnum {
     MENU(3, "菜单"),
     IFRAME(4, "内链"),
     LINK(5, "外链"),
-    // 操作
+    // 操作(按钮 or 接口)
     BUTTON(6, "按钮");
 
     //  Mybatis-Plus 提供注解表示插入数据库时插入该值
