@@ -30,7 +30,7 @@ public class AuthController {
     /**
      * 用户登陆
      */
-    @SysLog(module = "auth", value = "用户登录")
+    @SysLog(module = "auth", logType = 2, value = "用户登录")
     @PostMapping("/login")
     public Result<String> userLogin(@Validated UserLoginParam loginParam) {
         String token = authService.login(loginParam);
@@ -40,7 +40,7 @@ public class AuthController {
     /**
      * 用户注销登陆(若不自定义，则需要在springSecurity中配置)
      */
-    @SysLog(module = "auth", value = "退出登录")
+    @SysLog(module = "auth", logType = 2, value = "退出登录")
     @PostMapping("/logout")
     public Result<?> userLogout(UserLoginParam loginParam) {
         authService.logout();
