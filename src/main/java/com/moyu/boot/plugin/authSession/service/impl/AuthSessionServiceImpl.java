@@ -37,8 +37,9 @@ public class AuthSessionServiceImpl implements AuthSessionService {
         AuthSessionAnalysisVO vo = new AuthSessionAnalysisVO();
         vo.setMaxTokenCount(0);
         List<String> sessionList = StpUtil.searchSessionId("", 0, -1, true);
+        List<String> tokenList = StpUtil.searchTokenValue("", 0, -1, true);
         vo.setSessionTotalCount(sessionList.size());
-        int tokenTotalCount = 0;
+        vo.setTokenTotalCount(tokenList.size());
         int todayTokenCount = 0;
         for (String sessionId : sessionList) {
             List<SaTerminalInfo> terminalList = StpUtil.getSessionBySessionId(sessionId).getTerminalList();
@@ -46,7 +47,6 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             if (tokenCount > vo.getMaxTokenCount()) {
                 vo.setMaxTokenCount(tokenCount);
             }
-            tokenTotalCount = tokenTotalCount + tokenCount;
             for (SaTerminalInfo terminal : terminalList) {
                 DateTime yesterdayEnd = DateTime.now().minusDays(1).millisOfDay().withMaximumValue();
                 if (yesterdayEnd.isBefore(terminal.getCreateTime())) {
@@ -54,7 +54,6 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                 }
             }
         }
-        vo.setTokenTotalCount(tokenTotalCount);
         vo.setTodayTokenCount(todayTokenCount);
         return vo;
     }
