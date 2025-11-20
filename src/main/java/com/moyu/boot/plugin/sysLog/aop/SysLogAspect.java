@@ -109,8 +109,10 @@ public class SysLogAspect {
         sysLog.setContent(logAnnotation.value());
         sysLog.setLogType(logAnnotation.logType());
 
-        // 客户端ip
         if (request != null) {
+            // 请求地址
+            sysLog.setRequestUrl(request.getRequestURI());
+            // 客户端ip
             try {
                 sysLog.setOpIp(ServletUtil.getClientIP(request));
             } catch (Exception err) {
@@ -118,7 +120,6 @@ public class SysLogAspect {
             }
         }
         // 数据参数
-        sysLog.setRequestUrl(request.getRequestURI());
         if (logAnnotation.request()) {
             List<Object> params = filterArgs(joinPoint.getArgs());
             String requestContent = objectMapper.writeValueAsString(params);
