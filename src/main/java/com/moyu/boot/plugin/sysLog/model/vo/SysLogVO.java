@@ -25,6 +25,10 @@ public class SysLogVO {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
+     * 日志类型(字典 0默认 1操作访问 2登录认证 3三方交互)
+     */
+    private Integer logType;
+    /**
      * 系统/模块
      */
     private String module;
@@ -41,6 +45,22 @@ public class SysLogVO {
      */
     private String content;
     /**
+     * 操作ip
+     */
+    private String opIp;
+    /**
+     * 操作浏览器
+     */
+    private String opBrowser;
+    /**
+     * 操作系统
+     */
+    private String opOs;
+    /**
+     * 操作平台
+     */
+    private String opPlatform;
+    /**
      * 请求路径地址
      */
     private String requestUrl;
@@ -55,12 +75,12 @@ public class SysLogVO {
     /**
      * 开始时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     /**
      * 结束时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     /**
      * 执行耗时(ms)
@@ -73,6 +93,6 @@ public class SysLogVO {
     /**
      * 记录时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 }

@@ -40,13 +40,25 @@ public class SysLog {
      */
     private String operate;
     /**
-     * client Ip
-     */
-    private String opIp;
-    /**
      * 内容说明
      */
     private String content;
+    /**
+     * 操作ip
+     */
+    private String opIp;
+    /**
+     * 浏览器
+     */
+    private String opBrowser;
+    /**
+     * 操作系统
+     */
+    private String opOs;
+    /**
+     * 操作平台
+     */
+    private String opPlatform;
     /**
      * 请求路径地址
      */

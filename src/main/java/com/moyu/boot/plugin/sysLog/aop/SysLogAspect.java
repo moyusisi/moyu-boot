@@ -1,8 +1,12 @@
 package com.moyu.boot.plugin.sysLog.aop;
 
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.http.useragent.Browser;
+import cn.hutool.http.useragent.UserAgent;
+import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
@@ -112,11 +116,31 @@ public class SysLogAspect {
         if (request != null) {
             // 请求地址
             sysLog.setRequestUrl(request.getRequestURI());
-            // 客户端ip
+            // 客户端信息
             try {
+                // 客户端ip
                 sysLog.setOpIp(ServletUtil.getClientIP(request));
+                // 用户代理，简称 UA，是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、浏览器及版本、浏览器渲染引擎等。
+                UserAgent userAgent = getUserAgent(request);
+                if (ObjectUtil.isNotEmpty(userAgent)) {
+                    // 浏览器
+                    String browser = userAgent.getBrowser().toString();
+                    if (StrUtil.isNotBlank(browser)) {
+                        sysLog.setOpBrowser(StrUtil.sub(browser, 0, 50));
+                    }
+                    // 操作系统
+                    String os = userAgent.getOs().toString();
+                    if (StrUtil.isNotBlank(os)) {
+                        sysLog.setOpOs(StrUtil.sub(os, 0, 50));
+                    }
+                    // 平台
+                    String platform = userAgent.getPlatform().toString();
+                    if (StrUtil.isNotBlank(platform)) {
+                        sysLog.setOpPlatform(StrUtil.sub(platform, 0, 50));
+                    }
+                }
             } catch (Exception err) {
-                log.error("获取客户端ip异常：", e);
+                log.error("获取客户端信息异常：", e);
             }
         }
         // 数据参数
@@ -169,4 +193,18 @@ public class SysLogAspect {
         return obj instanceof MultipartFile || obj instanceof HttpServletRequest || obj instanceof HttpServletResponse;
     }
 
+
+    /**
+     * 获取请求代理头
+     */
+    private static UserAgent getUserAgent(HttpServletRequest request) {
+        String userAgentStr = ServletUtil.getHeaderIgnoreCase(request, "User-Agent");
+        UserAgent userAgent = UserAgentUtil.parse(userAgentStr);
+        if (ObjectUtil.isNotEmpty(userAgentStr)) {
+            if ("Unknown".equals(userAgent.getBrowser().getName())) {
+                userAgent.setBrowser(new Browser(userAgentStr, null, ""));
+            }
+        }
+        return userAgent;
+    }
 }

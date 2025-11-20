@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysResource;
@@ -45,6 +46,7 @@ public class SysResourceController {
     /**
      * 资源分页列表
      */
+    @SysLog(module = "system", value = "查询资源列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
     @PostMapping("/page")
     public Result<PageData<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
@@ -56,6 +58,7 @@ public class SysResourceController {
     /**
      * 获取资源树(可指定module、status)
      */
+    @SysLog(module = "system", value = "获取资源树")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:tree')")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
@@ -67,6 +70,7 @@ public class SysResourceController {
     /**
      * 获取资源详情
      */
+    @SysLog(module = "system", value = "查询资源详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:detail')")
     @PostMapping("/detail")
     public Result<SysResource> detail(@RequestBody SysResourceParam resourceParam) {
@@ -77,6 +81,7 @@ public class SysResourceController {
     /**
      * 添加资源
      */
+    @SysLog(module = "system", value = "添加资源")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:add')")
     @PostMapping("/add")
     public Result<String> add(@RequestBody SysResourceParam resourceParam) {
@@ -87,6 +92,7 @@ public class SysResourceController {
     /**
      * 删除资源
      */
+    @SysLog(module = "system", value = "删除资源")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysResourceParam resourceParam) {
@@ -98,6 +104,7 @@ public class SysResourceController {
     /**
      * 删除资源树,会集联删除
      */
+    @SysLog(module = "system", value = "集联删除资源树")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:deleteTree')")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
@@ -109,6 +116,7 @@ public class SysResourceController {
     /**
      * 编辑资源
      */
+    @SysLog(module = "system", value = "修改资源信息")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@RequestBody SysResourceParam resourceParam) {

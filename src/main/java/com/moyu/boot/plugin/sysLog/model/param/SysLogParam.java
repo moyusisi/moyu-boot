@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
@@ -41,63 +41,86 @@ public class SysLogParam extends BasePageParam {
     private Long id;
 
     /**
-    * 系统/模块
-    */
-    @Size(max=50, message="module长度不能超过50个字符")
+     * 日志类型(字典 0默认 1操作访问 2登录认证 3三方交互)
+     */
+    private Integer logType;
+    /**
+     * 系统/模块
+     */
+    @Size(max = 50, message = "module长度不能超过50个字符")
     private String module;
     /**
-    * 业务
-    */
-    @Size(max=50, message="business长度不能超过50个字符")
+     * 业务
+     */
+    @Size(max = 50, message = "business长度不能超过50个字符")
     private String business;
     /**
-    * 操作
-    */
-    @Size(max=50, message="operate长度不能超过50个字符")
+     * 操作
+     */
+    @Size(max = 50, message = "operate长度不能超过50个字符")
     private String operate;
     /**
-    * 内容说明
-    */
-    @Size(max=255, message="content长度不能超过255个字符")
+     * 内容说明
+     */
+    @Size(max = 255, message = "content长度不能超过255个字符")
     private String content;
+    /**
+     * 操作ip
+     */
+    private String opIp;
+    /**
+     * 操作浏览器
+     */
+    @Size(max = 50, message = "content长度不能超过50个字符")
+    private String opBrowser;
+    /**
+     * 操作系统
+     */
+    @Size(max = 50, message = "content长度不能超过50个字符")
+    private String opOs;
+    /**
+     * 操作平台
+     */
+    @Size(max = 50, message = "content长度不能超过50个字符")
+    private String opPlatform;
     /**
      * 请求路径地址
      */
-    @Size(max=255, message="requestUrl长度不能超过255个字符")
+    @Size(max = 255, message = "requestUrl长度不能超过255个字符")
     private String requestUrl;
     /**
-    * 请求参数
-    */
-    @Size(max=65535, message="requestContent长度不能超过65535个字符")
+     * 请求参数
+     */
+    @Size(max = 65535, message = "requestContent长度不能超过65535个字符")
     private String requestContent;
     /**
-    * 返回结果
-    */
-    @Size(max=65535, message="responseContent长度不能超过65535个字符")
+     * 返回结果
+     */
+    @Size(max = 65535, message = "responseContent长度不能超过65535个字符")
     private String responseContent;
     /**
-    * 开始时间
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 开始时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     /**
      * 开始时间-起始
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime1;
     /**
      * 开始时间-截止
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime2;
     /**
-    * 结束时间
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 结束时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     /**
-    * 执行耗时(ms)
-    */
+     * 执行耗时(ms)
+     */
     private Long executionTime;
     /**
      * 操作人ID
