@@ -2,6 +2,7 @@ package com.moyu.boot.plugin.sysLog.aop;
 
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
@@ -106,7 +107,16 @@ public class SysLogAspect {
         sysLog.setBusiness(business);
         sysLog.setOperate(operate);
         sysLog.setContent(logAnnotation.value());
+        sysLog.setLogType(logAnnotation.logType());
 
+        // 客户端ip
+        if (request != null) {
+            try {
+                sysLog.setOpIp(ServletUtil.getClientIP(request));
+            } catch (Exception err) {
+                log.error("获取客户端ip异常：", e);
+            }
+        }
         // 数据参数
         sysLog.setRequestUrl(request.getRequestURI());
         if (logAnnotation.request()) {

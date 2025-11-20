@@ -20,6 +20,11 @@ public @interface SysLog {
     String value() default "";
 
     /**
+     * 日志类型(字典 0默认 1操作访问 2登录认证 3三方交互)
+     */
+    int logType() default 0;
+
+    /**
      * 系统/模块
      */
     String module() default "";

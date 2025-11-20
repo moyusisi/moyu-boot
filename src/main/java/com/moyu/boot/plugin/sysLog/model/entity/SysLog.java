@@ -24,44 +24,52 @@ public class SysLog {
     private Long id;
 
     /**
-    * 系统/模块
-    */
+     * 日志类型(字典 0默认 1操作访问 2登录认证 3三方交互)
+     */
+    private Integer logType;
+    /**
+     * 系统/模块
+     */
     private String module;
     /**
-    * 业务
-    */
+     * 业务
+     */
     private String business;
     /**
-    * 操作
-    */
+     * 操作
+     */
     private String operate;
     /**
-    * 内容说明
-    */
+     * client Ip
+     */
+    private String opIp;
+    /**
+     * 内容说明
+     */
     private String content;
     /**
      * 请求路径地址
      */
     private String requestUrl;
     /**
-    * 请求参数
-    */
+     * 请求参数
+     */
     private String requestContent;
     /**
-    * 返回结果
-    */
+     * 返回结果
+     */
     private String responseContent;
     /**
-    * 开始时间
-    */
+     * 开始时间
+     */
     private Date startTime;
     /**
-    * 结束时间
-    */
+     * 结束时间
+     */
     private Date endTime;
     /**
-    * 执行耗时(ms)
-    */
+     * 执行耗时(ms)
+     */
     private Long executionTime;
 
     /**
