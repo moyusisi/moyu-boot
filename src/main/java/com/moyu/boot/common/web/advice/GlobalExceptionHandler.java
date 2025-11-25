@@ -52,7 +52,6 @@ public class GlobalExceptionHandler {
      * 使用 @Valid 或者 @Validated 进行参数验证时绑定失败会触发
      */
     @ExceptionHandler(BindException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(BindException e) {
         log.error("绑定异常:{}", e.getMessage());
         // 单个字段错误会返回MethodArgumentNotValidException，多个字段错误会把所有错误信息拼在一起返回BindException
@@ -68,7 +67,6 @@ public class GlobalExceptionHandler {
      * 使用 @Valid 或者 @Validated 进行参数验证时，违反如 @Size、@Min、@Max等约束条件会触发
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(ConstraintViolationException e) {
         log.error("违反约束条件异常:{}", e.getMessage());
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
@@ -83,7 +81,6 @@ public class GlobalExceptionHandler {
      * 请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失(parameter、header、cookie、path等)
      */
     @ExceptionHandler(ServletRequestBindingException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(ServletRequestBindingException e) {
         log.error("参数绑定异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
@@ -97,7 +94,6 @@ public class GlobalExceptionHandler {
      * 当请求参数类型不匹配时的异常，如Controller中@RequestParam指定的字段与传参不一致
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(MethodArgumentTypeMismatchException e) {
         log.error("参数类型错误异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
@@ -111,7 +107,6 @@ public class GlobalExceptionHandler {
      * 如json格式参数进行参数类型转换时，参数转换失败则抛出异常。
      */
     @ExceptionHandler(HttpMessageConversionException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(HttpMessageConversionException e) {
         log.error("参数转换异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
@@ -139,7 +134,6 @@ public class GlobalExceptionHandler {
      * 当 Servlet 请求处理时发生的异常。
      */
     @ExceptionHandler(ServletException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(ServletException e) {
         log.error("Servlet异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
@@ -153,7 +147,6 @@ public class GlobalExceptionHandler {
      * 一些断言工具中会抛出的异常,如 Assert.notEmpty
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(IllegalArgumentException e) {
         log.error("参数绑定异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
@@ -167,7 +160,6 @@ public class GlobalExceptionHandler {
      * 业务逻辑发生异常时主动抛出
      */
     @ExceptionHandler(BusinessException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(BusinessException e) {
         log.error(e.getMessage());
         Result<?> result = new Result<>(e.getCode(), e.getMessage());
@@ -179,7 +171,6 @@ public class GlobalExceptionHandler {
      * 其他未捕获异常
      */
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> exceptionHandler(Exception e) throws Exception {
         // 将认证鉴权异常异常继续抛出，不在此处理
         if (e instanceof AccessDeniedException || e instanceof AuthenticationException) {

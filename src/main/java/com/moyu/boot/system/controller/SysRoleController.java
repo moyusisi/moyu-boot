@@ -122,7 +122,6 @@ public class SysRoleController {
     public Result<List<Tree<String>>> grantMenu(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getModule(), "模块module不能为空");
-        Assert.notEmpty(roleParam.getGrantMenuList(), "授权列表grantMenuList不能为空");
         sysRoleService.grantMenu(roleParam);
         return Result.success();
     }
