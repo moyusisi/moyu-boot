@@ -74,16 +74,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         LoginUser loginUser = LoginUser.builder()
                 .username(sysUser.getAccount())
                 .name(sysUser.getName())
+                .orgCode(sysUser.getOrgCode())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
+                // 岗位及权限
+                .groupCode(sysGroupService.defaultGroup())
+                .groupOrgCode(sysUser.getOrgCode())
+                .dataScope(DataScopeEnum.SELF.getCode())
                 // 默认岗位权限(默认角色+直接拥有的角色)
                 .roles(roleSet)
                 // 权限标识集合(仅接口,无菜单)
                 .perms(sysRoleService.rolePerms(roleSet))
-                // 默认岗位
-                .groupCode(sysGroupService.defaultGroup())
-                .orgCode(sysUser.getOrgCode())
-                .dataScope(DataScopeEnum.SELF.getCode())
                 .build();
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(sysUser.getAccount());
@@ -95,17 +96,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
         // 有岗位则覆盖默认的岗位权限
         if (group != null) {
-            // 岗位角色 group-role
-            roleSet = sysRelationService.groupRole(group.getCode());
-            loginUser.setRoles(roleSet);
-            // 岗位权限 权限标识集合(仅接口,无菜单)
-            loginUser.setPerms(sysRoleService.rolePerms(roleSet));
             // 当前岗位
             loginUser.setGroupCode(group.getCode());
             // 组织机构随岗位变化
-            loginUser.setOrgCode(group.getOrgCode());
+            loginUser.setGroupCode(group.getOrgCode());
             // 岗位设置的数据权限范围
             loginUser.setDataScope(group.getDataScope());
+            // 岗位角色 group-role
+            loginUser.setRoles(sysRelationService.groupRole(group.getCode()));
+            // 岗位权限 权限标识集合(仅接口,无菜单)
+            loginUser.setPerms(sysRoleService.rolePerms(roleSet));
             // 自定义数据权限集合
             if (DataScopeEnum.ORG_DEFINE.getCode().equals(loginUser.getDataScope())) {
                 loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
