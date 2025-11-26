@@ -77,7 +77,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orgCode(sysUser.getOrgCode())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
-                // 岗位及权限
+                // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
                 .groupOrgCode(sysUser.getOrgCode())
                 .dataScope(DataScopeEnum.SELF.getCode())
@@ -86,6 +86,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 // 权限标识集合(仅接口,无菜单)
                 .perms(sysRoleService.rolePerms(roleSet))
                 .build();
+        /** 登录时以默认岗位登录
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(sysUser.getAccount());
         SysGroup group = null;
@@ -111,6 +112,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
             }
         }
+        */
         // 初始化权限
         loginUser.initAuthorities();
         return loginUser;
