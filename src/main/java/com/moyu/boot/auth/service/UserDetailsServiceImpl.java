@@ -99,7 +99,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // 当前岗位
             loginUser.setGroupCode(group.getCode());
             // 组织机构随岗位变化
-            loginUser.setGroupCode(group.getOrgCode());
+            loginUser.setGroupOrgCode(group.getOrgCode());
             // 岗位设置的数据权限范围
             loginUser.setDataScope(group.getDataScope());
             // 岗位角色 group-role
