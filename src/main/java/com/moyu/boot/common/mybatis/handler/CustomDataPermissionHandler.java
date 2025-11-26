@@ -88,13 +88,13 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             }
             case ORG: {
                 // 本机构
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 sqlStr = orgColumn + " = '" + orgCode + "'";
                 break;
             }
             case ORG_CHILD: {
                 // 本机构及以下
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 // 第一种方法使用IN scopes,这种处理方式适合所有服务都能访问组织机构表且组织机构不多的情况(否则数量过多会导致in效率低下)
                 // sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
                 // 第二种方法使用 orgPath Like, 这种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path(组织机构若变更则要洗数据)

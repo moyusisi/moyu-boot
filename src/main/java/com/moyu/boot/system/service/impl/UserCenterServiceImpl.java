@@ -80,10 +80,10 @@ public class UserCenterServiceImpl implements UserCenterService {
         }
         LoginUser loginUser = optUser.get();
         // 构造用户信息视图对象
-        UserInfo userInfo = UserInfo.builder().account(username)
+        UserInfo userInfo = UserInfo.builder().account(username).orgCode(loginUser.getOrgCode())
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
                 .perms(loginUser.getPerms()).roles(loginUser.getRoles())
-                .orgCode(loginUser.getOrgCode()).groupCode(loginUser.getGroupCode())
+                .groupCode(loginUser.getGroupCode()).groupOrgCode(loginUser.getGroupOrgCode())
                 .dataScope(loginUser.getDataScope()).scopes(loginUser.getScopes())
                 .build();
         // 岗位列表
@@ -177,7 +177,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 获取全部树
         Tree<String> rootTree = sysOrgService.singleTree();
         // 查询用户当前岗位所属公司
-        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getOrgCode());
+        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getGroupOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
         // 用户公司树列表

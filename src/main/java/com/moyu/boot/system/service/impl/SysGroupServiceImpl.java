@@ -107,10 +107,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 String username = SecurityUtils.getUsername();
                 queryWrapper.and(e -> e.eq(SysGroup::getCreateBy, username));
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode));
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 // find_in_set函数比like高效
 //                queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode).or().like(SysGroup::getOrgPath, orgCode));
                 queryWrapper.and(e -> e.eq(SysGroup::getOrgCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));

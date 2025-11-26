@@ -100,10 +100,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 String username = SecurityUtils.getUsername();
                 queryWrapper.and(e -> e.eq(SysUser::getCreateBy, username));
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode));
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = SecurityUtils.getGroupOrgCode();
                 // find_in_set函数比like高效
 //                queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode).or().like(SysUser::getOrgPath, orgCode));
                 queryWrapper.and(e -> e.eq(SysUser::getOrgCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
