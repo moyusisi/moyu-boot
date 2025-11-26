@@ -201,13 +201,17 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public String switchUserGroup(String groupCode) {
-        String username = SecurityUtils.getUsername();
+        LoginUser loginUser = SecurityUtils.getLoginUser().orElse(null);
+        if (loginUser == null) {
+            throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
+        }
+        String username = loginUser.getUsername();
         SysGroup group = null;
         Set<String> roleSet = null;
         if (sysGroupService.defaultGroup().equals(groupCode)) {
             // 默认岗位
             group = sysGroupService.userDefaultGroup(username);
-            // 直接角色
+            // 直接角色 role-user
             roleSet = sysRoleService.userRoles(username);
         } else {
             // 通过唯一标识code查询group
@@ -218,18 +222,15 @@ public class UserCenterServiceImpl implements UserCenterService {
             // 岗位角色 group-role
             roleSet = sysRelationService.groupRole(group.getCode());
         }
-        // 组装LoginUser
-        LoginUser loginUser = LoginUser.builder().enabled(true)
-                .username(username).groupCode(group.getCode())
-                // orgCode随岗位变化
-                .orgCode(group.getOrgCode())
-                // 岗位关联的角色
-                .roles(roleSet)
-                // 岗位权限 权限标识集合(仅接口,无菜单)
-                .perms(sysRoleService.rolePerms(roleSet))
-                // 岗位关联的数据权限
-                .dataScope(group.getDataScope())
-                .build();
+        // 根据切换的岗位更新loginUser
+        loginUser.setGroupCode(group.getCode());
+        loginUser.setGroupOrgCode(group.getOrgCode());
+        // 岗位关联的角色
+        loginUser.setRoles(roleSet);
+        // 岗位权限 权限标识集合(仅接口,无菜单)
+        loginUser.setPerms(sysRoleService.rolePerms(roleSet));
+        // 岗位关联的数据权限
+        loginUser.setDataScope(group.getDataScope());
         // 自定义数据权限集合
         if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
             loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
