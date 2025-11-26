@@ -235,7 +235,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         if (DataScopeEnum.ORG_DEFINE.getCode().equals(group.getDataScope())) {
             loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
         }
-        return tokenService.generateToken(loginUser);
+        return tokenService.refreshToken(loginUser);
     }
 
     /**

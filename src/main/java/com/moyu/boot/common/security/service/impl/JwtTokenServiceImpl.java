@@ -26,7 +26,6 @@ public class JwtTokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(LoginUser loginUser) {
-
         // 连缀写法追加多个
         StpUtil.login(loginUser.getUsername(), new SaLoginParameter()
                 // 是否在登录后将 Token 写入到响应头
@@ -42,6 +41,11 @@ public class JwtTokenServiceImpl implements TokenService {
                 .setExtra("scopes", loginUser.getScopes())
         );
         return StpUtil.getTokenValue();
+    }
+
+    @Override
+    public String refreshToken(LoginUser loginUser) {
+        return generateToken(loginUser);
     }
 
     @Override

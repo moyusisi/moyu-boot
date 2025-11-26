@@ -39,6 +39,14 @@ public class RedisTokenServiceImpl implements TokenService {
     }
 
     @Override
+    public String refreshToken(LoginUser loginUser) {
+        // 置为失效
+        invalidateToken(StpUtil.getTokenValue());
+        // 重新生成
+        return generateToken(loginUser);
+    }
+
+    @Override
     public Authentication parseToken() {
         // 从会话中获取缓存的数据
         LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get("loginUser");

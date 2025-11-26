@@ -32,6 +32,11 @@ public interface TokenService {
     String generateToken(LoginUser loginUser);
 
     /**
+     * 更新token(原有的置为失效，然后新生成)
+     */
+    String refreshToken(LoginUser loginUser);
+
+    /**
      * 解析 Token 获取认证信息(Spring Security 的核心组件)
      */
     Authentication parseToken();
