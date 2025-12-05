@@ -40,10 +40,12 @@ public class RedisTokenServiceImpl implements TokenService {
 
     @Override
     public String refreshToken(LoginUser loginUser) {
-        // 置为失效
-        invalidateToken(StpUtil.getTokenValue());
         // 重新生成
-        return generateToken(loginUser);
+        String token = generateToken(loginUser);
+        // 当前token置为失效
+        invalidateToken(StpUtil.getTokenValue());
+        // 返回新生成的token
+        return token;
     }
 
     @Override
