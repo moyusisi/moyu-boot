@@ -371,12 +371,14 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public Set<String> groupDataScopes(String groupCode) {
+        Set<String> scopes = new HashSet<>();
+
         // 通过唯一标识code查询group
         SysGroup group = this.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode));
-        if (group == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
+        // 无group返回空列表
+        if (group == null || ObjectUtil.equal(group.getDataScope(), DataScopeEnum.SELF.getCode())) {
+            return scopes;
         }
-        Set<String> scopes = new HashSet<>();
 
         if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG.getCode())) {
             scopes.add(group.getOrgCode());
@@ -390,7 +392,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             Tree<String> orgTree = sysOrgService.singleTree().getNode(group.getOrgCode());
             orgTree.walk(node -> scopes.add(node.getId()));
             // 从数据库中获取所有child（无缓存时）
-//                List<String> childList = sysOrgService.childrenCodeList(e.getOrgCode());
+//                List<String> childList = sysOrgService.childrenCodeList(group.getOrgCode());
 //                scopes.addAll(childList);
         }
         return scopes;
