@@ -33,8 +33,9 @@ public class AuthSessionController {
     private AuthSessionService authSessionService;
 
     /**
-     * 分页查询会话列表
+     * 会话统计
      */
+    @SysLog(module = "system", business = "会话管理", value = "会话统计", response = true)
     @PostMapping("/analyse")
     public Result<AuthSessionAnalysisVO> analyse() {
         AuthSessionAnalysisVO vo = authSessionService.analyse();
@@ -44,7 +45,7 @@ public class AuthSessionController {
     /**
      * 分页查询会话列表
      */
-    @SysLog(module = "system", business = "会话管理", value = "查询会话列表")
+    @SysLog(module = "system", business = "会话管理", value = "查询会话列表", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:page')")
     @PostMapping("/page")
     public Result<PageData<AuthSessionVO>> pageList(@RequestBody AuthSessionParam param) {
