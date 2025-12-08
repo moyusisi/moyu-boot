@@ -23,7 +23,7 @@ import java.util.List;
  * @author moyusisi
  * @since 2025-10-22
  */
-@Log(jsonLog = true)
+@Log(jsonLog = true, response = false)
 @RestController
 @RequestMapping("/api/sys/log")
 public class SysLogController {

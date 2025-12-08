@@ -46,6 +46,7 @@ public class AuthSessionController {
      * 分页查询会话列表
      */
     @SysLog(module = "system", business = "会话管理", value = "查询会话列表", response = true)
+    @Log(jsonLog = true, response = false)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('auth:session:page')")
     @PostMapping("/page")
     public Result<PageData<AuthSessionVO>> pageList(@RequestBody AuthSessionParam param) {
