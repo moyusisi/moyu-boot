@@ -19,7 +19,8 @@ CREATE TABLE `sys_org`
     `create_by`   VARCHAR(20)   DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
     `update_by`   VARCHAR(20)   DEFAULT NULL COMMENT '修改人',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
@@ -85,7 +86,8 @@ create table sys_role
     `create_by`   VARCHAR(32) DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME    DEFAULT NULL COMMENT '修改时间',
     `update_by`   VARCHAR(32) DEFAULT NULL COMMENT '修改人',
-    primary key (`id`)
+    primary key (`id`),
+    UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
@@ -113,7 +115,8 @@ create table sys_group
     `create_by`   VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
     `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
     `update_by`   VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
-    primary key (`id`)
+    primary key (`id`),
+    UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
@@ -144,7 +147,8 @@ create table sys_resource
     `create_by`     VARCHAR(32)  DEFAULT NULL COMMENT '创建人',
     `update_time`   DATETIME     DEFAULT NULL COMMENT '修改时间',
     `update_by`     VARCHAR(32)  DEFAULT NULL COMMENT '修改人',
-    primary key (`id`)
+    primary key (`id`),
+    UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
