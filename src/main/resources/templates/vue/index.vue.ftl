@@ -292,6 +292,8 @@
   // 打开详情页
   const openDetail = (row) => {
     detailRef.value.onOpen(row)
+    // 独立页面打开(与抽屉打开二选一)
+    // router.push({ path: "/${moduleName}/${entityName?uncap_first}/detail", query: { id: row.id } })
   }
 </script>
 

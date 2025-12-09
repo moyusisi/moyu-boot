@@ -35,7 +35,6 @@ public class AuthSessionController {
     /**
      * 会话统计
      */
-    @SysLog(module = "system", business = "会话管理", value = "会话统计", response = true)
     @PostMapping("/analyse")
     public Result<AuthSessionAnalysisVO> analyse() {
         AuthSessionAnalysisVO vo = authSessionService.analyse();

@@ -56,12 +56,13 @@
 <script setup>
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
 
-  import { required } from '@/utils/formRules'
-  import { message } from "ant-design-vue"
   import { useSettingsStore } from "@/store"
+  import { useRoute, useRouter } from "vue-router";
 
   // store
   const settingsStore = useSettingsStore()
+  const route = useRoute();
+  const router = useRouter();
 
   const emit = defineEmits({ successful: null })
   // 默认是关闭状态
@@ -81,6 +82,14 @@
     { label: "选项一", value: 1 },
     { label: "选项二", value: 2 }
   ]
+
+  // 独立页面打开(与打开抽屉二选一)
+  // onMounted(() => {
+  //   if (route.query.id || history.state.id) {
+  //     const row = { id: route.query.id || history.state.id }
+  //     loadData(row)
+  //   }
+  // })
 
   // 打开抽屉
   const onOpen = (row) => {
