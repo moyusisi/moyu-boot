@@ -484,6 +484,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         } else {
             fieldConfig.setShowInList(1);
         }
+        fieldConfig.setEllipsis(fieldConfig.getShowInList());
         if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
             fieldConfig.setShowInForm(0);
         } else {
@@ -708,6 +709,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 } else {
                     fieldConfig.setShowInList(1);
                 }
+                fieldConfig.setEllipsis(fieldConfig.getShowInList());
                 if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
                     fieldConfig.setShowInForm(0);
                 } else {
