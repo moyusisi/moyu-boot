@@ -1,5 +1,5 @@
 <template>
-<#if detailOpenType == 1>
+<#if detailOpenType == 0>
   <a-drawer
       :open="visible"
       title="${entityDesc}详情"
@@ -48,7 +48,7 @@
         </a-card>
       </a-form>
     </a-spin>
-<#if detailOpenType == 1>
+<#if detailOpenType == 0>
     <!--  底部操作区  -->
     <template #footer>
       <a-flex gap="small" justify="flex-end">
@@ -69,7 +69,7 @@
   const route = useRoute();
   const router = useRouter();
 
-<#if detailOpenType == 1>
+<#if detailOpenType == 0>
   // 默认是关闭状态
   const visible = ref(false)
   // 计算属性 抽屉宽度
@@ -89,7 +89,7 @@
     { label: "选项二", value: 2 }
   ]
 
-<#if detailOpenType == 1>
+<#if detailOpenType == 0>
   // 打开抽屉
   const onOpen = (row) => {
     if (row) {
@@ -126,7 +126,7 @@
     })
   }
 
-<#if detailOpenType == 1>
+<#if detailOpenType == 0>
   // 调用这个函数将子组件的一些数据和方法暴露出去
   defineExpose({
     onOpen
