@@ -65,11 +65,11 @@
   import { useRoute, useRouter } from "vue-router";
 
   // store
-  const settingsStore = useSettingsStore()
   const route = useRoute();
   const router = useRouter();
-
 <#if detailOpenType == 0>
+  const settingsStore = useSettingsStore()
+
   // 默认是关闭状态
   const visible = ref(false)
   // 计算属性 抽屉宽度
