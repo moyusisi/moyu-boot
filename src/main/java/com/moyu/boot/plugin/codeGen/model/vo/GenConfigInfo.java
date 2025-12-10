@@ -66,6 +66,11 @@ public class GenConfigInfo {
     private String author;
 
     /**
+     * 详情页打开方式，字典:0本页内打开,1独立页面打开'
+     */
+    private Integer detailOpenType;
+
+    /**
      * 来源类型，TABLE、SQL
      */
     private String sourceType;

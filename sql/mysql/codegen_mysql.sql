@@ -11,6 +11,7 @@ CREATE TABLE `gen_config`
     `entity_desc`      VARCHAR(100) DEFAULT NULL COMMENT '实体类描述',
     `author`           VARCHAR(50)  DEFAULT NULL COMMENT '作者',
     `parent_menu_code` VARCHAR(64)  DEFAULT NULL COMMENT '父菜单编码',
+    `detail_open_type` INT          DEFAULT '0' COMMENT '详情页打开方式，字典:0本页内打开,1独立页面打开',
     `source_type`      VARCHAR(20)  DEFAULT NULL COMMENT '来源类型',
 
     `create_time`      DATETIME     DEFAULT NULL COMMENT '创建时间',
