@@ -375,7 +375,7 @@
   .ant-card .ant-form {
     margin-bottom: -12px !important;
   }
-  .ant-form-item {
+  .ant-card .ant-form-item {
     margin-bottom: 12px !important;
   }
   /** 操作区 **/

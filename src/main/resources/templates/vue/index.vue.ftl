@@ -312,17 +312,7 @@
   .ant-card .ant-form {
     margin-bottom: -12px !important;
   }
-  .ant-form-item {
+  .ant-card .ant-form-item {
     margin-bottom: 12px !important;
-  }
-  .custom-btn {
-    background-color: #52C41AFF;
-    border-color: #52C41AFF;
-    color: #fff;
-  }
-  .custom-btn:hover {
-    background-color: #79D84B;
-    border-color: #79D84B;
-    color: #fff;
   }
 </style>
