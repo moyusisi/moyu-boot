@@ -484,7 +484,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         } else {
             fieldConfig.setShowInList(1);
         }
-        fieldConfig.setEllipsis(fieldConfig.getShowInList());
+        // 省略提示
+        if (fieldConfig.getFieldType().equals("String") || fieldConfig.getFieldType().equals("Date")) {
+            fieldConfig.setEllipsis(1);
+        } else {
+            fieldConfig.setEllipsis(0);
+        }
+        // showInForm
         if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
             fieldConfig.setShowInForm(0);
         } else {
@@ -709,7 +715,13 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 } else {
                     fieldConfig.setShowInList(1);
                 }
-                fieldConfig.setEllipsis(fieldConfig.getShowInList());
+                // 省略提示
+                if (fieldConfig.getFieldType().equals("String") || fieldConfig.getFieldType().equals("Date")) {
+                    fieldConfig.setEllipsis(1);
+                } else {
+                    fieldConfig.setEllipsis(0);
+                }
+                // showInForm
                 if (BaseEntity.baseFieldSet.contains(fieldConfig.getFieldName())) {
                     fieldConfig.setShowInForm(0);
                 } else {
