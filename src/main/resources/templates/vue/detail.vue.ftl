@@ -1,8 +1,10 @@
 <template>
+<#if detailOpenType == 1>
   <a-drawer
       :open="visible"
       title="${entityDesc}详情"
       :width="drawerWidth"
+      :maskClosable="false"
       :closable="false"
       :destroy-on-close="true"
       @close="onClose"
@@ -11,6 +13,7 @@
     <template #extra>
         <a-button type="primary" size="small" @click="onClose"><CloseOutlined /></a-button>
     </template>
+</#if>
     <!--  数据区  -->
     <a-spin :spinning="dataLoading">
       <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
@@ -45,6 +48,7 @@
         </a-card>
       </a-form>
     </a-spin>
+<#if detailOpenType == 1>
     <!--  底部操作区  -->
     <template #footer>
       <a-flex gap="small" justify="flex-end">
@@ -52,6 +56,7 @@
       </a-flex>
     </template>
   </a-drawer>
+</#if>
 </template>
 <script setup>
   import ${entityName?uncap_first}Api from '@/api/${moduleName}/${entityName?uncap_first}Api.js'
@@ -64,13 +69,14 @@
   const route = useRoute();
   const router = useRouter();
 
-  const emit = defineEmits({ successful: null })
+<#if detailOpenType == 1>
   // 默认是关闭状态
   const visible = ref(false)
   // 计算属性 抽屉宽度
   const drawerWidth = computed(() => {
     return settingsStore.menuCollapsed ? `calc(100% - 80px)` : `calc(100% - 210px)`
   })
+</#if>
 
   // 表单数据
   const formRef = ref()
@@ -83,14 +89,7 @@
     { label: "选项二", value: 2 }
   ]
 
-  // 独立页面打开(与打开抽屉二选一)
-  // onMounted(() => {
-  //   if (route.query.id || history.state.id) {
-  //     const row = { id: route.query.id || history.state.id }
-  //     loadData(row)
-  //   }
-  // })
-
+<#if detailOpenType == 1>
   // 打开抽屉
   const onOpen = (row) => {
     if (row) {
@@ -103,6 +102,16 @@
     formRef.value.resetFields()
     visible.value = false
   }
+<#else>
+  // 挂载时读取路由中的query参数
+  onMounted(() => {
+    if (route.query.id || history.state.id) {
+      const row = { id: route.query.id || history.state.id }
+      loadData(row)
+    }
+  })
+</#if>
+
   // 加载数据
   const loadData = (row) => {
     dataLoading.value = true
@@ -117,10 +126,12 @@
     })
   }
 
+<#if detailOpenType == 1>
   // 调用这个函数将子组件的一些数据和方法暴露出去
   defineExpose({
     onOpen
   })
+</#if>
 </script>
 
 <style scoped>
