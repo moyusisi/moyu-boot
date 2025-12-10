@@ -167,6 +167,9 @@
     </a-table>
   </a-card>
   <Form ref="formRef" @successful="loadData" />
+<#if detailOpenType == 1>
+  <Detail ref="detailRef"/>
+</#if>
 </template>
 
 <script setup>
@@ -177,6 +180,9 @@
   import { message } from "ant-design-vue"
   import { useSettingsStore } from "@/store"
   import Form from "./form.vue"
+<#if detailOpenType == 1>
+  import Detail from "./detail.vue"
+</#if>
 
   // store
   const settingsStore = useSettingsStore()
@@ -200,6 +206,9 @@
   ]
   // 其他页面操作
   const formRef = ref()
+  <#if detailOpenType == 1>
+  const detailRef = ref()
+  </#if>
 
   /***** 表格相关对象 start *****/
   const tableRef = ref()
@@ -351,7 +360,13 @@
   }
   // 打开详情页
   const openDetail = (row) => {
+    <#if detailOpenType == 1>
     detailRef.value.onOpen(row)
+    // 独立页面打开(与抽屉打开二选一)
+    // router.push({ path: "/${moduleName}/${entityName?uncap_first}/detail", query: { id: row.id } })
+    <#else>
+    router.push({ path: "/${moduleName}/${entityName?uncap_first}/detail", query: { id: row.id } })
+    </#if>
   }
 </script>
 
