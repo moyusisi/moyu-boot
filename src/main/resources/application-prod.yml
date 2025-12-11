@@ -5,6 +5,12 @@ management:
     web:
       exposure:
         include: health,info
+  endpoint:
+    info: # 关闭info（默认开启）
+      enabled: true
+    health: # 开启health 配置从不展示细节
+      enabled: true
+      show-details: never
 
 # spring配置
 spring:
