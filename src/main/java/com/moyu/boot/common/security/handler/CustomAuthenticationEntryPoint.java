@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * 自定义认证异常(登录异常)处理，未认证访问的情况处理(filter层)
+ * 自定义认证异常(登录异常)处理，未认证访问的情况处理(在filter层处理)
  * <p>
  * AuthenticationFailureHandler接口的实现类是AuthenticationEntryPointFailureHandler，
  * 它通过AuthenticationEntryPoint进行处理

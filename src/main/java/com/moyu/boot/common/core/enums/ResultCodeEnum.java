@@ -41,7 +41,6 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
     USER_ACCOUNT_NOT_EXIST("A0201", "用户账户不存在"),
     USER_ACCOUNT_FROZEN("A0202", "用户账户被冻结"),
     USER_ACCOUNT_DISABLED("A0203", "用户账户已作废"),
-    USER_ACCOUNT_EXPIRED("A0204", "用户账户已过期"),
     USER_PASSWORD_ERROR("A0210", "用户名或密码错误"),
     USER_LOGIN_CHECK_ERROR("A0220", "用户身份校验失败"),
     // 一般需要重新登录
