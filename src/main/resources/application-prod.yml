@@ -96,7 +96,4 @@ custom:
       # 监控管理类
       - /actuator/**
       - /monitor/**
-      # 忽略列表，不经过Security的任何过滤器(SpringBoot会自动将静态目录下的文件映射到根路径'/'下)
-    ignore-list:
-      - /static/**
-      - /public/**
+
