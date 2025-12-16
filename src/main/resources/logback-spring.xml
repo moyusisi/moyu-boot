@@ -6,7 +6,7 @@
     <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
 
     <!-- 日志存放路径 -->
-    <property name="log.path" value="/data/logs/${APP_NAME}"/>
+    <property name="log.path" value="/var/logs/${APP_NAME}"/>
     <springProfile name="local">
         <property name="log.path" value="logs/${APP_NAME}"/>
     </springProfile>
