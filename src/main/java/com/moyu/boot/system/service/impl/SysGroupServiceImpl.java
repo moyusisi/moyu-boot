@@ -281,16 +281,18 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public void groupDeleteRole(SysGroupParam param) {
+        // roleCodeSet
         if (ObjectUtil.isEmpty(param.getCodeSet())) {
             return;
         }
+        Assert.notEmpty(param.getCode(), "group的code不能为空");
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的role，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(param.getCode()).targetSet(param.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_ROLE.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
-        // 删除
+        // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
@@ -341,16 +343,18 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public void groupDeleteUser(SysGroupParam param) {
+        // userCodeSet
         if (ObjectUtil.isEmpty(param.getCodeSet())) {
             return;
         }
+        Assert.notEmpty(param.getCode(), "group的code不能为空");
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的user，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(param.getCode()).targetSet(param.getCodeSet())
                 .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
-        // 删除
+        // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }

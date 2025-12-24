@@ -188,7 +188,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public List<Tree<String>> treeForGrant(SysRoleParam roleParam) {
         // 模块编码
         SysResourceParam query = SysResourceParam.builder().module(roleParam.getModule()).build();
-        // 查询所有资源(包括菜单按钮)
+        // 查询模块所有资源(包括菜单按钮)
         List<SysResource> menuList = sysResourceService.list(query);
 
         // role已经拥有的资源权限
@@ -290,16 +290,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return;
         }
         // 查询该角色已拥有的用户
-        Set<String> oldUserSet = new HashSet<>();
-        sysRelationService.list(new LambdaQueryWrapper<SysRelation>()
-                // 只查询user的code
-                .select(SysRelation::getTargetId)
-                // 关系类型
-                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
-                // 指定role
-                .eq(SysRelation::getObjectId, roleParam.getCode())
-        ).forEach(e -> oldUserSet.add(e.getTargetId()));
-
+        Set<String> oldUserSet = sysRelationService.roleUser(roleParam.getCode());
         // 去除已有角色的用户
         userSet.removeAll(oldUserSet);
         // 无需新添加则返回
@@ -320,7 +311,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void roleDeleteUser(SysRoleParam roleParam) {
-        Assert.notEmpty(roleParam.getCode(), "角色coe不能为空");
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         // 待撤销授权的用户集合
         Set<String> userSet = roleParam.getCodeSet();
         if (ObjectUtil.isEmpty(userSet)) {
@@ -328,11 +319,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
-        // 查询指定userSet中已存在的于指定role的user，加入ids待删
+        // 查询指定role中已存在的user，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(roleParam.getCode()).targetSet(userSet)
                 .relationType(RelationTypeEnum.ROLE_HAS_USER.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
-        // 删除
+        // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
