@@ -19,6 +19,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
@@ -36,6 +37,7 @@ import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
+import com.moyu.boot.system.model.vo.DataScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysResourceService;
@@ -238,6 +240,42 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
+    public List<DataScopeInfo> dataScopeListForGrant(SysRoleParam param) {
+        List<DataScopeInfo> dataScopeInfoList = new ArrayList<>();
+        // 模块编码
+        SysResourceParam query = SysResourceParam.builder().module(param.getModule())
+                .resourceType(ResourceTypeEnum.BUTTON.getCode()).build();
+        // 查询模块所有按钮资源
+        List<SysResource> apiList = sysResourceService.list(query);
+
+        // role已经拥有的资源权限 permCode -> Relation
+        Map<String, SysRelation> permMap = new HashMap<>();
+        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getObjectId, param.getCode())
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .eq(SysRelation::getDeleted, 0)
+        ).forEach(e -> {
+            permMap.put(e.getTargetId(), e);
+        });
+        // 从apiList中找到已授权的部分
+        apiList.forEach(api -> {
+            if (permMap.containsKey(api.getCode())) {
+                SysRelation relation = permMap.get(api.getCode());
+                DataScopeInfo info = DataScopeInfo.builder()
+                        .code(api.getCode())
+                        .name(api.getName())
+                        .path(api.getPath())
+                        .permission(api.getPermission())
+                        .dataScope(relation.getDataScope())
+                        .scopeSet(relation.getScopeSet())
+                        .build();
+                dataScopeInfoList.add(info);
+            }
+        });
+        return dataScopeInfoList;
+    }
+
+    @Override
     public void grantMenu(SysRoleParam roleParam) {
         // 查询指定模块的所有可授权内容(菜单、按钮、链接)
         List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
@@ -279,6 +317,40 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
             return null;
         });
+    }
+
+    @Override
+    public void grantData(SysRoleParam param) {
+        List<DataScopeInfo> dataScopeList = param.getGrantDataList();
+        // 如果无数据则不授权
+        if (ObjectUtil.isEmpty(dataScopeList)) {
+            return;
+        }
+        Map<String, DataScopeInfo> scopeMap = new HashMap<>();
+        dataScopeList.forEach(e -> scopeMap.put(e.getCode(), e));
+        // 查询角色在本模块的已有权限(role+permCodeSet)
+        List<SysRelation> relationList = sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .eq(SysRelation::getObjectId, param.getCode())
+                .in(SysRelation::getTargetId, scopeMap.keySet()));
+        if (ObjectUtil.isEmpty(relationList)) {
+            return;
+        }
+        Date date = new Date();
+        relationList.forEach(relation -> {
+            DataScopeInfo dataScopeInfo = scopeMap.get(relation.getTargetId());
+            relation.setDataScope(dataScopeInfo.getDataScope() == null ? DataScopeEnum.ALL.getCode() : dataScopeInfo.getDataScope());
+            // 若是自定义数据范围,需要处理
+            if (ObjectUtil.equal(dataScopeInfo.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+                Assert.notEmpty(dataScopeInfo.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
+                relation.setScopeSet(dataScopeInfo.getScopeSet());
+            } else {
+                relation.setScopeSet(null);
+            }
+            relation.setUpdateBy(null);
+            relation.setUpdateTime(date);
+        });
+        sysRelationService.updateBatchById(relationList);
     }
 
     @Override

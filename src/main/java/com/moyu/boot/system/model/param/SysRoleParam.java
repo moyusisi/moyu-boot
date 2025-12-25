@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
+import com.moyu.boot.system.model.vo.DataScopeInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -41,6 +43,11 @@ public class SysRoleParam extends BasePageParam {
      * 角色授权时的资源code列表(按钮也在里面)
      */
     private Set<String> grantMenuList;
+
+    /**
+     * 角色授权时的数据范围列表
+     */
+    private List<DataScopeInfo> grantDataList;
 
     /**
      * 指定模块

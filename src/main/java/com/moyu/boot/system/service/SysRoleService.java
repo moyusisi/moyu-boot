@@ -6,6 +6,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
+import com.moyu.boot.system.model.vo.DataScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
@@ -64,11 +65,25 @@ public interface SysRoleService extends IService<SysRole> {
     List<Tree<String>> menuTreeForGrant(SysRoleParam param);
 
     /**
+     * 获取角色已授权的接口数据权限列表
+     *
+     * @param param 角色code, module必须传
+     */
+    List<DataScopeInfo> dataScopeListForGrant(SysRoleParam param);
+
+    /**
      * 角色授权，ROLE_HAS_MENU
      *
      * @param param 角色code，授权module必须传
      */
     void grantMenu(SysRoleParam param);
+
+    /**
+     * 角色授权数据范围，ROLE_HAS_PERM
+     *
+     * @param param 角色code，授权module必须传
+     */
+    void grantData(SysRoleParam param);
 
     /**
      * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
