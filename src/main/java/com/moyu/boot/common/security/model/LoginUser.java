@@ -57,7 +57,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Set<String> scopes;
 
     /**
-     * 权限集合
+     * 权限集合(仅接口的权限标记)
      */
     private Set<String> perms;
 

@@ -440,12 +440,47 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return permSet;
         }
         // 获取资源上的权限标识
-        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class).in(SysResource::getCode, menuSet)).forEach(e -> {
+        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .in(SysResource::getCode, menuSet)).forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 permSet.add(e.getPermission());
             }
         });
         return permSet;
+    }
+
+    @Override
+    public List<DataScopeInfo> rolePermsDataScopeList(Set<String> roleSet) {
+        // 权限标识集合
+        List<DataScopeInfo> dataScopeList = new ArrayList<>();
+        if (ObjectUtil.isEmpty(roleSet)) {
+            return dataScopeList;
+        }
+        // 所有权限 permCode->SysRelation
+        Map<String, SysRelation> allPermMap = new HashMap<>();
+        sysRelationService.list(SysRelationParam.builder()
+                .relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .objectSet(roleSet).build()).forEach(e -> allPermMap.put(e.getTargetId(), e));
+        if (ObjectUtil.isEmpty(allPermMap)) {
+            return dataScopeList;
+        }
+        // 仅获取接口的权限标识+数据范围
+        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .in(SysResource::getCode, allPermMap.keySet())).forEach(e -> {
+            if (ObjectUtil.isNotEmpty(e.getPermission())) {
+                SysRelation relation = allPermMap.get(e.getCode());
+                DataScopeInfo info = DataScopeInfo.builder()
+                        .permission(e.getPermission())
+                        .dataScope(relation.getDataScope())
+                        .scopeSet(relation.getScopeSet())
+                        .build();
+                // 不同的role中可能会有重复的perm,数据范围合并不在此处理
+                dataScopeList.add(info);
+            }
+        });
+        return dataScopeList;
     }
 
     /**

@@ -1,10 +1,7 @@
 package com.moyu.boot.system.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 数据权限信息
@@ -13,6 +10,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DataScopeInfo {
 

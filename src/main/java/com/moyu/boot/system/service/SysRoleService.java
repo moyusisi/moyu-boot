@@ -113,4 +113,9 @@ public interface SysRoleService extends IService<SysRole> {
      * 获取指定角色的权限标识
      */
     Set<String> rolePerms(Set<String> roleSet);
+
+    /**
+     * 获取指定角色的权限标识+数据范围
+     */
+    List<DataScopeInfo> rolePermsDataScopeList(Set<String> roleSet);
 }
