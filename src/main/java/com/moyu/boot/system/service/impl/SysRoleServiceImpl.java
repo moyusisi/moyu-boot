@@ -345,7 +345,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 Assert.notEmpty(dataScopeInfo.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
                 relation.setScopeSet(dataScopeInfo.getScopeSet());
             } else {
-                relation.setScopeSet(null);
+                relation.setScopeSet("");
             }
             relation.setUpdateBy(null);
             relation.setUpdateTime(date);
