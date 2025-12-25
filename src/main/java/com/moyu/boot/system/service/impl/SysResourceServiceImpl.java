@@ -321,12 +321,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
         // 结构转换
-        List<TreeNode<String>> treeNodeList = menuList.stream()
-                .map(menu -> {
-                    TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
-                    node.setExtra(BeanUtil.beanToMap(menu, false, true));
-                    return node;
-                }).collect(Collectors.toList());
+        List<TreeNode<String>> treeNodeList = menuList.stream().map(menu -> {
+            TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
+            node.setExtra(BeanUtil.beanToMap(menu, false, true));
+            return node;
+        }).collect(Collectors.toList());
         // 构建树
         return TreeUtil.build(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
