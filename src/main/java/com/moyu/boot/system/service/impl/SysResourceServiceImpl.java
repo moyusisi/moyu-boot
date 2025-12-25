@@ -69,12 +69,14 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         // 指定模块
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
-        // 指定资源类型
+        // 指定资源类型 resourceType
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
         // 指定code查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        // 指定path查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
         // 仅查询未删除的
         queryWrapper.eq(SysResource::getDeleted, 0);
         // 指定排序

@@ -244,7 +244,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<DataScopeInfo> dataScopeInfoList = new ArrayList<>();
         // 模块编码
         SysResourceParam query = SysResourceParam.builder().module(param.getModule())
-                .resourceType(ResourceTypeEnum.BUTTON.getCode()).build();
+                .resourceType(ResourceTypeEnum.BUTTON.getCode())
+                .name(param.getName()).path(param.getSearchKey())
+                .build();
         // 查询模块所有按钮资源
         List<SysResource> apiList = sysResourceService.list(query);
 
