@@ -110,7 +110,7 @@ public class SysRoleController {
     @SysLog(module = "system", value = "获取菜单树")
     public Result<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
-        return Result.success(sysRoleService.treeForGrant(roleParam));
+        return Result.success(sysRoleService.menuTreeForGrant(roleParam));
     }
 
     /**

@@ -61,7 +61,7 @@ public interface SysRoleService extends IService<SysRole> {
      *
      * @param param 角色code必须传
      */
-    List<Tree<String>> treeForGrant(SysRoleParam param);
+    List<Tree<String>> menuTreeForGrant(SysRoleParam param);
 
     /**
      * 角色授权，ROLE_HAS_MENU
