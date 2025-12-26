@@ -12,7 +12,6 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -125,7 +124,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
         /**
          * 数据范围集合
          */
-        private List<String> scopeSet;
+        private Set<String> scopeSet;
     }
 
     @Override
