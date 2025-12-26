@@ -9,7 +9,6 @@ import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * 角色组服务类Service
@@ -98,8 +97,4 @@ public interface SysGroupService extends IService<SysGroup> {
      */
     SysGroup userDefaultGroup(String username);
 
-    /**
-     * 获取指定group的数据范围集合
-     */
-    Set<String> groupDataScopes(String groupCode);
 }

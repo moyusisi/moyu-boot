@@ -163,11 +163,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             group.setOrgPath(SysConstants.COMMA_JOINER.join(list));
         }
-        // 若是自定义数据范围,需要处理
-        if (ObjectUtil.equal(param.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
-            Assert.notEmpty(param.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
-            group.setScopeSet(param.getScopeSet());
-        }
         this.save(group);
     }
 
@@ -201,11 +196,6 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             // 组织机构层级路径,逗号分隔,父节点在后
             List<String> list = TreeUtil.getParentsId(orgNode, true);
             updateGroup.setOrgPath(SysConstants.COMMA_JOINER.join(list));
-        }
-        // 若是自定义数据范围,需要处理
-        if (ObjectUtil.equal(param.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
-            Assert.notEmpty(param.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
-            updateGroup.setScopeSet(param.getScopeSet());
         }
         this.updateById(updateGroup);
     }
@@ -369,37 +359,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         group.setName("系统默认");
         group.setOrgCode(user.getOrgCode());
         group.setOrgName(user.getOrgName());
-        group.setDataScope(DataScopeEnum.SELF.getCode());
         return group;
-    }
-
-    @Override
-    public Set<String> groupDataScopes(String groupCode) {
-        Set<String> scopes = new HashSet<>();
-
-        // 通过唯一标识code查询group
-        SysGroup group = this.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode));
-        // 无group返回空列表
-        if (group == null || ObjectUtil.equal(group.getDataScope(), DataScopeEnum.SELF.getCode())) {
-            return scopes;
-        }
-
-        if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG.getCode())) {
-            scopes.add(group.getOrgCode());
-        } else if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
-            List<String> list = SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet());
-            scopes.addAll(list);
-        } else if (ObjectUtil.equal(group.getDataScope(), DataScopeEnum.ORG_CHILD.getCode())) {
-            // 添加org
-            scopes.add(group.getOrgCode());
-            // 从rootTree中获取所有child（有缓存时）
-            Tree<String> orgTree = sysOrgService.singleTree().getNode(group.getOrgCode());
-            orgTree.walk(node -> scopes.add(node.getId()));
-            // 从数据库中获取所有child（无缓存时）
-//                List<String> childList = sysOrgService.childrenCodeList(group.getOrgCode());
-//                scopes.addAll(childList);
-        }
-        return scopes;
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,18 +58,6 @@ public class SysGroupParam extends BasePageParam {
      */
     @NotBlank(message = "直属组织orgCode不能为空")
     private String orgCode;
-
-    /**
-     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
-     *
-     * @see DataScopeEnum
-     */
-    private Integer dataScope;
-
-    /**
-     * 自定义scope集合,逗号分隔
-     */
-    private String scopeSet;
 
     /**
      * 排序顺序

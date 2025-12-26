@@ -102,8 +102,6 @@ create table sys_group
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
     `org_code`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
-    `data_scope`  TINYINT       DEFAULT NULL COMMENT '数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)',
-    `scope_set`   VARCHAR(1024) DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
     `sort_num`    INT           DEFAULT NULL COMMENT '排序顺序',

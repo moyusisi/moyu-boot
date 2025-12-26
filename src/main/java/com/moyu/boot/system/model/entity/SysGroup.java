@@ -1,7 +1,6 @@
 package com.moyu.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.mybatis.entity.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,18 +34,6 @@ public class SysGroup extends BaseEntity {
      * 直属组织名称
      */
     private String orgName;
-
-    /**
-     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
-     *
-     * @see DataScopeEnum
-     */
-    private Integer dataScope;
-
-    /**
-     * 自定义scope集合,逗号分隔
-     */
-    private String scopeSet;
 
     /**
      * 组织机构层级路径,逗号分隔,父节点在后
