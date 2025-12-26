@@ -2,7 +2,7 @@ package com.moyu.boot.common.security.config;
 
 
 import cn.dev33.satoken.config.SaTokenConfig;
-import cn.dev33.satoken.jwt.StpLogicJwtForStateless;
+import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;
 import com.moyu.boot.common.security.service.TokenService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -45,6 +45,6 @@ public class SaTokenConfigure {
     @Bean
     @ConditionalOnProperty(value = "custom.security.session.type", havingValue = "jwt")
     public StpLogic getStpLogicJwt() {
-        return new StpLogicJwtForStateless();
+        return new StpLogicJwtForSimple();
     }
 }
