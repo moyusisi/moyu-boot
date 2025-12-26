@@ -58,6 +58,11 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Set<String> scopeSet;
 
     /**
+     * 角色集合
+     */
+    private Set<String> roles;
+
+    /**
      * 权限集合(仅接口的权限标记)
      */
     private Set<String> perms;
@@ -66,10 +71,6 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      * 接口权限对应的数据范围
      */
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
-    /**
-     * 角色集合
-     */
-    private Set<String> roles;
 
     /**
      * 默认字段
