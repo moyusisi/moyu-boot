@@ -269,7 +269,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                         .path(api.getPath())
                         .permission(api.getPermission())
                         .dataScope(relation.getDataScope())
-                        .scopeSet(relation.getScopeSet())
+                        .scopes(relation.getScopes())
                         .build();
                 dataScopeInfoList.add(info);
             }
@@ -344,10 +344,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             relation.setDataScope(dataScopeInfo.getDataScope() == null ? DataScopeEnum.ALL.getCode() : dataScopeInfo.getDataScope());
             // 若是自定义数据范围,需要处理
             if (ObjectUtil.equal(dataScopeInfo.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
-                Assert.notEmpty(dataScopeInfo.getScopeSet(), "自定义数据范围时, scopeSet不能为空");
-                relation.setScopeSet(dataScopeInfo.getScopeSet());
+                Assert.notEmpty(dataScopeInfo.getScopes(), "自定义数据范围时, scopeSet不能为空");
+                relation.setScopes(dataScopeInfo.getScopes());
             } else {
-                relation.setScopeSet("");
+                relation.setScopes("");
             }
             relation.setUpdateBy(null);
             relation.setUpdateTime(date);
@@ -476,7 +476,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 DataScopeInfo info = DataScopeInfo.builder()
                         .permission(e.getPermission())
                         .dataScope(relation.getDataScope())
-                        .scopeSet(relation.getScopeSet())
+                        .scopes(relation.getScopes())
                         .build();
                 // 不同的role中可能会有重复的perm,数据范围合并不在此处理
                 dataScopeList.add(info);

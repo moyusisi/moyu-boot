@@ -26,7 +26,7 @@ public class DataScopeInfo {
     private String code;
 
     /**
-     * 路由地址
+     * 路由地址url
      */
     private String path;
 
@@ -42,6 +42,6 @@ public class DataScopeInfo {
     /**
      * 自定义scope集合,逗号分隔
      */
-    private String scopeSet;
+    private String scopes;
 
 }

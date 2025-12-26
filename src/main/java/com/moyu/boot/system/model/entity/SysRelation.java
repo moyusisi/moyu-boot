@@ -41,5 +41,5 @@ public class SysRelation extends BaseEntity {
     /**
      * 自定义scope集合,逗号分隔
      */
-    private String scopeSet;
+    private String scopes;
 }
