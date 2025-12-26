@@ -1,11 +1,8 @@
 package com.moyu.boot.auth.service;
 
 
-import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.model.LoginUser;
-import com.moyu.boot.system.constant.SysConstants;
-import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.service.SysGroupService;
@@ -19,9 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -77,42 +71,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orgCode(sysUser.getOrgCode())
                 .password(sysUser.getPassword())
                 .enabled(sysUser.getStatus() == 0)
+                // 角色集合(默认角色+直接拥有的角色)
+                .roles(roleSet)
+                // 权限标识集合(仅接口,无菜单)
+                .perms(sysRoleService.rolePerms(roleSet))
                 // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
                 .groupOrgCode(sysUser.getOrgCode())
                 .dataScope(DataScopeEnum.SELF.getCode())
-                // 默认岗位权限(默认角色+直接拥有的角色)
-                .roles(roleSet)
-                // 权限标识集合(仅接口,无菜单)
-                .perms(sysRoleService.rolePerms(roleSet))
                 .build();
-        /** 登录时以默认岗位登录
-        // 岗位列表
-        List<SysGroup> groupList = sysGroupService.userGroupList(sysUser.getAccount());
-        SysGroup group = null;
-        if (ObjectUtil.isNotEmpty(groupList)) {
-            // 优先获取用户本部门的岗位
-            Optional<SysGroup> opt = groupList.stream().filter(e -> e.getCode().equals(sysUser.getOrgCode())).findFirst();
-            group = opt.orElse(groupList.get(0));
-        }
-        // 有岗位则覆盖默认的岗位权限
-        if (group != null) {
-            // 当前岗位
-            loginUser.setGroupCode(group.getCode());
-            // 组织机构随岗位变化
-            loginUser.setGroupOrgCode(group.getOrgCode());
-            // 岗位设置的数据权限范围
-            loginUser.setDataScope(group.getDataScope());
-            // 岗位角色 group-role
-            loginUser.setRoles(sysRelationService.groupRole(group.getCode()));
-            // 岗位权限 权限标识集合(仅接口,无菜单)
-            loginUser.setPerms(sysRoleService.rolePerms(roleSet));
-            // 自定义数据权限集合
-            if (DataScopeEnum.ORG_DEFINE.getCode().equals(loginUser.getDataScope())) {
-                loginUser.setScopes(new HashSet<>(SysConstants.COMMA_SPLITTER.splitToList(group.getScopeSet())));
-            }
-        }
-        */
         // 初始化权限
         loginUser.initAuthorities();
         return loginUser;
