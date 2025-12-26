@@ -80,7 +80,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
                 .groupOrgCode(sysUser.getOrgCode())
-                .dataScope(DataScopeEnum.SELF.getCode())
                 .build();
         // 初始化权限
         loginUser.initAuthorities();

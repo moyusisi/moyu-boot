@@ -83,7 +83,6 @@ public class UserCenterServiceImpl implements UserCenterService {
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
                 .perms(loginUser.getPerms()).roles(loginUser.getRoles())
                 .groupCode(loginUser.getGroupCode()).groupOrgCode(loginUser.getGroupOrgCode())
-                .dataScope(loginUser.getDataScope()).scopeSet(loginUser.getScopeSet())
                 .build();
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(username);
@@ -228,10 +227,8 @@ public class UserCenterServiceImpl implements UserCenterService {
         loginUser.setRoles(roleSet);
         // 岗位权限 权限标识集合(仅接口,无菜单)
         loginUser.setPerms(sysRoleService.rolePerms(roleSet));
-        // 岗位关联的数据权限类型
-        loginUser.setDataScope(group.getDataScope());
-        // 数据权限集合
-        loginUser.setScopeSet(sysGroupService.groupDataScopes(group.getOrgCode()));
+        // 接口权限的数据范围
+        loginUser.setPermScopeMap(sysRoleService.rolePermScopeMap(roleSet, group.getOrgCode()));
         return tokenService.refreshToken(loginUser);
     }
 

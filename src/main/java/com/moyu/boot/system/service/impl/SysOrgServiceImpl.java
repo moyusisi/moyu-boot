@@ -184,10 +184,10 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public Tree<String> singleTree() {
-//        if (ObjectUtil.isEmpty(rootTree)) {
-//            rootTree = loadRootTree();
-//        }
-        return loadRootTree();
+        if (ObjectUtil.isEmpty(rootTree)) {
+            rootTree = loadRootTree();
+        }
+        return rootTree;
     }
 
     @Override

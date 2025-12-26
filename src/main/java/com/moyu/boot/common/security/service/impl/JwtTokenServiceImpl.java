@@ -11,8 +11,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 /**
  * jwt 令牌服务类
@@ -37,8 +39,7 @@ public class JwtTokenServiceImpl implements TokenService {
                 .setExtra("groupOrgCode", loginUser.getGroupOrgCode())
                 .setExtra("roles", loginUser.getRoles())
                 .setExtra("perms", loginUser.getPerms())
-                .setExtra("dataScope", loginUser.getDataScope())
-                .setExtra("scopeList", loginUser.getScopeSet())
+                .setExtra("permScopeMap", loginUser.getPermScopeMap())
         );
         return StpUtil.getTokenValue();
     }
@@ -54,8 +55,7 @@ public class JwtTokenServiceImpl implements TokenService {
         // 获取 jwt Token 的扩展参数, 只在jwt模式下生效
         Object roles = StpUtil.getExtra("roles");
         Object perms = StpUtil.getExtra("perms");
-        Object dataScope = StpUtil.getExtra("dataScope");
-        Object scopeList = StpUtil.getExtra("scopeList");
+        Object permScopeMap = StpUtil.getExtra("permScopeMap");
         // 构造当前登录用户信息
         LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username((String) StpUtil.getExtra("username"))
@@ -64,8 +64,7 @@ public class JwtTokenServiceImpl implements TokenService {
                 .groupOrgCode((String) StpUtil.getExtra("groupOrgCode"))
                 .roles(ObjectUtil.isEmpty(roles) ? new HashSet<>() : new HashSet<>((List<String>) roles))
                 .perms(ObjectUtil.isEmpty(perms) ? new HashSet<>() : new HashSet<>((List<String>) perms))
-                .dataScope(ObjectUtil.isEmpty(dataScope) ? null : ((Number) dataScope).intValue())
-                .scopeSet(ObjectUtil.isEmpty(scopeList) ? new HashSet<>() : new HashSet<>((List<String>) scopeList))
+                .permScopeMap(ObjectUtil.isEmpty(permScopeMap) ? new HashMap<>() : (Map<String, LoginUser.DataScopeInfo>) permScopeMap)
                 .build();
         // 初始化authorities后才可使用springSecurity鉴权
         loginUser.initAuthorities();

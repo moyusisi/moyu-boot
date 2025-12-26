@@ -58,14 +58,6 @@ public class UserInfo {
      * 当前岗位所属组织机构
      */
     private String groupOrgCode;
-    /**
-     * 数据权限范围
-     */
-    private Integer dataScope;
-    /**
-     * 自定义数据权限集合
-     */
-    private Set<String> scopeSet;
 
     /**
      * 岗位列表

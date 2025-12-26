@@ -529,11 +529,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 本机构及以下
             scopeSet.add(orgCode);
             // 从rootTree中获取所有child（有缓存时）
-            Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
-            orgTree.walk(node -> scopeSet.add(node.getId()));
+//            Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
+//            orgTree.walk(node -> scopeSet.add(node.getId()));
             // 从数据库中获取所有child（无缓存时）
-//                    List<String> childList = sysOrgService.childrenCodeList(orgCode);
-//                    scopeSet.addAll(childList);
+            List<String> childList = sysOrgService.childrenCodeList(orgCode);
+            scopeSet.addAll(childList);
         } else if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
             // 自定义
             scopeSet.addAll(SysConstants.COMMA_SPLITTER.splitToList(relation.getScopes()));
