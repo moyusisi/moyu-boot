@@ -24,6 +24,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.constant.SecurityConstants;
+import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
@@ -39,10 +40,7 @@ import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
-import com.moyu.boot.system.service.SysRelationService;
-import com.moyu.boot.system.service.SysResourceService;
-import com.moyu.boot.system.service.SysRoleService;
-import com.moyu.boot.system.service.SysUserService;
+import com.moyu.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -73,6 +71,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private SysOrgService sysOrgService;
 
     @Override
     public List<SysRoleVO> list(SysRoleParam param) {
@@ -457,14 +457,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(roleSet)) {
             return dataScopeList;
         }
-        // 所有权限 permCode->SysRelation
+        // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
         Map<String, SysRelation> allPermMap = new HashMap<>();
         sysRelationService.list(SysRelationParam.builder().relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .objectSet(roleSet).build()).forEach(e -> allPermMap.put(e.getTargetId(), e));
         if (ObjectUtil.isEmpty(allPermMap)) {
             return dataScopeList;
         }
-        // 仅获取接口的权限标识+数据范围
+        // roleSet拥有Resource(仅包含按钮/接口)
         List<SysResource> apiList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .in(SysResource::getCode, allPermMap.keySet())
@@ -483,6 +483,96 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
         });
         return dataScopeList;
+    }
+
+    @Override
+    public Map<String, LoginUser.DataScopeInfo> rolePermScopeMap(Set<String> roleSet, String orgCode) {
+        // 权限标识集合
+        Map<String, LoginUser.DataScopeInfo> permScopeMap = new HashMap<>();
+        if (ObjectUtil.isEmpty(roleSet)) {
+            return permScopeMap;
+        }
+        // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
+        Map<String, SysRelation> allPermMap = new HashMap<>();
+        sysRelationService.list(SysRelationParam.builder().relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .objectSet(roleSet).build()).forEach(e -> allPermMap.put(e.getTargetId(), e));
+        if (ObjectUtil.isEmpty(allPermMap)) {
+            return permScopeMap;
+        }
+        // roleSet拥有Resource(仅包含按钮/接口)
+        List<SysResource> apiList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .in(SysResource::getCode, allPermMap.keySet())
+                .eq(SysResource::getDeleted, 0));
+        // 接口数据范围组装
+        apiList.forEach(e -> {
+            if (ObjectUtil.isNotEmpty(e.getPermission())) {
+                SysRelation relation = allPermMap.get(e.getCode());
+                LoginUser.DataScopeInfo info = buildDataScopeInfo(orgCode, relation);
+                if (permScopeMap.containsKey(e.getPermission())) {
+                    // 已有重复的，则要合并数据范围
+                    LoginUser.DataScopeInfo mergedInfo = mergeDataScope(permScopeMap.get(e.getPermission()), info);
+                    permScopeMap.put(e.getPermission(), mergedInfo);
+                } else {
+                    // 不重复直接添加
+                    permScopeMap.put(e.getPermission(), info);
+                }
+            }
+        });
+        //
+        return Collections.emptyMap();
+    }
+
+    /**
+     * 数据权限范围合并(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4自定义)
+     * 合并时优先级为： 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4自定义 < 0无限制
+     * 1.有无限制则最终为无限制
+     * 2.有自定义则最终为自定义，只是需要两项范围合并
+     * 3.其他按照优先级返回大的
+     */
+    private LoginUser.DataScopeInfo mergeDataScope(LoginUser.DataScopeInfo scope1, LoginUser.DataScopeInfo scope2) {
+        // 1.有无限制直接返回
+        if (scope1.getDataScope() == null || DataScopeEnum.ALL.getCode().equals(scope1.getDataScope())) {
+            return scope1;
+        }
+        if (scope2.getDataScope() == null || DataScopeEnum.ALL.getCode().equals(scope2.getDataScope())) {
+            return scope2;
+        }
+        // 按照 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4自定义 排序
+        LoginUser.DataScopeInfo max = scope1.getDataScope() > scope2.getDataScope() ? scope1 : scope2;
+        LoginUser.DataScopeInfo min = scope1.getDataScope() < scope2.getDataScope() ? scope1 : scope2;
+
+        // 2.有自定义，则把min的范围加入到max然后返回自定义。
+        if (max.getDataScope().equals(DataScopeEnum.ORG_DEFINE.getCode())) {
+            max.getScopeSet().addAll(min.getScopeSet());
+        }
+        // 3.其他情况返回max
+        return max;
+    }
+
+    private LoginUser.DataScopeInfo buildDataScopeInfo(String orgCode, SysRelation relation) {
+        LoginUser.DataScopeInfo info = new LoginUser.DataScopeInfo();
+        // 不限制时设置值，防止null
+        info.setDataScope(relation.getDataScope() == null ? DataScopeEnum.ALL.getCode() : relation.getDataScope());
+        Set<String> scopeSet = new HashSet<>();
+        info.setScopeSet(scopeSet);
+        if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG.getCode())) {
+            // 本机构
+            scopeSet.add(orgCode);
+        } else if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_CHILD.getCode())) {
+            // 本机构及以下
+            scopeSet.add(orgCode);
+            // 从rootTree中获取所有child（有缓存时）
+            Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
+            orgTree.walk(node -> scopeSet.add(node.getId()));
+            // 从数据库中获取所有child（无缓存时）
+//                    List<String> childList = sysOrgService.childrenCodeList(orgCode);
+//                    scopeSet.addAll(childList);
+        } else if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+            // 自定义
+            scopeSet.addAll(SysConstants.COMMA_SPLITTER.splitToList(relation.getScopes()));
+        }
+        return info;
     }
 
     /**

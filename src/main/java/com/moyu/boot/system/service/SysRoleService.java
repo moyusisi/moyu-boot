@@ -3,6 +3,7 @@ package com.moyu.boot.system.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -10,6 +11,7 @@ import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -118,4 +120,11 @@ public interface SysRoleService extends IService<SysRole> {
      * 获取指定角色的权限标识+数据范围
      */
     List<PermScopeInfo> rolePermsDataScopeList(Set<String> roleSet);
+
+    /**
+     * 获取角色的权限标识+数据范围(数据权限自动合并)
+     *
+     * @return Map:接口perm标识 -> dataScope
+     */
+    Map<String, LoginUser.DataScopeInfo> rolePermScopeMap(Set<String> roleSet, String orgCode);
 }
