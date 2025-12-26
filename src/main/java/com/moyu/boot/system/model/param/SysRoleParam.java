@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
-import com.moyu.boot.system.model.vo.DataScopeInfo;
+import com.moyu.boot.system.model.vo.PermScopeInfo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +47,7 @@ public class SysRoleParam extends BasePageParam {
     /**
      * 角色授权时的数据范围列表
      */
-    private List<DataScopeInfo> grantDataList;
+    private List<PermScopeInfo> grantScopeList;
 
     /**
      * 指定模块

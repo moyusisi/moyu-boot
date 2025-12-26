@@ -37,7 +37,7 @@ import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
-import com.moyu.boot.system.model.vo.DataScopeInfo;
+import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysResourceService;
@@ -240,8 +240,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<DataScopeInfo> dataScopeListForGrant(SysRoleParam param) {
-        List<DataScopeInfo> dataScopeInfoList = new ArrayList<>();
+    public List<PermScopeInfo> permScopeListForGrant(SysRoleParam param) {
+        List<PermScopeInfo> permScopeList = new ArrayList<>();
         // 模块编码
         SysResourceParam query = SysResourceParam.builder().module(param.getModule())
                 .resourceType(ResourceTypeEnum.BUTTON.getCode())
@@ -263,7 +263,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         apiList.forEach(api -> {
             if (permMap.containsKey(api.getCode())) {
                 SysRelation relation = permMap.get(api.getCode());
-                DataScopeInfo info = DataScopeInfo.builder()
+                PermScopeInfo vo = PermScopeInfo.builder()
                         .code(api.getCode())
                         .name(api.getName())
                         .path(api.getPath())
@@ -271,10 +271,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                         .dataScope(relation.getDataScope())
                         .scopes(relation.getScopes())
                         .build();
-                dataScopeInfoList.add(info);
+                permScopeList.add(vo);
             }
         });
-        return dataScopeInfoList;
+        return permScopeList;
     }
 
     @Override
@@ -322,14 +322,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public void grantData(SysRoleParam param) {
-        List<DataScopeInfo> dataScopeList = param.getGrantDataList();
+    public void grantScope(SysRoleParam param) {
+        List<PermScopeInfo> permScopeList = param.getGrantScopeList();
         // 如果无数据则不授权
-        if (ObjectUtil.isEmpty(dataScopeList)) {
+        if (ObjectUtil.isEmpty(permScopeList)) {
             return;
         }
-        Map<String, DataScopeInfo> scopeMap = new HashMap<>();
-        dataScopeList.forEach(e -> scopeMap.put(e.getCode(), e));
+        Map<String, PermScopeInfo> scopeMap = new HashMap<>();
+        permScopeList.forEach(e -> scopeMap.put(e.getCode(), e));
         // 查询角色在本模块的已有权限(role+permCodeSet)
         List<SysRelation> relationList = sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
@@ -340,12 +340,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         Date date = new Date();
         relationList.forEach(relation -> {
-            DataScopeInfo dataScopeInfo = scopeMap.get(relation.getTargetId());
-            relation.setDataScope(dataScopeInfo.getDataScope() == null ? DataScopeEnum.ALL.getCode() : dataScopeInfo.getDataScope());
+            PermScopeInfo info = scopeMap.get(relation.getTargetId());
+            relation.setDataScope(info.getDataScope() == null ? DataScopeEnum.ALL.getCode() : info.getDataScope());
             // 若是自定义数据范围,需要处理
-            if (ObjectUtil.equal(dataScopeInfo.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
-                Assert.notEmpty(dataScopeInfo.getScopes(), "自定义数据范围时, scopeSet不能为空");
-                relation.setScopes(dataScopeInfo.getScopes());
+            if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+                Assert.notEmpty(info.getScopes(), "自定义数据范围时, scopes不能为空");
+                relation.setScopes(info.getScopes());
             } else {
                 relation.setScopes("");
             }
@@ -451,9 +451,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<DataScopeInfo> rolePermsDataScopeList(Set<String> roleSet) {
+    public List<PermScopeInfo> rolePermsDataScopeList(Set<String> roleSet) {
         // 权限标识集合
-        List<DataScopeInfo> dataScopeList = new ArrayList<>();
+        List<PermScopeInfo> dataScopeList = new ArrayList<>();
         if (ObjectUtil.isEmpty(roleSet)) {
             return dataScopeList;
         }
@@ -473,7 +473,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         apiList.forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 SysRelation relation = allPermMap.get(e.getCode());
-                DataScopeInfo info = DataScopeInfo.builder()
+                PermScopeInfo info = PermScopeInfo.builder()
                         .permission(e.getPermission())
                         .dataScope(relation.getDataScope())
                         .scopes(relation.getScopes())

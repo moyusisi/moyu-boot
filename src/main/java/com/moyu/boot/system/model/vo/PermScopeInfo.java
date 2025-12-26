@@ -1,19 +1,20 @@
 package com.moyu.boot.system.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
- * 数据权限信息
+ * 接口的权限+数据范围信息
  */
 @Getter
 @Setter
 @ToString
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DataScopeInfo {
+public class PermScopeInfo {
 
     /**
      * 名称

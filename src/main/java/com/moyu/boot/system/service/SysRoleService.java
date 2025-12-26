@@ -6,7 +6,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
-import com.moyu.boot.system.model.vo.DataScopeInfo;
+import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public interface SysRoleService extends IService<SysRole> {
      *
      * @param param 角色code, module必须传
      */
-    List<DataScopeInfo> dataScopeListForGrant(SysRoleParam param);
+    List<PermScopeInfo> permScopeListForGrant(SysRoleParam param);
 
     /**
      * 角色授权，ROLE_HAS_MENU
@@ -83,7 +83,7 @@ public interface SysRoleService extends IService<SysRole> {
      *
      * @param param 角色code，授权module必须传
      */
-    void grantData(SysRoleParam param);
+    void grantScope(SysRoleParam param);
 
     /**
      * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
@@ -117,5 +117,5 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 获取指定角色的权限标识+数据范围
      */
-    List<DataScopeInfo> rolePermsDataScopeList(Set<String> roleSet);
+    List<PermScopeInfo> rolePermsDataScopeList(Set<String> roleSet);
 }
