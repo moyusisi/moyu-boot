@@ -105,7 +105,7 @@ public class SysResourceParam extends BasePageParam {
     private String icon;
 
     /**
-     * 是否可见（0不可见 1可见）
+     * 是否可见（0不可见 1可见）/数据权限（0无 1有）
      */
     private Integer visible;
 

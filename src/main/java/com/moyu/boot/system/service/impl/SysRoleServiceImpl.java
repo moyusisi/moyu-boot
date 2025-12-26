@@ -245,6 +245,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 模块编码
         SysResourceParam query = SysResourceParam.builder().module(param.getModule())
                 .resourceType(ResourceTypeEnum.BUTTON.getCode())
+                .visible(1) // 有数据权限的接口
                 .name(param.getName()).path(param.getSearchKey())
                 .build();
         // 查询模块所有按钮资源
