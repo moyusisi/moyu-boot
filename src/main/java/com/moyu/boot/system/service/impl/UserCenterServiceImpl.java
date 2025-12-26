@@ -13,7 +13,6 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
@@ -84,7 +83,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
                 .perms(loginUser.getPerms()).roles(loginUser.getRoles())
                 .groupCode(loginUser.getGroupCode()).groupOrgCode(loginUser.getGroupOrgCode())
-                .dataScope(loginUser.getDataScope()).scopes(loginUser.getScopes())
+                .dataScope(loginUser.getDataScope()).scopeSet(loginUser.getScopeSet())
                 .build();
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(username);
@@ -232,7 +231,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 岗位关联的数据权限类型
         loginUser.setDataScope(group.getDataScope());
         // 数据权限集合
-        loginUser.setScopes(sysGroupService.groupDataScopes(group.getOrgCode()));
+        loginUser.setScopeSet(sysGroupService.groupDataScopes(group.getOrgCode()));
         return tokenService.refreshToken(loginUser);
     }
 

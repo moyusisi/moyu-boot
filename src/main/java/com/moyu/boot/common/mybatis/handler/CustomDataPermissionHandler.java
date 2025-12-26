@@ -105,11 +105,11 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             }
             case ORG_DEFINE: {
                 //  自定义
-                Set<String> scopes = SecurityUtils.getScopes();
-                if (ObjectUtil.isEmpty(scopes)) {
+                Set<String> scopeSet = SecurityUtils.getScopes();
+                if (ObjectUtil.isEmpty(scopeSet)) {
                     sqlStr = "1 = 0";
                 } else {
-                    sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopes, "', '") + "')";
+                    sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopeSet, "', '") + "')";
                 }
                 break;
             }

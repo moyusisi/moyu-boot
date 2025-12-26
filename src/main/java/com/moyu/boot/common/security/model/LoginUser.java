@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 
@@ -54,7 +55,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     /**
      * 自定义数据权限集合
      */
-    private Set<String> scopes;
+    private Set<String> scopeSet;
 
     /**
      * 权限集合(仅接口的权限标记)
@@ -107,6 +108,25 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     @JsonIgnore
     private boolean enabled;
+
+    /**
+     * 数据范围信息
+     **/
+    @Data
+    public static class DataScopeInfo {
+
+        /**
+         * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
+         *
+         * @see com.moyu.boot.common.core.enums.DataScopeEnum
+         */
+        private Integer dataScope;
+
+        /**
+         * 数据范围集合
+         */
+        private List<String> scopeSet;
+    }
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {

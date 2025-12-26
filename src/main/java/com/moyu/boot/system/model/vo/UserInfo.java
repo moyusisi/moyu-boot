@@ -65,7 +65,7 @@ public class UserInfo {
     /**
      * 自定义数据权限集合
      */
-    private Set<String> scopes;
+    private Set<String> scopeSet;
 
     /**
      * 岗位列表

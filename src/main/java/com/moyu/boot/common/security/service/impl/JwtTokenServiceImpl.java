@@ -38,7 +38,7 @@ public class JwtTokenServiceImpl implements TokenService {
                 .setExtra("roles", loginUser.getRoles())
                 .setExtra("perms", loginUser.getPerms())
                 .setExtra("dataScope", loginUser.getDataScope())
-                .setExtra("scopes", loginUser.getScopes())
+                .setExtra("scopeList", loginUser.getScopeSet())
         );
         return StpUtil.getTokenValue();
     }
@@ -55,7 +55,7 @@ public class JwtTokenServiceImpl implements TokenService {
         Object roles = StpUtil.getExtra("roles");
         Object perms = StpUtil.getExtra("perms");
         Object dataScope = StpUtil.getExtra("dataScope");
-        Object scopes = StpUtil.getExtra("scopes");
+        Object scopeList = StpUtil.getExtra("scopeList");
         // 构造当前登录用户信息
         LoginUser loginUser = LoginUser.builder().enabled(true)
                 .username((String) StpUtil.getExtra("username"))
@@ -65,7 +65,7 @@ public class JwtTokenServiceImpl implements TokenService {
                 .roles(ObjectUtil.isEmpty(roles) ? new HashSet<>() : new HashSet<>((List<String>) roles))
                 .perms(ObjectUtil.isEmpty(perms) ? new HashSet<>() : new HashSet<>((List<String>) perms))
                 .dataScope(ObjectUtil.isEmpty(dataScope) ? null : ((Number) dataScope).intValue())
-                .scopes(ObjectUtil.isEmpty(scopes) ? new HashSet<>() : new HashSet<>((List<String>) scopes))
+                .scopeSet(ObjectUtil.isEmpty(scopeList) ? new HashSet<>() : new HashSet<>((List<String>) scopeList))
                 .build();
         // 初始化authorities后才可使用springSecurity鉴权
         loginUser.initAuthorities();

@@ -88,7 +88,7 @@ public class SecurityUtils {
      * 获取用户数据权限范围
      */
     public static Set<String> getScopes() {
-        return getLoginUser().map(LoginUser::getScopes).orElse(new HashSet<>());
+        return getLoginUser().map(LoginUser::getScopeSet).orElse(new HashSet<>());
     }
 
     /**
