@@ -71,6 +71,7 @@
     <!-- 业务日志级别 -->
     <logger name="com.moyu.boot" level="DEBUG"/>
     <logger name="org.springframework" level="INFO"/>
+    <logger name="com.moyu.boot.plugin.sysLog.mapper.SysLogMapper" level="INFO"/>
 
     <!-- 兜底日志 -->
     <root level="INFO">

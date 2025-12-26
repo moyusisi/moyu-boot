@@ -46,6 +46,7 @@ public class SysResourceController {
     /**
      * 资源分页列表
      */
+    @Log(jsonLog = true, response = false)
     @SysLog(module = "system", value = "查询资源列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
     @PostMapping("/page")
