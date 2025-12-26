@@ -77,6 +77,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
         // 指定path查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
+        // 指定visible查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getVisible()), SysResource::getVisible, param.getVisible());
         // 仅查询未删除的
         queryWrapper.eq(SysResource::getDeleted, 0);
         // 指定排序
