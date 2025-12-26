@@ -117,11 +117,6 @@ public interface SysRoleService extends IService<SysRole> {
     Set<String> rolePerms(Set<String> roleSet);
 
     /**
-     * 获取指定角色的权限标识+数据范围
-     */
-    List<PermScopeInfo> rolePermsDataScopeList(Set<String> roleSet);
-
-    /**
      * 获取角色的权限标识+数据范围(数据权限自动合并)
      *
      * @return Map:接口perm标识 -> dataScope

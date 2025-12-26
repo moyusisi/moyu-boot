@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -61,6 +62,10 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private Set<String> perms;
 
+    /**
+     * 接口权限对应的数据范围
+     */
+    private Map<String, LoginUser.DataScopeInfo> permScopeMap;
     /**
      * 角色集合
      */

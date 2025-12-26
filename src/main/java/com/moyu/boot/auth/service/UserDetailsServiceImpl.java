@@ -75,6 +75,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .roles(roleSet)
                 // 权限标识集合(仅接口,无菜单)
                 .perms(sysRoleService.rolePerms(roleSet))
+                // 接口权限的数据范围
+                .permScopeMap(sysRoleService.rolePermScopeMap(roleSet, sysUser.getOrgCode()))
                 // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
                 .groupOrgCode(sysUser.getOrgCode())
