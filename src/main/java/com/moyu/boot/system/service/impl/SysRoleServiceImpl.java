@@ -459,16 +459,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 所有权限 permCode->SysRelation
         Map<String, SysRelation> allPermMap = new HashMap<>();
-        sysRelationService.list(SysRelationParam.builder()
-                .relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
+        sysRelationService.list(SysRelationParam.builder().relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .objectSet(roleSet).build()).forEach(e -> allPermMap.put(e.getTargetId(), e));
         if (ObjectUtil.isEmpty(allPermMap)) {
             return dataScopeList;
         }
         // 仅获取接口的权限标识+数据范围
-        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+        List<SysResource> apiList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .in(SysResource::getCode, allPermMap.keySet())).forEach(e -> {
+                .in(SysResource::getCode, allPermMap.keySet())
+                .eq(SysResource::getDeleted, 0));
+        // 接口数据范围组装
+        apiList.forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 SysRelation relation = allPermMap.get(e.getCode());
                 DataScopeInfo info = DataScopeInfo.builder()
