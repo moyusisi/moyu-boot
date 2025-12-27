@@ -13,12 +13,12 @@ management:
       # 何时显示完整的运行状况详细信息
       show-details: never
   health:
-      # 存活探针: /actuator/health/liveness
-      livenessState:
-        enabled: true
-      # 就绪探针: /actuator/health/readiness
-      readinessState:
-        enabled: true
+    # 存活探针: /actuator/health/liveness
+    livenessState:
+      enabled: true
+    # 就绪探针: /actuator/health/readiness
+    readinessState:
+      enabled: true
 
 # spring配置
 spring:
