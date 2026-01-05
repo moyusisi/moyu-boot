@@ -35,6 +35,8 @@ public class SaTokenConfigure {
         config.setIsConcurrent(true);
         // 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token，为 false 时每次登录新建一个 token）
         config.setIsShare(false);
+        // 同一账号最大登录数量（只有在 isConcurrent=true, isShare=false 时才有意义）
+        config.setMaxLoginCount(5);
         // token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
         config.setTokenStyle("simple-uuid");
         // 是否输出操作日志
