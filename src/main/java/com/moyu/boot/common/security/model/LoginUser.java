@@ -49,15 +49,6 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private String groupOrgCode;
     /**
-     * 数据权限范围
-     */
-    private Integer dataScope;
-    /**
-     * 自定义数据权限集合
-     */
-    private Set<String> scopeSet;
-
-    /**
      * 角色集合
      */
     private Set<String> roles;
@@ -66,6 +57,15 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      * 权限集合(仅接口的权限标记)
      */
     private Set<String> perms;
+
+    /**
+     * 数据权限范围
+     */
+    private Integer dataScope;
+    /**
+     * 数据权限集合
+     */
+    private Set<String> scopeSet;
 
     /**
      * 接口权限对应的数据范围

@@ -95,20 +95,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         if (!SecurityUtils.isRoot()) {
             // 指定的列名
             Integer dataScope = SecurityUtils.getDataScope();
+            Set<String> scopeSet = SecurityUtils.getScopes();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
                 String username = SecurityUtils.getUsername();
-                queryWrapper.and(e -> e.eq(SysOrg::getCreateBy, username));
+                queryWrapper.eq(SysOrg::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
                 String orgCode = SecurityUtils.getGroupOrgCode();
-                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode));
+                queryWrapper.eq(SysOrg::getCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getGroupOrgCode();
-                // find_in_set函数比like高效
-//                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().like(SysOrg::getOrgPath, orgCode));
-                queryWrapper.and(e -> e.eq(SysOrg::getCode, orgCode).or().apply("find_in_set('" + orgCode + "', org_path)"));
+                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-                Set<String> scopes = SecurityUtils.getScopes();
-                queryWrapper.and(e -> e.in(SysOrg::getCode, scopes));
+                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
             }
         }
         // 分页查询

@@ -73,6 +73,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
         String orgColumn = annotation.orgColumn();
         Integer dataScope = SecurityUtils.getDataScope();
         DataScopeEnum scopeEnum = DataScopeEnum.getByCode(dataScope);
+        Set<String> scopeSet = SecurityUtils.getScopes();
         // 要追加的条件
         String sqlStr = "";
         switch (scopeEnum) {
@@ -94,20 +95,23 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             }
             case ORG_CHILD: {
                 // 本机构及以下
-                String orgCode = SecurityUtils.getGroupOrgCode();
                 // 第一种方法使用IN scopes,这种处理方式适合所有服务都能访问组织机构表且组织机构不多的情况(否则数量过多会导致in效率低下)
                 // sqlStr = orgColumn + " IN ( SELECT code FROM sys_org WHERE code = '" + orgCode + "' OR find_in_set( '" + orgCode + "' , org_path ) )";
                 // 第二种方法使用 orgPath Like, 这种处理方式则需要在数据表中新增一个表示组织机构树层级路径的字段，如:org_path(组织机构若变更则要洗数据)
                 // sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR " + annotation.orgPathColumn() + " LIKE '%" + orgCode + "%' )";
                 // 第三种方法使用 orgPath find_in_set, 这种处理方式与like类似但效率高点
-                sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set('" + orgCode + "', " + annotation.orgPathColumn() + " ) )";
+                // sqlStr = "( " + orgColumn + " = '" + orgCode + "' OR find_in_set('" + orgCode + "', " + annotation.orgPathColumn() + " ) )";
+                if (ObjectUtil.isEmpty(scopeSet)) {
+                    log.warn("dataScope为本机构及以下，但scopeSet为空,将不限制数据权限");
+                } else {
+                    sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopeSet, "', '") + "')";
+                }
                 break;
             }
             case ORG_DEFINE: {
                 //  自定义
-                Set<String> scopeSet = SecurityUtils.getScopes();
                 if (ObjectUtil.isEmpty(scopeSet)) {
-                    sqlStr = "1 = 0";
+                    log.warn("dataScope为自定义，但scopeSet为空,将不限制数据权限");
                 } else {
                     sqlStr = orgColumn + " IN ('" + CollectionUtil.join(scopeSet, "', '") + "')";
                 }

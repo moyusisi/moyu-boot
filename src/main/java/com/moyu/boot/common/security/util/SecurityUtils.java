@@ -63,14 +63,6 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取数据权限范围
-     */
-    public static Integer getDataScope() {
-        return getLoginUser().map(LoginUser::getDataScope).orElse(null);
-    }
-
-
-    /**
      * 获取用户角色集合
      */
     public static Set<String> getRoles() {
@@ -82,6 +74,13 @@ public class SecurityUtils {
      */
     public static Set<String> getPerms() {
         return getLoginUser().map(LoginUser::getPerms).orElse(new HashSet<>());
+    }
+
+    /**
+     * 获取数据权限范围
+     */
+    public static Integer getDataScope() {
+        return getLoginUser().map(LoginUser::getDataScope).orElse(null);
     }
 
     /**
