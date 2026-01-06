@@ -78,9 +78,6 @@ public class SysOrgParam extends BasePageParam {
     /**
      * 组织层级(字典 1一级公司 2二级公司 3三级公司)
      */
-    @NotNull(message = "组织层级orgLevel不能为空")
-    @Min(value = 1, message = "组织层级orgLevel有效取值范围为[1,3]")
-    @Max(value = 3, message = "组织层级orgLevel有效取值范围为[1,3]")
     private Integer orgLevel;
 
     /**
