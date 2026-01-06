@@ -20,7 +20,6 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
-import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.service.SysOrgService;
@@ -75,20 +74,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public PageData<SysUser> pageList(SysUserParam param) {
-        String deptCode = param.getOrgCode();
-        // 查询指定的组织所有的children，包含本身
-        List<String> childrenCode = new ArrayList<>();
-        if (StrUtil.isNotBlank(deptCode)) {
-            childrenCode = sysOrgService.childrenCodeList(deptCode);
-        }
         // 查询条件
         LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
         // 指定orgCode查询
-        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
-        // 指定orgCode查询(与上面的in等价)
-        queryWrapper.apply(ObjectUtil.isNotEmpty(deptCode), "find_in_set('" + deptCode + "', org_path)");
+        String parentCode = param.getOrgCode();
+        if (ObjectUtil.isNotEmpty(parentCode)) {
+            // 查询指定的组织所有的children，包含本身
+            List<String> children = sysOrgService.childrenCodeList(parentCode);
+            queryWrapper.in(ObjectUtil.isNotEmpty(children), SysUser::getOrgCode, children);
+        }
         // 指定status查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
         // 仅查询未删除的
