@@ -4,6 +4,7 @@ package com.moyu.boot.system.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.PreDataScope;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
@@ -37,7 +38,8 @@ public class SysUserController {
      * 分页获取角色列表
      */
     @SysLog(module = "system", value = "分页查询用户列表")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
+    @PreDataScope("sys:user:page")
     @PostMapping("/page")
     public Result<PageData<SysUser>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");

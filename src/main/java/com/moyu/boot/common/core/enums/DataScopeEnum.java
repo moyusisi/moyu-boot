@@ -16,13 +16,14 @@ import java.util.Objects;
 public enum DataScopeEnum {
 
     /**
-     * 数据权限(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4自定义)
+     * 数据权限(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4本公司及以下 5自定义)
      */
     ALL(0, "不限制"),
     SELF(1, "仅本人数据"),
     ORG(2, "仅本机构"),
     ORG_CHILD(3, "本机构及以下"),
-    ORG_DEFINE(4, "自定义");
+    COMPANY(4, "本公司及以下"),
+    ORG_DEFINE(5, "自定义");
 
     private final Integer code;
 
