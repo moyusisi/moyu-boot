@@ -54,12 +54,13 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public List<SysOrg> list(SysOrgParam param) {
+        String parentCode = param.getParentCode();
         // 查询条件
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class);
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysOrg::getName, param.getName());
-        // 指定parentCode查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getParentCode()), SysOrg::getParentCode, param.getParentCode());
+        // 指定父节点查询(包括本身)
+        queryWrapper.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode));
         // 指定status查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysOrg::getStatus, param.getStatus());
         // 仅查询未删除的
@@ -81,10 +82,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         LambdaQueryWrapper<SysOrg> queryWrapper = Wrappers.lambdaQuery(SysOrg.class);
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysOrg::getName, param.getName());
-        // 指定父节点查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(parentCode), SysOrg::getParentCode, parentCode);
-        // 指定父节点查询(包括本身) = parentCode or code
-//        queryWrapper.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode));
+        // 指定父节点查询(包括本身)
+        queryWrapper.and(ObjectUtil.isNotEmpty(parentCode), e -> e.eq(SysOrg::getCode, parentCode).or().eq(SysOrg::getParentCode, parentCode));
         // 指定status查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysOrg::getStatus, param.getStatus());
         // 仅查询未删除的
