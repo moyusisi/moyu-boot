@@ -21,6 +21,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
+import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
@@ -104,6 +105,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 queryWrapper.eq(SysOrg::getCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
+            } else if (DataScopeEnum.COMPANY.getCode().equals(dataScope)) {
+                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
             }
@@ -169,6 +172,21 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         orgList.forEach(e -> codeList.add(e.getCode()));
 //        this.baseMapper.selectAll(Wrappers.lambdaQuery(SysOrg.class).eq(SysOrg::getCode, orgCode));
         return codeList;
+    }
+
+    @Override
+    public String orgCompany(String orgCode) {
+        String companyCode = orgCode;
+        // 获取组织结构树
+        Tree<String> node = singleTree().getNode(orgCode);
+        while (null != node) {
+            if (OrgTypeEnum.COMPANY.getCode().equals(node.get("orgType"))) {
+                companyCode = node.getId();
+                break;
+            }
+            node = node.getParent();
+        }
+        return companyCode;
     }
 
     /**

@@ -63,6 +63,7 @@ create table sys_user
     `update_time`     DATETIME      DEFAULT NULL COMMENT '修改时间',
     `update_by`       VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`),
+    KEY `idx_org_code` (`org_code`),
     UNIQUE INDEX `uniq_account` (`account`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
@@ -114,6 +115,7 @@ create table sys_group
     `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
     `update_by`   VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
     primary key (`id`),
+    KEY `idx_org_code` (`org_code`),
     UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4

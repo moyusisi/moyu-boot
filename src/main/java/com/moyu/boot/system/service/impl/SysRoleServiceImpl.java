@@ -492,7 +492,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     /**
      * 数据权限范围合并(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4自定义)
-     * 合并时优先级为： 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4自定义 < 0无限制
+     * 合并时优先级为： 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4本公司及以下 < 5自定义 < 0无限制
      * 1.有无限制则最终为无限制
      * 2.有自定义则最终为自定义，只是需要两项范围合并
      * 3.其他按照优先级返回大的
@@ -505,7 +505,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (scope2.getDataScope() == null || DataScopeEnum.ALL.getCode().equals(scope2.getDataScope())) {
             return scope2;
         }
-        // 按照 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4自定义 排序
+        // 按照 1仅本人数据 < 2仅本机构 < 3本机构及以下 < 4本公司及以下 < 5自定义 排序
         LoginUser.DataScopeInfo max = scope1.getDataScope() > scope2.getDataScope() ? scope1 : scope2;
         LoginUser.DataScopeInfo min = scope1.getDataScope() < scope2.getDataScope() ? scope1 : scope2;
 
@@ -523,10 +523,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         info.setDataScope(relation.getDataScope() == null ? DataScopeEnum.ALL.getCode() : relation.getDataScope());
         Set<String> scopeSet = new HashSet<>();
         info.setScopeSet(scopeSet);
-        if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG.getCode())) {
+        if (DataScopeEnum.ORG.getCode().equals(info.getDataScope())) {
             // 本机构
             scopeSet.add(orgCode);
-        } else if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_CHILD.getCode())) {
+        } else if (DataScopeEnum.ORG_CHILD.getCode().equals(info.getDataScope())) {
             // 本机构及以下
             scopeSet.add(orgCode);
             // 从rootTree中获取所有child（有缓存时）
@@ -535,7 +535,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 从数据库中获取所有child（无缓存时）
             List<String> childList = sysOrgService.childrenCodeList(orgCode);
             scopeSet.addAll(childList);
-        } else if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
+        } else if (DataScopeEnum.COMPANY.getCode().equals(info.getDataScope())) {
+            // 本公司及以下
+            String companyCode = sysOrgService.orgCompany(orgCode);
+            scopeSet.add(companyCode);
+            // 从数据库中获取所有child（无缓存时）
+            List<String> childList = sysOrgService.childrenCodeList(companyCode);
+            scopeSet.addAll(childList);
+        } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(info.getDataScope())) {
             // 自定义
             scopeSet.addAll(SysConstants.COMMA_SPLITTER.splitToList(relation.getScopes()));
         }
