@@ -35,6 +35,10 @@ public class SysGroupParam extends BasePageParam {
      * 名称关键词
      */
     private String searchKey;
+    /**
+     * 用户名(账号)
+     */
+    private String username;
 
     //********** db中存在的字段 **********//
     /**

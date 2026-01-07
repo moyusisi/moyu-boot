@@ -172,4 +172,16 @@ public class SysGroupController {
         return Result.success();
     }
 
+
+    /**
+     * 查询指定分组的角色列表
+     */
+    @SysLog(module = "system", value = "查询用户的岗位列表")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
+    @PostMapping("/userGroupList")
+    public Result<List<SysGroupVO>> userGroupList(@RequestBody SysGroupParam groupParam) {
+        Assert.notEmpty(groupParam.getUsername(), "用户名username不能为空");
+        List<SysGroupVO> list = sysGroupService.userGroupList(groupParam);
+        return Result.success(list);
+    }
 }

@@ -243,6 +243,20 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
+    public List<SysGroupVO> userGroupList(SysGroupParam param) {
+        // 查询指定user的所有group
+        Set<String> groupSet = sysRelationService.userGroup(param.getUsername());
+        if (ObjectUtil.isEmpty(groupSet)) {
+            return new ArrayList<>();
+        }
+        param.setCodeSet(groupSet);
+        param.setStatus(0);
+        // 查询岗位
+        List<SysGroup> groupList = this.list(param);
+        return buildGroupVOList(groupList);
+    }
+
+    @Override
     public void groupAddRole(SysGroupParam param) {
         String groupCode = param.getCode();
         Set<String> roleSet = param.getCodeSet();
