@@ -39,7 +39,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2002, '0', '业务模块', 'biz_module', 1, '/bizModule', 'Layout', 'profile-outlined', '', 1, null, null, 2, null, '', 0, null, null, null, null),
 
         (2003, 'sys_module', '组织架构', 'dir_sys_org', 2, '/org', null, 'apartment-outlined', '', 1, null, 'sys_module', 10, null, '', 0, null, null, null, null),
-        (2004, 'sys_module', '权限控制', 'dir_sys_perm', 2, '/perm', null, 'user-switch-outlined', '', 1, null, 'sys_module', 20, null, '', 0, null, null, null, null),
+        (2004, 'sys_module', '权限控制', 'dir_sys_perm', 2, '/perm', null, 'unlock-outlined', '', 1, null, 'sys_module', 20, null, '', 0, null, null, null, null),
         (2005, 'sys_module', '资源管理', 'dir_sys_resource', 2, '/sys/resource', null, 'trademark-circle-outlined', '', 1, null, 'sys_module', 30, null, null, 0, null, null, null, null),
         (2006, 'sys_module', '系统工具', 'dir_sys_dev', 2, '/dev', null, 'tool-outlined', '', 1, null, 'sys_module', 40, null, '', 0, null, null, null, null),
         (2007, 'sys_module', '系统运维', 'dir_sys_ops', 2, '/ops', null, 'hdd-outlined', '', 1, null, 'sys_module', 50, null, '', 0, null, null, null, null),
