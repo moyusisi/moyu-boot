@@ -14,8 +14,8 @@ values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, null
 
 -- 用户
 insert into moyu.sys_user (id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, deleted, create_time, create_by, update_time, update_by)
-values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '超管', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        (102, 'rAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '超管', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
+values  (101, 'superAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '超管小李', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
+        (102, 'rAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '超管小王', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
         (103, 'bjAdmin', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
         (104, 'auditor', '$2a$10$ZxsW23u3p2wdnEpPTkT5zuOU.rs.TqyWAAa5eFTgxbQfbQggZ2Y3C', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
 
@@ -31,7 +31,7 @@ values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  (1894925631903645700, '总部兼职岗', 'g_zongbu', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
-        (1894925631903645701, '北京技术部岗', 'g_bjtech', '12002000', '北京技术部', '12002000,12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
+        (1894925631903645701, '北京公司管理岗', 'g_beijing', '12000000', '北京公司', '12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
         (1894925631903645702, '全局审计岗', 'g_auditor', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
 
 -- 菜单数据
@@ -273,10 +273,9 @@ values  ('ROOT', 'rAdmin', 1, 0, null, null, null, null),
         ('r_auditor', 'btn_sys_button_detail', 2, 0, null, null, null, null),
 
         ('g_zongbu', 'superAdmin', 3, 0, null, null, null, null),
-        ('g_zongbu', 'bjAdmin', 3, 0, null, null, null, null),
         ('g_zongbu', 'r_superAdmin', 4, 0, null, null, null, null),
-        ('g_bjtech', 'bjAdmin', 3, 0, null, null, null, null),
-        ('g_bjtech', 'r_superAdmin', 4, 0, null, null, null, null),
+        ('g_beijing', 'bjAdmin', 3, 0, null, null, null, null),
+        ('g_beijing', 'r_orgAdmin', 4, 0, null, null, null, null),
         ('g_auditor', 'auditor', 3, 0, null, null, null, null),
         ('g_auditor', 'r_auditor', 4,  0, null, null, null, null);
 
