@@ -342,7 +342,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Date date = new Date();
         relationList.forEach(relation -> {
             PermScopeInfo info = scopeMap.get(relation.getTargetId());
-            relation.setDataScope(info.getDataScope() == null ? DataScopeEnum.ALL.getCode() : info.getDataScope());
+            relation.setDataScope(info.getDataScope());
             // 若是自定义数据范围,需要处理
             if (ObjectUtil.equal(info.getDataScope(), DataScopeEnum.ORG_DEFINE.getCode())) {
                 Assert.notEmpty(info.getScopes(), "自定义数据范围时, scopes不能为空");
