@@ -78,7 +78,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2056, 'dir_biz_company', '人员管理', 'menu_biz_user', 3, '/biz/user', 'biz/user/index', 'user-outlined', null, 1, null, 'biz_module', 53, null, '', 0, null, null, null, null),
         (2057, 'dir_biz_company', '岗位管理', 'menu_biz_pos', 3, '/biz/position', 'biz/position/index', 'apartment-outlined', null, 1, null, 'biz_module', 54, null, '', 0, null, null, null, null),
 
-        (2100, 'menu_sys_org', '组织树', 'api_sys_org_tree', 6, '/api/sys/org/tree', '', null, 'sys:org:tree', 0, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
+        (2100, 'menu_sys_org', '组织树', 'api_sys_org_tree', 6, '/api/sys/org/tree', '', null, 'sys:org:tree', 1, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
         (2101, 'menu_sys_org', '新增组织', 'btn_sys_org_add', 6, '/api/sys/org/add', '', '', 'sys:org:add', 0, null, 'sys_module', 101001, null, '', 0, null, null, null, null),
         (2102, 'menu_sys_org', '删除组织', 'btn_sys_org_delete', 6, '/api/sys/org/delete', '', '', 'sys:org:delete', 0, null, 'sys_module', 101002, null, '', 0, null, null, null, null),
         (2103, 'menu_sys_org', '修改组织', 'btn_sys_org_edit', 6, '/api/sys/org/edit', '', '', 'sys:org:edit', 0, null, 'sys_module', 101003, null, '', 0, null, null, null, null),
