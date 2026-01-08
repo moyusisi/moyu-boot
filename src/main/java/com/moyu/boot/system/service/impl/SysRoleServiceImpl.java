@@ -298,14 +298,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Set<String> grantMenuSet = roleParam.getGrantMenuList();
         // 本次授权内容中，仅保留可授权部分(目录不可授权)
         grantMenuSet.retainAll(allMenuCode);
+        // role原来已有的权限
+        Set<String> oldPermSet = sysRelationService.rolePerm(roleParam.getCode());
+        // 移除老权限，只留新权限
+        grantMenuSet.removeAll(oldPermSet);
+        // 原权限 - 新权限 = 要移除的权限
+        oldPermSet.removeAll(grantMenuSet);
 
         // 删除旧权限和添加新权限放在一个事务中，有异常会自动回滚(使用模板事物精确控制粒度)
         transactionTemplate.execute((transactionStatus) -> {
             // TransactionCallbackWithoutResult 有异常则会自动回滚
 
-            // 清空角色在本模块的所有权限
-            sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
-                    .eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, allMenuCode));
+            // 移除本次删除的权限
+            if (ObjectUtil.isNotEmpty(oldPermSet)) {
+                sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
+                        .eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, oldPermSet));
+            }
             // 非空则新加权限
             if (ObjectUtil.isNotEmpty(grantMenuSet)) {
                 List<SysRelation> addList = new ArrayList<>();
