@@ -19,7 +19,6 @@ import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
-import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysResource;
@@ -168,21 +167,6 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public List<Tree<String>> userOrgTree(String username) {
-        if (SecurityUtils.isRoot()) {
-            return sysOrgService.tree();
-        }
-        // 获取全部树
-        Tree<String> rootTree = sysOrgService.singleTree();
-        // 查询用户当前岗位所属公司
-        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getGroupOrgCode());
-        // 用户直属公司orgTree
-        Tree<String> orgTree = rootTree.getNode(orgCode);
-        // 用户公司树列表
-        return Lists.newArrayList(orgTree);
-    }
-
-    @Override
     public List<SysRoleVO> userRoleList(String roleName) {
         // 当前登陆用户
         if (!SecurityUtils.getLoginUser().isPresent()) {
@@ -279,19 +263,5 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 构建树
         return TreeUtil.buildSingle(treeNodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
-
-    /**
-     * 获取指定部门所属公司的orgCode
-     */
-    private String getUserCompanyCode(Tree<String> tree, String deptCode) {
-        // 通过用户的orgPath获取用户的组织链接
-        List<String> orgPathList = TreeUtil.getParentsId(tree.getNode(deptCode), true);
-        // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
-        String orgCode = orgPathList.stream()
-                .filter(code -> ObjectUtil.equal(OrgTypeEnum.COMPANY.getCode(), tree.getNode(code).get("orgType")))
-                .findFirst().orElse(deptCode);
-        return orgCode;
-    }
-
 
 }

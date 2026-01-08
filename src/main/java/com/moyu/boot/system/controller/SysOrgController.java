@@ -53,6 +53,7 @@ public class SysOrgController {
      * 获取组织树
      */
     @Log(jsonLog = true, response = false)
+    @PreDataScope("sys:org:tree")
     @PostMapping("/tree")
     public Result<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();

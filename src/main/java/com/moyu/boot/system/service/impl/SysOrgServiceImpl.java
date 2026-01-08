@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -193,7 +194,22 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
      */
     @Override
     public List<Tree<String>> tree() {
-        return singleTree().getChildren();
+        Tree<String> rootTree = singleTree();
+        if (SecurityUtils.isRoot()) {
+            return rootTree.getChildren();
+        }
+        // 数据范围
+        Integer dataScope = SecurityUtils.getDataScope();
+        // 未设置或设置为不限制时，返回全树
+        if (dataScope == null || DataScopeEnum.ALL.getCode().equals(dataScope)) {
+            return rootTree.getChildren();
+        }
+        // 其他情况都按照数据范围返回公司树
+        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getGroupOrgCode());
+        // 用户直属公司orgTree
+        Tree<String> orgTree = rootTree.getNode(orgCode);
+        // 用户公司树列表
+        return Lists.newArrayList(orgTree);
     }
 
     @Override
@@ -261,6 +277,19 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             // 本节点的子节点orgPath也应该改变，待tree更新之后才可以修改 TODO
         }
         this.updateById(updateOrg);
+    }
+
+    /**
+     * 获取指定部门所属公司的orgCode
+     */
+    private String getUserCompanyCode(Tree<String> tree, String deptCode) {
+        // 通过用户的orgPath获取用户的组织链接
+        List<String> orgPathList = TreeUtil.getParentsId(tree.getNode(deptCode), true);
+        // 从前往后遍历，因组织链有顺序，所以遍历顺序不能变
+        String orgCode = orgPathList.stream()
+                .filter(code -> ObjectUtil.equal(OrgTypeEnum.COMPANY.getCode(), tree.getNode(code).get("orgType")))
+                .findFirst().orElse(deptCode);
+        return orgCode;
     }
 
     /**

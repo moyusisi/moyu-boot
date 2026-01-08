@@ -24,11 +24,6 @@ public interface UserCenterService {
     List<Tree<String>> userMenu(String username);
 
     /**
-     * 获取用户组织机构树
-     */
-    List<Tree<String>> userOrgTree(String username);
-
-    /**
      * 当前用户拥有的岗位角色列表
      */
     List<SysRoleVO> userRoleList(String roleName);

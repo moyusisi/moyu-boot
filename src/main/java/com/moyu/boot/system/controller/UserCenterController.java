@@ -55,18 +55,6 @@ public class UserCenterController {
     }
 
     /**
-     * 获取用户所属公司的组织树
-     */
-    @Log(jsonLog = true, response = false)
-    @PostMapping("/userOrgTree")
-    public Result<List<Tree<String>>> userOrgTree() {
-        // 当前登陆用户username
-        String username = SecurityUtils.getUsername();
-        List<Tree<String>> list = userCenterService.userOrgTree(username);
-        return Result.success(list);
-    }
-
-    /**
      * 获取当前用户拥有的角色列表(用于将当前用户角色赋予group)
      */
     @SysLog(module = "system", value = "查询当前用户的拥有的角色列表")
