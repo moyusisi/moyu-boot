@@ -22,6 +22,7 @@ import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRelation;
+import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRelationParam;
@@ -70,6 +71,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysGroup::getName, param.getName());
         // 指定code查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysGroup::getCode, param.getCode());
+        // 指定codeSet集合查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysGroup::getCode, param.getCodeSet());
         // 指定orgCode查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getOrgCode()), SysGroup::getOrgCode, param.getOrgCode());
         // 指定status查询
@@ -91,6 +94,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysGroup::getName, param.getName());
         // 指定code查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysGroup::getCode, param.getCode());
+        // 指定codeSet集合查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysGroup::getCode, param.getCodeSet());
         // 指定orgCode查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getOrgCode()), SysGroup::getOrgCode, param.getOrgCode());
         // 指定status查询
@@ -249,6 +254,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         if (ObjectUtil.isEmpty(groupSet)) {
             return new ArrayList<>();
         }
+        // 添加查询参数
         param.setCodeSet(groupSet);
         param.setStatus(0);
         // 查询岗位
