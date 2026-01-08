@@ -25,7 +25,8 @@ values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, 
         (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, null, null, null, null),
         (120, '超级管理员', 'r_superAdmin', 2, 0, null, null, 0, null, null, null, null),
         (130, '角色管理员', 'r_roleAdmin', 3, 0, null, '', 0, null, null, null, null),
-        (140, '审计员', 'r_auditor', 4, 0, null, '', 0, null, null, null, null);
+        (140, '公司管理员', 'r_orgAdmin', 4, 0, null, '', 0, null, null, null, null),
+        (150, '审计员', 'r_auditor', 5, 0, null, '', 0, null, null, null, null);
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
