@@ -30,7 +30,7 @@ values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, 
 
 -- 功能权限组
 insert into moyu.sys_group (id, name, code, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, '总部兼职岗', 'g_zongbu', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
+values  (1894925631903645700, '总部管理岗', 'g_zongbu', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
         (1894925631903645701, '北京公司管理岗', 'g_beijing', '12000000', '北京公司', '12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
         (1894925631903645702, '全局审计岗', 'g_auditor', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
 
@@ -273,7 +273,7 @@ values ('ROOT', 'rAdmin', 1, null, null, 0, null, null, null, null),
        ('r_auditor', 'btn_sys_button_detail', 2, null, null, 0, null, null, null, null),
 
        ('g_zongbu', 'bjAdmin', 3, null, null, 0, null, null, null, null),
-       ('g_zongbu', 'r_superAdmin', 4, null, null, 0, null, null, null, null),
+       ('g_zongbu', 'r_orgAdmin', 4, null, null, 0, null, null, null, null),
        ('g_beijing', 'bjAdmin', 3, null, null, 0, null, null, null, null),
        ('g_beijing', 'r_orgAdmin', 4, null, null, 0, null, null, null, null),
        ('g_auditor', 'auditor', 3, null, null, 0, null, null, null, null),
