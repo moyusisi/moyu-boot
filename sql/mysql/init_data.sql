@@ -272,7 +272,7 @@ values ('ROOT', 'rAdmin', 1, null, null, 0, null, null, null, null),
        ('r_auditor', 'btn_sys_button_list', 2, null, null, 0, null, null, null, null),
        ('r_auditor', 'btn_sys_button_detail', 2, null, null, 0, null, null, null, null),
 
-       ('g_zongbu', 'superAdmin', 3, null, null, 0, null, null, null, null),
+       ('g_zongbu', 'bjAdmin', 3, null, null, 0, null, null, null, null),
        ('g_zongbu', 'r_superAdmin', 4, null, null, 0, null, null, null, null),
        ('g_beijing', 'bjAdmin', 3, null, null, 0, null, null, null, null),
        ('g_beijing', 'r_orgAdmin', 4, null, null, 0, null, null, null, null),
