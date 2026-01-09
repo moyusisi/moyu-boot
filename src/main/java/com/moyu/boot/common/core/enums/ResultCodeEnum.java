@@ -52,6 +52,9 @@ public enum ResultCodeEnum implements IResultCode, Serializable {
      */
     ACCESS_PERMISSION_EXCEPTION("A0300", "访问权限异常"),
     ACCESS_UNAUTHORIZED("A0301", "访问未授权"),
+    AUTHORIZATION_EXPIRED("A0311", "授权已过期"),
+    NO_PERMISSION_TO_USE_API("A0312", "无权限使用 API"),
+
     /**
      * 二级宏观错误码
      */

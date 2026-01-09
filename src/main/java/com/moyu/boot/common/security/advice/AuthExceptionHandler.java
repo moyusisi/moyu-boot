@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,6 +36,9 @@ public class AuthExceptionHandler {
     // security的认证异常(AuthenticationException及子类)
     @ExceptionHandler(AuthenticationException.class)
     public Result<?> authenticationException(AuthenticationException e) {
+        if (e instanceof BadCredentialsException) {
+            return new Result<>(ResultCodeEnum.USER_PASSWORD_ERROR);
+        }
         // 登录异常
         return new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
     }

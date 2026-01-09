@@ -1,10 +1,10 @@
 package com.moyu.boot.auth.service;
 
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysUser;
-import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysRoleService;
@@ -48,8 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("加载{}的用户信息", username);
         // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
-        SysUser sysUser = sysUserService.detail(SysUserParam.builder().account(username).build());
-//        SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
+        SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
             throw new UsernameNotFoundException("用户账号不存在");
