@@ -50,7 +50,7 @@ public interface SysResourceService extends IService<SysResource> {
     void deleteByIds(SysResourceParam param);
 
     /**
-     * 通过codes删除，会集联删除树的所有节点
+     * 通过codes删除，要删除的节点下还有其他子节点则无法删除
      */
     void deleteTree(SysResourceParam param);
 

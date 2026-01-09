@@ -11,8 +11,6 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -33,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -168,55 +165,44 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     public void deleteByIds(SysResourceParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
-        // 逻辑删除
-        LambdaUpdateWrapper<SysResource> updateWrapper = Wrappers.lambdaUpdate(SysResource.class);
-        updateWrapper.in(SysResource::getId, idSet).set(SysResource::getDeleted, 1);
-        this.update(updateWrapper);
+        Set<String> codeSet = listByIds(idSet).stream().map(SysResource::getCode).collect(Collectors.toSet());
+        // 物理删除
+        this.removeByIds(idSet);
         // 资源删除时,对应的role_has_menu也要删除
-        clearRoleMenu(idSet);
+        clearRoleMenu(codeSet);
     }
 
     @Override
     public void deleteTree(SysResourceParam param) {
-        // 要集联删除，子节点也要全部删除
+        // 待删除节点的code集合(要删除的节点下还有其他子节点则无法删除)
+        Set<String> codeSet = param.getCodes();
+        // 查询codeSet+子节点
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         // 查询部分字段
         queryWrapper.select(SysResource::getId, SysResource::getCode, SysResource::getParentCode);
         // 指定模块(有模块的情况下要过滤)
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        // 指定codeSet+其子节点
+        queryWrapper.and(e -> e.in(SysResource::getCode, codeSet).or().in(SysResource::getParentCode, codeSet));
         queryWrapper.eq(SysResource::getDeleted, 0);
         // 所有的菜单
-        List<SysResource> resourceList = this.list(queryWrapper);
-        // 待删除节点的code集合
-        Set<String> codeSet = param.getCodes();
-
+        List<SysResource> allList = this.list(queryWrapper);
+        // 子节点
+        Set<String> subCodeSet = allList.stream().map(SysResource::getCode).collect(Collectors.toSet());
+        // 移出本次要删除的code，剩下的为本次没删除的子节点
+        subCodeSet.removeAll(codeSet);
+        if (ObjectUtil.isNotEmpty(subCodeSet)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "要删除节点下还有其他子节点，无法直接删除");
+        }
         // 待删除的id集合(先把指定节点加入集合)
-        Set<Long> idSet = resourceList.stream()
-                .filter(e -> codeSet.contains(e.getCode()))
-                .map(SysResource::getId)
-                .collect(Collectors.toSet());
+        Set<Long> idSet = allList.stream().map(SysResource::getId).collect(Collectors.toSet());
         if (CollectionUtils.isEmpty(idSet)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败,未查到指定数据");
         }
-        // 循环查找子节点,并加入到待删除集合
-        while (!CollectionUtils.isEmpty(codeSet)) {
-            Set<String> childrenSet = new HashSet<>();
-            resourceList.forEach(e -> {
-                if (codeSet.contains(e.getParentCode())) {
-                    childrenSet.add(e.getCode());
-                    idSet.add(e.getId());
-                }
-            });
-            // 子节点将变为新的父节点
-            codeSet.clear();
-            codeSet.addAll(childrenSet);
-        }
-        // 逻辑删除
-        UpdateWrapper<SysResource> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("deleted", 1);
-        this.update(updateWrapper);
+        // 物理删除
+        removeByIds(idSet);
         // 资源删除时,对应的role_has_resource也要删除
-        clearRoleMenu(idSet);
+        clearRoleMenu(codeSet);
     }
 
     @Override
@@ -332,18 +318,14 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     /**
-     * 清除关系表中role_has_perm的指定的menu id的关系
+     * 清除关系表中role_has_perm的指定的关系
      *
-     * @param menuIds 指定的menu id集合
+     * @param codeSet 指定的menu code集合
      */
-    private void clearRoleMenu(Set<Long> menuIds) {
-        if (ObjectUtil.isEmpty(menuIds)) {
+    private void clearRoleMenu(Set<String> codeSet) {
+        if (ObjectUtil.isEmpty(codeSet)) {
             return;
         }
-        // 查询出来menu对应的code
-        Set<String> codeSet = new HashSet<>();
-        this.list(Wrappers.lambdaQuery(SysResource.class).select(SysResource::getCode).in(SysResource::getId, menuIds))
-                .forEach(e -> codeSet.add(e.getCode()));
         // 删除指定menuCode 的 ROLE_HAS_MENU
         sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM)
