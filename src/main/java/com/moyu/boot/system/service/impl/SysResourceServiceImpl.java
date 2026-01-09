@@ -11,7 +11,6 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -180,14 +179,12 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public void deleteTree(SysResourceParam param) {
         // 要集联删除，子节点也要全部删除
-        QueryWrapper<SysResource> queryWrapper = new QueryWrapper<SysResource>().checkSqlInjection();
-        // 查询所有的资源(包括目录、按钮等)
-        queryWrapper.lambda()
-                // 查询部分字段
-                .select(SysResource::getId, SysResource::getCode, SysResource::getParentCode)
-                // 指定模块(有模块的情况下要过滤)
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
-                .eq(SysResource::getDeleted, 0);
+        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        // 查询部分字段
+        queryWrapper.select(SysResource::getId, SysResource::getCode, SysResource::getParentCode);
+        // 指定模块(有模块的情况下要过滤)
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        queryWrapper.eq(SysResource::getDeleted, 0);
         // 所有的菜单
         List<SysResource> resourceList = this.list(queryWrapper);
         // 待删除节点的code集合
