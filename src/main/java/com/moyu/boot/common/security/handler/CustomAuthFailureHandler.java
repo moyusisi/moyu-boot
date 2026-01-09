@@ -1,0 +1,40 @@
+package com.moyu.boot.common.security.handler;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.model.Result;
+import org.springframework.http.MediaType;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
+
+/**
+ * 自定义的认证失败处理类。用于使用 httpSecurity.formLogin() 时指定，可直接返回json数据
+ * <a href="https://blog.csdn.net/weixin_43831002/article/details/126131233">参考阅读</a>
+ *
+ * @author shisong
+ * @since 2024-12-30
+ */
+public class CustomAuthFailureHandler implements AuthenticationFailureHandler {
+
+    @Override
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+        // 认证失败直接返回json数据告诉前端
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+
+        // 登录异常
+        String responseBody = new ObjectMapper().writeValueAsString(new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION));
+        PrintWriter printWriter = response.getWriter();
+        printWriter.print(responseBody);
+        printWriter.flush();
+    }
+}
