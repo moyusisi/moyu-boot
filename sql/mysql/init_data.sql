@@ -45,8 +45,9 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2006, 'sys_module', '系统工具', 'dir_sys_dev', 2, '/dev', null, 'tool-outlined', '', 1, null, 'sys_module', 40, null, '', 0, null, null, null, null),
         (2007, 'sys_module', '系统运维', 'dir_sys_ops', 2, '/ops', null, 'hdd-outlined', '', 1, null, 'sys_module', 50, null, '', 0, null, null, null, null),
         (2008, 'sys_module', '移动端管理', 'dir_sys_mobile', 2, '/mobile', null, 'mobile-outlined', '', 1, null, 'sys_module', 60, null, '', 0, null, null, null, null),
-        (2009, 'biz_module', '公司架构', 'dir_biz_company', 2, '/1nlpdpnief', null, 'cluster-outlined', '', 1, null, 'biz_module', 20, null, '', 0, null, null, null, null),
-        (2010, 'biz_module', '通知公告', 'menu_biz_notice', 3, '/biz/notice', 'biz/notice/index', 'appstore-outlined', null, 1, null, 'biz_module', 30, null, '', 0, null, null, null, null),
+        (2009, 'sys_module', '通用接口', 'dir_sys_api', 2, '/sys/api', null, 'folder-open-outlined', '', 0, null, 'sys_module', 100, null, '', 0, null, null, null, null),
+        (2011, 'biz_module', '公司架构', 'dir_biz_company', 2, '/1nlpdpnief', null, 'cluster-outlined', '', 1, null, 'biz_module', 20, null, '', 0, null, null, null, null),
+        (2012, 'biz_module', '通知公告', 'menu_biz_notice', 3, '/biz/notice', 'biz/notice/index', 'appstore-outlined', null, 1, null, 'biz_module', 30, null, '', 0, null, null, null, null),
 
         (2031, 'dir_sys_org', '组织管理', 'menu_sys_org', 3, '/sys/org', 'system/org/index', 'cluster-outlined', null, 1, null, 'sys_module', 1010, null, '', 0, null, null, null, null),
         (2032, 'dir_sys_org', '用户管理', 'menu_sys_user', 3, '/sys/user', 'system/user/index', 'user-outlined', '', 1, null, 'sys_module', 1020, null, '', 0, null, null, null, null),
@@ -78,7 +79,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
         (2056, 'dir_biz_company', '人员管理', 'menu_biz_user', 3, '/biz/user', 'biz/user/index', 'user-outlined', null, 1, null, 'biz_module', 53, null, '', 0, null, null, null, null),
         (2057, 'dir_biz_company', '岗位管理', 'menu_biz_pos', 3, '/biz/position', 'biz/position/index', 'apartment-outlined', null, 1, null, 'biz_module', 54, null, '', 0, null, null, null, null),
 
-        (2100, 'menu_sys_org', '组织树', 'api_sys_org_tree', 6, '/api/sys/org/tree', '', null, 'sys:org:tree', 1, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
+        (2100, 'dir_sys_api', '组织树', 'api_sys_org_tree', 6, '/api/sys/org/tree', '', null, 'sys:org:tree', 1, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
         (2101, 'menu_sys_org', '新增组织', 'btn_sys_org_add', 6, '/api/sys/org/add', '', '', 'sys:org:add', 0, null, 'sys_module', 101001, null, '', 0, null, null, null, null),
         (2102, 'menu_sys_org', '删除组织', 'btn_sys_org_delete', 6, '/api/sys/org/delete', '', '', 'sys:org:delete', 0, null, 'sys_module', 101002, null, '', 0, null, null, null, null),
         (2103, 'menu_sys_org', '修改组织', 'btn_sys_org_edit', 6, '/api/sys/org/edit', '', '', 'sys:org:edit', 0, null, 'sys_module', 101003, null, '', 0, null, null, null, null),
