@@ -37,17 +37,13 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private String name;
     /**
-     * 当前组织机构
+     * 当前组织机构(岗位相关)
      */
     private String orgCode;
     /**
      * 当前岗位(可能为空)
      */
     private String groupCode;
-    /**
-     * 当前岗位所在组织机构，决定数据权限
-     */
-    private String groupOrgCode;
     /**
      * 角色集合
      */

@@ -13,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
@@ -81,7 +82,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         UserInfo userInfo = UserInfo.builder().account(username).orgCode(loginUser.getOrgCode())
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())
                 .perms(loginUser.getPerms()).roles(loginUser.getRoles())
-                .groupCode(loginUser.getGroupCode()).groupOrgCode(loginUser.getGroupOrgCode())
+                .groupCode(loginUser.getGroupCode())
                 .build();
         // 岗位列表
         List<SysGroup> groupList = sysGroupService.userGroupList(username);
@@ -205,14 +206,16 @@ public class UserCenterServiceImpl implements UserCenterService {
             roleSet = sysRelationService.groupRole(group.getCode());
         }
         // 根据切换的岗位更新loginUser
+        loginUser.setOrgCode(group.getOrgCode());
         loginUser.setGroupCode(group.getCode());
-        loginUser.setGroupOrgCode(group.getOrgCode());
         // 岗位关联的角色
         loginUser.setRoles(roleSet);
         // 岗位权限 权限标识集合(仅接口,无菜单)
         loginUser.setPerms(sysRoleService.rolePerms(roleSet));
         // 接口权限的数据范围
         loginUser.setPermScopeMap(sysRoleService.rolePermScopeMap(roleSet, group.getOrgCode()));
+        // 数据范围默认本人数据，真正的数据范围在PreDataScope切面中赋值
+        loginUser.setDataScope(DataScopeEnum.SELF.getCode());
         return tokenService.refreshToken(loginUser);
     }
 

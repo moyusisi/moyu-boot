@@ -89,7 +89,7 @@ public class CustomDataPermissionHandler implements MultiDataPermissionHandler {
             }
             case ORG: {
                 // 本机构
-                String orgCode = SecurityUtils.getGroupOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 sqlStr = orgColumn + " = '" + orgCode + "'";
                 break;
             }

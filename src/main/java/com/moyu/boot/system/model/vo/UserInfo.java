@@ -54,10 +54,6 @@ public class UserInfo {
      * 当前岗位(可能为空)
      */
     private String groupCode;
-    /**
-     * 当前岗位所属组织机构
-     */
-    private String groupOrgCode;
 
     /**
      * 岗位列表

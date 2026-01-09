@@ -22,7 +22,6 @@ import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRelation;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.param.SysRelationParam;
@@ -113,7 +112,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
                 String username = SecurityUtils.getUsername();
                 queryWrapper.eq(SysGroup::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getGroupOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 queryWrapper.eq(SysGroup::getOrgCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysGroup::getOrgCode, scopeSet);

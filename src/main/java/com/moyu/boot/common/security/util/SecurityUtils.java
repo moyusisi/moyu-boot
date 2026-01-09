@@ -56,10 +56,10 @@ public class SecurityUtils {
     }
 
     /**
-     * 获取当前岗位部门ID
+     * 获取当前部门code
      */
-    public static String getGroupOrgCode() {
-        return getLoginUser().map(LoginUser::getGroupOrgCode).orElse(null);
+    public static String getOrgCode() {
+        return getLoginUser().map(LoginUser::getOrgCode).orElse(null);
     }
 
     /**

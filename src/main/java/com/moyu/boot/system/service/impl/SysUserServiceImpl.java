@@ -98,7 +98,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 String username = SecurityUtils.getUsername();
                 queryWrapper.eq(SysUser::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getGroupOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 queryWrapper.eq(SysUser::getOrgCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet);

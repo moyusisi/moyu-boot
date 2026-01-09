@@ -101,7 +101,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
                 String username = SecurityUtils.getUsername();
                 queryWrapper.eq(SysOrg::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getGroupOrgCode();
+                String orgCode = SecurityUtils.getOrgCode();
                 queryWrapper.eq(SysOrg::getCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
@@ -205,7 +205,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
             return rootTree.getChildren();
         }
         // 其他情况都按照数据范围返回公司树
-        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getGroupOrgCode());
+        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
         // 用户公司树列表
