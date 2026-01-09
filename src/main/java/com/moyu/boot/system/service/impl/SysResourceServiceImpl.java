@@ -335,7 +335,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     }
 
     /**
-     * 清除关系表中role_has_menu的指定的menu id的关系
+     * 清除关系表中role_has_perm的指定的menu id的关系
      *
      * @param menuIds 指定的menu id集合
      */
