@@ -39,7 +39,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         // 登录失效，需要重新登录
         Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
         String responseBody = new ObjectMapper().writeValueAsString(result);
-        log.info("Security Filter层，认证异常处理返回:{}", responseBody);
+        log.info("Security Filter层，访问{}认证异常，处理返回:{}", request.getRequestURI(), responseBody);
         PrintWriter printWriter = response.getWriter();
         printWriter.print(responseBody);
         printWriter.flush();
