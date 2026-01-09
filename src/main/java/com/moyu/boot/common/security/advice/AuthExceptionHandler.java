@@ -44,7 +44,7 @@ public class AuthExceptionHandler {
         return new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
     }
 
-    // security的授权异常(AccessDeniedException及子类) 先于security AuthenticationEntryPoint 处理
+    // security的授权异常(AccessDeniedException及子类) 先于filter层的exceptionHandling处理
     // sa权限认证的相关异常(SaTokenException的子类)也一起处理(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
     @ExceptionHandler({AccessDeniedException.class, NotLoginException.class, NotRoleException.class, NotPermissionException.class})
     public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
