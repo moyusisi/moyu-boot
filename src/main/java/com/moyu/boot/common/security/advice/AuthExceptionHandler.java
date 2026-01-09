@@ -33,10 +33,11 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice(annotations = RestController.class)
 public class AuthExceptionHandler {
 
-    // security的认证异常(AuthenticationException及子类)
+    // security的认证异常(用户进行认证过程中，认证失败时触发。)
     @ExceptionHandler(AuthenticationException.class)
     public Result<?> authenticationException(AuthenticationException e) {
         if (e instanceof BadCredentialsException) {
+            // 用户名或密码错误
             return new Result<>(ResultCodeEnum.USER_PASSWORD_ERROR);
         }
         // 登录异常
