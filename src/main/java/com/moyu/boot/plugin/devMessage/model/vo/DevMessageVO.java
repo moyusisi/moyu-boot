@@ -37,13 +37,9 @@ public class DevMessageVO {
      */
     private String title;
     /**
-     * 内容说明
+     * 内容
      */
     private String content;
-    /**
-     * 扩展信息
-     */
-    private String extJson;
     /**
      * 发送人
      */
@@ -51,11 +47,11 @@ public class DevMessageVO {
     /**
      * 发送时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime;
     /**
      * 过期时间
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 }

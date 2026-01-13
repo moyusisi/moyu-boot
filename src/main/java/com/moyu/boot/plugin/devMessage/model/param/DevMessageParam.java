@@ -7,7 +7,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Data;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.Set;
 
@@ -41,54 +42,49 @@ public class DevMessageParam extends BasePageParam {
     private Long id;
 
     /**
-    * 唯一编码
-    */
-    @Size(max=64, message="code长度不能超过64个字符")
+     * 唯一编码
+     */
+    @Size(max = 64, message = "code长度不能超过64个字符")
     private String code;
     /**
-    * 消息类型（0正常 1停用）
-    */
+     * 消息类型（0正常 1停用）
+     */
     private Integer messageType;
     /**
-    * 标题
-    */
+     * 标题
+     */
     @NotBlank(message = "title不能为空")
-    @Size(max=255, message="title长度不能超过255个字符")
+    @Size(max = 255, message = "title长度不能超过255个字符")
     private String title;
     /**
-    * 内容说明
-    */
+     * 内容
+     */
     @NotBlank(message = "content不能为空")
-    @Size(max=65535, message="content长度不能超过65535个字符")
+    @Size(max = 65535, message = "content长度不能超过65535个字符")
     private String content;
     /**
-    * 扩展信息
-    */
-    @Size(max=65535, message="extJson长度不能超过65535个字符")
-    private String extJson;
-    /**
-    * 发送人
-    */
-    @Size(max=32, message="sendBy长度不能超过32个字符")
+     * 发送人
+     */
+    @Size(max = 32, message = "sendBy长度不能超过32个字符")
     private String sendBy;
     /**
-    * 发送时间
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 发送时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime;
     /**
-    * 发送时间-起始
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 发送时间-起始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime1;
     /**
-    * 发送时间-截止
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 发送时间-截止
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sendTime2;
     /**
-    * 过期时间
-    */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+     * 过期时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 }

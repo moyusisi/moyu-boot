@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/dev/devMessage")
+@RequestMapping("/api/dev/message")
 public class DevMessageController {
 
 
@@ -35,7 +35,7 @@ public class DevMessageController {
     /**
      * 站内消息列表
      */
-//    @PreAuthorize("hasAuthority('dev:devMessage:list')")
+//    @PreAuthorize("hasAuthority('dev:message:list')")
     @PostMapping("/list")
     public Result<List<DevMessageVO>> list(@RequestBody DevMessageParam param) {
         List<DevMessageVO> list = devMessageService.list(param);
@@ -45,7 +45,7 @@ public class DevMessageController {
     /**
      * 站内消息分页列表
      */
-    //@PreAuthorize("hasAuthority('dev:devMessage:page')")
+    //@PreAuthorize("hasAuthority('dev:message:page')")
     @PostMapping("/page")
     public Result<PageData<DevMessageVO>> pageList(@RequestBody DevMessageParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -56,7 +56,7 @@ public class DevMessageController {
     /**
      * 站内消息详情
      */
-    //@PreAuthorize("hasAuthority('dev:devMessage:detail')")
+    //@PreAuthorize("hasAuthority('dev:message:detail')")
     @PostMapping("/detail")
     public Result<DevMessageVO> detail(@RequestBody DevMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -66,7 +66,7 @@ public class DevMessageController {
     /**
      * 新增站内消息
      */
-    //@PreAuthorize("hasAuthority('dev:devMessage:add')")
+    //@PreAuthorize("hasAuthority('dev:message:add')")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody DevMessageParam param) {
         devMessageService.add(param);
@@ -76,7 +76,7 @@ public class DevMessageController {
     /**
      * 修改站内消息
      */
-    //@PreAuthorize("hasAuthority('dev:devMessage:edit')")
+    //@PreAuthorize("hasAuthority('dev:message:edit')")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody DevMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -87,7 +87,7 @@ public class DevMessageController {
     /**
      * 删除数据
      */
-    //@PreAuthorize("hasAuthority('dev:devMessage:delete')")
+    //@PreAuthorize("hasAuthority('dev:message:delete')")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody DevMessageParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");

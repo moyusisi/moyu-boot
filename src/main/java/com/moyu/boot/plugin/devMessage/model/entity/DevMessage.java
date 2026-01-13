@@ -24,36 +24,32 @@ public class DevMessage {
     private Long id;
 
     /**
-    * 唯一编码
-    */
+     * 唯一编码
+     */
     private String code;
     /**
-    * 消息类型（0正常 1停用）
-    */
+     * 消息类型（0正常 1停用）
+     */
     private Integer messageType;
     /**
-    * 标题
-    */
+     * 标题
+     */
     private String title;
     /**
-    * 内容说明
-    */
+     * 内容
+     */
     private String content;
     /**
-    * 扩展信息
-    */
-    private String extJson;
-    /**
-    * 发送人
-    */
+     * 发送人
+     */
     private String sendBy;
     /**
-    * 发送时间
-    */
+     * 发送时间
+     */
     private Date sendTime;
     /**
-    * 过期时间
-    */
+     * 过期时间
+     */
     private Date expireTime;
 
     /**
