@@ -21,8 +21,8 @@ CREATE TABLE `dev_message`
   COLLATE = utf8mb4_general_ci;
 
 -- 2. 用户消息接收表
-DROP TABLE IF EXISTS `user_message`;
-CREATE TABLE `user_message`
+DROP TABLE IF EXISTS `dev_user_message`;
+CREATE TABLE `dev_user_message`
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `from_id`     VARCHAR(64) DEFAULT NULL COMMENT '来源对象id',
