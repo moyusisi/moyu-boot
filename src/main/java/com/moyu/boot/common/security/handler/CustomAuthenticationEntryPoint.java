@@ -66,7 +66,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 break;
             // token 无效
             case NotLoginException.INVALID_TOKEN:
-                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
                 break;
             // token 已过期
             case NotLoginException.TOKEN_TIMEOUT:
@@ -90,7 +90,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 break;
             // 当前会话未登录
             default:
-                result = new Result<>(ResultCodeEnum.ACCESS_PERMISSION_EXCEPTION);
+                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
                 break;
         }
         return result;
