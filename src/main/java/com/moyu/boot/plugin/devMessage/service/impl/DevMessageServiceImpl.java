@@ -1,6 +1,7 @@
 package com.moyu.boot.plugin.devMessage.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -102,14 +103,17 @@ public class DevMessageServiceImpl extends ServiceImpl<DevMessageMapper, DevMess
     public void add(DevMessageParam param) {
         // 属性复制
         DevMessage devMessage = BeanUtil.copyProperties(param, DevMessage.class);
+        devMessage.setCode("MSG" + IdUtil.getSnowflakeNextId());
+        devMessage.setSendTime(new Date());
         // 其他处理
         devMessage.setId(null);
         this.save(devMessage);
     }
 
     @Override
-    public void update(DevMessageParam param) {
-        // 通过主键id查询原有数据
+    public DevMessageVO read(DevMessageParam param) {
+        DevMessageVO vo = detail(param);
+/*        // 通过主键id查询原有数据 TODO
         DevMessage old = this.getById(param.getId());
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
@@ -118,7 +122,8 @@ public class DevMessageServiceImpl extends ServiceImpl<DevMessageMapper, DevMess
         DevMessage toUpdate = BeanUtil.copyProperties(param, DevMessage.class);
         // 其他处理
         toUpdate.setId(param.getId());
-        this.updateById(toUpdate);
+        this.updateById(toUpdate);*/
+        return vo;
     }
 
     @Override

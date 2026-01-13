@@ -37,9 +37,9 @@ public interface DevMessageService extends IService<DevMessage> {
     void add(DevMessageParam param);
 
     /**
-     * 修改记录(通过主键id更新)
+     * 阅读记录详情(通过主键更新)
      */
-    void update(DevMessageParam param);
+    DevMessageVO read(DevMessageParam param);
 
     /**
      * 通过ids删除记录

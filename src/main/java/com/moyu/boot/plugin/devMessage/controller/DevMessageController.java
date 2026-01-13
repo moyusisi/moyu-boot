@@ -74,14 +74,13 @@ public class DevMessageController {
     }
 
     /**
-     * 修改站内消息
+     * 阅读站内信消息
      */
-    //@PreAuthorize("hasAuthority('dev:message:edit')")
-    @PostMapping("/edit")
-    public Result<?> edit(@Validated @RequestBody DevMessageParam param) {
+//    @PreAuthorize("hasAuthority('dev:message:read')")
+    @PostMapping("/read")
+    public Result<DevMessageVO> read(@RequestBody DevMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
-        devMessageService.update(param);
-        return Result.success();
+        return Result.success(devMessageService.read(param));
     }
 
     /**
