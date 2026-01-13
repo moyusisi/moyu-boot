@@ -69,7 +69,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
 
     /**
-     * 默认字段
+     * 默认字段，用户账号，唯一标识
      *
      * @see org.springframework.security.core.userdetails.User
      */
