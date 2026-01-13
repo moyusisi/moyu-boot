@@ -21,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 全局异常处理器
  * <p>
- * Filter内抓「Token 校验异常」，AuthenticationEntryPoint 抓「无 Token 异常」，全局处理器抓「漏网异常」，三者结合覆盖所有场景。
- * <p>
  * HttpSecurity#exceptionHandling()处理认证异常(AuthenticationEntryPoint)和授权异常(AccessDeniedHandler)是在Filter层
  * 此处的异常处理类@ExceptionHandler仅处理RestController中的异常
  * 使用SpringSecurity的@PreAuthorize 或 SaToken的@SaCheckPermission 进行权限校验时，会被此Advice处理
