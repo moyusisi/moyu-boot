@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.devMessage.service.impl;
+package com.moyu.boot.plugin.InboxMessage.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
@@ -10,11 +10,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.devMessage.mapper.DevMessageMapper;
-import com.moyu.boot.plugin.devMessage.model.entity.DevMessage;
-import com.moyu.boot.plugin.devMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.devMessage.model.vo.DevMessageVO;
-import com.moyu.boot.plugin.devMessage.service.DevMessageService;
+import com.moyu.boot.plugin.InboxMessage.mapper.DevMessageMapper;
+import com.moyu.boot.plugin.InboxMessage.model.entity.DevMessage;
+import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
+import com.moyu.boot.plugin.InboxMessage.service.DevMessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

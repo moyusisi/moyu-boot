@@ -1,9 +1,9 @@
-package com.moyu.boot.plugin.devMessage.service;
+package com.moyu.boot.plugin.InboxMessage.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.devMessage.model.entity.DevMessage;
-import com.moyu.boot.plugin.devMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.devMessage.model.vo.DevMessageVO;
+import com.moyu.boot.plugin.InboxMessage.model.entity.DevMessage;
+import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

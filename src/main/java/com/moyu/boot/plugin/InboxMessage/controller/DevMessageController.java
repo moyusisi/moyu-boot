@@ -1,13 +1,13 @@
-package com.moyu.boot.plugin.devMessage.controller;
+package com.moyu.boot.plugin.InboxMessage.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.devMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.devMessage.model.vo.DevMessageVO;
-import com.moyu.boot.plugin.devMessage.service.DevMessageService;
+import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
+import com.moyu.boot.plugin.InboxMessage.service.DevMessageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
