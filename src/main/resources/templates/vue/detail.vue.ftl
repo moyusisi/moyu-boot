@@ -19,7 +19,7 @@
       <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
         <a-card>
           <template #title>
-            <span><RightSquareFilled style="color: dodgerblue;"/>基本信息</span>
+            <span><RightSquareFilled style="color: dodgerblue;"/> 基本信息</span>
           </template>
           <a-row :gutter="24">
 <#if fieldList??>

@@ -15,7 +15,10 @@
     <!--  数据区  -->
     <a-spin :spinning="dataLoading">
       <a-form ref="formRef" :model="formData" :label-col="{span: 6}">
-        <a-card title="基本信息">
+        <a-card>
+          <template #title>
+            <span><RightSquareFilled style="color: dodgerblue;"/> 基本信息</span>
+          </template>
           <a-row :gutter="24">
 <#if fieldList??>
   <#list fieldList as fieldConfig>
