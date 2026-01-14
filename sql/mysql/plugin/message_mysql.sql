@@ -1,7 +1,7 @@
 # 站内信、PUSH、短信 ==> 任务待办、通知公告
--- 1. 站内消息表
-DROP TABLE IF EXISTS `dev_message`;
-CREATE TABLE `dev_message`
+-- 1. 站内消息表 inbox
+DROP TABLE IF EXISTS `inbox_message`;
+CREATE TABLE `inbox_message`
 (
     `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `code`         VARCHAR(64)  DEFAULT NULL COMMENT '唯一编码',
@@ -19,9 +19,9 @@ CREATE TABLE `dev_message`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
--- 2. 用户消息接收表
-DROP TABLE IF EXISTS `dev_user_message`;
-CREATE TABLE `dev_user_message`
+-- 2. 站内信接收表
+DROP TABLE IF EXISTS `user_message`;
+CREATE TABLE `user_message`
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `from_id`     VARCHAR(64) DEFAULT NULL COMMENT '来源对象id',
@@ -34,7 +34,7 @@ CREATE TABLE `dev_user_message`
     KEY `idx_from_id` (`from_id`),
     KEY `idx_user_id` (`user_id`),
     KEY `idx_create_time` (`create_time`)
-) ENGINE = InnoDB COMMENT ='用户消息接收表'
+) ENGINE = InnoDB COMMENT ='站内信接收表'
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
