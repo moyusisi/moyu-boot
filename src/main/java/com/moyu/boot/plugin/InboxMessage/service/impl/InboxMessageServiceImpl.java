@@ -12,6 +12,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.InboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
+import com.moyu.boot.plugin.InboxMessage.model.entity.UserMessage;
 import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
 import com.moyu.boot.plugin.InboxMessage.model.vo.UserMessageVO;
@@ -21,6 +22,7 @@ import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -43,6 +45,9 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
 
     @Resource
     private SysUserService sysUserService;
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
 
     @Override
     public List<InboxMessageVO> list(InboxMessageParam param) {
@@ -116,7 +121,21 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         inboxMessage.setSendTime(new Date());
         // 其他处理
         inboxMessage.setId(null);
-        this.save(inboxMessage);
+        List<String> userList = param.getReceiveUserList();
+        List<UserMessage> messageList = new ArrayList<>();
+        Date now = new Date();
+        for (String userId : userList) {
+            UserMessage userMessage = new UserMessage();
+            userMessage.setFromId(inboxMessage.getCode());
+            userMessage.setUserId(userId);
+            userMessage.setCreateTime(now);
+            messageList.add(userMessage);
+        }
+        transactionTemplate.execute((transactionStatus) -> {
+            this.save(inboxMessage);
+            userMessageService.saveBatch(messageList);
+            return null;
+        });
     }
 
     @Override

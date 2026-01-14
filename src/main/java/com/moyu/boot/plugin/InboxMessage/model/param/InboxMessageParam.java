@@ -8,6 +8,7 @@ import com.moyu.boot.common.core.model.BasePageParam;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
@@ -93,6 +94,7 @@ public class InboxMessageParam extends BasePageParam {
     /**
      * 接收人列表
      */
+    @NotEmpty(message = "接收人不能为空")
     private List<String> receiveUserList;
     /**
      * 用户唯一id（account）
