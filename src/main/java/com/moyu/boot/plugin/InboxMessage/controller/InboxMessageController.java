@@ -7,6 +7,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.InboxMessage.model.vo.UserMessageVO;
 import com.moyu.boot.plugin.InboxMessage.service.InboxMessageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,6 +93,17 @@ public class InboxMessageController {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
         inboxMessageService.deleteByIds(param);
         return Result.success();
+    }
+
+    /**
+     * 触达记录、阅读列表
+     */
+    //@PreAuthorize("hasAuthority('dev:message:page')")
+    @PostMapping("/userMessagePage")
+    public Result<PageData<UserMessageVO>> userMessagePage(@RequestBody InboxMessageParam param) {
+        Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
+        PageData<UserMessageVO> page = inboxMessageService.userMessagePage(param);
+        return Result.success(page);
     }
 
 }

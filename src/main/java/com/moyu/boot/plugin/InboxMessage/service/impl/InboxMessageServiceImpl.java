@@ -14,15 +14,18 @@ import com.moyu.boot.plugin.InboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.InboxMessage.model.vo.UserMessageVO;
 import com.moyu.boot.plugin.InboxMessage.service.InboxMessageService;
+import com.moyu.boot.plugin.InboxMessage.service.UserMessageService;
+import com.moyu.boot.system.model.entity.SysUser;
+import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -34,6 +37,12 @@ import java.util.Set;
 @Slf4j
 @Service
 public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, InboxMessage> implements InboxMessageService {
+
+    @Resource
+    private UserMessageService userMessageService;
+
+    @Resource
+    private SysUserService sysUserService;
 
     @Override
     public List<InboxMessageVO> list(InboxMessageParam param) {
@@ -134,6 +143,33 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         //this.removeByIds(idSet);
         // 逻辑删除
         this.update(Wrappers.lambdaUpdate(InboxMessage.class).in(InboxMessage::getId, idSet).set(InboxMessage::getDeleted, 1));
+    }
+
+    @Override
+    public PageData<UserMessageVO> userMessagePage(InboxMessageParam param) {
+        PageData<UserMessageVO> pageData = userMessageService.pageList(param);
+        if (pageData.getTotal() == 0) {
+            return pageData;
+        }
+        // 补充消息title
+        Map<String, InboxMessage> messageMap = new HashMap<>();
+        Set<String> messageSet = pageData.getRecords().stream().map(UserMessageVO::getFromId).collect(Collectors.toSet());
+        this.list(Wrappers.lambdaQuery(InboxMessage.class).select(InboxMessage::getCode, InboxMessage::getTitle)
+                        .in(InboxMessage::getCode, messageSet))
+                .forEach(e -> messageMap.put(e.getCode(), e));
+        // 补充用户name
+        Map<String, SysUser> userMap = new HashMap<>();
+        Set<String> userSet = pageData.getRecords().stream().map(UserMessageVO::getUserId).collect(Collectors.toSet());
+        sysUserService.list(Wrappers.lambdaQuery(SysUser.class).select(SysUser::getAccount, SysUser::getName)
+                        .in(SysUser::getAccount, userSet))
+                .forEach(e -> userMap.put(e.getAccount(), e));
+        // 补充message和user信息
+        pageData.getRecords().forEach(vo -> {
+            vo.setName(userMap.get(vo.getUserId()).getName());
+            vo.setTitle(messageMap.get(vo.getFromId()).getTitle());
+        });
+        // 补充用户name
+        return pageData;
     }
 
     /**

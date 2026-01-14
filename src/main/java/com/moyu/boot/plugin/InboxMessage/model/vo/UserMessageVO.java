@@ -7,17 +7,16 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
- * 站内消息视图对象
+ * 站内信接收视图对象
  *
  * @author moyusisi
- * @since 2026-01-13
+ * @since 2026-01-14
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InboxMessageVO {
+public class UserMessageVO {
 
     /**
      * 主键id
@@ -26,38 +25,33 @@ public class InboxMessageVO {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
-     * 唯一编码
+     * 来源对象id
      */
-    private String code;
+    private String fromId;
     /**
-     * 消息类型（0正常 1停用）
-     */
-    private Integer messageType;
-    /**
-     * 标题
+     * 消息标题
      */
     private String title;
     /**
-     * 内容
+     * 用户唯一id
      */
-    private String content;
+    private String userId;
     /**
-     * 发送人
+     * 用户姓名
      */
-    private String sendBy;
+    private String name;
     /**
-     * 发送时间
+     * 是否已读
+     */
+    private Integer hasRead;
+    /**
+     * 已读时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date sendTime;
+    private Date readTime;
     /**
-     * 过期时间
+     * 接收时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date expireTime;
-
-    /**
-     * 消息触达记录
-     */
-    private List<UserMessageVO> readList;
+    private Date createTime;
 }

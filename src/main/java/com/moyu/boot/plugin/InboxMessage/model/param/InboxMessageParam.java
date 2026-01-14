@@ -89,8 +89,17 @@ public class InboxMessageParam extends BasePageParam {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
 
+    //***** 触达参数 *****//
     /**
      * 接收人列表
      */
     private List<String> receiveUserList;
+    /**
+     * 用户唯一id（account）
+     */
+    private String userId;
+    /**
+     * 是否已读
+     */
+    private Integer hasRead;
 }

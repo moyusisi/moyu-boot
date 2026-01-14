@@ -5,6 +5,7 @@ import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.moyu.boot.plugin.InboxMessage.model.vo.UserMessageVO;
 
 import java.util.List;
 
@@ -45,4 +46,11 @@ public interface InboxMessageService extends IService<InboxMessage> {
      * 通过ids删除记录
      */
     void deleteByIds(InboxMessageParam param);
+
+    /**
+     *
+     * @param param
+     * @return
+     */
+    PageData<UserMessageVO> userMessagePage(InboxMessageParam param);
 }
