@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -87,4 +88,9 @@ public class InboxMessageParam extends BasePageParam {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date expireTime;
+
+    /**
+     * 接收人列表
+     */
+    private List<String> receiveUserList;
 }
