@@ -7,15 +7,15 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * 站内消息表(dev_message)实体对象
+ * 站内消息表(inbox_message)实体对象
  *
  * @author moyusisi
  * @since 2026-01-13
  */
 @Getter
 @Setter
-@TableName("dev_message")
-public class DevMessage {
+@TableName("inbox_message")
+public class InboxMessage {
 
     /**
      * 主键id

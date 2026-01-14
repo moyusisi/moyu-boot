@@ -20,7 +20,7 @@ import java.util.Set;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DevMessageParam extends BasePageParam {
+public class InboxMessageParam extends BasePageParam {
 
     //********** 额外字段 **********//
     /**

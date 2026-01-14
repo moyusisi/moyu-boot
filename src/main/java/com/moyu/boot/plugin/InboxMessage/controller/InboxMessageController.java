@@ -5,9 +5,9 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
-import com.moyu.boot.plugin.InboxMessage.service.DevMessageService;
+import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.InboxMessage.service.InboxMessageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,19 +26,19 @@ import java.util.List;
 @Log(jsonLog = true)
 @RestController
 @RequestMapping("/api/dev/message")
-public class DevMessageController {
+public class InboxMessageController {
 
 
     @Resource
-    private DevMessageService devMessageService;
+    private InboxMessageService inboxMessageService;
 
     /**
      * 站内消息列表
      */
 //    @PreAuthorize("hasAuthority('dev:message:list')")
     @PostMapping("/list")
-    public Result<List<DevMessageVO>> list(@RequestBody DevMessageParam param) {
-        List<DevMessageVO> list = devMessageService.list(param);
+    public Result<List<InboxMessageVO>> list(@RequestBody InboxMessageParam param) {
+        List<InboxMessageVO> list = inboxMessageService.list(param);
         return Result.success(list);
     }
 
@@ -47,9 +47,9 @@ public class DevMessageController {
      */
     //@PreAuthorize("hasAuthority('dev:message:page')")
     @PostMapping("/page")
-    public Result<PageData<DevMessageVO>> pageList(@RequestBody DevMessageParam param) {
+    public Result<PageData<InboxMessageVO>> pageList(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<DevMessageVO> pageList = devMessageService.pageList(param);
+        PageData<InboxMessageVO> pageList = inboxMessageService.pageList(param);
         return Result.success(pageList);
     }
 
@@ -58,9 +58,9 @@ public class DevMessageController {
      */
     //@PreAuthorize("hasAuthority('dev:message:detail')")
     @PostMapping("/detail")
-    public Result<DevMessageVO> detail(@RequestBody DevMessageParam param) {
+    public Result<InboxMessageVO> detail(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
-        return Result.success(devMessageService.detail(param));
+        return Result.success(inboxMessageService.detail(param));
     }
 
     /**
@@ -68,8 +68,8 @@ public class DevMessageController {
      */
     //@PreAuthorize("hasAuthority('dev:message:add')")
     @PostMapping("/add")
-    public Result<?> add(@Validated @RequestBody DevMessageParam param) {
-        devMessageService.add(param);
+    public Result<?> add(@Validated @RequestBody InboxMessageParam param) {
+        inboxMessageService.add(param);
         return Result.success();
     }
 
@@ -78,9 +78,9 @@ public class DevMessageController {
      */
 //    @PreAuthorize("hasAuthority('dev:message:read')")
     @PostMapping("/read")
-    public Result<DevMessageVO> read(@RequestBody DevMessageParam param) {
+    public Result<InboxMessageVO> read(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
-        return Result.success(devMessageService.read(param));
+        return Result.success(inboxMessageService.read(param));
     }
 
     /**
@@ -88,9 +88,9 @@ public class DevMessageController {
      */
     //@PreAuthorize("hasAuthority('dev:message:delete')")
     @PostMapping("/delete")
-    public Result<?> delete(@RequestBody DevMessageParam param) {
+    public Result<?> delete(@RequestBody InboxMessageParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
-        devMessageService.deleteByIds(param);
+        inboxMessageService.deleteByIds(param);
         return Result.success();
     }
 

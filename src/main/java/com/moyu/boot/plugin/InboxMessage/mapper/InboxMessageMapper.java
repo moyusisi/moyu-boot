@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.common.mybatis.annotation.DataPermission;
-import com.moyu.boot.plugin.InboxMessage.model.entity.DevMessage;
-import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
+import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
+import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -15,13 +15,13 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * 针对表dev_message(站内消息表)的数据库操作Mapper
+ * 针对表inbox_message(站内消息表)的数据库操作Mapper
  *
  * @author moyusisi
  * @since 2026-01-13
  */
 @Mapper
-public interface DevMessageMapper extends BaseMapper<DevMessage> {
+public interface InboxMessageMapper extends BaseMapper<InboxMessage> {
 
     /**
      * 获取站内消息分页数据
@@ -30,16 +30,16 @@ public interface DevMessageMapper extends BaseMapper<DevMessage> {
      *
      * @param page 分页对象(包含页码、页大小)
      * @param param 查询参数
-     * @return {@link Page<DevMessageVO>} 站内消息分页列表
+     * @return {@link Page< InboxMessageVO >} 站内消息分页列表
      */
-    Page<DevMessageVO> getDevMessagePage(Page<DevMessageVO> page, DevMessageParam param);
+    Page<InboxMessageVO> getDevMessagePage(Page<InboxMessageVO> page, InboxMessageParam param);
 
    /**
    * 这是一个使用数据权限的例子，也是一个使用使用 Wrapper 自定义 SQL 的例子
    * <a href="https://baomidou.com/guides/wrapper/#%E4%BD%BF%E7%94%A8-wrapper-%E8%87%AA%E5%AE%9A%E4%B9%89-sql">参考这里</a>
    */
-   @DataPermission(userColumn = "create_by")
-   @Select("SELECT * FROM dev_message ${ew.customSqlSegment} LIMIT 5")
-   List<DevMessageVO> selectLimit(@Param(Constants.WRAPPER) Wrapper<DevMessageVO> wrapper);
+   @DataPermission(userColumn = "send_by")
+   @Select("SELECT * FROM inbox_message ${ew.customSqlSegment} LIMIT 5")
+   List<InboxMessageVO> selectLimit(@Param(Constants.WRAPPER) Wrapper<InboxMessageVO> wrapper);
 }
 

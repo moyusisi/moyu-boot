@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DevMessageVO {
+public class InboxMessageVO {
 
     /**
      * 主键id

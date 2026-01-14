@@ -1,9 +1,9 @@
 package com.moyu.boot.plugin.InboxMessage.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.InboxMessage.model.entity.DevMessage;
-import com.moyu.boot.plugin.InboxMessage.model.param.DevMessageParam;
-import com.moyu.boot.plugin.InboxMessage.model.vo.DevMessageVO;
+import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
+import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.InboxMessage.model.vo.InboxMessageVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
@@ -14,35 +14,35 @@ import java.util.List;
  * @author moyusisi
  * @since 2026-01-13
  */
-public interface DevMessageService extends IService<DevMessage> {
+public interface InboxMessageService extends IService<InboxMessage> {
 
     /**
      * 获取记录列表(不分页，通过条件自行控制数量)
      */
-    List<DevMessageVO> list(DevMessageParam param);
+    List<InboxMessageVO> list(InboxMessageParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<DevMessageVO> pageList(DevMessageParam param);
+    PageData<InboxMessageVO> pageList(InboxMessageParam param);
 
     /**
      * 获取记录详情(通过主键或唯一键)
      */
-     DevMessageVO detail(DevMessageParam param);
+     InboxMessageVO detail(InboxMessageParam param);
 
     /**
      * 添加记录
      */
-    void add(DevMessageParam param);
+    void add(InboxMessageParam param);
 
     /**
      * 阅读记录详情(通过主键更新)
      */
-    DevMessageVO read(DevMessageParam param);
+    InboxMessageVO read(InboxMessageParam param);
 
     /**
      * 通过ids删除记录
      */
-    void deleteByIds(DevMessageParam param);
+    void deleteByIds(InboxMessageParam param);
 }
