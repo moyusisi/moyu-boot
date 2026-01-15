@@ -115,7 +115,6 @@ public class InboxMessageController {
     @SaCheckLogin
     @PostMapping("/unreadCount")
     public Result<Long> unreadCount(@RequestBody InboxMessageParam param) {
-        Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
         Assert.notEmpty(SecurityUtils.getUsername(), "用户ID不能为空");
         Long unreadCount = inboxMessageService.unreadCount(param);
         return Result.success(unreadCount);
