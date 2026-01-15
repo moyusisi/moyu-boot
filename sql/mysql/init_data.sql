@@ -59,9 +59,9 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
 
         (2038, 'dir_sys_dev', '代码生成', 'menu_sys_gen', 3, '/dev/gen', 'dev/gen/index', 'code-outlined', '', 1, null, 'sys_module', 4010, null, '', 0, null, null, null, null),
         (2039, 'dir_sys_dev', '文件管理', 'menu_sys_file', 3, '/dev/file/index', 'dev/file/index', 'copy-outlined', null, 1, null, 'sys_module', 4020, null, '', 0, null, null, null, null),
-        (2040, 'dir_sys_dev', '邮件推送', 'menu_sys_email', 3, '/dev/email/index', 'dev/email/index', 'send-outlined', null, 1, null, 'sys_module', 4030, null, '', 0, null, null, null, null),
-        (2041, 'dir_sys_dev', '短信发送', 'menu_sys_sms', 3, '/dev/sms/index', 'dev/sms/index', 'mail-outlined', null, 1, null, 'sys_module', 4040, null, '', 0, null, null, null, null),
-        (2042, 'dir_sys_dev', '站内信息', 'menu_sys_message', 3, '/dev/message/index', 'dev/message/index', 'message-outlined', null, 1, null, 'sys_module', 4050, null, '', 0, null, null, null, null),
+        (2040, 'dir_sys_dev', '短信发送', 'menu_sys_sms', 3, '/dev/sms/index', 'dev/sms/index', 'mail-outlined', null, 1, null, 'sys_module', 4030, null, '', 0, null, null, null, null),
+        (2041, 'dir_sys_dev', '消息推送', 'menu_sys_email', 3, '/dev/push/index', 'dev/push/index', 'send-outlined', null, 1, null, 'sys_module', 4040, null, '', 0, null, null, null, null),
+        (2042, 'dir_sys_dev', '站内信', 'menu_sys_message', 3, '/dev/message/index', 'dev/message/index', 'message-outlined', null, 1, null, 'sys_module', 4050, null, '', 0, null, null, null, null),
 
         (2043, 'dir_sys_ops', '会话管理', 'menu_sys_session', 3, '/auth/monitor', 'auth/monitor/index', 'bars-outlined', null, 1, null, 'sys_module', 5002, null, '', 0, null, null, null, null),
         (2044, 'dir_sys_ops', '系统日志', 'menu_sys_log', 3, '/ops/sys/log', 'system/log/index', 'bars-outlined', null, 1, null, 'sys_module', 5004, null, '', 0, null, null, null, null),

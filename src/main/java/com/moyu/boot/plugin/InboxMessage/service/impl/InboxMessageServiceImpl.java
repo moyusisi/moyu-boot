@@ -55,6 +55,8 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     public List<InboxMessageVO> list(InboxMessageParam param) {
         // 查询条件
         LambdaQueryWrapper<InboxMessage> queryWrapper = Wrappers.lambdaQuery(InboxMessage.class);
+        // 指定code查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), InboxMessage::getCode, param.getCode());
         // 指定title查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getTitle()), InboxMessage::getTitle, param.getTitle());
         // 指定content查询
@@ -81,6 +83,8 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     public PageData<InboxMessageVO> pageList(InboxMessageParam param) {
         // 查询条件
         LambdaQueryWrapper<InboxMessage> queryWrapper = Wrappers.lambdaQuery(InboxMessage.class);
+        // 指定code查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), InboxMessage::getCode, param.getCode());
         // 指定title查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getTitle()), InboxMessage::getTitle, param.getTitle());
         // 指定content查询
