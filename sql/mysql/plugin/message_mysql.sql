@@ -1,5 +1,5 @@
 # 站内信、PUSH、短信 ==> 任务待办、通知公告
--- 1. 站内消息表 inbox
+-- 1. 站内信表
 DROP TABLE IF EXISTS `inbox_message`;
 CREATE TABLE `inbox_message`
 (
@@ -15,7 +15,7 @@ CREATE TABLE `inbox_message`
     PRIMARY KEY (`id`),
     UNIQUE KEY `uniq_code` (`code`),
     KEY `idx_send_time` (`send_time`)
-) ENGINE = InnoDB COMMENT ='站内消息表'
+) ENGINE = InnoDB COMMENT ='站内信表'
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
@@ -31,8 +31,8 @@ CREATE TABLE `user_message`
     `deleted`     TINYINT     DEFAULT 0 COMMENT '删除标志（0未删除 1已删除）',
     `create_time` DATETIME    DEFAULT NULL COMMENT '接收时间',
     PRIMARY KEY (`id`),
+    UNIQUE INDEX `uniq_user_message` (`user_id`, `from_id`),
     KEY `idx_from_id` (`from_id`),
-    KEY `idx_user_id` (`user_id`),
     KEY `idx_create_time` (`create_time`)
 ) ENGINE = InnoDB COMMENT ='站内信接收表'
   DEFAULT CHARSET = utf8mb4
