@@ -1,6 +1,7 @@
 package com.moyu.boot.plugin.InboxMessage.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.plugin.InboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.InboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.InboxMessage.model.entity.UserMessage;
@@ -188,6 +190,39 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
             vo.setTitle(messageMap.get(vo.getFromId()).getTitle());
         });
         // 补充用户name
+        return pageData;
+    }
+
+    @Override
+    public Long unreadCount(InboxMessageParam param) {
+        String userId = SecurityUtils.getUsername();
+        Assert.notEmpty(userId, "用户ID不能为空");
+        Long count = userMessageService.count(Wrappers.lambdaQuery(UserMessage.class)
+                .eq(UserMessage::getUserId, userId)
+                .eq(UserMessage::getHasRead, 0)
+                .eq(UserMessage::getDeleted, 0)
+        );
+        return count;
+    }
+
+    @Override
+    public PageData<UserMessageVO> userReadPage(InboxMessageParam param) {
+        param.setUserId(SecurityUtils.getUsername());
+        Assert.notEmpty(param.getUserId(), "用户ID不能为空");
+        PageData<UserMessageVO> pageData = userMessageService.pageList(param);
+        if (pageData.getTotal() == 0) {
+            return pageData;
+        }
+        // 补充消息title
+        Map<String, InboxMessage> messageMap = new HashMap<>();
+        Set<String> messageSet = pageData.getRecords().stream().map(UserMessageVO::getFromId).collect(Collectors.toSet());
+        this.list(Wrappers.lambdaQuery(InboxMessage.class).select(InboxMessage::getCode, InboxMessage::getTitle)
+                        .in(InboxMessage::getCode, messageSet))
+                .forEach(e -> messageMap.put(e.getCode(), e));
+        // 补充title
+        pageData.getRecords().forEach(vo -> {
+            vo.setTitle(messageMap.get(vo.getFromId()).getTitle());
+        });
         return pageData;
     }
 
