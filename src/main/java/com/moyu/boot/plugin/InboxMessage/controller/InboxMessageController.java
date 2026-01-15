@@ -104,7 +104,7 @@ public class InboxMessageController {
     @SaCheckLogin
     @PostMapping("/read")
     public Result<InboxMessageVO> read(@RequestBody InboxMessageParam param) {
-        Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getCode()), "code不能为空");
         Assert.notEmpty(SecurityUtils.getUsername(), "用户ID不能为空");
         return Result.success(inboxMessageService.read(param));
     }

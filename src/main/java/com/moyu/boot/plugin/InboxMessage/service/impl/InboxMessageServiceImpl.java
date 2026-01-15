@@ -141,22 +141,6 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     }
 
     @Override
-    public InboxMessageVO read(InboxMessageParam param) {
-        InboxMessageVO vo = detail(param);
-/*        // 通过主键id查询原有数据 TODO
-        DevMessage old = this.getById(param.getId());
-        if (old == null) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
-        }
-        // 属性复制
-        DevMessage toUpdate = BeanUtil.copyProperties(param, DevMessage.class);
-        // 其他处理
-        toUpdate.setId(param.getId());
-        this.updateById(toUpdate);*/
-        return vo;
-    }
-
-    @Override
     public void deleteByIds(InboxMessageParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
@@ -191,6 +175,32 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         });
         // 补充用户name
         return pageData;
+    }
+
+    @Override
+    public InboxMessageVO read(InboxMessageParam param) {
+        String userId = SecurityUtils.getUsername();
+        Assert.notEmpty(userId, "用户ID不能为空");
+        // 查询消息
+        InboxMessage inboxMessage = this.getOne(Wrappers.lambdaQuery(InboxMessage.class).eq(InboxMessage::getCode, param.getCode()));
+        if (inboxMessage == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
+        }
+        // 转换为vo
+        InboxMessageVO vo = BeanUtil.copyProperties(inboxMessage, InboxMessageVO.class);
+        // 查询触达记录
+        UserMessage userMessage = userMessageService.getOne(Wrappers.lambdaQuery(UserMessage.class)
+                .eq(UserMessage::getFromId, param.getCode()).eq(UserMessage::getUserId, userId));
+        // 用户消息未读则更新为已读
+        if (userMessage != null && userMessage.getHasRead() != 1) {
+            // 属性复制
+            UserMessage toUpdate = new UserMessage();
+            toUpdate.setId(userMessage.getId());
+            toUpdate.setHasRead(1);
+            toUpdate.setReadTime(new Date());
+            userMessageService.updateById(toUpdate);
+        }
+        return vo;
     }
 
     @Override
