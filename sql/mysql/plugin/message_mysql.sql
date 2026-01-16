@@ -5,7 +5,7 @@ CREATE TABLE `inbox_message`
 (
     `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `code`         VARCHAR(64)  DEFAULT NULL COMMENT '唯一编码',
-    `message_type` TINYINT      DEFAULT 0 COMMENT '消息类型（0正常 1停用）',
+    `message_type` TINYINT      DEFAULT 0 COMMENT '消息类型',
     `title`        VARCHAR(255) DEFAULT NULL COMMENT '标题',
     `content`      TEXT         DEFAULT NULL COMMENT '内容',
     `send_by`      VARCHAR(32)  DEFAULT NULL COMMENT '发送人',
