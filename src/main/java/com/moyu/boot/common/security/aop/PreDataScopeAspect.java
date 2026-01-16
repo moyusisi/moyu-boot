@@ -1,5 +1,4 @@
-package com.moyu.boot.common.core.aop;
-
+package com.moyu.boot.common.security.aop;
 
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.util.SecurityUtils;

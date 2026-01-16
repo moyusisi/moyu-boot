@@ -19,7 +19,7 @@ import javax.annotation.Resource;
 @Configuration
 public class SaTokenConfigure {
 
-    // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc
+    // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc/doc.html#/use/config
     @Resource
     public void configSaToken(SaTokenConfig config) {
         // token 名称（同时也是 cookie 名称）
