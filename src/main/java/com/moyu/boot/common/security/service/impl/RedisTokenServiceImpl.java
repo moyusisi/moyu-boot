@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.service.impl;
 
-
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import com.moyu.boot.common.security.model.LoginUser;

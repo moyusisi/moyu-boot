@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.util;
 
-
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;

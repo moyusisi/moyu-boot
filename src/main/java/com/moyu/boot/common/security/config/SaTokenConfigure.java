@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.config;
 
-
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;

@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.advice;
 
-
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;

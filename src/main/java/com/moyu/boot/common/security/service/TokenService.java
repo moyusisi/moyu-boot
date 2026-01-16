@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.service;
 
-
 import com.moyu.boot.common.security.model.LoginUser;
 import org.springframework.security.core.Authentication;
 
@@ -20,11 +19,6 @@ public interface TokenService {
      * 令牌前缀
      */
     String TOKEN_PREFIX = "Bearer";
-    /**
-     * jwt秘钥，至少256-bit(32-byte)，如：7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC
-     * 可通过 RandomUtil.randomString(32) 生产
-     */
-    String TOKEN_SECRET = "7nPXLm0zLVdqKM5QTb03ahcRiWzoC2UC";
 
     /**
      * 生成token

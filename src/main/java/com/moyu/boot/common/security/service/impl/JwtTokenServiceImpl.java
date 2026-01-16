@@ -3,18 +3,12 @@ package com.moyu.boot.common.security.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
-import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 /**
  * jwt 令牌服务类

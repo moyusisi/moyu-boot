@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.config;
 
-
 import com.moyu.boot.common.security.filter.TokenAuthenticationFilter;
 import com.moyu.boot.common.security.handler.CustomAccessDeniedHandler;
 import com.moyu.boot.common.security.handler.CustomAuthenticationEntryPoint;

@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.service.impl;
 
-
 import cn.dev33.satoken.stp.StpInterface;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import org.springframework.stereotype.Component;
