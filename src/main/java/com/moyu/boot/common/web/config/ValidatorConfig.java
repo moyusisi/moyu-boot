@@ -18,6 +18,7 @@ import javax.validation.ValidatorFactory;
 @Configuration
 public class ValidatorConfig {
 
+    // 不手动定义 Validator Bean，也会校验，只是默认不开启快速失败模式
     @Bean
     public Validator validator() {
         ValidatorFactory validatorFactory = Validation.byProvider(HibernateValidator.class).configure()
