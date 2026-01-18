@@ -38,7 +38,7 @@ public class SecurityConfig {
     private TokenService tokenService;
 
     /**
-     * 跨域过滤器配置
+     * 跨域资源共享过滤器
      */
     @Bean
     public CorsFilter corsFilter() {
@@ -54,7 +54,7 @@ public class SecurityConfig {
         config.addAllowedHeader("*");
         // 暴露的响应头（前端可获取的自定义头）
         config.addExposedHeader("Authorization");
-        // 预检请求缓存时间
+        // 预检请求缓存时间(单位s)
         config.setMaxAge(3600L);
 
         //  2. 应用跨域配置规则到所有接口
@@ -80,8 +80,8 @@ public class SecurityConfig {
         }
         // 白名单放行
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
-        // 设置/api下的接口，需要认证才可访问
-        http.authorizeRequests().antMatchers("/api/**").authenticated();
+        // 设置需要认证才可访问的接口
+        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
 
         // 允许跨域访问
         http.cors();
