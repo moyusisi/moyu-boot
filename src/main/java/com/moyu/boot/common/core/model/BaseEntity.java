@@ -23,8 +23,18 @@ public class BaseEntity implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 表基类实体的实例属性
+     */
+    public static final String ID = "id";
+    public static final String DELETED = "deleted";
+    public static final String CREATE_TIME = "createTime";
+    public static final String CREATE_BY = "createBy";
+    public static final String UPDATE_TIME = "updateTime";
+    public static final String UPDATE_BY = "updateBy";
+
     @TableField(exist = false)
-    public static final Set<String> baseFieldSet = new HashSet<>(Arrays.asList("id", "deleted", "createTime", "updateTime", "createBy", "updateBy"));
+    public static final Set<String> baseFieldSet = new HashSet<>(Arrays.asList(ID, DELETED, CREATE_TIME, CREATE_BY, UPDATE_TIME, UPDATE_BY));
 
     /**
      * 主键id

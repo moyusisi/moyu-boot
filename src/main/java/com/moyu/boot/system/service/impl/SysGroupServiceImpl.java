@@ -15,6 +15,7 @@ import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -187,7 +188,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
-        SysGroup updateGroup = BeanUtil.copyProperties(param, SysGroup.class);
+        SysGroup updateGroup = BeanUtil.copyProperties(param, SysGroup.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         updateGroup.setId(oldGroup.getId());
         // 若新指定了直属组织，则设置组织名
         if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateGroup.getOrgCode()) && ObjectUtil.isNotEmpty(updateGroup.getOrgCode())) {

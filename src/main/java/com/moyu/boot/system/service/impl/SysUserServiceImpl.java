@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
 import com.moyu.boot.system.constant.SysConstants;
@@ -164,7 +165,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void update(SysUserParam param) {
         SysUser oldUser = this.detail(param);
         // 属性复制
-        SysUser updateUser = BeanUtil.copyProperties(param, SysUser.class);
+        SysUser updateUser = BeanUtil.copyProperties(param, SysUser.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         updateUser.setId(oldUser.getId());
         // 若新指定了直属组织，则设置所属组织
         if (ObjectUtil.notEqual(oldUser.getOrgCode(), updateUser.getOrgCode()) && ObjectUtil.isNotEmpty(updateUser.getOrgCode())) {

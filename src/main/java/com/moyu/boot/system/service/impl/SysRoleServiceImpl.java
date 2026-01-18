@@ -22,6 +22,7 @@ import com.google.common.collect.Multimap;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
@@ -180,7 +181,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
-        SysRole toUpdate = BeanUtil.copyProperties(param, SysRole.class);
+        SysRole toUpdate = BeanUtil.copyProperties(param, SysRole.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         // 其他处理
         toUpdate.setId(param.getId());
         this.updateById(toUpdate);

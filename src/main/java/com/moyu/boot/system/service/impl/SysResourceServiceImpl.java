@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
@@ -213,7 +214,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 转换
-        SysResource toUpdate = BeanUtil.copyProperties(param, SysResource.class);
+        SysResource toUpdate = BeanUtil.copyProperties(param, SysResource.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         // 其他处理
         toUpdate.setId(param.getId());
         this.updateById(toUpdate);
