@@ -1,6 +1,5 @@
 package com.moyu.boot.common.mybatis.handler;
 
-
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.security.util.SecurityUtils;

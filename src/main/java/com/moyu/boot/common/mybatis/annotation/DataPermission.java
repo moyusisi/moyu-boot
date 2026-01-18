@@ -1,6 +1,5 @@
 package com.moyu.boot.common.mybatis.annotation;
 
-
 import java.lang.annotation.*;
 
 /**
