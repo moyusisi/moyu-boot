@@ -2,7 +2,7 @@ package com.moyu.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.moyu.boot.common.mybatis.entity.BaseEntity;
+import com.moyu.boot.common.core.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 

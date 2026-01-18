@@ -1,7 +1,5 @@
 package com.moyu.boot.common.core.enums;
 
-import com.moyu.boot.common.core.model.IResultCode;
-
 import java.io.Serializable;
 import java.util.StringJoiner;
 
@@ -19,7 +17,7 @@ import java.util.StringJoiner;
  * @author song.shi
  * @since 2016-04-01
  */
-public enum ResultCodeEnum implements IResultCode, Serializable {
+public enum ResultCodeEnum implements ResultCode, Serializable {
 
     /**
      * 成功

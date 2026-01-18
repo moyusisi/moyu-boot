@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerIntercep
 import com.baomidou.mybatisplus.extension.plugins.inner.DataPermissionInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.moyu.boot.common.mybatis.entity.BaseEntity;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomDataPermissionHandler;
 import com.moyu.boot.common.mybatis.handler.CustomMetaObjectHandler;
 import org.springframework.context.annotation.Bean;

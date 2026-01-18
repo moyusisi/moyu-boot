@@ -1,4 +1,4 @@
-package com.moyu.boot.common.mybatis.entity;
+package com.moyu.boot.common.core.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;

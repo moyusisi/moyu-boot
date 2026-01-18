@@ -1,4 +1,4 @@
-package com.moyu.boot.common.core.model;
+package com.moyu.boot.common.core.enums;
 
 
 /**
@@ -7,7 +7,7 @@ package com.moyu.boot.common.core.model;
  * @author shisong
  * @since 2025-09-12
  */
-public interface IResultCode {
+public interface ResultCode {
 
     /**
      * 获取响应码
