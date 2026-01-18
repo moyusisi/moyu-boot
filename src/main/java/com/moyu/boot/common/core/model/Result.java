@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
- * 基本响应对象, 包含错误代码和错误描述信息, 返回的具体数据可包含在 data 字段中, data采用范型, 可根据需要定义类型
+ * 基本响应结果对象, 包含错误代码和错误描述信息, 返回的具体数据可包含在 data 字段中, data采用范型, 可根据需要定义类型
  * <p>使用举例:</p>
  * <pre>
  * 仅创建一个空响应对象:

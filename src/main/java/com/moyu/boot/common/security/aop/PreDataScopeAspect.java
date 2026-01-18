@@ -32,7 +32,7 @@ public class PreDataScopeAspect {
     }
 
     /**
-     * 切面处理并保存日志
+     * 切面处理
      */
     @Before("pointcut() && @annotation(annotation)")
     public void logHandler(com.moyu.boot.common.core.annotation.PreDataScope annotation) {

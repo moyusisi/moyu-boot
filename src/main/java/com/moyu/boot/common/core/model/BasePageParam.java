@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.StringJoiner;
 
 /**
- * 分页请求
+ * 分页请求参数基类对象
  *
  * @author shisong02
  * @since 2022-10-24

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * 分页数据
+ * 分页数据结果基类对象
  *
  * @author shisong02
  * @since 2023-12-28
