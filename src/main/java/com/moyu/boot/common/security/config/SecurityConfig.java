@@ -42,20 +42,26 @@ public class SecurityConfig {
      */
     @Bean
     public CorsFilter corsFilter() {
+        // 1. 构建跨域配置规则
         CorsConfiguration config = new CorsConfiguration();
+        // 设置允许的跨域源
+        config.addAllowedOriginPattern("*");
         // 设置跨域访问可以携带cookie
         config.setAllowCredentials(true);
-        // 设置访问源地址
-        config.addAllowedOriginPattern("*");
-        // 设置访问源请求头 允许携带任何头信息
-        config.addAllowedHeader("*");
-        // 设置访问源请求方法 允许所有的请求方法
+        // 设置允许的请求方法 允许所有的请求方法
         config.addAllowedMethod("*");
-        // 初始化cors配置源对象
+        // 设置允许的请求头 允许携带任何头信息
+        config.addAllowedHeader("*");
+        // 暴露的响应头（前端可获取的自定义头）
+        config.addExposedHeader("Authorization");
+        // 预检请求缓存时间
+        config.setMaxAge(3600L);
+
+        //  2. 应用跨域配置规则到所有接口
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // 给配置源对象设置过滤的参数 == > 所有的路径都要求校验是否跨域
         source.registerCorsConfiguration("/**", config);
-        // 返回配置好的CorsFilter
+
+        // 3. 返回配置好的CorsFilter
         return new CorsFilter(source);
     }
 
