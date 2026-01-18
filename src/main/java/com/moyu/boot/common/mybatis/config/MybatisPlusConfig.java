@@ -28,14 +28,14 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        // 乐观锁插件
-        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
-        // 阻断插件
-        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         // 数据权限
         interceptor.addInnerInterceptor(new DataPermissionInterceptor(new CustomDataPermissionHandler()));
         // 分页插件。如果配置多个插件, 切记分页最后添加
         interceptor.addInnerInterceptor(paginationInnerInterceptor());
+        // 乐观锁插件
+        interceptor.addInnerInterceptor(optimisticLockerInnerInterceptor());
+        // 阻断插件
+        interceptor.addInnerInterceptor(blockAttackInnerInterceptor());
         return interceptor;
     }
 
@@ -47,8 +47,18 @@ public class MybatisPlusConfig {
         // 设置数据库类型为mysql
         paginationInnerInterceptor.setDbType(DbType.MYSQL);
         // 设置最大单页限制数量，默认 500 条，-1 不受限制
-        paginationInnerInterceptor.setMaxLimit(100L);
+        paginationInnerInterceptor.setMaxLimit(500L);
         return paginationInnerInterceptor;
+    }
+
+    /**
+     * 自定义公共字段自动填充
+     *
+     * @see BaseEntity
+     */
+    @Bean
+    public MetaObjectHandler metaObjectHandler() {
+        return new CustomMetaObjectHandler();
     }
 
     /**
@@ -65,13 +75,4 @@ public class MybatisPlusConfig {
         return new BlockAttackInnerInterceptor();
     }
 
-    /**
-     * 自定义公共字段自动填充
-     *
-     * @see BaseEntity
-     */
-    @Bean
-    public MetaObjectHandler metaObjectHandler() {
-        return new CustomMetaObjectHandler();
-    }
 }
