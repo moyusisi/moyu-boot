@@ -42,7 +42,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         try {
-            // 严格模式的插入填充，只有当字段为空时才进行填充，避免覆盖已有的值。
+            // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(null 值不填充)。
             this.strictInsertFill(metaObject, DELETED, Integer.class, 0);
             this.strictInsertFill(metaObject, CREATE_TIME, Date.class, new Date());
             this.strictInsertFill(metaObject, CREATE_BY, String.class, getUserId());
@@ -56,8 +56,8 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         try {
-            // setFieldValByName方法会判断db中是否有对应的字段,无需判断 (metaObject.getOriginalObject() instanceof BaseEntity)
-            // 更新时不使用严格模式,不管原来是否有值,都更新
+            // 会自动判断表中是否有对应的字段
+            // 更新时不使用严格模式,不管原来是否有值,都更新(严格模式只有原值为null才更新)
             this.setFieldValByName(UPDATE_TIME, new Date(), metaObject);
             this.setFieldValByName(UPDATE_BY, getUserId(), metaObject);
         } catch (Exception e) {
