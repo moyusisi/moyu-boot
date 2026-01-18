@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.moyu.boot.common.core.model.BasePageParam;
+import com.moyu.boot.common.core.model.PageParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +21,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GenConfigParam extends BasePageParam {
+public class GenConfigParam extends PageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.moyu.boot.common.core.model.BasePageParam;
+import com.moyu.boot.common.core.model.PageParam;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class InboxMessageParam extends BasePageParam {
+public class InboxMessageParam extends PageParam {
 
     //********** 额外字段 **********//
     /**

@@ -1,7 +1,7 @@
 package com.moyu.boot.plugin.authSession.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.moyu.boot.common.core.model.BasePageParam;
+import com.moyu.boot.common.core.model.PageParam;
 import lombok.Data;
 
 import java.util.Set;
@@ -14,7 +14,7 @@ import java.util.Set;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class AuthSessionParam extends BasePageParam {
+public class AuthSessionParam extends PageParam {
 
     /**
      * 待删除的唯一键集合

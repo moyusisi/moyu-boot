@@ -9,7 +9,7 @@ import java.util.StringJoiner;
  * @author shisong02
  * @since 2022-10-24
  */
-public class BasePageParam implements Serializable {
+public class PageParam implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -40,7 +40,7 @@ public class BasePageParam implements Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", BasePageParam.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", PageParam.class.getSimpleName() + "[", "]")
                 .add("pageNum=" + pageNum)
                 .add("pageSize=" + pageSize)
                 .toString();

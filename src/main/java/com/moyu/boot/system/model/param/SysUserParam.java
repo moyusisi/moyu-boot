@@ -2,7 +2,7 @@ package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.moyu.boot.common.core.model.BasePageParam;
+import com.moyu.boot.common.core.model.PageParam;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysUserParam extends BasePageParam {
+public class SysUserParam extends PageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的id列表
