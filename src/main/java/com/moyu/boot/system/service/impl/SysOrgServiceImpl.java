@@ -217,6 +217,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         Tree<String> catchedTree = gson.fromJson(jsonString, new TypeToken<Tree<String>>() {
         }.getType());
         if (ObjectUtil.isEmpty(catchedTree)) {
+            // 加载数据
             catchedTree = loadRootTree();
             jsonString = gson.toJson(catchedTree);
             // 写入缓存，并设定存活时间 (单位: 秒)
