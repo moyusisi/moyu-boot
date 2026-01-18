@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,6 +25,11 @@ public class SecurityProperties {
      * 是否启用鉴权功能(false等同于全加白)
      */
     private Boolean enabled = Boolean.TRUE;
+
+    /**
+     * 保护列表，需要认证访问的的路径
+     */
+    private List<String> authList = Arrays.asList("/api/**");
 
     /**
      * 白名单，Security AuthorizationFilter 过滤器直接放行的路径
