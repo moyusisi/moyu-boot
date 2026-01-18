@@ -1,5 +1,6 @@
 package com.moyu.boot.system.service.impl;
 
+import cn.dev33.satoken.SaManager;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
@@ -16,6 +17,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -47,11 +50,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
-
-    /**
-     * 组织结构树(本地缓存)
-     */
-    private Tree<String> rootTree;
 
     @Override
     public List<SysOrg> list(SysOrgParam param) {
@@ -214,10 +212,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public Tree<String> singleTree() {
-        if (ObjectUtil.isEmpty(rootTree)) {
-            rootTree = loadRootTree();
+        Gson gson = new Gson();
+        String jsonString = SaManager.getSaTokenDao().get("org:tree:singleTree");
+        Tree<String> catchedTree = gson.fromJson(jsonString, new TypeToken<Tree<String>>() {
+        }.getType());
+        if (ObjectUtil.isEmpty(catchedTree)) {
+            catchedTree = loadRootTree();
+            jsonString = gson.toJson(catchedTree);
+            // 写入缓存，并设定存活时间 (单位: 秒)
+            SaManager.getSaTokenDao().set("org:tree:singleTree", jsonString, 60 * 10L);
         }
-        return rootTree;
+        return catchedTree;
     }
 
     @Override
