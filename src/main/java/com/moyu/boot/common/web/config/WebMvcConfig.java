@@ -28,7 +28,7 @@ import java.util.List;
  * @author shisong
  * @since 2024-11-30
  */
-@AutoConfiguration
+//@AutoConfiguration
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
