@@ -9,8 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -171,11 +169,8 @@ public class GlobalExceptionHandler {
      * 其他未捕获异常
      */
     @ExceptionHandler(Exception.class)
-    public Result<?> exceptionHandler(Exception e) throws Exception {
-        // 将认证鉴权异常异常继续抛出，不在此处理
-        if (e instanceof AccessDeniedException || e instanceof AuthenticationException) {
-            throw e;
-        }
+    public Result<?> exceptionHandler(Exception e) {
+        // 确保AuthExceptionHandler优先级比Global高，否则认证异常就会在此捕获
         log.error("系统异常", e);
         Result<?> result = Result.failed(e.getMessage());
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
