@@ -1,4 +1,4 @@
-package com.moyu.boot.common.web.advice;
+package com.moyu.boot.system.advice;
 
 
 import cn.hutool.json.JSONUtil;
