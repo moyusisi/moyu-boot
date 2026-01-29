@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.InboxMessage.service.impl;
+package com.moyu.boot.plugin.bnboxMessage.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -9,13 +9,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.InboxMessage.mapper.UserMessageMapper;
-import com.moyu.boot.plugin.InboxMessage.model.entity.UserMessage;
-import com.moyu.boot.plugin.InboxMessage.model.param.InboxMessageParam;
-import com.moyu.boot.plugin.InboxMessage.model.vo.UserMessageVO;
-import com.moyu.boot.plugin.InboxMessage.service.UserMessageService;
+import com.moyu.boot.plugin.bnboxMessage.mapper.UserMessageMapper;
+import com.moyu.boot.plugin.bnboxMessage.model.entity.UserMessage;
+import com.moyu.boot.plugin.bnboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.bnboxMessage.model.vo.UserMessageVO;
+import com.moyu.boot.plugin.bnboxMessage.service.UserMessageService;
 import lombok.extern.slf4j.Slf4j;
-import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
