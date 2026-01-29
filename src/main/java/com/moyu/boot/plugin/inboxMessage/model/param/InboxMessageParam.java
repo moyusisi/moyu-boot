@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.bnboxMessage.model.param;
+package com.moyu.boot.plugin.inboxMessage.model.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

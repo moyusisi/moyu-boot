@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.bnboxMessage.model.entity;
+package com.moyu.boot.plugin.inboxMessage.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;

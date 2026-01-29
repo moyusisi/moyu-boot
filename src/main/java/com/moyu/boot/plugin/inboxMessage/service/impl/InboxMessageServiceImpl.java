@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.bnboxMessage.service.impl;
+package com.moyu.boot.plugin.inboxMessage.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
@@ -12,14 +12,14 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
-import com.moyu.boot.plugin.bnboxMessage.mapper.InboxMessageMapper;
-import com.moyu.boot.plugin.bnboxMessage.model.entity.InboxMessage;
-import com.moyu.boot.plugin.bnboxMessage.model.entity.UserMessage;
-import com.moyu.boot.plugin.bnboxMessage.model.param.InboxMessageParam;
-import com.moyu.boot.plugin.bnboxMessage.model.vo.InboxMessageVO;
-import com.moyu.boot.plugin.bnboxMessage.model.vo.UserMessageVO;
-import com.moyu.boot.plugin.bnboxMessage.service.InboxMessageService;
-import com.moyu.boot.plugin.bnboxMessage.service.UserMessageService;
+import com.moyu.boot.plugin.inboxMessage.mapper.InboxMessageMapper;
+import com.moyu.boot.plugin.inboxMessage.model.entity.InboxMessage;
+import com.moyu.boot.plugin.inboxMessage.model.entity.UserMessage;
+import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.inboxMessage.model.vo.UserMessageVO;
+import com.moyu.boot.plugin.inboxMessage.service.InboxMessageService;
+import com.moyu.boot.plugin.inboxMessage.service.UserMessageService;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;

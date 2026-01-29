@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.bnboxMessage.controller;
+package com.moyu.boot.plugin.inboxMessage.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.hutool.core.lang.Assert;
@@ -7,10 +7,10 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.util.SecurityUtils;
-import com.moyu.boot.plugin.bnboxMessage.model.param.InboxMessageParam;
-import com.moyu.boot.plugin.bnboxMessage.model.vo.InboxMessageVO;
-import com.moyu.boot.plugin.bnboxMessage.model.vo.UserMessageVO;
-import com.moyu.boot.plugin.bnboxMessage.service.InboxMessageService;
+import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.inboxMessage.model.vo.UserMessageVO;
+import com.moyu.boot.plugin.inboxMessage.service.InboxMessageService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

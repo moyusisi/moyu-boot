@@ -1,13 +1,13 @@
-package com.moyu.boot.plugin.bnboxMessage.mapper;
+package com.moyu.boot.plugin.inboxMessage.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.common.mybatis.annotation.DataPermission;
-import com.moyu.boot.plugin.bnboxMessage.model.entity.InboxMessage;
-import com.moyu.boot.plugin.bnboxMessage.model.param.InboxMessageParam;
-import com.moyu.boot.plugin.bnboxMessage.model.vo.InboxMessageVO;
+import com.moyu.boot.plugin.inboxMessage.model.entity.InboxMessage;
+import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
+import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
