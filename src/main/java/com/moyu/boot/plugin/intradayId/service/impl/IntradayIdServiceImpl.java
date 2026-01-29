@@ -2,7 +2,7 @@ package com.moyu.boot.plugin.intradayId.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.plugin.intradayId.service.IntradayIdService;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -25,9 +25,8 @@ public class IntradayIdServiceImpl implements IntradayIdService {
     // 日期格式
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-    // 注入自定义配置的 RedisTemplate
     @Resource
-    private RedisTemplate<String, Object> redisTemplate;
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public String nextId() {
@@ -50,7 +49,7 @@ public class IntradayIdServiceImpl implements IntradayIdService {
         String today = DTF.format(LocalDate.now());
         Long seq = generatorId(prefix, today);
         // 4. 格式化补零，返回日内标识
-        return today + String.format("%04d", seq);
+        return prefix + today + String.format("%04d", seq);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class IntradayIdServiceImpl implements IntradayIdService {
         String today = DTF.format(LocalDate.now());
         Long seq = generatorId(prefix, today);
         // 4. 格式化补零，返回日内标识
-        return today + String.format("%0" + size + "d", seq);
+        return prefix + today + String.format("%0" + size + "d", seq);
     }
 
     /**
@@ -74,10 +73,10 @@ public class IntradayIdServiceImpl implements IntradayIdService {
         }
         key = key + today;
         // 2. redis原子递增（初始值为 0，第一次递增后返回 1，后续依次+1）
-        Long increment = redisTemplate.opsForValue().increment(key, 1);
+        Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
         // 3. 设置过期时间（仅第一次递增时设置，避免重复设置）
         if (increment != null && increment == 1) {
-            redisTemplate.expire(key, 24, TimeUnit.HOURS);
+            stringRedisTemplate.expire(key, 24, TimeUnit.HOURS);
         }
         // 4. 日内递增序列值
         return increment;
