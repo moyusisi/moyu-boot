@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 public class IntradayIdServiceImpl implements IntradayIdService {
 
     // 固定前缀
-    private static final String INTRADAY_SEQ = "intraday:seq:";
+    private static final String INTRADAY_SEQ = "day:seq:";
 
     // 日期格式
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyyMMdd");
