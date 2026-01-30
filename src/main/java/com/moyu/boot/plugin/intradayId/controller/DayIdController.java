@@ -2,7 +2,7 @@ package com.moyu.boot.plugin.intradayId.controller;
 
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.intradayId.service.IntradayIdService;
+import com.moyu.boot.plugin.intradayId.service.DayIdService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,17 +18,17 @@ import javax.annotation.Resource;
 @Log(jsonLog = true)
 @RestController
 @RequestMapping("/api/dev/seq")
-public class IntradayIdController {
+public class DayIdController {
 
     @Resource
-    private IntradayIdService intradayIdService;
+    private DayIdService dayIdService;
 
     /**
      * 自增测试接口
      */
     @PostMapping("/inc")
     public Result<String> inc() {
-        String sn = intradayIdService.nextId("SN", 5);
+        String sn = dayIdService.nextId("SN", 5);
         return Result.success(sn);
     }
 }

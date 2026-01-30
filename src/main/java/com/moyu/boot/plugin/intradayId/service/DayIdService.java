@@ -14,7 +14,7 @@ package com.moyu.boot.plugin.intradayId.service;
  * @author shisong
  * @since 2026-01-29
  */
-public interface IntradayIdService {
+public interface DayIdService {
 
     /**
      * 获取日内标识(当日下一个ID,递增序列默认4位)

@@ -1,7 +1,7 @@
 package com.moyu.boot.plugin.intradayId.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.moyu.boot.plugin.intradayId.service.IntradayIdService;
+import com.moyu.boot.plugin.intradayId.service.DayIdService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2026-01-29
  */
 @Component
-public class IntradayIdServiceImpl implements IntradayIdService {
+public class DayIdServiceImpl implements DayIdService {
 
     // 固定前缀
     private static final String INTRADAY_SEQ = "day:seq:";
