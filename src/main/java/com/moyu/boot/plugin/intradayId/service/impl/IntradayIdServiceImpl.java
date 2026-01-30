@@ -66,12 +66,8 @@ public class IntradayIdServiceImpl implements IntradayIdService {
      * @return 当日递增数字（例如 1、2、3...）
      */
     public Long generatorId(String prefix, String today) {
-        // 1. 构造当日的key,格式为: intraday:seq:[prefix:]today
-        String key = INTRADAY_SEQ;
-        if (StrUtil.isNotEmpty(prefix)) {
-            key = INTRADAY_SEQ + prefix + ":";
-        }
-        key = key + today;
+        // 1. 构造当日的key,格式为: day:seq:[prefix]today
+        String key = INTRADAY_SEQ + (StrUtil.isEmpty(prefix) ? today : prefix + today);
         // 2. redis原子递增（初始值为 0，第一次递增后返回 1，后续依次+1）
         Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
         // 3. 设置过期时间（仅第一次递增时设置，避免重复设置）
