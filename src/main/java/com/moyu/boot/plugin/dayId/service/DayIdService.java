@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.intradayId.service;
+package com.moyu.boot.plugin.dayId.service;
 
 /**
  * 日内标识生成服务(单日维度生成连续编号)

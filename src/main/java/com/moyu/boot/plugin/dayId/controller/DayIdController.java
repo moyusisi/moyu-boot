@@ -1,8 +1,8 @@
-package com.moyu.boot.plugin.intradayId.controller;
+package com.moyu.boot.plugin.dayId.controller;
 
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.intradayId.service.DayIdService;
+import com.moyu.boot.plugin.dayId.service.DayIdService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
