@@ -5,6 +5,7 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.dayId.service.DayIdService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -22,6 +23,15 @@ public class DayIdController {
 
     @Resource
     private DayIdService dayIdService;
+
+    /**
+     * 获取指定key(day:seq:idKey)对应的ID
+     */
+    @PostMapping("/currentId")
+    public Result<String> currentId(@RequestParam String idKey) {
+        String sn = dayIdService.getId(idKey);
+        return Result.success(sn);
+    }
 
     /**
      * 自增测试接口

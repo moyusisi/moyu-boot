@@ -61,11 +61,25 @@ public class RedisDayIdServiceImpl implements DayIdService {
     }
 
     /**
+     * 读取当前Id序号
+     */
+    @Override
+    public String getId(String idKey) {
+        if (StrUtil.isEmpty(idKey)) {
+            return null;
+        }
+        // 构造fullKey,格式为: day:seq:idKey
+        String fullKey = INTRADAY_SEQ + idKey;
+        // 从redis读取值并返回
+        return stringRedisTemplate.opsForValue().get(fullKey);
+    }
+
+    /**
      * 生成日内递增标识（纯数字，无补零）
      *
      * @return 当日递增数字（例如 1、2、3...）
      */
-    public Long generatorId(String prefix, String today) {
+    private Long generatorId(String prefix, String today) {
         // 1. 构造当日的key,格式为: day:seq:[prefix]today
         String key = INTRADAY_SEQ + (StrUtil.isEmpty(prefix) ? today : prefix + today);
         // 2. redis原子递增（初始值为 0，第一次递增后返回 1，后续依次+1）

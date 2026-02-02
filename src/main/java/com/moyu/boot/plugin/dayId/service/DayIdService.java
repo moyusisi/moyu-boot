@@ -38,4 +38,8 @@ public interface DayIdService {
      */
     String nextId(String prefix, Integer size);
 
+    /**
+     * 获取指定key对应的ID,格式为: day:seq:idKey
+     */
+    String getId(String idKey);
 }
