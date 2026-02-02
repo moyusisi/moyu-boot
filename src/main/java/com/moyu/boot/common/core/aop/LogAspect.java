@@ -11,14 +11,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 打印参数和返回值的AOP, 拦截 Log 注解
@@ -122,6 +124,9 @@ public class LogAspect {
      * 判断是否应跳过(有些对象不应处理)
      */
     private boolean shouldSkip(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         Class<?> clazz = obj.getClass();
         if (clazz.isArray()) {
             // 是否有继承关系

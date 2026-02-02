@@ -179,6 +179,9 @@ public class SysLogAspect {
      * 判断是否应跳过(有些对象不应处理)
      */
     private boolean shouldSkip(Object obj) {
+        if (obj == null) {
+            return false;
+        }
         Class<?> clazz = obj.getClass();
         if (clazz.isArray()) {
             // 是否有继承关系
