@@ -1,6 +1,7 @@
 package com.moyu.boot.plugin.dayId.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.moyu.boot.plugin.dayId.model.vo.DayIdVO;
 import com.moyu.boot.plugin.dayId.service.DayIdService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
@@ -8,6 +9,9 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -20,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisDayIdServiceImpl implements DayIdService {
 
     // 固定前缀
-    private static final String INTRADAY_SEQ = "day:seq:";
+    private static final String INTRADAY_SEQ = "seq:day:";
 
     // 日期格式
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -68,10 +72,29 @@ public class RedisDayIdServiceImpl implements DayIdService {
         if (StrUtil.isEmpty(idKey)) {
             return null;
         }
-        // 构造fullKey,格式为: day:seq:idKey
+        // 构造fullKey,格式为: seq:day:idKey
         String fullKey = INTRADAY_SEQ + idKey;
         // 从redis读取值并返回
         return stringRedisTemplate.opsForValue().get(fullKey);
+    }
+
+    @Override
+    public List<DayIdVO> list(String keyword) {
+        List<DayIdVO> voList = new ArrayList<>();
+        // 构造模糊匹配表达式：前缀 + * [+ keyword + *]
+        String keyPattern = INTRADAY_SEQ + (StrUtil.isBlank(keyword) ? "*" : "*" + keyword + "*");
+        // 获取所有匹配前缀的 key 集合（Set 类型，避免重复）
+        Set<String> matchKeys = stringRedisTemplate.keys(keyPattern);
+        // 遍历匹配到的key并取值
+        for (String key : matchKeys) {
+            DayIdVO vo = new DayIdVO();
+            String value = stringRedisTemplate.opsForValue().get(key);
+            vo.setIdKey(StrUtil.subAfter(key, INTRADAY_SEQ, false));
+            vo.setIdValue(value);
+            vo.setSeq(vo.getIdKey() + String.format("%04d", Long.valueOf(vo.getIdValue())));
+            voList.add(vo);
+        }
+        return voList;
     }
 
     /**
@@ -80,7 +103,7 @@ public class RedisDayIdServiceImpl implements DayIdService {
      * @return 当日递增数字（例如 1、2、3...）
      */
     private Long generatorId(String prefix, String today) {
-        // 1. 构造当日的key,格式为: day:seq:[prefix]today
+        // 1. 构造当日的key,格式为: seq:day:[prefix]today
         String key = INTRADAY_SEQ + (StrUtil.isEmpty(prefix) ? today : prefix + today);
         // 2. redis原子递增（初始值为 0，第一次递增后返回 1，后续依次+1）
         Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
