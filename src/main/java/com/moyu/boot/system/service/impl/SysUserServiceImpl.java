@@ -62,12 +62,16 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         // 查询条件
         LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
+        // 指定userId查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId());
+        // 指定account查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
-        // 指定orgCode时查询所属组织
-        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
         // 指定codeSet查询
         queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysUser::getAccount, param.getCodeSet());
+        // 指定orgCode时查询所属组织
+        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
         // 指定status查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
         // 仅查询未删除的
@@ -81,6 +85,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public PageData<SysUser> pageList(SysUserParam param) {
         // 查询条件
         LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
+        // 指定userId查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId());
+        // 指定account查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
         // 指定orgCode查询
@@ -124,6 +132,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser detail(SysUserParam param) {
         LambdaQueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection().lambda()
                 .eq(ObjectUtil.isNotEmpty(param.getId()), SysUser::getId, param.getId())
+                .eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId())
                 .eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // id、code均为唯一标识
         SysUser SysUser = this.getOne(queryWrapper);
@@ -201,7 +210,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void updatePassword(SysUserParam param) {
         // 先查原有数据
         SysUser oldUser = this.detail(param);
-        this.update(new LambdaUpdateWrapper<SysUser>()
+
+        this.update(Wrappers.lambdaUpdate(SysUser.class)
                 .eq(SysUser::getId, oldUser.getId())
                 .set(SysUser::getPassword, passwordEncoder.encode(param.getPassword())));
     }
@@ -210,7 +220,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public void resetPassword(SysUserParam param) {
         // 先查原有数据
         SysUser oldUser = this.detail(param);
-        this.update(new LambdaUpdateWrapper<SysUser>()
+        this.update(Wrappers.lambdaUpdate(SysUser.class)
                 .eq(SysUser::getId, oldUser.getId())
                 .set(SysUser::getPassword, passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD)));
     }
