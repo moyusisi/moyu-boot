@@ -45,6 +45,11 @@ public class SysUserParam extends PageParam {
     private Long id;
 
     /**
+     * 用户唯一标识
+     */
+    private Long userId;
+
+    /**
      * 账号
      */
     @NotBlank(message = "用户账号account不能为空")

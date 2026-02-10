@@ -22,6 +22,10 @@ import java.util.Set;
 public class UserInfo {
 
     /**
+     * 用户唯一标识
+     */
+    private Long userId;
+    /**
      * 账号
      */
     private String account;

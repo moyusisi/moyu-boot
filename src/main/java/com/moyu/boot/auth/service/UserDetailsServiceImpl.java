@@ -6,7 +6,6 @@ import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysGroupService;
-import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysRoleService;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +37,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private SysGroupService sysGroupService;
 
-    @Resource
-    private SysRelationService sysRelationService;
-
     /**
      * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
      */
@@ -65,6 +61,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Set<String> roleSet = sysRoleService.userRoles(sysUser.getAccount());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()
+                .userId(sysUser.getUserId())
                 .username(sysUser.getAccount())
                 .name(sysUser.getName())
                 .orgCode(sysUser.getOrgCode())

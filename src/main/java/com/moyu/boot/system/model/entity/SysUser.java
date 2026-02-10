@@ -32,6 +32,11 @@ public class SysUser extends BaseEntity {
     private Long id;
 
     /**
+     * 用户唯一标识
+     */
+    private Long userId;
+
+    /**
      * 账号
      */
     private String account;

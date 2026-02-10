@@ -33,6 +33,10 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+    /**
      * 用户姓名
      */
     private String name;
@@ -55,7 +59,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private Set<String> perms;
 
     /**
-     * 数据权限范围
+     * 数据范围
      */
     private Integer dataScope;
     /**
@@ -68,6 +72,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
 
+    //***** 下面是UserDetails接口所需字段 *****//
     /**
      * 默认字段，用户账号，唯一标识
      *

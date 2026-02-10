@@ -19,6 +19,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.plugin.dayId.service.DayIdService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -48,6 +49,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private DayIdService dayIdService;
 
     @Override
     public List<SysUser> list(SysUserParam param) {
@@ -143,6 +147,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 属性复制
         SysUser user = BeanUtil.copyProperties(param, SysUser.class);
         user.setId(null);
+        // 用户唯一id，202602100001
+        user.setUserId(Long.valueOf(dayIdService.nextId()));
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {
             // 获取组织结构树

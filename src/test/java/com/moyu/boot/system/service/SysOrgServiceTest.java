@@ -1,8 +1,7 @@
-package com.moyu.boot.service;
+package com.moyu.boot.system.service;
 
 import com.moyu.boot.BaseTest;
 import com.moyu.boot.system.model.entity.SysOrg;
-import com.moyu.boot.system.service.SysOrgService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
