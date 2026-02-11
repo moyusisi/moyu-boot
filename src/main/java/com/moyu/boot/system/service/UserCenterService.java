@@ -29,7 +29,7 @@ public interface UserCenterService {
     List<SysRoleVO> userRoleList(String roleName);
 
     /**
-     * 当前用户切换岗位重新生成token
+     * 切换用户岗位
      */
-    String switchUserGroup(String groupCode);
+    void switchUserGroup(String groupCode);
 }

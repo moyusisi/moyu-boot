@@ -43,9 +43,11 @@ public class JwtTokenServiceImpl implements TokenService {
     }
 
     @Override
-    public String refreshToken(LoginUser loginUser) {
-        // jwt无法将原token置为失效，仅可以生成新token（置为失效只需前端删掉原token即可）
-        return generateToken(loginUser);
+    public void switchUser(LoginUser loginUser) {
+        // 账户相关的信息缓存到Account-Session中(Simple模式才支持session)
+        StpUtil.getSession().set("name", loginUser.getName());
+        // 将登录用户信息缓存到Token-Session中
+        StpUtil.getTokenSession().set("loginUser", loginUser);
     }
 
     @Override

@@ -31,7 +31,7 @@ drop table if exists sys_user;
 create table sys_user
 (
     `id`              BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `user_id`         BIGINT NOT NULL DEFAULT 0 COMMENT '用户唯一id',
+    `user_id`         VARCHAR(64)     DEFAULT NULL COMMENT '用户唯一id',
     `account`         VARCHAR(64)     DEFAULT NULL COMMENT '账号',
     `password`        VARCHAR(64)     DEFAULT NULL COMMENT '密码',
     `nick_name`       VARCHAR(64)     DEFAULT NULL COMMENT '昵称',

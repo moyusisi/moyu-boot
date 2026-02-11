@@ -47,7 +47,7 @@ public class SysUserParam extends PageParam {
     /**
      * 用户唯一标识
      */
-    private Long userId;
+    private String userId;
 
     /**
      * 账号

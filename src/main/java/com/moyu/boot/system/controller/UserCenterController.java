@@ -68,9 +68,10 @@ public class UserCenterController {
      */
     @SysLog(module = "system", value = "岗位切换")
     @PostMapping("/switchUserGroup")
-    public Result<String> switchUserGroup(@RequestBody SysGroupParam groupParam) {
+    public Result<?> switchUserGroup(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "岗位code不能为空");
-        return Result.success(userCenterService.switchUserGroup(groupParam.getCode()));
+        userCenterService.switchUserGroup(groupParam.getCode());
+        return Result.success();
     }
 
 }

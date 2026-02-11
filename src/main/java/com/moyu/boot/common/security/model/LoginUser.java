@@ -35,7 +35,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     /**
      * 用户id
      */
-    private Long userId;
+    private String userId;
     /**
      * 用户姓名
      */

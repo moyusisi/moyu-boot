@@ -36,11 +36,11 @@ public class RedisTokenServiceImpl implements TokenService {
     }
 
     @Override
-    public String refreshToken(LoginUser loginUser) {
-        // 当前token置为失效
-        invalidateToken(StpUtil.getTokenValue());
-        // 返回新生成的token
-        return generateToken(loginUser);
+    public void switchUser(LoginUser loginUser) {
+        // 账户相关的信息缓存到Account-Session中
+        StpUtil.getSession().set("name", loginUser.getName());
+        // 将登录用户信息缓存到Token-Session中
+        StpUtil.getTokenSession().set("loginUser", loginUser);
     }
 
     @Override

@@ -183,7 +183,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     }
 
     @Override
-    public String switchUserGroup(String groupCode) {
+    public void switchUserGroup(String groupCode) {
         LoginUser loginUser = SecurityUtils.getLoginUser().orElse(null);
         if (loginUser == null) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
@@ -216,7 +216,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         loginUser.setPermScopeMap(sysRoleService.rolePermScopeMap(roleSet, group.getOrgCode()));
         // 数据范围默认本人数据，真正的数据范围在PreDataScope切面中赋值
         loginUser.setDataScope(DataScopeEnum.SELF.getCode());
-        return tokenService.refreshToken(loginUser);
+        tokenService.switchUser(loginUser);
     }
 
     /**
