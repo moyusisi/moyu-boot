@@ -11,6 +11,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
+import com.moyu.boot.system.model.vo.SysOrgVO;
 import com.moyu.boot.system.service.SysOrgService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -43,9 +44,9 @@ public class SysOrgController {
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @PreDataScope("sys:org:page")
     @PostMapping("/page")
-    public Result<PageData<SysOrg>> pageList(@RequestBody SysOrgParam orgParam) {
+    public Result<PageData<SysOrgVO>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysOrg> page = sysOrgService.pageList(orgParam);
+        PageData<SysOrgVO> page = sysOrgService.pageList(orgParam);
         return Result.success(page);
     }
 
@@ -66,7 +67,7 @@ public class SysOrgController {
     @SysLog(module = "system", value = "查询组织详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
     @PostMapping("/detail")
-    public Result<SysOrg> detail(@RequestBody SysOrgParam orgParam) {
+    public Result<SysOrgVO> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");
         return Result.success(sysOrgService.detail(orgParam));
     }

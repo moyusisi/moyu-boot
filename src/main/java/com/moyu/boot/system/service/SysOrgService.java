@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
+import com.moyu.boot.system.model.vo.SysOrgVO;
 
 import java.util.List;
 
@@ -18,17 +19,17 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 查询组织列表(不分页，不限制数据权限)
      */
-    List<SysOrg> list(SysOrgParam param);
+    List<SysOrgVO> list(SysOrgParam param);
 
     /**
      * 分页获取组织列表
      */
-    PageData<SysOrg> pageList(SysOrgParam param);
+    PageData<SysOrgVO> pageList(SysOrgParam param);
 
     /**
      * 获取组织机构详情(通过主键或唯一键)
      */
-    SysOrg detail(SysOrgParam param);
+    SysOrgVO detail(SysOrgParam param);
 
     /**
      * 添加组织机构

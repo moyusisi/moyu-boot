@@ -1,21 +1,29 @@
-package com.moyu.boot.system.model.entity;
+package com.moyu.boot.system.model.vo;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.moyu.boot.common.core.model.BaseEntity;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
- * 组织机构表
+ * 组织机构视图对象
  *
- * @TableName sys_org
+ * @author moyusisi
+ * @since 2026-02-11
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_org")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysOrg extends BaseEntity {
+public class SysOrgVO {
+
+    /**
+     * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     /**
      * 父编码
      */
@@ -30,8 +38,6 @@ public class SysOrg extends BaseEntity {
     private String code;
     /**
      * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
-     *
-     * @see com.moyu.boot.system.enums.OrgTypeEnum
      */
     private Integer orgType;
     /**
@@ -58,4 +64,22 @@ public class SysOrg extends BaseEntity {
      * 备注
      */
     private String remark;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    /**
+     * 创建人
+     */
+    private String createBy;
+    /**
+     * 修改时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    /**
+     * 修改人
+     */
+    private String updateBy;
 }
