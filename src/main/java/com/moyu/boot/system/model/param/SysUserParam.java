@@ -2,6 +2,8 @@ package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +14,11 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 
 /**
- * 用户信息参数
+ * 用户信息请求参数(查询、修改)
  */
 @Getter
 @Setter
@@ -26,7 +28,7 @@ import java.util.Set;
 public class SysUserParam extends PageParam {
     //********** 额外字段 **********//
     /**
-     * 待删除的id列表
+     * 待删除的id集合
      */
     private Set<Long> ids;
     /**
@@ -41,90 +43,77 @@ public class SysUserParam extends PageParam {
     //********** db中存在的字段 **********//
     /**
      * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
-     * 用户唯一标识
+     * 用户唯一id
      */
     private String userId;
-
     /**
      * 账号
      */
     @NotBlank(message = "用户账号account不能为空")
     private String account;
-
     /**
      * 密码
      */
     private String password;
-
     /**
      * 昵称
      */
     private String nickName;
-
     /**
      * 头像
      */
     private String avatar;
-
     /**
      * 姓名
      */
     @NotBlank(message = "用户姓名name不能为空")
     private String name;
-
     /**
      * 性别(字典 0未知 1男 2女)
      */
     @NotNull(message = "用户性别gender不能为空")
     private Integer gender;
-
     /**
      * 生日
      */
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-    private LocalDate birthday;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date birthday;
     /**
      * 邮箱
      */
     private String email;
-
     /**
      * 手机
      */
     private String phone;
-
     /**
      * 身份证号
      */
     private String idNo;
-
     /**
      * 联系地址
      */
     private String address;
-
     /**
      * 员工编码
      */
     private String staffCode;
-
     /**
      * 员工入职日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate entryDate;
-
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date entryDate;
     /**
      * 直属组织编码
      */
     @NotBlank(message = "用户直属组织orgCode不能为空")
     private String orgCode;
-
     /**
      * 状态（0正常 1停用）
      */
@@ -132,7 +121,6 @@ public class SysUserParam extends PageParam {
     @Min(value = 0, message = "用户状态status有效取值范围为[0,1]")
     @Max(value = 1, message = "用户状态status有效取值范围为[0,1]")
     private Integer status;
-
     /**
      * 备注
      */

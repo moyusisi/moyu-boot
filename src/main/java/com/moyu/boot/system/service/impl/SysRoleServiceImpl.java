@@ -415,16 +415,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<SysUser> roleUserList(SysRoleParam roleParam) {
+    public List<SysUser> roleUserList(SysRoleParam param) {
         // 查询指定role的所有user
-        Set<String> userSet = sysRelationService.roleUser(roleParam.getCode());
+        Set<String> userSet = sysRelationService.roleUser(param.getCode());
         if (ObjectUtil.isEmpty(userSet)) {
             return new ArrayList<>();
         }
         // 查询用户(可指定搜索词)
         List<SysUser> userList = sysUserService.list(SysUserParam.builder()
-                .name(roleParam.getSearchKey())
-                .orgCode(roleParam.getOrgCode())
+                .name(param.getSearchKey())
+                .orgCode(param.getOrgCode())
                 .codeSet(userSet).build());
         return userList;
     }

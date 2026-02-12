@@ -70,13 +70,13 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public UserInfo currentUserInfo(String username) {
-        // 查询用户entity
-        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         // 当前登陆用户
         Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
         if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
+        // 查询用户
+        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         LoginUser loginUser = optUser.get();
         // 构造用户信息视图对象
         UserInfo userInfo = UserInfo.builder().account(username).orgCode(loginUser.getOrgCode())

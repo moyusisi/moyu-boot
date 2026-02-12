@@ -22,7 +22,7 @@ import java.util.Set;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ${entityName}Param extends BasePageParam {
+public class ${entityName}Param extends PageParam {
 
     //********** 额外字段 **********//
     /**

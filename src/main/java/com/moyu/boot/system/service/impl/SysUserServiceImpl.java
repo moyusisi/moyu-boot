@@ -138,11 +138,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
                 .eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId())
                 .eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // id、code均为唯一标识
-        SysUser SysUser = this.getOne(queryWrapper);
-        if (SysUser == null) {
+        SysUser user = this.getOne(queryWrapper);
+        if (user == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
-        return SysUser;
+        return user;
     }
 
     @Override

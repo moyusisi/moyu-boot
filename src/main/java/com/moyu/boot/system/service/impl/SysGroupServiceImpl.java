@@ -371,7 +371,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public SysGroup userDefaultGroup(String username) {
-        // 查询用户entity
+        // 查询用户
         SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         SysGroup group = new SysGroup();
         group.setCode(defaultGroup());
