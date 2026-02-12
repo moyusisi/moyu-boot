@@ -45,7 +45,7 @@ public interface SysUserService extends IService<SysUser> {
     void deleteByIds(SysUserParam param);
 
     /**
-     * 重置用户密码
+     * 修改用户密码
      **/
     void updatePassword(SysUserParam userParam);
 

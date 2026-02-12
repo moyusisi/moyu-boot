@@ -1,4 +1,4 @@
-package com.moyu.boot.auth.config;
+package com.moyu.boot.common.security.config;
 
 import cn.hutool.crypto.SmUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
