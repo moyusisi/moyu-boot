@@ -67,6 +67,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
+        // 指定phone查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getPhone()), SysUser::getPhone, param.getPhone());
         // 指定codeSet查询
         queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysUser::getAccount, param.getCodeSet());
         // 指定orgCode时查询所属组织
@@ -90,6 +92,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
         // 指定name查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
+        // 指定phone查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getPhone()), SysUser::getPhone, param.getPhone());
         // 指定orgCode查询
         String parentCode = param.getOrgCode();
         if (ObjectUtil.isNotEmpty(parentCode)) {
