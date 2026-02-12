@@ -123,6 +123,12 @@
             <artifactId>hutool-all</artifactId>
             <version>5.8.40</version>
         </dependency>
+        <!-- 国密算法依赖 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>1.79</version>
+        </dependency>
         <!-- joda-time https://mvnrepository.com/artifact/joda-time/joda-time -->
         <dependency>
             <groupId>joda-time</groupId>
