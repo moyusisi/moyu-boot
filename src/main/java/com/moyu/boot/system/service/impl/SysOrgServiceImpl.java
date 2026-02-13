@@ -54,9 +54,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> implements SysOrgService {
 
-    @Resource
-    private final ObjectMapper objectMapper;
-
     @Override
     public List<SysOrgVO> list(SysOrgParam param) {
         String parentCode = param.getParentCode();

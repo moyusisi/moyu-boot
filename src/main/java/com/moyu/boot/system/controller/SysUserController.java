@@ -10,6 +10,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
+import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.SysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -41,9 +42,9 @@ public class SysUserController {
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
     @PreDataScope("sys:user:page")
     @PostMapping("/page")
-    public Result<PageData<SysUser>> pageList(@RequestBody SysUserParam userParam) {
+    public Result<PageData<SysUserVO>> pageList(@RequestBody SysUserParam userParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(userParam.getPageNum(), userParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysUser> page = sysUserService.pageList(userParam);
+        PageData<SysUserVO> page = sysUserService.pageList(userParam);
         return Result.success(page);
     }
 
@@ -53,7 +54,7 @@ public class SysUserController {
     @SysLog(module = "system", value = "查询用户详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:detail')")
     @PostMapping("/detail")
-    public Result<SysUser> detail(@RequestBody SysUserParam userParam) {
+    public Result<SysUserVO> detail(@RequestBody SysUserParam userParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(userParam.getId(), userParam.getAccount()), "id和account不能同时为空");
         return Result.success(sysUserService.detail(userParam));
     }

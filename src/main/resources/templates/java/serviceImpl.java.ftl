@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import ${packageName}.${moduleName}.mapper.${entityName}Mapper;
 import ${packageName}.${moduleName}.model.entity.${entityName};
@@ -169,7 +170,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
-        ${entityName} toUpdate = BeanUtil.copyProperties(param, ${entityName}.class);
+        ${entityName} toUpdate = BeanUtil.copyProperties(param, ${entityName}.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         // 其他处理
         toUpdate.setId(param.getId());
         this.updateById(toUpdate);

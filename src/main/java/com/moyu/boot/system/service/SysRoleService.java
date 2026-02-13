@@ -9,6 +9,7 @@ import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
+import com.moyu.boot.system.model.vo.SysUserVO;
 
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,7 @@ public interface SysRoleService extends IService<SysRole> {
     /**
      * 角色内用户列表，仅包含 ROLE_HAS_USER 关系直接指定的用户。
      */
-    List<SysUser> roleUserList(SysRoleParam param);
+    List<SysUserVO> roleUserList(SysRoleParam param);
 
     /**
      * 用户直接关联的角色, 仅包含 ROLE_HAS_USER 关系直接指定的用户。

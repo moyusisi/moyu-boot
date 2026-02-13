@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
+import com.moyu.boot.system.model.vo.SysUserVO;
 
 import java.util.List;
 
@@ -17,17 +18,17 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * 获取记录列表(不分页，不限制数据权限)
      */
-    List<SysUser> list(SysUserParam param);
+    List<SysUserVO> list(SysUserParam param);
 
     /**
      * 分页获取记录列表
      */
-    PageData<SysUser> pageList(SysUserParam param);
+    PageData<SysUserVO> pageList(SysUserParam param);
 
     /**
      * 获取记录详情
      */
-    SysUser detail(SysUserParam param);
+    SysUserVO detail(SysUserParam param);
 
     /**
      * 添加记录

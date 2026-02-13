@@ -30,6 +30,7 @@ import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
+import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -217,18 +218,18 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     }
 
     @Override
-    public List<SysUser> groupUserList(SysGroupParam param) {
+    public List<SysUserVO> groupUserList(SysGroupParam param) {
         // 查询指定group的所有user
         Set<String> userSet = sysRelationService.groupUser(param.getCode());
         if (ObjectUtil.isEmpty(userSet)) {
             return new ArrayList<>();
         }
         // 查询用户(可指定搜索词)
-        List<SysUser> userList = sysUserService.list(SysUserParam.builder()
+        List<SysUserVO> voList = sysUserService.list(SysUserParam.builder()
                 .name(param.getSearchKey())
                 .orgCode(param.getOrgCode())
                 .codeSet(userSet).build());
-        return userList;
+        return voList;
     }
 
     @Override
@@ -372,7 +373,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     @Override
     public SysGroup userDefaultGroup(String username) {
         // 查询用户
-        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
+        SysUser user = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
+        if (user == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
+        }
         SysGroup group = new SysGroup();
         group.setCode(defaultGroup());
         group.setName("系统默认");

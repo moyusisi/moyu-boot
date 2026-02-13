@@ -25,7 +25,6 @@ import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
-import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.GroupInfo;
 import com.moyu.boot.system.model.vo.Meta;
 import com.moyu.boot.system.model.vo.SysRoleVO;
@@ -75,9 +74,12 @@ public class UserCenterServiceImpl implements UserCenterService {
         if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
-        // 查询用户
-        SysUser user = sysUserService.detail(SysUserParam.builder().account(username).build());
         LoginUser loginUser = optUser.get();
+        // 查询用户
+        SysUser user = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
+        if (user == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
+        }
         // 构造用户信息视图对象
         UserInfo userInfo = UserInfo.builder().account(username).orgCode(loginUser.getOrgCode())
                 .name(user.getName()).nickName(user.getNickName()).avatar(user.getAvatar())

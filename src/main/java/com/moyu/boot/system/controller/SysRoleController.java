@@ -11,6 +11,7 @@ import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
+import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.SysRoleService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -157,9 +158,9 @@ public class SysRoleController {
     @SysLog(module = "system", value = "查询角色包含的用户列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
     @PostMapping("/userList")
-    public Result<List<SysUser>> userList(@RequestBody SysRoleParam roleParam) {
+    public Result<List<SysUserVO>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");
-        List<SysUser> list = sysRoleService.roleUserList(roleParam);
+        List<SysUserVO> list = sysRoleService.roleUserList(roleParam);
         return Result.success(list);
     }
 

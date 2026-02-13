@@ -8,10 +8,10 @@ import com.moyu.boot.common.core.annotation.PreDataScope;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
 import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
+import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.SysGroupService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -140,9 +140,9 @@ public class SysGroupController {
     @SysLog(module = "system", value = "查询岗位内的用户列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
     @PostMapping("/userList")
-    public Result<List<SysUser>> userList(@RequestBody SysGroupParam groupParam) {
+    public Result<List<SysUserVO>> userList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getCode(), "分组code不能为空");
-        List<SysUser> list = sysGroupService.groupUserList(groupParam);
+        List<SysUserVO> list = sysGroupService.groupUserList(groupParam);
         return Result.success(list);
     }
 
