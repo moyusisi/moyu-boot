@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -20,7 +23,10 @@ import java.util.Set;
  * @author ${author}
  * @since ${.now?string["yyyy-MM-dd"]}
  */
-@Data
+@Getter
+@Setter
+@ToString
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ${entityName}Param extends PageParam {
 
