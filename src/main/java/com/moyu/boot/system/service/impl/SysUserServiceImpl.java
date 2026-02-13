@@ -224,8 +224,8 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public void updatePassword(SysUserParam param) {
-        // 通过主键id查询原有数据
-        SysUser old = this.getById(param.getId());
+        // 先查原有数据
+        SysUser old = this.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, param.getAccount()));
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
@@ -237,7 +237,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public void resetPassword(SysUserParam param) {
         // 先查原有数据
-        SysUser old = this.getById(param.getId());
+        SysUser old = this.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, param.getAccount()));
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
