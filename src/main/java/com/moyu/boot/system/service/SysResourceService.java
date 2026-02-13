@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
+import com.moyu.boot.system.model.vo.SysResourceVO;
 
 import java.util.List;
 
@@ -27,17 +28,17 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 获取菜单列表
      */
-    List<SysResource> list(SysResourceParam param);
+    List<SysResourceVO> list(SysResourceParam param);
 
     /**
      * 分页获取菜单列表
      */
-    PageData<SysResource> pageList(SysResourceParam param);
+    PageData<SysResourceVO> pageList(SysResourceParam param);
 
     /**
      * 获取菜单详情
      */
-    SysResource detail(SysResourceParam param);
+    SysResourceVO detail(SysResourceParam param);
 
     /**
      * 添加菜单

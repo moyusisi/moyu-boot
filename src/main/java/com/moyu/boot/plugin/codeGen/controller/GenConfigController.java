@@ -35,7 +35,7 @@ import java.util.List;
  * @author shisong
  * @since 2025-09-15
  */
-@Log(jsonLog = true)
+@Log(jsonLog = true, response = false)
 @Slf4j
 @RestController
 @RequestMapping("/api/gen/config")

@@ -26,12 +26,14 @@ import com.moyu.boot.system.mapper.SysResourceMapper;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
+import com.moyu.boot.system.model.vo.SysResourceVO;
 import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysResourceService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -51,17 +53,15 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public List<Tree<String>> tree(SysResourceParam param) {
-        // 查询条件(可指定module、status)
-        SysResourceParam query = SysResourceParam.builder().module(param.getModule()).build();
-        // 查询所有资源
-        List<SysResource> resourceList = this.list(query);
+        // 查询所有资源(可指定module、status)
+        List<SysResource> resourceList = this.list(Wrappers.lambdaQuery(SysResource.class).eq(SysResource::getModule, param.getModule()));
         // 构建树中包含记录的所有字段
         String rootId = ObjectUtil.isEmpty(param.getModule()) ? SysConstants.ROOT_NODE_ID : param.getModule();
         return buildTree(resourceList, rootId);
     }
 
     @Override
-    public List<SysResource> list(SysResourceParam param) {
+    public List<SysResourceVO> list(SysResourceParam param) {
         // 查询条件
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         // 指定模块
@@ -82,11 +82,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         queryWrapper.orderByAsc(SysResource::getSortNum);
         // 查询
         List<SysResource> resourceList = this.list(queryWrapper);
-        return resourceList;
+        // 转换为voList
+        List<SysResourceVO> voList = buildSysResourceVOList(resourceList);
+        return voList;
     }
 
     @Override
-    public PageData<SysResource> pageList(SysResourceParam param) {
+    public PageData<SysResourceVO> pageList(SysResourceParam param) {
         // 查询条件
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         // 指定模块
@@ -105,12 +107,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         queryWrapper.orderByAsc(SysResource::getSortNum);
         // 分页查询
         Page<SysResource> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysResource> menuPage = this.page(page, queryWrapper);
-        return new PageData<>(menuPage.getTotal(), menuPage.getRecords());
+        Page<SysResource> resourcePage = this.page(page, queryWrapper);
+        List<SysResourceVO> voList = buildSysResourceVOList(resourcePage.getRecords());
+        return new PageData<>(resourcePage.getTotal(), voList);
     }
 
     @Override
-    public SysResource detail(SysResourceParam param) {
+    public SysResourceVO detail(SysResourceParam param) {
         // 查询条件 id、code均为唯一标识
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysResource::getId, param.getId());
@@ -119,7 +122,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         if (sysResource == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
-        return sysResource;
+        // 转换为vo
+        SysResourceVO vo = BeanUtil.copyProperties(sysResource, SysResourceVO.class);
+        return vo;
     }
 
     @Override
@@ -331,6 +336,21 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM)
                 .in(SysRelation::getTargetId, codeSet));
+    }
+
+    /**
+     * 实体对象生成展示对象 entityList -> voList
+     */
+    private List<SysResourceVO> buildSysResourceVOList(List<SysResource> entityList) {
+        List<SysResourceVO> voList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(entityList)) {
+            return voList;
+        }
+        for (SysResource entity : entityList) {
+            SysResourceVO vo = BeanUtil.copyProperties(entity, SysResourceVO.class);
+            voList.add(vo);
+        }
+        return voList;
     }
 }
 

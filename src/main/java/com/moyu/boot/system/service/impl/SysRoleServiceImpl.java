@@ -34,7 +34,6 @@ import com.moyu.boot.system.mapper.SysRoleMapper;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysRole;
-import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -189,14 +188,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public List<Tree<String>> menuTreeForGrant(SysRoleParam roleParam) {
-        // 模块编码
-        SysResourceParam query = SysResourceParam.builder().module(roleParam.getModule()).build();
+    public List<Tree<String>> menuTreeForGrant(SysRoleParam param) {
         // 查询模块所有资源(包括菜单按钮)
-        List<SysResource> menuList = sysResourceService.list(query);
+        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getModule, param.getModule()));
 
         // role已经拥有的资源权限
-        Set<String> permSet = sysRelationService.rolePerm(roleParam.getCode());
+        Set<String> permSet = sysRelationService.rolePerm(param.getCode());
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
         Multimap<String, SysResource> allButtonMap = ArrayListMultimap.create();
@@ -236,7 +234,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
         // 指定rootId
-        String rootId = ObjectUtil.isEmpty(roleParam.getModule()) ? SysConstants.ROOT_NODE_ID : roleParam.getModule();
+        String rootId = ObjectUtil.isEmpty(param.getModule()) ? SysConstants.ROOT_NODE_ID : param.getModule();
         // 构建树
         return TreeUtil.build(nodeList, rootId, nodeConfig, new DefaultNodeParser<>());
     }
@@ -244,14 +242,17 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<PermScopeInfo> permScopeListForGrant(SysRoleParam param) {
         List<PermScopeInfo> permScopeList = new ArrayList<>();
-        // 模块编码
-        SysResourceParam query = SysResourceParam.builder().module(param.getModule())
-                .resourceType(ResourceTypeEnum.BUTTON.getCode())
-                .visible(1) // 有数据权限的接口
-                .name(param.getName()).path(param.getSearchKey())
-                .build();
         // 查询模块所有按钮资源
-        List<SysResource> apiList = sysResourceService.list(query);
+        List<SysResource> apiList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                // 有数据权限的接口
+                .eq(SysResource::getVisible, 1)
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
+                // 指定name查询
+                .like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName())
+                // 指定path查询
+                .like(ObjectUtil.isNotEmpty(param.getSearchKey()), SysResource::getPath, param.getSearchKey())
+        );
 
         // role已经拥有的资源权限 permCode -> Relation
         Map<String, SysRelation> permMap = new HashMap<>();

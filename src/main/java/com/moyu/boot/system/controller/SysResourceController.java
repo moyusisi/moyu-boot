@@ -7,8 +7,8 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.param.SysResourceParam;
+import com.moyu.boot.system.model.vo.SysResourceVO;
 import com.moyu.boot.system.service.SysResourceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,8 +38,8 @@ public class SysResourceController {
      * 资源列表
      */
     @PostMapping("/list")
-    public Result<List<SysResource>> list(@RequestBody SysResourceParam resourceParam) {
-        List<SysResource> list = sysResourceService.list(resourceParam);
+    public Result<List<SysResourceVO>> list(@RequestBody SysResourceParam resourceParam) {
+        List<SysResourceVO> list = sysResourceService.list(resourceParam);
         return Result.success(list);
     }
 
@@ -50,9 +50,9 @@ public class SysResourceController {
     @SysLog(module = "system", value = "查询资源列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
     @PostMapping("/page")
-    public Result<PageData<SysResource>> pageList(@RequestBody SysResourceParam resourceParam) {
+    public Result<PageData<SysResourceVO>> pageList(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysResource> list = sysResourceService.pageList(resourceParam);
+        PageData<SysResourceVO> list = sysResourceService.pageList(resourceParam);
         return Result.success(list);
     }
 
@@ -74,7 +74,7 @@ public class SysResourceController {
     @SysLog(module = "system", value = "查询资源详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:detail')")
     @PostMapping("/detail")
-    public Result<SysResource> detail(@RequestBody SysResourceParam resourceParam) {
+    public Result<SysResourceVO> detail(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
         return Result.success(sysResourceService.detail(resourceParam));
     }
