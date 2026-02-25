@@ -44,7 +44,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         // 1. 构建跨域配置规则
         CorsConfiguration config = new CorsConfiguration();
-        // 设置允许的跨域源
+        // 设置允许的跨域源(credentials设置为include时，服务端的Access-Control-Allow-Origin不能设置为*)
         config.addAllowedOriginPattern("*");
         // 设置跨域访问可以携带cookie
         config.setAllowCredentials(true);
