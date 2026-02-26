@@ -57,7 +57,7 @@ public class SysResourceController {
     }
 
     /**
-     * 获取资源树(可指定module、status)
+     * 获取资源树(可指定module)
      */
     @SysLog(module = "system", value = "获取资源树")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:tree')")

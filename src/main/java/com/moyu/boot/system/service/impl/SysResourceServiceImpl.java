@@ -53,8 +53,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
 
     @Override
     public List<Tree<String>> tree(SysResourceParam param) {
-        // 查询所有资源(可指定module、status)
-        List<SysResource> resourceList = this.list(Wrappers.lambdaQuery(SysResource.class).eq(SysResource::getModule, param.getModule()));
+        // 查询所有资源(可指定module)
+        List<SysResource> resourceList = this.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule()));
         // 构建树中包含记录的所有字段
         String rootId = ObjectUtil.isEmpty(param.getModule()) ? SysConstants.ROOT_NODE_ID : param.getModule();
         return buildTree(resourceList, rootId);

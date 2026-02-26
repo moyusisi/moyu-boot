@@ -20,7 +20,7 @@ public interface SysResourceService extends IService<SysResource> {
     /**
      * 菜单树,包含按钮(借助hutool的树结构)
      *
-     * @param param 查询条件(可指定module、status)
+     * @param param 查询条件(可指定module)
      * @return 菜单树List集合
      */
     List<Tree<String>> tree(SysResourceParam param);
