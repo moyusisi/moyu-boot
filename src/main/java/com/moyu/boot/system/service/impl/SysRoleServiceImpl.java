@@ -191,7 +191,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public List<Tree<String>> menuTreeForGrant(SysRoleParam param) {
         // 查询模块所有资源(包括菜单按钮)
         List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(SysResource::getModule, param.getModule()));
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule()));
 
         // role已经拥有的资源权限
         Set<String> permSet = sysRelationService.rolePerm(param.getCode());
