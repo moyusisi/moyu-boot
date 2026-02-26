@@ -106,10 +106,10 @@ public class SysRoleController {
     }
 
     /**
-     * 获取菜单树，用于给角色授权时选择(treeNode不包含button)
+     * 获取菜单树，用于给角色授权时选择(treeNode为菜单，按钮列表为node的属性)
      */
     @PostMapping("/menuTreeForGrant")
-    @SysLog(module = "system", value = "获取菜单树")
+    @SysLog(module = "system", value = "获取授权菜单树")
     public Result<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         return Result.success(sysRoleService.menuTreeForGrant(roleParam));
@@ -119,7 +119,7 @@ public class SysRoleController {
      * 角色授权的接口数据范围信息列表
      */
     @PostMapping("/permScopeForGrant")
-    @SysLog(module = "system", value = "获取菜单树")
+    @SysLog(module = "system", value = "获取授权接口数据范围")
     public Result<List<PermScopeInfo>> permScopeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getModule(), "模块moudle不能为空");
