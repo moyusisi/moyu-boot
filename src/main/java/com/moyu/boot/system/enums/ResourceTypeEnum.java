@@ -20,8 +20,9 @@ public enum ResourceTypeEnum {
      * 资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
      */
     INVALID(0, null),
-    // 菜单
+    // 应用模块
     MODULE(1, "模块"),
+    // 菜单
     DIR(2, "目录"),
     MENU(3, "菜单"),
     IFRAME(4, "内链"),
