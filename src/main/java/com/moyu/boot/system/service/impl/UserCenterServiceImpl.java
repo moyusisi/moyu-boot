@@ -131,7 +131,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         List<SysResource> userMenuList = CollectionUtil.newArrayList();
         menuList.forEach(sysMenu -> {
             if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getResourceType())) {
-                // path为空则设置为随机字符串
+                // 前端的路由对象path不能为空
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
                     sysMenu.setPath(StrUtil.SLASH + sysMenu.getCode());
                 }
@@ -139,7 +139,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getResourceType())) {
                 userMenuList.add(sysMenu);
             } else {
-                // 叶子结点有权限才添加(菜单、内链、外链等)
+                // 有权限才添加(菜单、内链、外链等)
                 if (SecurityUtils.isRoot() || permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }
@@ -148,7 +148,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 构建菜单路由树结构
         Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_NODE_ID);
 
-        // 移除空目录(只要有符合条件的子节点就保留)
+        // 移除空目录(本节点或子节点满足条件，则保留当前节点及其所有子节点)
         singleTree.filter(tree -> {
             // id=0或parentId=0均不符合要求(排除根和模块)
             if (SysConstants.ROOT_NODE_ID.equals(tree.getId()) || SysConstants.ROOT_NODE_ID.equals(tree.getParentId())) {
@@ -157,10 +157,8 @@ public class UserCenterServiceImpl implements UserCenterService {
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
                 Meta meta = (Meta) tree.get("meta");
                 String metaType = meta.getType();
-                // 叶子结点不是目录
+                // 结点不是目录则保留
                 boolean notDir = !ResourceTypeEnum.DIR.name().equalsIgnoreCase(metaType) && !ResourceTypeEnum.MODULE.name().equalsIgnoreCase(metaType);
-                // 有权限的菜单叶子节点才符合要求
-//                return notDir && permSet.contains(tree.getId());
                 return notDir;
             } else {
                 return false;
