@@ -133,7 +133,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getResourceType())) {
                 // path为空则设置为随机字符串
                 if (ObjectUtil.isEmpty(sysMenu.getPath())) {
-                    sysMenu.setPath(StrUtil.SLASH + RandomUtil.randomString(10));
+                    sysMenu.setPath(StrUtil.SLASH + sysMenu.getCode());
                 }
                 userMenuList.add(sysMenu);
             } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getResourceType())) {
