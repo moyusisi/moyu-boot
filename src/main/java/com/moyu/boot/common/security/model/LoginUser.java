@@ -122,7 +122,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     public static class DataScopeInfo {
 
         /**
-         * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
+         * 数据权限(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4本公司及以下 5自定义)
          *
          * @see com.moyu.boot.common.core.enums.DataScopeEnum
          */

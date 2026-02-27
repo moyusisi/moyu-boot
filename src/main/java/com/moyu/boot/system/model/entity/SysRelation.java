@@ -42,4 +42,11 @@ public class SysRelation extends BaseEntity {
      * 自定义scope集合,逗号分隔
      */
     private String scopes;
+
+    /**
+     * 扩展信息
+     *
+     * @see com.moyu.boot.system.model.entity.ext.RelationExt
+     */
+    private String extJson;
 }

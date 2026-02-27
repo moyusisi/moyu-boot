@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 /**
  * 接口的权限+数据范围信息
  */
@@ -43,6 +45,6 @@ public class PermScopeInfo {
     /**
      * 自定义scope集合,逗号分隔
      */
-    private String scopes;
+    private List<String> scopeList;
 
 }

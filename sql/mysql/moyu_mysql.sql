@@ -166,6 +166,7 @@ CREATE TABLE `sys_relation`
     `relation_type` TINYINT       DEFAULT NULL COMMENT '关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role)',
     `data_scope`    TINYINT       DEFAULT NULL COMMENT '数据范围(字典 0无限制 1仅本人数据 2仅本机构 3本机构及以下 4自定义)',
     `scopes`        VARCHAR(1024) DEFAULT NULL COMMENT '自定义scope集合,逗号分隔',
+    `ext_json`      TEXT          DEFAULT NULL COMMENT '扩展信息',
     `deleted`       TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`   DATETIME      DEFAULT NULL COMMENT '创建时间',
     `create_by`     VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
