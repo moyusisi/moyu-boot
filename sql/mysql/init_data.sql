@@ -144,7 +144,7 @@ values  (2001, '0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'ap
 
 -- 关系
 INSERT INTO moyu.sys_relation (object_id, target_id, relation_type, data_scope, scopes, ext_json, deleted, create_time, create_by, update_time, update_by)
-VALUES  ('ROOT', null, 1, null, null, null, 0, null, null, null, null),
+VALUES  ('ROOT', 'rAdmin', 1, null, null, null, 0, null, null, null, null),
         ('r_superAdmin', 'superAdmin', 1, null, null, null, 0, null, null, null, null),
 
         ('r_default', 'menu_sys_org', 2, null, null, null, 0, null, null, null, null),
