@@ -32,18 +32,6 @@ public class SysRelation extends BaseEntity {
     private Integer relationType;
 
     /**
-     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
-     *
-     * @see com.moyu.boot.common.core.enums.DataScopeEnum
-     */
-    private Integer dataScope;
-
-    /**
-     * 自定义scope集合,逗号分隔
-     */
-    private String scopes;
-
-    /**
      * 扩展信息
      *
      * @see com.moyu.boot.system.model.entity.ext.RelationExt
