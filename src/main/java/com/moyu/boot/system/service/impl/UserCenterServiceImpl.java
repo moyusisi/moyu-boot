@@ -260,9 +260,9 @@ public class UserCenterServiceImpl implements UserCenterService {
                     // 扩展字段
                     ResourceExt.MetaExt ext = gson.fromJson(menu.getExtJson(), ResourceExt.MetaExt.class);
                     if (ObjectUtil.isNotEmpty(ext)) {
-                        meta.setBrief(ext.getBrief() == 1);
-                        meta.setAffix(ext.getAffix() == 1);
-                        meta.setKeepAlive(ext.getKeepAlive() == 1);
+                        meta.setBrief(ObjectUtil.equal(ext.getBrief(), 1));
+                        meta.setAffix(ObjectUtil.equal(ext.getAffix(), 1));
+                        meta.setKeepAlive(ObjectUtil.equal(ext.getKeepAlive(), 1));
                     }
                     // 如果是内链或者外链，设置url
                     if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
