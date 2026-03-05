@@ -30,10 +30,6 @@ public class SysRelationParam {
      * targetId的集合
      */
     private Set<String> targetSet;
-    /**
-     * 名称关键词
-     */
-    private String searchKey;
 
     //********** db中存在的字段 **********//
     /**
