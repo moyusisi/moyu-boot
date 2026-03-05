@@ -15,6 +15,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
@@ -25,6 +27,7 @@ import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.mapper.SysResourceMapper;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
+import com.moyu.boot.system.model.entity.ext.ResourceExt;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.vo.SysResourceVO;
 import com.moyu.boot.system.service.SysRelationService;
@@ -223,6 +226,8 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         SysResource toUpdate = BeanUtil.copyProperties(param, SysResource.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         // 其他处理
         toUpdate.setId(param.getId());
+        // extJson
+        buildResourceExt(param);
         this.updateById(toUpdate);
     }
 
@@ -265,9 +270,24 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResource.setVisible(param.getVisible());
         sysResource.setModule(param.getModule());
         sysResource.setSortNum(param.getSortNum());
-        sysResource.setExtJson(param.getExtJson());
         sysResource.setRemark(param.getRemark());
+        sysResource.setExtJson(buildResourceExt(param));
         return sysResource;
+    }
+
+    /**
+     * 构造Resource的extJson
+     */
+    private String buildResourceExt(SysResourceParam param) {
+        if (param == null) {
+            return null;
+        }
+        ResourceExt.MetaExt extObj = new ResourceExt.MetaExt();
+        extObj.setBrief(param.getBrief() ? 1 : null);
+        extObj.setAffix(param.getAffix() ? 1 : null);
+        extObj.setKeepAlive(param.getKeepAlive() ? 1 : null);
+        // 扩展信息
+        return new Gson().toJson(extObj);
     }
 
     /**
@@ -347,8 +367,16 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         if (CollectionUtils.isEmpty(entityList)) {
             return voList;
         }
+        Gson gson = new GsonBuilder().create();
         for (SysResource entity : entityList) {
             SysResourceVO vo = BeanUtil.copyProperties(entity, SysResourceVO.class);
+            String extJson = entity.getExtJson();
+            if (StrUtil.isNotEmpty(extJson)) {
+                ResourceExt.MetaExt metaExt = gson.fromJson(extJson, ResourceExt.MetaExt.class);
+                vo.setBrief(metaExt.getBrief() == 1);
+                vo.setAffix(metaExt.getAffix() == 1);
+                vo.setKeepAlive(metaExt.getKeepAlive() == 1);
+            }
             voList.add(vo);
         }
         return voList;

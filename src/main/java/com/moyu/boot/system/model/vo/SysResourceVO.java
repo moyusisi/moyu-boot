@@ -73,10 +73,6 @@ public class SysResourceVO {
      */
     private Integer sortNum;
     /**
-     * 扩展信息
-     */
-    private String extJson;
-    /**
      * 备注
      */
     private String remark;
@@ -98,4 +94,20 @@ public class SysResourceVO {
      * 修改人
      */
     private String updateBy;
+
+    //***** 扩展信息extJson的展开 *****
+    /**
+     * 【目录】是否简洁模式(只有一个菜单时，不显示目录直接显示该菜单)
+     */
+    private Boolean brief;
+
+    /**
+     * 【菜单】是否固定显示
+     */
+    private Boolean affix;
+
+    /**
+     * 【菜单】是否支持页面缓存
+     */
+    private Boolean keepAlive;
 }

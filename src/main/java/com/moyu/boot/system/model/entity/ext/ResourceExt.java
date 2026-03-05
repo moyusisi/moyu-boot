@@ -2,8 +2,6 @@ package com.moyu.boot.system.model.entity.ext;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * sys_relation表中扩展字段对应的实体
  *
@@ -21,16 +19,16 @@ public class ResourceExt {
         /**
          * 【目录】是否简洁模式(只有一个菜单时，不显示目录直接显示该菜单)
          */
-        private Boolean brief;
+        private Integer brief;
 
         /**
          * 【菜单】是否固定显示
          */
-        private Boolean affix;
+        private Integer affix;
 
         /**
          * 【菜单】是否支持页面缓存
          */
-        private Boolean keepAlive;
+        private Integer keepAlive;
     }
 }
