@@ -8,11 +8,12 @@ import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -24,6 +25,7 @@ import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysUser;
+import com.moyu.boot.system.model.entity.ext.ResourceExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.GroupInfo;
 import com.moyu.boot.system.model.vo.Meta;
@@ -231,6 +233,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         TreeNodeConfig nodeConfig = new TreeNodeConfig();
         nodeConfig.setIdKey("code");
         nodeConfig.setParentIdKey("parentCode");
+        Gson gson = new GsonBuilder().create();
         // 结构转换
         List<TreeNode<String>> treeNodeList = menuList.stream()
                 .map(menu -> {
@@ -250,10 +253,16 @@ public class UserCenterServiceImpl implements UserCenterService {
                     meta.setTitle(menu.getName());
                     // metaType 使用字符串
                     meta.setType(resourceType.name().toLowerCase());
-                    meta.setKeepAlive(false);
                     // 如果设置了不可见，那么设置hidden
                     if (ObjectUtil.equal(menu.getVisible(), 0)) {
                         meta.setHidden(true);
+                    }
+                    // 扩展字段
+                    ResourceExt.MetaExt ext = gson.fromJson(menu.getExtJson(), ResourceExt.MetaExt.class);
+                    if (ObjectUtil.isNotEmpty(ext)) {
+                        meta.setBrief(ext.getBrief() == 1);
+                        meta.setAffix(ext.getAffix() == 1);
+                        meta.setKeepAlive(ext.getKeepAlive() == 1);
                     }
                     // 如果是内链或者外链，设置url
                     if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {

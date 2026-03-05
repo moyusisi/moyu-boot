@@ -283,9 +283,9 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             return null;
         }
         ResourceExt.MetaExt extObj = new ResourceExt.MetaExt();
-        extObj.setBrief(param.getBrief() ? 1 : null);
-        extObj.setAffix(param.getAffix() ? 1 : null);
-        extObj.setKeepAlive(param.getKeepAlive() ? 1 : null);
+        extObj.setBrief(param.getBrief());
+        extObj.setAffix(param.getAffix());
+        extObj.setKeepAlive(param.getKeepAlive());
         // 扩展信息
         return new Gson().toJson(extObj);
     }
@@ -370,12 +370,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         Gson gson = new GsonBuilder().create();
         for (SysResource entity : entityList) {
             SysResourceVO vo = BeanUtil.copyProperties(entity, SysResourceVO.class);
-            String extJson = entity.getExtJson();
-            if (StrUtil.isNotEmpty(extJson)) {
-                ResourceExt.MetaExt metaExt = gson.fromJson(extJson, ResourceExt.MetaExt.class);
-                vo.setBrief(metaExt.getBrief() == 1);
-                vo.setAffix(metaExt.getAffix() == 1);
-                vo.setKeepAlive(metaExt.getKeepAlive() == 1);
+            ResourceExt.MetaExt ext = gson.fromJson(entity.getExtJson(), ResourceExt.MetaExt.class);
+            if (ObjectUtil.isNotEmpty(ext)) {
+                vo.setBrief(ext.getBrief());
+                vo.setAffix(ext.getAffix());
+                vo.setKeepAlive(ext.getKeepAlive());
             }
             voList.add(vo);
         }
