@@ -37,17 +37,17 @@ public class Meta {
     private Boolean hidden;
 
     /**
-     * 【目录】只有一个子路由是否始终显示
+     * 【目录】是否简洁模式(只有一个菜单时，不显示目录直接显示该菜单)
      */
-    private Boolean alwaysShow;
+    private Boolean brief;
 
     /**
-     * 【菜单】在tabView中是否固定显示在tab中
+     * 【菜单】是否固定显示
      */
     private Boolean affix;
 
     /**
-     * 【菜单】是否开启页面缓存
+     * 【菜单】是否支持页面缓存
      */
     private Boolean keepAlive;
 
