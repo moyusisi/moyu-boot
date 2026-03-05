@@ -51,6 +51,8 @@ import java.util.stream.Collectors;
 @Service
 public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysResource> implements SysResourceService {
 
+    private static final Gson gson = new GsonBuilder().create();
+
     @Resource
     private SysRelationService sysRelationService;
 
@@ -122,12 +124,13 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysResource::getId, param.getId());
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
-        SysResource sysResource = this.getOne(queryWrapper);
-        if (sysResource == null) {
+        SysResource entity = this.getOne(queryWrapper);
+        if (entity == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
-        SysResourceVO vo = BeanUtil.copyProperties(sysResource, SysResourceVO.class);
+        SysResourceVO vo = BeanUtil.copyProperties(entity, SysResourceVO.class);
+        fillFromExtJson(vo, entity.getExtJson());
         return vo;
     }
 
@@ -227,7 +230,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         // 其他处理
         toUpdate.setId(param.getId());
         // extJson
-        buildResourceExt(param);
+        toUpdate.setExtJson(buildExtJson(param));
         this.updateById(toUpdate);
     }
 
@@ -271,14 +274,14 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResource.setModule(param.getModule());
         sysResource.setSortNum(param.getSortNum());
         sysResource.setRemark(param.getRemark());
-        sysResource.setExtJson(buildResourceExt(param));
+        sysResource.setExtJson(buildExtJson(param));
         return sysResource;
     }
 
     /**
      * 构造Resource的extJson
      */
-    private String buildResourceExt(SysResourceParam param) {
+    private String buildExtJson(SysResourceParam param) {
         if (param == null) {
             return null;
         }
@@ -367,7 +370,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         if (CollectionUtils.isEmpty(entityList)) {
             return voList;
         }
-        Gson gson = new GsonBuilder().create();
         for (SysResource entity : entityList) {
             SysResourceVO vo = BeanUtil.copyProperties(entity, SysResourceVO.class);
             ResourceExt.MetaExt ext = gson.fromJson(entity.getExtJson(), ResourceExt.MetaExt.class);
@@ -379,6 +381,18 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             voList.add(vo);
         }
         return voList;
+    }
+
+    /**
+     * 根据extJson填充vo对象
+     */
+    private void fillFromExtJson(SysResourceVO vo, String extJson) {
+        ResourceExt.MetaExt ext = gson.fromJson(extJson, ResourceExt.MetaExt.class);
+        if (ObjectUtil.isNotEmpty(ext)) {
+            vo.setBrief(ext.getBrief());
+            vo.setAffix(ext.getAffix());
+            vo.setKeepAlive(ext.getKeepAlive());
+        }
     }
 }
 
