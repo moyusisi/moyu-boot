@@ -40,7 +40,7 @@ public class SysOrgController {
     /**
      * 分页获取组织列表
      */
-    @SysLog(module = "system", value = "分页查询组织列表")
+    @SysLog(module = "system", logType = 2, value = "分页查询组织列表")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
     @PreDataScope("sys:org:page")
     @PostMapping("/page")
@@ -64,7 +64,7 @@ public class SysOrgController {
     /**
      * 获取详情
      */
-    @SysLog(module = "system", value = "查询组织详情")
+    @SysLog(module = "system", logType = 2, value = "查询组织详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
     @PostMapping("/detail")
     public Result<SysOrgVO> detail(@RequestBody SysOrgParam orgParam) {
@@ -75,7 +75,7 @@ public class SysOrgController {
     /**
      * 添加
      */
-    @SysLog(module = "system", value = "新增组织机构", response = true)
+    @SysLog(module = "system", logType = 2, value = "新增组织机构", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysOrgParam orgParam) {
@@ -86,7 +86,7 @@ public class SysOrgController {
     /**
      * 删除
      */
-    @SysLog(module = "system", value = "删除组织机构", response = true)
+    @SysLog(module = "system", logType = 2, value = "删除组织机构", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysOrgParam orgParam) {
@@ -98,7 +98,7 @@ public class SysOrgController {
     /**
      * 删除树,会集联删除
      */
-    @SysLog(module = "system", value = "删除组织机构树", response = true)
+    @SysLog(module = "system", logType = 2, value = "删除组织机构树", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:deleteTree')")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysOrgParam orgParam) {
@@ -110,7 +110,7 @@ public class SysOrgController {
     /**
      * 编辑
      */
-    @SysLog(module = "system", value = "修改组织机构", response = true)
+    @SysLog(module = "system", logType = 2, value = "修改组织机构", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysOrgParam orgParam) {

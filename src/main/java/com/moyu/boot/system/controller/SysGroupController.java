@@ -40,7 +40,7 @@ public class SysGroupController {
     /**
      * 分页获取角色列表
      */
-    @SysLog(module = "system", value = "分页查询岗位列表")
+    @SysLog(module = "system", logType = 2, value = "分页查询岗位列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:page')")
     @PreDataScope("sys:group:page")
     @PostMapping("/page")
@@ -53,7 +53,7 @@ public class SysGroupController {
     /**
      * 获取详情
      */
-    @SysLog(module = "system", value = "查询岗位详情", response = true)
+    @SysLog(module = "system", logType = 2, value = "查询岗位详情", response = true)
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:detail')")
     @PostMapping("/detail")
     public Result<SysGroupVO> detail(@RequestBody SysGroupParam groupParam) {
@@ -64,7 +64,7 @@ public class SysGroupController {
     /**
      * 添加
      */
-    @SysLog(module = "system", value = "新增岗位", response = true)
+    @SysLog(module = "system", logType = 2, value = "新增岗位", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysGroupParam groupParam) {
@@ -75,7 +75,7 @@ public class SysGroupController {
     /**
      * 删除
      */
-    @SysLog(module = "system", value = "删除岗位", response = true)
+    @SysLog(module = "system", logType = 2, value = "删除岗位", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysGroupParam groupParam) {
@@ -87,7 +87,7 @@ public class SysGroupController {
     /**
      * 编辑
      */
-    @SysLog(module = "system", value = "修改岗位", response = true)
+    @SysLog(module = "system", logType = 2, value = "修改岗位", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysGroupParam groupParam) {
@@ -99,7 +99,7 @@ public class SysGroupController {
     /**
      * 查询指定分组的角色列表
      */
-    @SysLog(module = "system", value = "查询岗位内的角色列表")
+    @SysLog(module = "system", logType = 2, value = "查询岗位内的角色列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:roleList')")
     @PostMapping("/roleList")
     public Result<List<SysRoleVO>> roleList(@RequestBody SysGroupParam groupParam) {
@@ -111,7 +111,7 @@ public class SysGroupController {
     /**
      * 分组内新增角色
      */
-    @SysLog(module = "system", value = "岗位内添加角色", response = true)
+    @SysLog(module = "system", logType = 2, value = "岗位内添加角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:addRole')")
     @PostMapping("/addRole")
     public Result<?> addRole(@RequestBody SysGroupParam groupParam) {
@@ -124,7 +124,7 @@ public class SysGroupController {
     /**
      * 分组内移除角色
      */
-    @SysLog(module = "system", value = "岗位内移除角色", response = true)
+    @SysLog(module = "system", logType = 2, value = "岗位内移除角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteRole')")
     @PostMapping("/deleteRole")
     public Result<?> deleteRole(@RequestBody SysGroupParam groupParam) {
@@ -137,7 +137,7 @@ public class SysGroupController {
     /**
      * 查询指定分组的角色列表
      */
-    @SysLog(module = "system", value = "查询岗位内的用户列表")
+    @SysLog(module = "system", logType = 2, value = "查询岗位内的用户列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
     @PostMapping("/userList")
     public Result<List<SysUserVO>> userList(@RequestBody SysGroupParam groupParam) {
@@ -149,7 +149,7 @@ public class SysGroupController {
     /**
      * 分组内新增角色
      */
-    @SysLog(module = "system", value = "岗位内的添加用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "岗位内的添加用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:addUser')")
     @PostMapping("/addUser")
     public Result<?> addUser(@RequestBody SysGroupParam groupParam) {
@@ -162,7 +162,7 @@ public class SysGroupController {
     /**
      * 分组内移除角色
      */
-    @SysLog(module = "system", value = "岗位内的移除用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "岗位内的移除用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:deleteUser')")
     @PostMapping("/deleteUser")
     public Result<?> deleteUser(@RequestBody SysGroupParam groupParam) {
@@ -176,7 +176,7 @@ public class SysGroupController {
     /**
      * 查询指定分组的角色列表
      */
-    @SysLog(module = "system", value = "查询用户的岗位列表")
+    @SysLog(module = "system", logType = 2, value = "查询用户的岗位列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
     @PostMapping("/userGroupList")
     public Result<List<SysGroupVO>> userGroupList(@RequestBody SysGroupParam groupParam) {

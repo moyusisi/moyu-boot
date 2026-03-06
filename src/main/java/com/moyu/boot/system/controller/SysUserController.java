@@ -38,7 +38,7 @@ public class SysUserController {
     /**
      * 分页获取角色列表
      */
-    @SysLog(module = "system", value = "分页查询用户列表")
+    @SysLog(module = "system", logType = 2, value = "分页查询用户列表")
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:page')")
     @PreDataScope("sys:user:page")
     @PostMapping("/page")
@@ -51,7 +51,7 @@ public class SysUserController {
     /**
      * 获取详情
      */
-    @SysLog(module = "system", value = "查询用户详情")
+    @SysLog(module = "system", logType = 2, value = "查询用户详情")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:detail')")
     @PostMapping("/detail")
     public Result<SysUserVO> detail(@RequestBody SysUserParam userParam) {
@@ -62,7 +62,7 @@ public class SysUserController {
     /**
      * 添加
      */
-    @SysLog(module = "system", value = "新增用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "新增用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
@@ -73,7 +73,7 @@ public class SysUserController {
     /**
      * 删除
      */
-    @SysLog(module = "system", value = "删除用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "删除用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysUserParam sysUserParam) {
@@ -85,7 +85,7 @@ public class SysUserController {
     /**
      * 编辑
      */
-    @SysLog(module = "system", value = "修改用户信息", response = true)
+    @SysLog(module = "system", logType = 2, value = "修改用户信息", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysUserParam userParam) {
@@ -96,7 +96,7 @@ public class SysUserController {
     /**
      * 修改密码
      **/
-    @SysLog(module = "system", value = "修改密码", request = false)
+    @SysLog(module = "system", logType = 2, value = "修改密码", request = false)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/updatePwd")
     public Result<?> updatePassword(@RequestBody SysUserParam userParam) {
@@ -108,7 +108,7 @@ public class SysUserController {
     /**
      * 重置密码
      **/
-    @SysLog(module = "system", value = "重置密码", response = true)
+    @SysLog(module = "system", logType = 2, value = "重置密码", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:edit')")
     @PostMapping("/resetPwd")
     public Result<?> resetPassword(@RequestBody SysUserParam sysUserParam) {

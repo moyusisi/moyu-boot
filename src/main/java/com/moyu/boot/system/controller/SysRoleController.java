@@ -40,7 +40,7 @@ public class SysRoleController {
     /**
      * 获取角色列表
      */
-    @SysLog(module = "system", value = "查询全部角色列表")
+    @SysLog(module = "system", logType = 2, value = "查询全部角色列表")
     @PostMapping("/list")
     public Result<List<SysRoleVO>> list(@RequestBody SysRoleParam roleParam) {
         List<SysRoleVO> list = sysRoleService.list(roleParam);
@@ -50,7 +50,7 @@ public class SysRoleController {
     /**
      * 分页获取角色列表
      */
-    @SysLog(module = "system", value = "分页查询角色列表")
+    @SysLog(module = "system", logType = 2, value = "分页查询角色列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
     @PostMapping("/page")
     public Result<PageData<SysRoleVO>> pageList(@RequestBody SysRoleParam roleParam) {
@@ -62,7 +62,7 @@ public class SysRoleController {
     /**
      * 获取详情
      */
-    @SysLog(module = "system", value = "查询角色详情", response = true)
+    @SysLog(module = "system", logType = 2, value = "查询角色详情", response = true)
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:detail')")
     @PostMapping("/detail")
     public Result<SysRoleVO> detail(@RequestBody SysRoleParam roleParam) {
@@ -73,7 +73,7 @@ public class SysRoleController {
     /**
      * 添加
      */
-    @SysLog(module = "system", value = "新增角色", response = true)
+    @SysLog(module = "system", logType = 2, value = "新增角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:add')")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysRoleParam roleParam) {
@@ -84,7 +84,7 @@ public class SysRoleController {
     /**
      * 删除
      */
-    @SysLog(module = "system", value = "删除角色", response = true)
+    @SysLog(module = "system", logType = 2, value = "删除角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:delete')")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysRoleParam roleParam) {
@@ -96,7 +96,7 @@ public class SysRoleController {
     /**
      * 编辑
      */
-    @SysLog(module = "system", value = "修改角色", response = true)
+    @SysLog(module = "system", logType = 2, value = "修改角色", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:edit')")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
@@ -109,7 +109,7 @@ public class SysRoleController {
      * 获取菜单树，用于给角色授权时选择(treeNode为菜单，按钮列表为node的属性)
      */
     @PostMapping("/menuTreeForGrant")
-    @SysLog(module = "system", value = "获取授权菜单树")
+    @SysLog(module = "system", logType = 2, value = "获取授权菜单树")
     public Result<List<Tree<String>>> menuTreeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         return Result.success(sysRoleService.menuTreeForGrant(roleParam));
@@ -119,7 +119,7 @@ public class SysRoleController {
      * 角色授权的接口数据范围信息列表
      */
     @PostMapping("/permScopeForGrant")
-    @SysLog(module = "system", value = "获取授权接口数据范围")
+    @SysLog(module = "system", logType = 2, value = "获取授权接口数据范围")
     public Result<List<PermScopeInfo>> permScopeForGrant(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getModule(), "模块moudle不能为空");
@@ -129,7 +129,7 @@ public class SysRoleController {
     /**
      * 给角色授权菜单
      */
-    @SysLog(module = "system", value = "给角色授权菜单资源", response = true)
+    @SysLog(module = "system", logType = 2, value = "给角色授权菜单资源", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
     @PostMapping("/grantMenu")
     public Result<?> grantMenu(@RequestBody SysRoleParam roleParam) {
@@ -143,7 +143,7 @@ public class SysRoleController {
      * 给角色授权接口数据范围
      */
     @PostMapping("/grantScope")
-    @SysLog(module = "system", value = "给角色授权数据范围", response = true)
+    @SysLog(module = "system", logType = 2, value = "给角色授权数据范围", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantScope')")
     public Result<?> grantScope(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
@@ -155,7 +155,7 @@ public class SysRoleController {
     /**
      * 查询指定角色的用户列表(仅直接通过 role_has_user 关系指定的用户，即全局角色用户)
      */
-    @SysLog(module = "system", value = "查询角色包含的用户列表")
+    @SysLog(module = "system", logType = 2, value = "查询角色包含的用户列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
     @PostMapping("/userList")
     public Result<List<SysUserVO>> userList(@RequestBody SysRoleParam roleParam) {
@@ -167,7 +167,7 @@ public class SysRoleController {
     /**
      * 角色新增用户
      */
-    @SysLog(module = "system", value = "角色中新增用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "角色中新增用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:addUser')")
     @PostMapping("/roleAddUser")
     public Result<?> roleAddUser(@RequestBody SysRoleParam roleParam) {
@@ -180,7 +180,7 @@ public class SysRoleController {
     /**
      * 角色删除用户
      */
-    @SysLog(module = "system", value = "角色中删除用户", response = true)
+    @SysLog(module = "system", logType = 2, value = "角色中删除用户", response = true)
     @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:deleteUser')")
     @PostMapping("/roleDeleteUser")
     public Result<?> roleDeleteUser(@RequestBody SysRoleParam roleParam) {
