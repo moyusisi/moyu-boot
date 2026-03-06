@@ -40,6 +40,10 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         LambdaQueryWrapper<SysLog> queryWrapper = Wrappers.lambdaQuery(SysLog.class);
         // 指定id查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
+        // 指定logType查询
+        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
         // 指定module查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
@@ -83,6 +87,8 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
         // 指定logType查询
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
+        // 指定name查询
+        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
         // 指定module查询
         queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
