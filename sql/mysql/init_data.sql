@@ -70,7 +70,7 @@ values  ('0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'appstore
         ('dir_sys_ops', '内部链接', 'iframe_sys_link', 4, 'https://www.baidu.com', '', 'disconnect-outlined', '', 1, null, 'sys_module', 5040, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '外部链接', 'link_sys_doc', 5, 'https://www.baidu.com', '', 'link-outlined', '', 1, null, 'sys_module', 5050, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '日志审计', 'dir_sys_log', 2, '/ops/log', null, 'robot-outlined', null, 1, null, 'sys_module', 5060, null, '', 0, null, null, null, null),
-        ('dir_sys_ops', '系统日志', 'menu_sys_log', 3, '/ops/sys/log', 'system/log/index', 'bars-outlined', null, 1, null, 'sys_module', 5063, null, '', 0, null, null, null, null),
+        ('dir_sys_log', '系统日志', 'menu_sys_log', 3, '/ops/sys/log', 'system/log/index', 'bars-outlined', null, 1, null, 'sys_module', 5063, null, '', 0, null, null, null, null),
         ('dir_sys_log', '访问日志', 'menu_sys_vislog', 3, '/ops/log/vislog', 'system/log/visLog', 'bars-outlined', null, 1, null, 'sys_module', 5061, null, '', 0, null, null, null, null),
         ('dir_sys_log', '操作日志', 'menu_sys_oplog', 3, '/ops/log/oplog', 'system/log/opLog', 'bars-outlined', null, 1, null, 'sys_module', 5062, null, '', 0, null, null, null, null),
         ('dir_sys_mobile', '模块管理', 'menu_sys_mobile_module', 3, '/mobile/module/index', 'mobile/resource/module/index', 'build-outlined', null, 1, null, 'sys_module', 51, null, '', 0, null, null, null, null),
