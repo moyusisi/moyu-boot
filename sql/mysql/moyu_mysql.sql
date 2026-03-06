@@ -183,6 +183,7 @@ DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`
 (
     `id`               BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `name`             VARCHAR(50)  DEFAULT NULL COMMENT '日志名称',
     `module`           VARCHAR(50)  DEFAULT NULL COMMENT '系统/模块',
     `log_type`         TINYINT      DEFAULT NULL COMMENT '日志类型(字典 0默认日志 1访问日志 2操作日志 3交互日志)',
     `business`         VARCHAR(50)  DEFAULT NULL COMMENT '业务',
