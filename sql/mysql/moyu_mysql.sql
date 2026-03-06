@@ -184,7 +184,7 @@ CREATE TABLE `sys_log`
 (
     `id`               BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
     `module`           VARCHAR(50)  DEFAULT NULL COMMENT '系统/模块',
-    `log_type`         TINYINT      DEFAULT NULL COMMENT '日志类型(字典 0默认日志 1操作日志 2登录认证 3三方交互)',
+    `log_type`         TINYINT      DEFAULT NULL COMMENT '日志类型(字典 0默认日志 1访问日志 2操作日志 3交互日志)',
     `business`         VARCHAR(50)  DEFAULT NULL COMMENT '业务',
     `operate`          VARCHAR(50)  DEFAULT NULL COMMENT '操作/接口',
     `content`          VARCHAR(255) DEFAULT NULL COMMENT '内容说明',
