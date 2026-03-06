@@ -40,7 +40,7 @@ public class AuthController {
     /**
      * 用户注销登陆(若不自定义，则需要在springSecurity中配置)
      */
-    @SysLog(module = "auth", logType = 1, value = "用户退出")
+    @SysLog(module = "auth", logType = 1, value = "用户登出")
     @PostMapping("/logout")
     public Result<?> userLogout(UserLoginParam loginParam) {
         authService.logout();
