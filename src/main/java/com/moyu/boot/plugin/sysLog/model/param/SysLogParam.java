@@ -39,7 +39,11 @@ public class SysLogParam extends PageParam {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-
+    /**
+     * 日志名称
+     */
+    @Size(max = 20, message = "name长度不能超过20个字符")
+    private String name;
     /**
      * 日志类型(字典 0默认 1访问日志 2操作日志 3交互日志)
      */

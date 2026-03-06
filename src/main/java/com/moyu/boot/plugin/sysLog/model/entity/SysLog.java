@@ -22,7 +22,10 @@ public class SysLog {
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
-
+    /**
+     * 日志名称
+     */
+    private String name;
     /**
      * 日志类型(字典 0默认 1访问日志 2操作日志 3交互日志)
      */

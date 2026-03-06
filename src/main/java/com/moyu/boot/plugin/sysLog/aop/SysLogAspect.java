@@ -107,10 +107,11 @@ public class SysLogAspect {
             // business为空时，取值方法名
             operate = joinPoint.getSignature().getName();
         }
+        sysLog.setName(logAnnotation.value());
         sysLog.setModule(logAnnotation.module());
         sysLog.setBusiness(business);
         sysLog.setOperate(operate);
-        sysLog.setContent(logAnnotation.value());
+        sysLog.setContent(logAnnotation.content());
         sysLog.setLogType(logAnnotation.logType());
 
         if (request != null) {

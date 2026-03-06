@@ -15,7 +15,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface SysLog {
     /**
-     * 日志内容，对应content
+     * 日志名称，对应name
      */
     String value() default "";
 
@@ -38,6 +38,11 @@ public @interface SysLog {
      * 操作,用于记录对应业务的什么操作, 无值则切面中会赋值方法名
      */
     String operate() default "";
+
+    /**
+     * 内容说明,用于记录自定义内容
+     */
+    String content() default "";
 
     /**
      * 是否记录请求参数, 默认为true

@@ -25,6 +25,10 @@ public class SysLogVO {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
+     * 日志名称
+     */
+    private String name;
+    /**
      * 日志类型(字典 0默认 1访问日志 2操作日志 3交互日志)
      */
     private Integer logType;
