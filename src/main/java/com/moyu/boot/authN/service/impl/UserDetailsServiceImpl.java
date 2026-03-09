@@ -1,17 +1,17 @@
-package com.moyu.boot.authN.service;
+package com.moyu.boot.authN.service.impl;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRoleService;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,22 +41,23 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
      */
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public SysUser loadUserByUsername(String username) {
         log.info("加载{}的用户信息", username);
         // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
         SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
-            throw new UsernameNotFoundException("用户账号不存在");
+            throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_NOT_EXIST);
         }
         // 创建 UserDetails
-        return buildUserDetails(sysUser);
+        return sysUser;
     }
 
     /**
-     * 创建LoginUserDetails
+     * 创建LoginUser
      */
-    private LoginUser buildUserDetails(SysUser sysUser) {
+    @Override
+    public LoginUser buildUserDetails(SysUser sysUser) {
         // 用户直接拥有的角色 ROLE_HAS_USER 关系
         Set<String> roleSet = sysRoleService.userRoles(sysUser.getAccount());
         // 组装LoginUser
