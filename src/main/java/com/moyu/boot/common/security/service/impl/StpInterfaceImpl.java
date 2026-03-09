@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Sa-Token 的权限加载接口实现类，每次调用鉴权代码时才会执行
+ * 保证此类被 SpringBoot 扫描
  *
  * @author shisong
  * @since 2025-11-11
