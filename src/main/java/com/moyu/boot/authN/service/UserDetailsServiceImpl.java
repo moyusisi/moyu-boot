@@ -1,4 +1,4 @@
-package com.moyu.boot.auth.service;
+package com.moyu.boot.authN.service;
 
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

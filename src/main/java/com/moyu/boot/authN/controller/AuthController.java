@@ -1,8 +1,8 @@
-package com.moyu.boot.auth.controller;
+package com.moyu.boot.authN.controller;
 
 
-import com.moyu.boot.auth.model.param.UserLoginParam;
-import com.moyu.boot.auth.service.AuthService;
+import com.moyu.boot.authN.model.param.UserLoginParam;
+import com.moyu.boot.authN.service.AuthService;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;

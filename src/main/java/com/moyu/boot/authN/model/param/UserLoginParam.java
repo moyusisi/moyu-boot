@@ -1,4 +1,4 @@
-package com.moyu.boot.auth.model.param;
+package com.moyu.boot.authN.model.param;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

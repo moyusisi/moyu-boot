@@ -1,12 +1,13 @@
-package com.moyu.boot.auth.service;
+package com.moyu.boot.authN.service;
 
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
-import com.moyu.boot.auth.model.param.UserLoginParam;
+import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,6 +31,9 @@ public class AuthService {
 
     @Resource
     private TokenService tokenService;
+
+    @Value("${custom.security.sm4Key:KeyMustBe16Size.}")
+    private String sm4Key;
 
     /**
      * 用户登陆

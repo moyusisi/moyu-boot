@@ -1,4 +1,4 @@
-package com.moyu.boot.auth.config;
+package com.moyu.boot.authN.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
