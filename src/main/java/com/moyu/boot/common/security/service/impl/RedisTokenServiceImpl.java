@@ -32,7 +32,7 @@ public class RedisTokenServiceImpl implements TokenService {
         StpUtil.getSession().set("name", loginUser.getName());
         // 将登录用户信息缓存到Token-Session中
         StpUtil.getTokenSession().set("loginUser", loginUser);
-        return StpUtil.getTokenValue();
+        return StpUtil.getTokenInfo().getTokenValue();
     }
 
     @Override

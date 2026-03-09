@@ -36,4 +36,8 @@ public class UserLoginParam {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    /**
+     * 设备
+     */
+    private String device;
 }
