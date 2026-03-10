@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_DISABLED);
         }
         // 对比密码
-        if (passwordEncoder.matches(password, sysUser.getPassword())) {
+        if (!passwordEncoder.matches(password, sysUser.getPassword())) {
             // 用户名或密码错误
             throw new BusinessException(ResultCodeEnum.USER_PASSWORD_ERROR);
         }
