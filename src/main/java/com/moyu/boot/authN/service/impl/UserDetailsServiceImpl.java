@@ -3,10 +3,10 @@ package com.moyu.boot.authN.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.boot.authN.service.UserDetailsService;
+import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
-import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRoleService;
@@ -65,8 +65,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(sysUser.getAccount())
                 .name(sysUser.getName())
                 .orgCode(sysUser.getOrgCode())
-                .password(sysUser.getPassword())
-                .enabled(sysUser.getStatus() == 0)
                 // 角色集合(默认角色+直接拥有的角色)
                 .roles(roleSet)
                 // 权限标识集合(仅接口,无菜单)

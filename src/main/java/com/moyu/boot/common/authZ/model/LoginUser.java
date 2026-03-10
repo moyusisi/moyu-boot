@@ -30,6 +30,10 @@ public class LoginUser implements Serializable {
      */
     private String userId;
     /**
+     * 用户账号，唯一标识 account
+     */
+    private String username;
+    /**
      * 用户姓名
      */
     private String name;
@@ -52,7 +56,8 @@ public class LoginUser implements Serializable {
     private Set<String> perms;
 
     /**
-     * 数据范围
+     * 数据范围(动态变化)
+     * @see com.moyu.boot.common.core.annotation.PreDataScope
      */
     private Integer dataScope;
     /**
@@ -64,24 +69,6 @@ public class LoginUser implements Serializable {
      * 接口权限对应的数据范围
      */
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
-
-    //***** 下面是UserDetails接口所需字段 *****//
-    /**
-     * 默认字段，用户账号，唯一标识
-     */
-    private String username;
-
-    /**
-     * 不允许序列化只允许反序列化
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
-    /**
-     * 是否可用 ,禁用的用户不能身份验证
-     */
-    @JsonIgnore
-    private boolean enabled;
 
     /**
      * 数据范围信息
