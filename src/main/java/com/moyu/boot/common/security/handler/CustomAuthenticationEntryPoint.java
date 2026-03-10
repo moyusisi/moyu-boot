@@ -82,7 +82,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 break;
             // token 已被冻结
             case NotLoginException.TOKEN_FREEZE:
-                result = new Result<>(ResultCodeEnum.ACCOUNT_FROZEN);
+                result = new Result<>(ResultCodeEnum.USER_ACCOUNT_FROZEN);
                 break;
             // 未按照指定前缀提交 token
             case NotLoginException.NO_PREFIX:

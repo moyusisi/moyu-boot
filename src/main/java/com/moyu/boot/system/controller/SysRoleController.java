@@ -1,5 +1,6 @@
 package com.moyu.boot.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -7,13 +8,11 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.SysRoleService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -74,7 +73,7 @@ public class SysRoleController {
      * 添加
      */
     @SysLog(module = "system", logType = 2, value = "新增角色", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:add')")
+    @SaCheckPermission(value = "sys:role:add", orRole = "ROOT")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysRoleParam roleParam) {
         sysRoleService.add(roleParam);
@@ -85,7 +84,7 @@ public class SysRoleController {
      * 删除
      */
     @SysLog(module = "system", logType = 2, value = "删除角色", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:delete')")
+    @SaCheckPermission(value = "sys:role:delete", orRole = "ROOT")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getIds(), "删除列表ids不能为空");
@@ -97,7 +96,7 @@ public class SysRoleController {
      * 编辑
      */
     @SysLog(module = "system", logType = 2, value = "修改角色", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:edit')")
+    @SaCheckPermission(value = "sys:role:edit", orRole = "ROOT")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
@@ -130,7 +129,7 @@ public class SysRoleController {
      * 给角色授权菜单
      */
     @SysLog(module = "system", logType = 2, value = "给角色授权菜单资源", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantMenu')")
+    @SaCheckPermission(value = "sys:role:grantMenu", orRole = "ROOT")
     @PostMapping("/grantMenu")
     public Result<?> grantMenu(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
@@ -144,7 +143,7 @@ public class SysRoleController {
      */
     @PostMapping("/grantScope")
     @SysLog(module = "system", logType = 2, value = "给角色授权数据范围", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:grantScope')")
+    @SaCheckPermission(value = "sys:role:grantScope", orRole = "ROOT")
     public Result<?> grantScope(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
         Assert.notEmpty(roleParam.getGrantScopeList(), "数据范围列表不能为空");
@@ -168,7 +167,7 @@ public class SysRoleController {
      * 角色新增用户
      */
     @SysLog(module = "system", logType = 2, value = "角色中新增用户", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:addUser')")
+    @SaCheckPermission(value = "sys:role:addUser", orRole = "ROOT")
     @PostMapping("/roleAddUser")
     public Result<?> roleAddUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
@@ -181,7 +180,7 @@ public class SysRoleController {
      * 角色删除用户
      */
     @SysLog(module = "system", logType = 2, value = "角色中删除用户", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:deleteUser')")
+    @SaCheckPermission(value = "sys:role:deleteUser", orRole = "ROOT")
     @PostMapping("/roleDeleteUser")
     public Result<?> roleDeleteUser(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "角色code不能为空");

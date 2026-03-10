@@ -1,5 +1,6 @@
 package com.moyu.boot.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -10,7 +11,6 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.param.SysResourceParam;
 import com.moyu.boot.system.model.vo.SysResourceVO;
 import com.moyu.boot.system.service.SysResourceService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,7 +83,7 @@ public class SysResourceController {
      * 添加资源
      */
     @SysLog(module = "system", logType = 2, value = "添加资源")
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:add')")
+    @SaCheckPermission(value = "sys:resource:add", orRole = "ROOT")
     @PostMapping("/add")
     public Result<String> add(@RequestBody SysResourceParam resourceParam) {
         sysResourceService.add(resourceParam);
@@ -94,7 +94,7 @@ public class SysResourceController {
      * 删除资源
      */
     @SysLog(module = "system", logType = 2, value = "删除资源")
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:delete')")
+    @SaCheckPermission(value = "sys:resource:delete", orRole = "ROOT")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getIds(), "删除列表ids不能为空");
@@ -106,7 +106,7 @@ public class SysResourceController {
      * 删除资源树,会集联删除
      */
     @SysLog(module = "system", logType = 2, value = "集联删除资源树")
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:deleteTree')")
+    @SaCheckPermission(value = "sys:resource:deleteTree", orRole = "ROOT")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
         Assert.notEmpty(resourceParam.getCodes(), "删除列表codes不能为空");
@@ -118,7 +118,7 @@ public class SysResourceController {
      * 编辑资源
      */
     @SysLog(module = "system", logType = 2, value = "修改资源信息")
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:edit')")
+    @SaCheckPermission(value = "sys:resource:edit", orRole = "ROOT")
     @PostMapping("/edit")
     public Result<String> edit(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");

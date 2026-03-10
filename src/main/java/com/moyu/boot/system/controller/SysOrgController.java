@@ -1,6 +1,6 @@
 package com.moyu.boot.system.controller;
 
-
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
@@ -9,11 +9,9 @@ import com.moyu.boot.common.core.annotation.PreDataScope;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.model.vo.SysOrgVO;
 import com.moyu.boot.system.service.SysOrgService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +39,7 @@ public class SysOrgController {
      * 分页获取组织列表
      */
     @SysLog(module = "system", logType = 2, value = "分页查询组织列表")
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:page')")
+    @SaCheckPermission(value = "sys:org:page", orRole = "ROOT")
     @PreDataScope("sys:org:page")
     @PostMapping("/page")
     public Result<PageData<SysOrgVO>> pageList(@RequestBody SysOrgParam orgParam) {
@@ -76,7 +74,7 @@ public class SysOrgController {
      * 添加
      */
     @SysLog(module = "system", logType = 2, value = "新增组织机构", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:add')")
+    @SaCheckPermission(value = "sys:org:add", orRole = "ROOT")
     @PostMapping("/add")
     public Result<String> add(@Validated @RequestBody SysOrgParam orgParam) {
         sysOrgService.add(orgParam);
@@ -87,7 +85,7 @@ public class SysOrgController {
      * 删除
      */
     @SysLog(module = "system", logType = 2, value = "删除组织机构", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:delete')")
+    @SaCheckPermission(value = "sys:org:delete", orRole = "ROOT")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getIds(), "删除列表ids不能为空");
@@ -99,7 +97,7 @@ public class SysOrgController {
      * 删除树,会集联删除
      */
     @SysLog(module = "system", logType = 2, value = "删除组织机构树", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:deleteTree')")
+    @SaCheckPermission(value = "sys:org:deleteTree", orRole = "ROOT")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysOrgParam orgParam) {
         Assert.notEmpty(orgParam.getCodes(), "删除列表codes不能为空");
@@ -111,7 +109,7 @@ public class SysOrgController {
      * 编辑
      */
     @SysLog(module = "system", logType = 2, value = "修改组织机构", response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:edit')")
+    @SaCheckPermission(value = "sys:org:edit", orRole = "ROOT")
     @PostMapping("/edit")
     public Result<String> edit(@Validated @RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");

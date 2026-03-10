@@ -1,6 +1,5 @@
 package com.moyu.boot.common.security.handler;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
