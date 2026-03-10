@@ -78,8 +78,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
                 .build();
-        // 初始化权限
-        loginUser.initAuthorities();
         return loginUser;
     }
 }

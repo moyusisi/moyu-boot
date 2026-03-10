@@ -55,6 +55,11 @@ public class AuthServiceImpl implements AuthService {
         }
         // 通过account获取用户
         SysUser sysUser = userDetailsService.loadUserByUsername(username);
+        // 检查状态
+        if (sysUser.getStatus() != 0) {
+            // 账户已停用、已作废
+            throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_DISABLED);
+        }
         // encryptPwd
         String encryptPwd = SmUtil.sm4(sm4Key.getBytes(StandardCharsets.UTF_8)).encryptHex(password);
         // 对比密码
@@ -64,11 +69,6 @@ public class AuthServiceImpl implements AuthService {
         }
         // 构造登录用户
         LoginUser loginUser = userDetailsService.buildUserDetails(sysUser);
-        // 检查状态
-        if (!loginUser.isEnabled()) {
-            // 账户不可用、已作废
-            throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_DISABLED);
-        }
         // 生成token
         return tokenService.generateToken(loginUser);
     }

@@ -1,7 +1,6 @@
 package com.moyu.boot.common.security.service;
 
 import com.moyu.boot.common.security.model.LoginUser;
-import org.springframework.security.core.Authentication;
 
 /**
  * 令牌服务，有多种实现
@@ -29,11 +28,6 @@ public interface TokenService {
      * token不变，更换loginUser TODO
      */
     void switchUser(LoginUser loginUser);
-
-    /**
-     * 解析 Token 获取认证信息(Spring Security 的核心组件)
-     */
-    Authentication parseToken();
 
     /**
      * 置 Token 失效
