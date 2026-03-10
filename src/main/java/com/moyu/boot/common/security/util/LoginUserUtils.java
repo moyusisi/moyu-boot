@@ -16,7 +16,7 @@ import java.util.Set;
  * @since 2025-01-06
  */
 @Slf4j
-public class SecurityUtils {
+public class LoginUserUtils {
 
     /**
      * 获取当前登录用户信息

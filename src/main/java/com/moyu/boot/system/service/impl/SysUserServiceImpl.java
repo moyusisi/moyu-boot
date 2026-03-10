@@ -17,7 +17,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.plugin.dayId.service.DayIdService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
@@ -110,15 +110,15 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 仅查询未删除的
         queryWrapper.eq(SysUser::getDeleted, 0);
         // 非ROOT则限制数据权限
-        if (!SecurityUtils.isRoot()) {
+        if (!LoginUserUtils.isRoot()) {
             // 指定的列名
-            Integer dataScope = SecurityUtils.getDataScope();
-            Set<String> scopeSet = SecurityUtils.getScopes();
+            Integer dataScope = LoginUserUtils.getDataScope();
+            Set<String> scopeSet = LoginUserUtils.getScopes();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = SecurityUtils.getUsername();
+                String username = LoginUserUtils.getUsername();
                 queryWrapper.eq(SysUser::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = LoginUserUtils.getOrgCode();
                 queryWrapper.eq(SysUser::getOrgCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet);

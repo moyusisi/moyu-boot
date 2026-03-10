@@ -6,7 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
 import com.moyu.boot.plugin.inboxMessage.model.vo.UserMessageVO;
@@ -105,7 +105,7 @@ public class InboxMessageController {
     @PostMapping("/read")
     public Result<InboxMessageVO> read(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getCode()), "code不能为空");
-        Assert.notEmpty(SecurityUtils.getUsername(), "用户ID不能为空");
+        Assert.notEmpty(LoginUserUtils.getUsername(), "用户ID不能为空");
         return Result.success(inboxMessageService.read(param));
     }
 
@@ -115,7 +115,7 @@ public class InboxMessageController {
     @SaCheckLogin
     @PostMapping("/unreadCount")
     public Result<Long> unreadCount(@RequestBody InboxMessageParam param) {
-        Assert.notEmpty(SecurityUtils.getUsername(), "用户ID不能为空");
+        Assert.notEmpty(LoginUserUtils.getUsername(), "用户ID不能为空");
         Long unreadCount = inboxMessageService.unreadCount(param);
         return Result.success(unreadCount);
     }
@@ -127,7 +127,7 @@ public class InboxMessageController {
     @PostMapping("/readPage")
     public Result<PageData<UserMessageVO>> userReadPage(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        Assert.notEmpty(SecurityUtils.getUsername(), "用户ID不能为空");
+        Assert.notEmpty(LoginUserUtils.getUsername(), "用户ID不能为空");
         PageData<UserMessageVO> page = inboxMessageService.userReadPage(param);
         return Result.success(page);
     }

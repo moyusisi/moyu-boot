@@ -28,7 +28,7 @@ import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
@@ -90,7 +90,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 指定指定状态
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
@@ -115,7 +115,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 指定指定状态
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!SecurityUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序

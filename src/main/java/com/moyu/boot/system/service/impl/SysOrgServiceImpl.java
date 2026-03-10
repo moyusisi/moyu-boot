@@ -15,7 +15,6 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
@@ -24,7 +23,7 @@ import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
@@ -37,7 +36,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -108,15 +106,15 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         queryWrapper.orderByAsc(SysOrg::getSortNum);
 
         // 非ROOT则限制数据权限
-        if (!SecurityUtils.isRoot()) {
+        if (!LoginUserUtils.isRoot()) {
             // 指定的列名
-            Integer dataScope = SecurityUtils.getDataScope();
-            Set<String> scopeSet = SecurityUtils.getScopes();
+            Integer dataScope = LoginUserUtils.getDataScope();
+            Set<String> scopeSet = LoginUserUtils.getScopes();
             if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = SecurityUtils.getUsername();
+                String username = LoginUserUtils.getUsername();
                 queryWrapper.eq(SysOrg::getCreateBy, username);
             } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = SecurityUtils.getOrgCode();
+                String orgCode = LoginUserUtils.getOrgCode();
                 queryWrapper.eq(SysOrg::getCode, orgCode);
             } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
                 queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
@@ -213,17 +211,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public List<Tree<String>> tree() {
         Tree<String> rootTree = singleTree();
-        if (SecurityUtils.isRoot()) {
+        if (LoginUserUtils.isRoot()) {
             return rootTree.getChildren();
         }
         // 数据范围
-        Integer dataScope = SecurityUtils.getDataScope();
+        Integer dataScope = LoginUserUtils.getDataScope();
         // 未设置或设置为不限制时，返回全树
         if (dataScope == null || DataScopeEnum.ALL.getCode().equals(dataScope)) {
             return rootTree.getChildren();
         }
         // 其他情况都按照数据范围返回公司树
-        String orgCode = getUserCompanyCode(rootTree, SecurityUtils.getOrgCode());
+        String orgCode = getUserCompanyCode(rootTree, LoginUserUtils.getOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
         // 用户公司树列表

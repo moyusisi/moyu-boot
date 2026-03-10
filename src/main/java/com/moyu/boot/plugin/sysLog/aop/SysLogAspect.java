@@ -8,7 +8,7 @@ import cn.hutool.http.useragent.Browser;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +67,7 @@ public class SysLogAspect {
     @Around("logPointcut() && @annotation(logAnnotation)")
     public Object logHandler(ProceedingJoinPoint joinPoint, com.moyu.boot.common.core.annotation.SysLog logAnnotation) throws Throwable {
         // 先从上下文中获取当前用户，防止被清理(可能为空)
-        String username = SecurityUtils.getUsername();
+        String username = LoginUserUtils.getUsername();
         Object result = null;
         Exception exception = null;
         long start = System.currentTimeMillis();

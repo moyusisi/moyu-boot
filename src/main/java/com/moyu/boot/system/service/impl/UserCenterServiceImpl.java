@@ -19,7 +19,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
 import com.moyu.boot.common.security.service.TokenService;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
@@ -72,7 +72,7 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public UserInfo currentUserInfo(String username) {
         // 当前登陆用户
-        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        Optional<LoginUser> optUser = LoginUserUtils.getLoginUser();
         if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
@@ -111,15 +111,15 @@ public class UserCenterServiceImpl implements UserCenterService {
 
     @Override
     public List<Tree<String>> userMenu(String username) {
-        Optional<LoginUser> optUser = SecurityUtils.getLoginUser();
+        Optional<LoginUser> optUser = LoginUserUtils.getLoginUser();
         if (!optUser.isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
-        Set<String> roleSet = SecurityUtils.getRoles();
+        Set<String> roleSet = LoginUserUtils.getRoles();
         // 用户有权限的资源code集合(含按钮)
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
         //  无任何权限直接返回
-        if (CollectionUtils.isEmpty(permSet) && !SecurityUtils.isRoot()) {
+        if (CollectionUtils.isEmpty(permSet) && !LoginUserUtils.isRoot()) {
             return Lists.newArrayList();
         }
         // 查询所有的菜单(不含按钮)
@@ -142,7 +142,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 userMenuList.add(sysMenu);
             } else {
                 // 有权限才添加(菜单、内链、外链等)
-                if (SecurityUtils.isRoot() || permSet.contains(sysMenu.getCode())) {
+                if (LoginUserUtils.isRoot() || permSet.contains(sysMenu.getCode())) {
                     userMenuList.add(sysMenu);
                 }
             }
@@ -172,21 +172,21 @@ public class UserCenterServiceImpl implements UserCenterService {
     @Override
     public List<SysRoleVO> userRoleList(String roleName) {
         // 当前登陆用户
-        if (!SecurityUtils.getLoginUser().isPresent()) {
+        if (!LoginUserUtils.getLoginUser().isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
-        if (SecurityUtils.isRoot()) {
+        if (LoginUserUtils.isRoot()) {
             // root拥有所有角色
             return sysRoleService.list(SysRoleParam.builder().name(roleName).build());
         }
         // 当前用户的角色
-        Set<String> roleSet = SecurityUtils.getRoles();
+        Set<String> roleSet = LoginUserUtils.getRoles();
         return sysRoleService.list(SysRoleParam.builder().codeSet(roleSet).name(roleName).build());
     }
 
     @Override
     public void switchUserGroup(String groupCode) {
-        LoginUser loginUser = SecurityUtils.getLoginUser().orElse(null);
+        LoginUser loginUser = LoginUserUtils.getLoginUser().orElse(null);
         if (loginUser == null) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }

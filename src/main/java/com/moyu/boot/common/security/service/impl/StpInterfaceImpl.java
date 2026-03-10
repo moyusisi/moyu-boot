@@ -1,7 +1,7 @@
 package com.moyu.boot.common.security.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return new ArrayList<>(SecurityUtils.getPerms());
+        return new ArrayList<>(LoginUserUtils.getPerms());
     }
 
     /**
@@ -30,6 +30,6 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getRoleList(Object loginId, String loginType) {
-        return new ArrayList<>(SecurityUtils.getRoles());
+        return new ArrayList<>(LoginUserUtils.getRoles());
     }
 }

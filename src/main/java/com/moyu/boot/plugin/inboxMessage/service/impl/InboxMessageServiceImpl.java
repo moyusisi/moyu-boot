@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.security.util.SecurityUtils;
+import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.plugin.inboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.inboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.inboxMessage.model.entity.UserMessage;
@@ -183,7 +183,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
 
     @Override
     public InboxMessageVO read(InboxMessageParam param) {
-        String userId = SecurityUtils.getUsername();
+        String userId = LoginUserUtils.getUsername();
         Assert.notEmpty(userId, "用户ID不能为空");
         // 查询消息
         InboxMessage inboxMessage = this.getOne(Wrappers.lambdaQuery(InboxMessage.class).eq(InboxMessage::getCode, param.getCode()));
@@ -209,7 +209,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
 
     @Override
     public Long unreadCount(InboxMessageParam param) {
-        String userId = SecurityUtils.getUsername();
+        String userId = LoginUserUtils.getUsername();
         Assert.notEmpty(userId, "用户ID不能为空");
         Long count = userMessageService.count(Wrappers.lambdaQuery(UserMessage.class)
                 .eq(UserMessage::getUserId, userId)
@@ -221,7 +221,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
 
     @Override
     public PageData<UserMessageVO> userReadPage(InboxMessageParam param) {
-        param.setUserId(SecurityUtils.getUsername());
+        param.setUserId(LoginUserUtils.getUsername());
         Assert.notEmpty(param.getUserId(), "用户ID不能为空");
         PageData<UserMessageVO> pageData = userMessageService.pageList(param);
         if (pageData.getTotal() == 0) {
