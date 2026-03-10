@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * SpringSecurity安全服务工具类
+ * 登录用户工具类
  *
  * @author shisong
  * @since 2025-01-06
