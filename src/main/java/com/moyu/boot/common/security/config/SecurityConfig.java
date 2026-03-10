@@ -81,7 +81,7 @@ public class SecurityConfig {
         // 白名单放行
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
         // 设置需要认证才可访问的接口
-        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
+//        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
 
         // 允许跨域访问
         http.cors();
@@ -101,16 +101,16 @@ public class SecurityConfig {
         http.httpBasic().disable();
 
         // 添加Token认证解析过滤器
-        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-        // 添加CORS filter
-        http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
-
-        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
-        http.exceptionHandling()
-                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                // 授权异常处理，访问权限不足时的处理
-                .accessDeniedHandler(new CustomAccessDeniedHandler());
+//        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+//        // 添加CORS filter
+//        http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
+//
+//        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
+//        http.exceptionHandling()
+//                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
+//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+//                // 授权异常处理，访问权限不足时的处理
+//                .accessDeniedHandler(new CustomAccessDeniedHandler());
         return http.build();
     }
 

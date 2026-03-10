@@ -1,14 +1,31 @@
 package com.moyu.boot.common.security.config;
 
 import cn.dev33.satoken.config.SaTokenConfig;
+import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;
+import cn.dev33.satoken.stp.StpUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.extra.servlet.ServletUtil;
+import com.google.gson.Gson;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.service.TokenService;
+import com.moyu.boot.common.security.util.LoginUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Sa-Token 配置类
@@ -16,8 +33,12 @@ import javax.annotation.Resource;
  * @author shisong
  * @since 2025-11-11
  */
+@Slf4j
 @Configuration
 public class SaTokenConfigure {
+
+    @Resource
+    private SecurityProperties properties;
 
     // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc/doc.html#/use/config
     @Resource
@@ -47,5 +68,67 @@ public class SaTokenConfigure {
     @ConditionalOnProperty(value = "custom.security.session.type", havingValue = "jwt")
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForSimple();
+    }
+
+    // 注册 Sa-Token全局过滤器 https://sa-token.cc/doc.html#/up/global-filter
+    @Bean
+    public SaServletFilter getSaServletFilter() {
+        // 放行白名单
+        List<String> whiteList = new ArrayList<>();
+        // 如果没有开启认证，则全放行，否则按照白名单放行
+        if (Boolean.FALSE.equals(properties.getEnabled())) {
+            whiteList.add("/**");
+        } else {
+            whiteList.addAll(properties.getWhiteList());
+        }
+        return new SaServletFilter()
+                // 指定 拦截路由 与 放行路由
+                .addInclude(properties.getAuthList().toArray(new String[0]))
+                // 放行路由
+                .addExclude(whiteList.toArray(new String[0]))
+                // 认证函数: 每次请求执行
+                .setAuth(obj -> {
+                    // log.info("===== 进入Sa-Token全局认证 =====");
+                    // 登录认证 -- 拦截所有路由，并排除/user/doLogin 用于开放登录
+                    // SaRouter.match("/api/**").check(r -> StpUtil.checkLogin());
+                    StpUtil.checkLogin();
+                })
+
+                // 异常处理函数：过滤器中抛出的异常无法进入全局@ExceptionHandler
+                .setError(e -> {
+                    log.info("===== 进入Filter层异常处理 =====");
+                    // 未认证时默认返回
+                    Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+                    if (e instanceof NotLoginException) {
+                        // 处理登录异常，区分未认证的具体场景
+                        result = LoginUtils.handleNotLogin((NotLoginException) e);
+                    }
+                    String responseBody = new Gson().toJson(result);
+                    // 获取原始请求对象
+                    HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
+                    HttpServletResponse response = (HttpServletResponse) SaHolder.getResponse().getSource();
+                    // 记录日志
+                    String ip = ServletUtil.getClientIP(request);
+                    if (ObjectUtil.isNotEmpty(ip)) {
+                        log.info("From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                    }
+                    log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
+                    // 设置响应头
+//                    response.setStatus(HttpServletResponse.SC_OK);
+                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    return new Gson().toJson(result);
+                })
+
+                // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
+                .setBeforeAuth(r -> {
+                    // ---------- 设置一些安全响应头 ----------
+                    SaHolder.getResponse()
+                            // 是否启用浏览器默认XSS防护： 0=禁用 | 1=启用 | 1; mode=block 启用, 并在检查到XSS攻击时，停止渲染页面
+                            .setHeader("X-XSS-Protection", "1; mode=block")
+                            // 禁用浏览器内容嗅探
+                            .setHeader("X-Content-Type-Options", "nosniff")
+                    ;
+                });
     }
 }
