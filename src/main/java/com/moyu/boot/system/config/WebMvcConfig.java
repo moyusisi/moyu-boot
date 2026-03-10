@@ -1,5 +1,8 @@
 package com.moyu.boot.system.config;
 
+import cn.dev33.satoken.fun.strategy.SaCorsHandleFunction;
+import cn.dev33.satoken.router.SaHttpMethod;
+import cn.dev33.satoken.router.SaRouter;
 import com.moyu.boot.system.interceptor.VueHistoryInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public CorsFilter corsFilter() {
         // 1. 构建跨域配置规则
         CorsConfiguration config = new CorsConfiguration();
-        // 跨域请求时允许的的请求源
+        // 跨域请求时允许的的请求源(动态匹配)
         config.addAllowedOriginPattern("*");
         // 跨域请求时允许的请求方式
         config.addAllowedMethod("POST, GET, OPTIONS");
@@ -48,6 +51,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         // 3. 返回配置好的CorsFilter
         return new CorsFilter(source);
+    }
+
+    /**
+     * CORS 跨域处理策略(优先级高于SaServletFilter)
+     */
+    @Bean
+    public SaCorsHandleFunction corsHandle() {
+
+        return (req, res, sto) -> {
+            // 允许指定域访问跨域资源
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            // 指定跨域请求时允许的请求方式
+            res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
+            // 指定跨域请求时允许前端携带的请求头
+            res.setHeader("Access-Control-Allow-Headers", "*");
+            // 预检请求缓存时间(单位s)
+            res.setHeader("Access-Control-Max-Age", "3600");
+            // 跨域请求是否允许携带cookie凭证(为true时，Access-Control-Allow-Origin不能设置为*)
+//            res.setHeader("Access-Control-Allow-Credentials", "true");
+            // OPTIONS预检请求，不做处理，立即返回到前端
+            SaRouter.match(SaHttpMethod.OPTIONS).back();
+        };
     }
 
     /**
