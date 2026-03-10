@@ -42,6 +42,16 @@ public class SecurityProperties {
     private List<String> ignoreList = new ArrayList<>();
 
     /**
+     * 密码加密方式
+     */
+    private String cryptoType = "sm4";
+
+    /**
+     * sm4自定义密钥
+     */
+    private String sm4Key = "KeyMustBe16Size.";
+
+    /**
      * 会话配置
      */
     private SessionConfig session;

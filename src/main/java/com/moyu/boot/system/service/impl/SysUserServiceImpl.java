@@ -17,6 +17,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.security.service.PasswordEncoder;
 import com.moyu.boot.common.security.util.LoginUserUtils;
 import com.moyu.boot.plugin.dayId.service.DayIdService;
 import com.moyu.boot.system.constant.SysConstants;
@@ -27,7 +28,6 @@ import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.SysOrgService;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

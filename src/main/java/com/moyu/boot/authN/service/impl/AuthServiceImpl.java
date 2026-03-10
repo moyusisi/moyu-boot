@@ -2,22 +2,19 @@ package com.moyu.boot.authN.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.SmUtil;
 import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.authN.service.AuthService;
 import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.security.model.LoginUser;
+import com.moyu.boot.common.security.service.PasswordEncoder;
 import com.moyu.boot.common.security.service.TokenService;
 import com.moyu.boot.system.model.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.nio.charset.StandardCharsets;
-import java.util.Objects;
 
 /**
  * 登录认证服务类
@@ -35,8 +32,8 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private TokenService tokenService;
 
-    @Value("${custom.security.sm4Key:KeyMustBe16Size.}")
-    private String sm4Key;
+    @Resource
+    private PasswordEncoder passwordEncoder;
 
     /**
      * 用户登陆
@@ -60,10 +57,8 @@ public class AuthServiceImpl implements AuthService {
             // 账户已停用、已作废
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_DISABLED);
         }
-        // encryptPwd
-        String encryptPwd = SmUtil.sm4(sm4Key.getBytes(StandardCharsets.UTF_8)).encryptHex(password);
         // 对比密码
-        if (!Objects.equals(sysUser.getPassword(), encryptPwd)) {
+        if (passwordEncoder.matches(password, sysUser.getPassword())) {
             // 用户名或密码错误
             throw new BusinessException(ResultCodeEnum.USER_PASSWORD_ERROR);
         }
