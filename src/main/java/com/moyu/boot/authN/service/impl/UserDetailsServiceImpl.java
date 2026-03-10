@@ -19,7 +19,6 @@ import java.util.Set;
 
 /**
  * 用户信息加载服务的自定义实现类
- * Spring Security权限认证时(AuthenticationProvider.authenticate)会调用UserDetailsService.loadUserByUsername
  *
  * @author shisong
  * @since 2024-12-27
@@ -38,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private SysGroupService sysGroupService;
 
     /**
-     * SpringSecurity权限认证时(AuthenticationProvider#authenticate)会调用此方法
+     * 通过username加载登录用户信息
      */
     @Override
     public SysUser loadUserByUsername(String username) {
