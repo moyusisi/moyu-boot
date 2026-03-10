@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.model;
+package com.moyu.boot.common.authZ.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

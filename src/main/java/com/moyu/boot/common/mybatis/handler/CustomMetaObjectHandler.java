@@ -2,7 +2,7 @@ package com.moyu.boot.common.mybatis.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.moyu.boot.common.core.model.BaseEntity;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 

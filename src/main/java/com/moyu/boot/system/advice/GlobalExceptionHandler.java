@@ -8,7 +8,7 @@ import cn.hutool.json.JSONUtil;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.security.util.ExceptionWrapperUtils;
+import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

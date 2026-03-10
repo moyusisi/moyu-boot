@@ -8,7 +8,7 @@ import cn.hutool.http.useragent.Browser;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;

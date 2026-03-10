@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.util;
+package com.moyu.boot.common.authZ.util;
 
 import cn.dev33.satoken.exception.NotLoginException;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;

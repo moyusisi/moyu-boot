@@ -17,7 +17,7 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;

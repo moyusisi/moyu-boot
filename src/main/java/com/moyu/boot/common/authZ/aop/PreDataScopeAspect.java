@@ -1,7 +1,7 @@
-package com.moyu.boot.common.security.aop;
+package com.moyu.boot.common.authZ.aop;
 
-import com.moyu.boot.common.security.model.LoginUser;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.model.LoginUser;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

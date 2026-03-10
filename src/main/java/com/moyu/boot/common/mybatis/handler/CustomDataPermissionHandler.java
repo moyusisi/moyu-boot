@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.handler.MultiDataPermissionHandler;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.mybatis.annotation.DataPermission;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jsqlparser.expression.Expression;

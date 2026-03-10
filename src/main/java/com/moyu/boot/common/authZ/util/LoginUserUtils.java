@@ -1,7 +1,7 @@
-package com.moyu.boot.common.security.util;
+package com.moyu.boot.common.authZ.util;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.moyu.boot.common.security.model.LoginUser;
+import com.moyu.boot.common.authZ.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashSet;

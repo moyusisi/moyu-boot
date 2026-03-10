@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.service;
+package com.moyu.boot.common.authZ.service;
 
 /**
  * 加密器服务

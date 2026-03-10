@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.plugin.inboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.inboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.inboxMessage.model.entity.UserMessage;

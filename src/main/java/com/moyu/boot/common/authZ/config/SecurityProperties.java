@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.config;
+package com.moyu.boot.common.authZ.config;
 
 import lombok.Data;
 import lombok.Getter;

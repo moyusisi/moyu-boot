@@ -1,7 +1,7 @@
-package com.moyu.boot.common.security.service.impl;
+package com.moyu.boot.common.authZ.service.impl;
 
 import cn.dev33.satoken.stp.StpInterface;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

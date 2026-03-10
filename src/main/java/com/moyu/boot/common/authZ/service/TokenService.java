@@ -1,6 +1,6 @@
-package com.moyu.boot.common.security.service;
+package com.moyu.boot.common.authZ.service;
 
-import com.moyu.boot.common.security.model.LoginUser;
+import com.moyu.boot.common.authZ.model.LoginUser;
 
 /**
  * 令牌服务，有多种实现

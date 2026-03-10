@@ -1,6 +1,6 @@
 package com.moyu.boot.authN.service;
 
-import com.moyu.boot.common.security.model.LoginUser;
+import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.system.model.entity.SysUser;
 
 /**

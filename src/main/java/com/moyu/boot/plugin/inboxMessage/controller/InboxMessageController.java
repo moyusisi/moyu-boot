@@ -6,7 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.security.util.LoginUserUtils;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
 import com.moyu.boot.plugin.inboxMessage.model.vo.UserMessageVO;

@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.config;
+package com.moyu.boot.common.authZ.config;
 
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.context.SaHolder;
@@ -12,8 +12,8 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.security.service.TokenService;
-import com.moyu.boot.common.security.util.ExceptionWrapperUtils;
+import com.moyu.boot.common.authZ.service.TokenService;
+import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
