@@ -25,21 +25,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     /**
      * 跨域资源共享过滤器
+     * 如果优先级低可能会导致CORS策略不生效
      */
     @Bean
     public CorsFilter corsFilter() {
         // 1. 构建跨域配置规则
         CorsConfiguration config = new CorsConfiguration();
-        // 设置允许的跨域源(credentials设置为include时，服务端的Access-Control-Allow-Origin不能设置为*)
+        // 跨域请求时允许的的请求源
         config.addAllowedOriginPattern("*");
-        // 设置跨域访问可以携带cookie
-        config.setAllowCredentials(true);
-        // 设置允许的请求方法 允许所有的请求方法
-        config.addAllowedMethod("*");
-        // 设置允许的请求头 允许携带任何头信息
+        // 跨域请求时允许的请求方式
+        config.addAllowedMethod("POST, GET, OPTIONS");
+        // 跨域请求时允许前端携带的请求头
         config.addAllowedHeader("*");
-        // 暴露的响应头（前端可获取的自定义头）
-        config.addExposedHeader("Authorization");
+        // 跨域请求是否允许携带cookie凭证(为true时，Access-Control-Allow-Origin不能设置为*)
+        config.setAllowCredentials(true);
         // 预检请求缓存时间(单位s)
         config.setMaxAge(3600L);
 
