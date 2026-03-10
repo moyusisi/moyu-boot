@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * 自定义认证鉴权相关配置
+ *
  * @author shisong
  * @since 2025-01-24
  */
