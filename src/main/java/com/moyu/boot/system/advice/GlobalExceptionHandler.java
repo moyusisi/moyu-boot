@@ -1,16 +1,14 @@
 package com.moyu.boot.system.advice;
 
 
-import cn.dev33.satoken.annotation.SaCheckDisable;
-import cn.dev33.satoken.annotation.SaCheckHttpBasic;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
-import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.json.JSONUtil;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
+import com.moyu.boot.common.security.util.ExceptionWrapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -174,9 +172,23 @@ public class GlobalExceptionHandler {
 
     /**
      * 鉴权异常
-     * sa权限认证的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
+     * 未登录异常单独处理(如果已在全局过滤器SaServletFilter中处理，则不会走到全局@ExceptionHandler中)
      */
-    @ExceptionHandler({NotLoginException.class, NotRoleException.class, NotPermissionException.class})
+    @ExceptionHandler(NotLoginException.class)
+    public Result<?> notLoginException(HttpServletRequest request, Exception e) {
+        Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+        if (e instanceof NotLoginException) {
+            // 处理登录异常，区分未认证的具体场景
+            result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
+        }
+        return result;
+    }
+
+    /**
+     * 鉴权异常
+     * sa鉴权的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
+     */
+    @ExceptionHandler({NotRoleException.class, NotPermissionException.class})
     public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
         log.info("未授权访问：{}", request.getRequestURI());
         return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
