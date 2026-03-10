@@ -1,11 +1,9 @@
 package com.moyu.boot.common.security.util;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -21,26 +19,11 @@ import java.util.Set;
 public class SecurityUtils {
 
     /**
-     * 获取认证信息:Authentication
-     */
-    private static Authentication getAuthentication() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
-    /**
      * 获取当前登录用户信息
      **/
     public static Optional<LoginUser> getLoginUser() {
-        Optional<LoginUser> optUser = Optional.empty();
-        Authentication authentication = getAuthentication();
-        if (authentication != null) {
-            // 用户凭证，已登录用户为 LoginUser，未登录用户为username
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof LoginUser) {
-                optUser = Optional.of((LoginUser) principal);
-            }
-        }
-        return optUser;
+        // StpUtil.getTokenSession()时会校验是否登录(checkLogin)
+        return Optional.of((LoginUser) StpUtil.getTokenSession().get("loginUser"));
     }
 
 
@@ -86,13 +69,6 @@ public class SecurityUtils {
      */
     public static Set<String> getScopes() {
         return getLoginUser().map(LoginUser::getScopeSet).orElse(new HashSet<>());
-    }
-
-    /**
-     * 获取用户授权集合
-     */
-    public static Set<String> getAuthorities() {
-        return getLoginUser().map(e -> AuthorityUtils.authorityListToSet(e.getAuthorities())).orElse(new HashSet<>());
     }
 
     /**
