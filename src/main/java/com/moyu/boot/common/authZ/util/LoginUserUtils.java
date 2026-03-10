@@ -26,8 +26,12 @@ public class LoginUserUtils {
      * 获取当前登录用户信息
      **/
     public static Optional<LoginUser> getLoginUser() {
-        // StpUtil.getTokenSession()时会校验是否登录(checkLogin)
-        return Optional.of((LoginUser) StpUtil.getTokenSession().get("loginUser"));
+        Optional<LoginUser> optUser = Optional.empty();
+        if (StpUtil.isLogin()) {
+            // StpUtil.getTokenSession()时会校验是否登录(无则抛出异常)
+            optUser = Optional.of((LoginUser) StpUtil.getTokenSession().get("loginUser"));
+        }
+        return optUser;
     }
 
 
