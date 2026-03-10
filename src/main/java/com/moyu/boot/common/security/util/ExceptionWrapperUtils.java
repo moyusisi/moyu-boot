@@ -5,10 +5,12 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
 
 /**
+ * 异常处理工具
+ *
  * @author shisong
  * @since 2026-03-10
  */
-public class LoginUtils {
+public class ExceptionWrapperUtils {
 
     /**
      * 处理未登录异常的不同场景

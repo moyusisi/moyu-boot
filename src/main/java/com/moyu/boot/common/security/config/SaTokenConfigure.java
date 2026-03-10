@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.security.service.TokenService;
-import com.moyu.boot.common.security.util.LoginUtils;
+import com.moyu.boot.common.security.util.ExceptionWrapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -101,7 +101,7 @@ public class SaTokenConfigure {
                     Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
                     if (e instanceof NotLoginException) {
                         // 处理登录异常，区分未认证的具体场景
-                        result = LoginUtils.handleNotLogin((NotLoginException) e);
+                        result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
                     }
                     String responseBody = new Gson().toJson(result);
                     // 获取原始请求对象
