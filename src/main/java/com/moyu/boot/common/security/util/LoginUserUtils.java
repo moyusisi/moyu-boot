@@ -1,7 +1,6 @@
 package com.moyu.boot.common.security.util;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.moyu.boot.common.security.constant.SecurityConstants;
 import com.moyu.boot.common.security.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,6 +16,11 @@ import java.util.Set;
  */
 @Slf4j
 public class LoginUserUtils {
+
+    /**
+     * ROOT管理员角色编码
+     */
+    public static final String ROOT_ROLE = "ROOT";
 
     /**
      * 获取当前登录用户信息
@@ -75,7 +79,7 @@ public class LoginUserUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        return getRoles().contains(SecurityConstants.ROOT_ROLE);
+        return getRoles().contains(ROOT_ROLE);
     }
 
 }

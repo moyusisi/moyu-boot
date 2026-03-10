@@ -67,6 +67,7 @@ public class SaTokenConfigure {
     @Bean
     @ConditionalOnProperty(value = "custom.security.session.type", havingValue = "jwt")
     public StpLogic getStpLogicJwt() {
+        // 仅Token风格替换，仍然需要Redis
         return new StpLogicJwtForSimple();
     }
 
