@@ -81,6 +81,11 @@ public class AuthSessionVO {
     private Date deadline;
 
     /**
+     * session剩余有效期百分比
+     */
+    private Double sessionTimeoutPercent;
+
+    /**
      * 令牌数量
      */
     private Integer tokenCount;
