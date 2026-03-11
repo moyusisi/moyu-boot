@@ -34,33 +34,29 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
 
     @Override
     public String nextId() {
-        String today = DTF.format(LocalDate.now());
-        Long seq = generatorId(null, today);
-        // 4. 格式化补零，返回日内标识
-        return today + String.format("%04d", seq);
+        // 返回日内标识(当日下一个ID,递增序列默认4位)
+        return nextId(4);
     }
 
     @Override
     public String nextId(Integer size) {
         String today = DTF.format(LocalDate.now());
         Long seq = generatorId(null, today);
-        // 4. 格式化补零，返回日内标识
+        // 返回日内标识，格式化补零
         return today + String.format("%0" + size + "d", seq);
     }
 
     @Override
     public String nextId(String prefix) {
-        String today = DTF.format(LocalDate.now());
-        Long seq = generatorId(prefix, today);
-        // 4. 格式化补零，返回日内标识
-        return prefix + today + String.format("%04d", seq);
+        // 返回带前缀的日内标识(当日下一个ID,递增序列默认4位)
+        return nextId(prefix, 4);
     }
 
     @Override
     public String nextId(String prefix, Integer size) {
         String today = DTF.format(LocalDate.now());
         Long seq = generatorId(prefix, today);
-        // 4. 格式化补零，返回日内标识
+        // 返回带前缀的日内标识，格式化补零
         return prefix + today + String.format("%0" + size + "d", seq);
     }
 
