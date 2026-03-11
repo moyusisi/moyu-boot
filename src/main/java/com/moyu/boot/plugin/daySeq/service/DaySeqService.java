@@ -1,6 +1,6 @@
-package com.moyu.boot.plugin.dayId.service;
+package com.moyu.boot.plugin.daySeq.service;
 
-import com.moyu.boot.plugin.dayId.model.vo.DayIdVO;
+import com.moyu.boot.plugin.daySeq.model.vo.DaySeqVO;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ import java.util.List;
  * @author shisong
  * @since 2026-01-29
  */
-public interface DayIdService {
+public interface DaySeqService {
 
     /**
      * 获取日内标识(当日下一个ID,递增序列默认4位)
@@ -50,5 +50,5 @@ public interface DayIdService {
     /**
      * 返回所有的日内标识
      */
-    List<DayIdVO> list(String keyword);
+    List<DaySeqVO> list(String keyword);
 }

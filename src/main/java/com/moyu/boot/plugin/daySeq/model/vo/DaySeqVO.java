@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.dayId.model.vo;
+package com.moyu.boot.plugin.daySeq.model.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DayIdVO {
+public class DaySeqVO {
 
     /**
      * 日内标识的idKey

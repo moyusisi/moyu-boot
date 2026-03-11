@@ -19,7 +19,7 @@ import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.authZ.service.PasswordEncoder;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
-import com.moyu.boot.plugin.dayId.service.DayIdService;
+import com.moyu.boot.plugin.daySeq.service.DaySeqService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -52,7 +52,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private PasswordEncoder passwordEncoder;
 
     @Resource
-    private DayIdService dayIdService;
+    private DaySeqService daySeqService;
 
     @Override
     public List<SysUserVO> list(SysUserParam param) {
@@ -167,7 +167,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser user = BeanUtil.copyProperties(param, SysUser.class);
         user.setId(null);
         // 用户唯一id，202602100001
-        user.setUserId(dayIdService.nextId());
+        user.setUserId(daySeqService.nextId());
         // user.setUserId(IdUtil.getSnowflakeNextIdStr());
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {

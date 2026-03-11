@@ -1,8 +1,8 @@
-package com.moyu.boot.plugin.dayId.service.impl;
+package com.moyu.boot.plugin.daySeq.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.moyu.boot.plugin.dayId.model.vo.DayIdVO;
-import com.moyu.boot.plugin.dayId.service.DayIdService;
+import com.moyu.boot.plugin.daySeq.model.vo.DaySeqVO;
+import com.moyu.boot.plugin.daySeq.service.DaySeqService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2026-01-29
  */
 @Component
-public class RedisDayIdServiceImpl implements DayIdService {
+public class RedisDaySeqServiceImpl implements DaySeqService {
 
     // 固定前缀
     private static final String INTRADAY_SEQ = "seq:day:";
@@ -79,15 +79,15 @@ public class RedisDayIdServiceImpl implements DayIdService {
     }
 
     @Override
-    public List<DayIdVO> list(String keyword) {
-        List<DayIdVO> voList = new ArrayList<>();
+    public List<DaySeqVO> list(String keyword) {
+        List<DaySeqVO> voList = new ArrayList<>();
         // 构造模糊匹配表达式：前缀 + * [+ keyword + *]
         String keyPattern = INTRADAY_SEQ + (StrUtil.isBlank(keyword) ? "*" : "*" + keyword + "*");
         // 获取所有匹配前缀的 key 集合（Set 类型，避免重复）
         Set<String> matchKeys = stringRedisTemplate.keys(keyPattern);
         // 遍历匹配到的key并取值
         for (String key : matchKeys) {
-            DayIdVO vo = new DayIdVO();
+            DaySeqVO vo = new DaySeqVO();
             String value = stringRedisTemplate.opsForValue().get(key);
             vo.setIdKey(StrUtil.subAfter(key, INTRADAY_SEQ, false));
             vo.setIdValue(value);
