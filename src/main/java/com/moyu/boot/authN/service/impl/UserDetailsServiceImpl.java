@@ -57,7 +57,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public LoginUser buildUserDetails(SysUser sysUser) {
-        // 用户直接拥有的角色 ROLE_HAS_USER 关系
+        // 用户直接拥有的角色 USER_HAS_ROLE 关系
         Set<String> roleSet = sysRoleService.userRoles(sysUser.getAccount());
         // 组装LoginUser
         LoginUser loginUser = LoginUser.builder()

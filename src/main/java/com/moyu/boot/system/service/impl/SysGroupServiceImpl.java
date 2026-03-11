@@ -310,7 +310,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 
     @Override
     public void groupAddUser(SysGroupParam param) {
-        String objectId = param.getCode();
+        String groupCode = param.getCode();
         Set<String> userSet = param.getCodeSet();
         if (ObjectUtil.isEmpty(userSet)) {
             return;
@@ -318,15 +318,15 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 已加入分组的用户
         Set<String> oldUserSet = new HashSet<>();
         Set<String> otherGroupUserSet = new HashSet<>();
-        // 查询指定group包含的user，放入oldSet
+        // 查询指定group关联的的user，放入oldSet
         sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
-                .in(SysRelation::getTargetId, userSet)
+                .in(SysRelation::getObjectId, userSet)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
         ).forEach(e -> {
-            if (objectId.equals(e.getObjectId())) {
-                oldUserSet.add(e.getTargetId());
+            if (groupCode.equals(e.getTargetId())) {
+                oldUserSet.add(e.getObjectId());
             } else {
-                otherGroupUserSet.add(e.getTargetId());
+                otherGroupUserSet.add(e.getObjectId());
             }
         });
         // 限制用户只允许加入一个分组
@@ -334,17 +334,17 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
 //            String message = String.format("用户%s已加入其他分组，不可重复添加", otherGroupUserSet);
 //            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER.getCode(), message);
 //        }
-        // 从target中删除已经存在的
+        // 从userSet中删除已经存在的
         userSet.removeAll(oldUserSet);
         // 再次判断要新增的内容为空则返回
         if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
         List<SysRelation> addList = new ArrayList<>();
-        userSet.forEach(code -> {
+        userSet.forEach(username -> {
             SysRelation entity = new SysRelation();
-            entity.setObjectId(objectId);
-            entity.setTargetId(code);
+            entity.setObjectId(username);
+            entity.setTargetId(groupCode);
             entity.setRelationType(RelationTypeEnum.USER_HAS_GROUP.getCode());
             addList.add(entity);
         });
@@ -361,7 +361,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的user，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().objectId(param.getCode()).targetSet(param.getCodeSet())
+        sysRelationService.list(SysRelationParam.builder().targetId(param.getCode()).objectSet(param.getCodeSet())
                 .relationType(RelationTypeEnum.USER_HAS_GROUP.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 物理删除

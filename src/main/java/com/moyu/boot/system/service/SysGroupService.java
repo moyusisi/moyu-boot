@@ -20,7 +20,7 @@ import java.util.List;
 public interface SysGroupService extends IService<SysGroup> {
 
     /**
-     * 未分配任何分组时为默认分组，默认分组包含用户直接关联的所有角色(ROLE_HAS_USER)
+     * 未分配任何分组时为默认分组，默认分组包含用户直接关联的所有角色(USER_HAS_ROLE)
      */
     default String defaultGroup() {
         return "g_default";

@@ -396,7 +396,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
-        // 添加 ROLE_HAS_USER 关系
+        // 添加 USER_HAS_ROLE 关系
         List<SysRelation> addList = new ArrayList<>();
         userSet.forEach(code -> {
             SysRelation entity = new SysRelation();
@@ -445,7 +445,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public Set<String> userRoles(String username) {
-        // 用户直接拥有的角色 ROLE_HAS_USER 关系
+        // 用户直接拥有的角色 USER_HAS_ROLE 关系
         Set<String> roleSet = sysRelationService.userRole(username);
         // 添加默认角色
         roleSet.add(defaultRole());

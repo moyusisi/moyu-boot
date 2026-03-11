@@ -152,9 +152,9 @@ public class SysRoleController {
     }
 
     /**
-     * 查询指定角色的用户列表(仅直接通过 role_has_user 关系指定的用户，即全局角色用户)
+     * 查询指定角色的用户列表(仅直接通过 USER_HAS_ROLE 关系指定的用户，即全局角色用户)
      */
-    @SysLog(module = "system", logType = 2, value = "查询角色包含的用户列表")
+    @SysLog(module = "system", logType = 2, value = "查询角色关联的用户列表")
 //    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
     @PostMapping("/userList")
     public Result<List<SysUserVO>> userList(@RequestBody SysRoleParam roleParam) {
