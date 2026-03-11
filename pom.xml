@@ -22,6 +22,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <sa-token.version>1.45.0</sa-token.version>
     </properties>
 
     <dependencyManagement>
@@ -139,25 +140,25 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot-starter</artifactId>
-            <version>1.44.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
         <!-- Sa-Token 整合 SpringAOP 实现注解鉴权 -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-aop</artifactId>
-            <version>1.44.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
         <!-- Sa-Token 整合 jwt -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-jwt</artifactId>
-            <version>1.44.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
         <!-- Sa-Token 整合 RedisTemplate -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-template</artifactId>
-            <version>1.44.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
         <!-- 提供 Redis 连接池 -->
         <dependency>
@@ -168,7 +169,7 @@
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-alone-redis</artifactId>
-            <version>1.44.0</version>
+            <version>${sa-token.version}</version>
         </dependency>
     </dependencies>
 
