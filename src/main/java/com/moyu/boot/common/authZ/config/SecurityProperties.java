@@ -65,7 +65,7 @@ public class SecurityProperties {
     public static class SessionConfig {
         /**
          * 认证策略类型
-         * * jwt   : 基于JWT的无状态认证
+         * * jwt   : 基于JWT的认证
          * * redis : 基于Redis的有状态认证
          */
         private String type = "redis";
