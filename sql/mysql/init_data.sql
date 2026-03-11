@@ -64,6 +64,7 @@ values  ('0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'appstore
         ('dir_sys_dev', '站内信', 'menu_sys_message', 3, '/dev/message/index', 'dev/message/index', 'message-outlined', null, 1, null, 'sys_module', 4050, null, '', 0, null, null, null, null),
 
         ('dir_sys_ops', '会话管理', 'menu_sys_session', 3, '/auth/monitor', 'auth/monitor/index', 'bars-outlined', null, 1, null, 'sys_module', 5002, null, '', 0, null, null, null, null),
+        ('dir_sys_ops', '序列器', 'menu_sys_seq', 3, '/dev/seq', 'dev/seq/index', 'field-number-outlined', null, 1, null, 'sys_module', 5003, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '三方用户', 'menu_sys_third', 3, '/auth/third', 'auth/third/index', 'team-outlined', null, 1, null, 'sys_module', 5010, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '任务调度', 'menu_sys_job', 3, '/dev/job', 'dev/job/index', 'field-time-outlined', null, 1, null, 'sys_module', 5020, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '系统监控', 'menu_sys_monitor', 3, '/dev/monitor', 'dev/monitor/index', 'database-outlined', null, 1, null, 'sys_module', 5030, null, '', 0, null, null, null, null),
