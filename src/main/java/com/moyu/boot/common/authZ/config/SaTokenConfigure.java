@@ -61,6 +61,8 @@ public class SaTokenConfigure {
         config.setTokenStyle("simple-uuid");
         // 是否输出操作日志
         config.setIsLog(true);
+        // 关闭控制台banner
+        config.setIsPrint(false);
     }
 
     // Sa-Token 整合 jwt https://sa-token.cc/doc.html#/plugin/jwt-extend
