@@ -5,7 +5,7 @@ import com.moyu.boot.plugin.daySeq.model.vo.DaySeqVO;
 import java.util.List;
 
 /**
- * 日内标识生成服务(单日维度生成连续编号)
+ * 日内标识生成服务(日内递增序列)
  * <p>
  * 日内标识的组成结构如下(每部分用-分开):
  * <pre>
