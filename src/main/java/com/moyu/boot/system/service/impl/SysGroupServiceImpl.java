@@ -321,7 +321,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 查询指定group包含的user，放入oldSet
         sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
                 .in(SysRelation::getTargetId, userSet)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
         ).forEach(e -> {
             if (objectId.equals(e.getObjectId())) {
                 oldUserSet.add(e.getTargetId());
@@ -345,7 +345,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             SysRelation entity = new SysRelation();
             entity.setObjectId(objectId);
             entity.setTargetId(code);
-            entity.setRelationType(RelationTypeEnum.GROUP_HAS_USER.getCode());
+            entity.setRelationType(RelationTypeEnum.USER_HAS_GROUP.getCode());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
@@ -362,7 +362,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         Set<Long> ids = new HashSet<>();
         // 查询指定group中存在的user，加入ids待删
         sysRelationService.list(SysRelationParam.builder().objectId(param.getCode()).targetSet(param.getCodeSet())
-                .relationType(RelationTypeEnum.GROUP_HAS_USER.getCode()).build()
+                .relationType(RelationTypeEnum.USER_HAS_GROUP.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {

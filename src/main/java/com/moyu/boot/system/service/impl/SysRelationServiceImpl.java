@@ -91,27 +91,27 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
+    public Set<String> userGroup(String username) {
+        Set<String> groupSet = new HashSet<>();
+        // user查group
+        list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getObjectId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
+                .eq(SysRelation::getObjectId, username)
+        ).forEach(e -> groupSet.add(e.getTargetId()));
+        return groupSet;
+    }
+
+    @Override
     public Set<String> groupUser(String groupCode) {
         Set<String> userSet = new HashSet<>();
         // group查user
         list(Wrappers.lambdaQuery(SysRelation.class)
                 .select(SysRelation::getTargetId)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
-                .eq(SysRelation::getObjectId, groupCode)
-        ).forEach(e -> userSet.add(e.getTargetId()));
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
+                .eq(SysRelation::getTargetId, groupCode)
+        ).forEach(e -> userSet.add(e.getObjectId()));
         return userSet;
-    }
-
-    @Override
-    public Set<String> userGroup(String username) {
-        Set<String> groupSet = new HashSet<>();
-        // role查group
-        list(Wrappers.lambdaQuery(SysRelation.class)
-                .select(SysRelation::getObjectId)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.GROUP_HAS_USER.getCode())
-                .eq(SysRelation::getTargetId, username)
-        ).forEach(e -> groupSet.add(e.getObjectId()));
-        return groupSet;
     }
 
     @Override

@@ -277,10 +277,10 @@ VALUES  ('ROOT', 'rAdmin', 1, null, null, null, 0, null, null, null, null),
         ('r_auditor', 'btn_sys_button_list', 2, null, null, null, 0, null, null, null, null),
         ('r_auditor', 'btn_sys_button_detail', 2, null, null, null, 0, null, null, null, null),
 
-        ('g_zongbu', 'bjAdmin', 3, null, null, null, 0, null, null, null, null),
-        ('g_zongbu', 'r_orgAdmin', 4, null, null, null, 0, null, null, null, null),
-        ('g_beijing', 'bjAdmin', 3, null, null, null, 0, null, null, null, null),
+        ('bjAdmin', 'g_zongbu', 3, null, null, null, 0, null, null, null, null),
+        ('r_orgAdmin', 'g_zongbu', 4, null, null, null, 0, null, null, null, null),
+        ('bjAdmin', 'g_beijing', 3, null, null, null, 0, null, null, null, null),
+        ('auditor', 'g_auditor', 3, null, null, null, 0, null, null, null, null),
         ('g_beijing', 'r_orgAdmin', 4, null, null, null, 0, null, null, null, null),
-        ('g_auditor', 'auditor', 3, null, null, null, 0, null, null, null, null),
         ('g_auditor', 'r_auditor', 4, null, null, null, 0, null, null, null, null);
 

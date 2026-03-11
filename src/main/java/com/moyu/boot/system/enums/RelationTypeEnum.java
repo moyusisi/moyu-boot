@@ -22,7 +22,7 @@ public enum RelationTypeEnum {
     INVALID(0, null),
     ROLE_HAS_USER(1, "角色-用户关系"),
     ROLE_HAS_PERM(2, "角色-权限关系"),
-    GROUP_HAS_USER(3, "分组-用户关系"),
+    USER_HAS_GROUP(3, "用户-分组关系"),
     GROUP_HAS_ROLE(4, "分组-角色关系"),
     SCOPE_HAS_USER(5, "数据-用户关系");
 

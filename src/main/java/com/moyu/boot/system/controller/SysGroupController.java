@@ -173,7 +173,6 @@ public class SysGroupController {
         return Result.success();
     }
 
-
     /**
      * 查询指定分组的角色列表
      */

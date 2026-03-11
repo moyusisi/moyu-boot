@@ -40,14 +40,14 @@ public interface SysRelationService extends IService<SysRelation> {
     Set<String> rolePerm(Set<String> roleSet);
 
     /**
-     * GROUP_HAS_USER关系, group查询user
-     */
-    Set<String> groupUser(String groupCode);
-
-    /**
-     * GROUP_HAS_USER关系, user查询group
+     * USER_HAS_GROUP关系, user查询group
      */
     Set<String> userGroup(String username);
+
+    /**
+     * USER_HAS_GROUP关系, group查询user
+     */
+    Set<String> groupUser(String groupCode);
 
     /**
      * GROUP_HAS_ROLE关系, group查询role
