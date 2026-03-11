@@ -79,7 +79,21 @@ public class AuthSessionServiceImpl implements AuthSessionService {
             vo.setSessionId(saSession.getId());
             vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
             vo.setSessionTimeout(saSession.timeout());
-            vo.setDeadline(DateTime.now().plusSeconds(Convert.toInt(saSession.timeout())).toDate());
+            // 配置的过期时长
+            long configTimeout = SaManager.getConfig().getTimeout();
+            long sessionTimeout = vo.getSessionTimeout();
+            // 剩余时间百分比
+            if (sessionTimeout == -1) {
+                vo.setDeadline(DateTime.now().plusDays(100).toDate());
+                vo.setSessionTimeoutPercent(1d);
+            } else {
+                vo.setDeadline(DateTime.now().plusSeconds(Convert.toInt(sessionTimeout)).toDate());
+                if (configTimeout == -1) {
+                    vo.setSessionTimeoutPercent(1d);
+                } else {
+                    vo.setSessionTimeoutPercent(NumberUtil.div(sessionTimeout, configTimeout));
+                }
+            }
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
             List<SaTerminalInfo> terminalList = saSession.getTerminalList();
             List<AuthSessionVO.SignTokenInfo> tokenInfoList = terminalList.stream()
@@ -94,18 +108,17 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                         tokenInfo.setTokenValue(terminalInfo.getTokenValue());
                         tokenInfo.setTokenDevice(terminalInfo.getDeviceType());
                         tokenInfo.setCreateTime(new Date(terminalInfo.getCreateTime()));
-                        long tokenTimeoutConfig = SaManager.getConfig().getTimeout();
                         long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
                         tokenInfo.setTokenTimeout(tokenTimeout);
                         if (tokenTimeout == -1) {
                             tokenInfo.setDeadline(DateTime.now().plusDays(100).toDate());
-                            tokenInfo.setTokenTimeoutPercent(100d);
+                            tokenInfo.setTokenTimeoutPercent(1d);
                         } else {
                             tokenInfo.setDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenTimeout)).toDate());
-                            if (tokenTimeoutConfig == -1) {
+                            if (configTimeout == -1) {
                                 tokenInfo.setTokenTimeoutPercent(1d);
                             } else {
-                                tokenInfo.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, tokenTimeoutConfig));
+                                tokenInfo.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, configTimeout));
                             }
                         }
                         return tokenInfo;
