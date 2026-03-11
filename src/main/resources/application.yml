@@ -36,3 +36,6 @@ mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
   # 加载全局的配置文件
 #  config-location: classpath:mybatis-config.xml
+  global-config:
+    # 关闭控制台输出banner
+    banner: false
