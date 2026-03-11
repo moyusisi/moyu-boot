@@ -105,7 +105,7 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
         Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
         // 3. 设置过期时间（仅第一次递增时设置，避免重复设置）
         if (increment != null && increment == 1) {
-            stringRedisTemplate.expire(key, 24, TimeUnit.HOURS);
+            stringRedisTemplate.expire(key, 3, TimeUnit.DAYS);
         }
         // 4. 日内递增序列值
         return increment;
