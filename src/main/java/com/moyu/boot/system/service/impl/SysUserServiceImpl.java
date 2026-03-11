@@ -166,7 +166,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 属性复制
         SysUser user = BeanUtil.copyProperties(param, SysUser.class);
         user.setId(null);
-        // 用户唯一id，202602100001
+        // 用户唯一id，202602110001
         user.setUserId(daySeqService.nextId());
         // user.setUserId(IdUtil.getSnowflakeNextIdStr());
         // 若指定了直属组织，则设置所属组织
