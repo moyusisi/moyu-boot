@@ -95,7 +95,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         Set<String> groupSet = new HashSet<>();
         // user查group
         list(Wrappers.lambdaQuery(SysRelation.class)
-                .select(SysRelation::getObjectId)
+                .select(SysRelation::getTargetId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
                 .eq(SysRelation::getObjectId, username)
         ).forEach(e -> groupSet.add(e.getTargetId()));
@@ -106,11 +106,12 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     public Set<String> groupUser(String groupCode) {
         Set<String> userSet = new HashSet<>();
         // group查user
-        list(Wrappers.lambdaQuery(SysRelation.class)
-                .select(SysRelation::getTargetId)
+        List<SysRelation>list = list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getObjectId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
                 .eq(SysRelation::getTargetId, groupCode)
-        ).forEach(e -> userSet.add(e.getObjectId()));
+        );
+        list.forEach(e -> userSet.add(e.getObjectId()));
         return userSet;
     }
 
