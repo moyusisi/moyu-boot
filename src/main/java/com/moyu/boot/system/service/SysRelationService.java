@@ -20,14 +20,14 @@ public interface SysRelationService extends IService<SysRelation> {
     List<SysRelation> list(SysRelationParam param);
 
     /**
-     * ROLE_HAS_USER 关系, role查user
-     */
-    Set<String> roleUser(String roleCode);
-
-    /**
-     * ROLE_HAS_USER 关系, user查role
+     * USER_HAS_ROLE 关系, user查role
      */
     Set<String> userRole(String username);
+
+    /**
+     * USER_HAS_ROLE 关系, role查user
+     */
+    Set<String> roleUser(String roleCode);
 
     /**
      * ROLE_HAS_PERM关系, role查perm

@@ -400,9 +400,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         List<SysRelation> addList = new ArrayList<>();
         userSet.forEach(code -> {
             SysRelation entity = new SysRelation();
-            entity.setObjectId(roleParam.getCode());
-            entity.setTargetId(code);
-            entity.setRelationType(RelationTypeEnum.ROLE_HAS_USER.getCode());
+            entity.setObjectId(code);
+            entity.setTargetId(roleParam.getCode());
+            entity.setRelationType(RelationTypeEnum.USER_HAS_ROLE.getCode());
             addList.add(entity);
         });
         sysRelationService.saveBatch(addList);
@@ -419,8 +419,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定role中已存在的user，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().objectId(roleParam.getCode()).targetSet(userSet)
-                .relationType(RelationTypeEnum.ROLE_HAS_USER.getCode()).build()
+        sysRelationService.list(SysRelationParam.builder().targetId(roleParam.getCode()).objectSet(userSet)
+                .relationType(RelationTypeEnum.USER_HAS_ROLE.getCode()).build()
         ).forEach(e -> ids.add(e.getId()));
         // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {

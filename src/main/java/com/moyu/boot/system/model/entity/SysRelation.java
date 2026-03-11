@@ -25,7 +25,7 @@ public class SysRelation extends BaseEntity {
     private String targetId;
 
     /**
-     * 关系类型(字典 1:role_has_user,2:role_has_perm,3:group_has_user,4:group_has_role,5:scope_has_user)
+     * 关系类型(字典 1:user_has_role, 2:role_has_perm, 3:user_has_group, 4:group_has_role, 5:scope_has_user)
      *
      * @see com.moyu.boot.system.enums.RelationTypeEnum
      */

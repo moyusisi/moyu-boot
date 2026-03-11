@@ -17,10 +17,10 @@ import java.util.Objects;
 public enum RelationTypeEnum {
 
     /**
-     * 关系类型(字典 1:role_has_user, 2:role_has_perm, 3:group_has_user, 4:group_has_role, 5:scope_has_user)
+     * 关系类型(字典 1:user_has_role, 2:role_has_perm, 3:user_has_group, 4:group_has_role, 5:scope_has_user)
      */
     INVALID(0, null),
-    ROLE_HAS_USER(1, "角色-用户关系"),
+    USER_HAS_ROLE(1, "用户-角色关系"),
     ROLE_HAS_PERM(2, "角色-权限关系"),
     USER_HAS_GROUP(3, "用户-分组关系"),
     GROUP_HAS_ROLE(4, "分组-角色关系"),

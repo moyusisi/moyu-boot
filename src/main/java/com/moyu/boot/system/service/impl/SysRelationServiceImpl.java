@@ -40,28 +40,28 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
     }
 
     @Override
+    public Set<String> userRole(String username) {
+        Set<String> roleSet = new HashSet<>();
+        // user查role
+        this.list(Wrappers.lambdaQuery(SysRelation.class)
+                .select(SysRelation::getTargetId)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                .eq(SysRelation::getObjectId, username)
+        ).forEach(e -> roleSet.add(e.getTargetId()));
+        return roleSet;
+    }
+
+    @Override
     public Set<String> roleUser(String roleCode) {
         // 用户角色集合
         Set<String> userSet = new HashSet<>();
         // role查user
         this.list(Wrappers.lambdaQuery(SysRelation.class)
-                .select(SysRelation::getTargetId)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
-                .eq(SysRelation::getObjectId, roleCode)
-        ).forEach(e -> userSet.add(e.getTargetId()));
-        return userSet;
-    }
-
-    @Override
-    public Set<String> userRole(String username) {
-        Set<String> roleSet = new HashSet<>();
-        // user查role
-        this.list(Wrappers.lambdaQuery(SysRelation.class)
                 .select(SysRelation::getObjectId)
-                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_USER.getCode())
-                .eq(SysRelation::getTargetId, username)
-        ).forEach(e -> roleSet.add(e.getObjectId()));
-        return roleSet;
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                .eq(SysRelation::getTargetId, roleCode)
+        ).forEach(e -> userSet.add(e.getObjectId()));
+        return userSet;
     }
 
     @Override
