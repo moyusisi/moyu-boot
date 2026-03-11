@@ -24,7 +24,7 @@ import java.util.List;
 public class SecurityProperties {
 
     /**
-     * 是否启用鉴权功能(false等同于全加白)
+     * 是否启用登录鉴权功能(false等同于全加白)
      */
     private Boolean enabled = Boolean.TRUE;
 
