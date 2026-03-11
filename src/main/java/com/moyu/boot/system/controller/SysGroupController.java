@@ -177,7 +177,7 @@ public class SysGroupController {
      * 查询指定分组的角色列表
      */
     @SysLog(module = "system", logType = 2, value = "查询用户的岗位列表")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userList')")
+//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:group:userGroupList')")
     @PostMapping("/userGroupList")
     public Result<List<SysGroupVO>> userGroupList(@RequestBody SysGroupParam groupParam) {
         Assert.notEmpty(groupParam.getUsername(), "用户名username不能为空");
