@@ -10,10 +10,10 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
-import com.moyu.boot.common.core.enums.ResultCodeEnum;
-import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -88,12 +88,7 @@ public class SaTokenConfigure {
                 // 放行路由
                 .addExclude(whiteList.toArray(new String[0]))
                 // 认证函数: 每次请求执行
-                .setAuth(obj -> {
-                    // log.info("===== 进入Sa-Token全局认证 =====");
-                    // 登录认证 -- 拦截所有路由，并排除/user/doLogin 用于开放登录
-                    // SaRouter.match("/api/**").check(r -> StpUtil.checkLogin());
-                    StpUtil.checkLogin();
-                })
+                .setAuth(obj -> StpUtil.checkLogin())
 
                 // 异常处理函数：过滤器中抛出的异常无法进入全局@ExceptionHandler
                 .setError(e -> {
@@ -101,24 +96,7 @@ public class SaTokenConfigure {
                     // 获取原始请求对象
                     HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
                     HttpServletResponse response = (HttpServletResponse) SaHolder.getResponse().getSource();
-                    // 未认证时默认返回
-                    Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
-                    if (e instanceof NotLoginException) {
-                        // 处理登录异常，区分未认证的具体场景
-                        result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
-                    }
-                    // 设置响应头
-                    // response.setStatus(HttpServletResponse.SC_OK);
-                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                    String responseBody = new Gson().toJson(result);
-                    // 记录日志
-                    String ip = ServletUtil.getClientIP(request);
-                    if (ObjectUtil.isNotEmpty(ip)) {
-                        log.info("From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
-                    }
-                    log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
-                    return responseBody;
+                    return filterErrorHandler(request, response, e);
                 })
 
                 // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
@@ -131,5 +109,28 @@ public class SaTokenConfigure {
                             .setHeader("X-Content-Type-Options", "nosniff")
                     ;
                 });
+    }
+
+    /**
+     * 处理Filter层的异常
+     */
+    private Object filterErrorHandler(HttpServletRequest request, HttpServletResponse response, Throwable e) {
+        // 未认证时默认返回
+        Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+        if (e instanceof NotLoginException) {
+            // 处理登录异常，区分未认证的具体场景
+            result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
+        }
+        // 设置响应头
+        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        String responseBody = new Gson().toJson(result);
+        // 记录日志
+        String ip = ServletUtil.getClientIP(request);
+        if (ObjectUtil.isNotEmpty(ip)) {
+            log.info("From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+        }
+        log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
+        return responseBody;
     }
 }
