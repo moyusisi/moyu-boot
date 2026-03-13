@@ -1,6 +1,5 @@
 package com.moyu.boot.authN.model.param;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;

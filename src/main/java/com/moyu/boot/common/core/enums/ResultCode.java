@@ -1,6 +1,5 @@
 package com.moyu.boot.common.core.enums;
 
-
 /**
  * 响应码接口
  *

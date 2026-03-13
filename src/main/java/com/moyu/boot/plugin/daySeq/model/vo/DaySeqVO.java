@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.daySeq.model.vo;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 

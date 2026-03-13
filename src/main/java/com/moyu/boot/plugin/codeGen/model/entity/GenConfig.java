@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.model.entity;
 
-
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

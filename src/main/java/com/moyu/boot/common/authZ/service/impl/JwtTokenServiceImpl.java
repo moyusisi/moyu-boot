@@ -1,6 +1,5 @@
 package com.moyu.boot.common.authZ.service.impl;
 
-
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
 import com.moyu.boot.common.authZ.model.LoginUser;

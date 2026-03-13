@@ -1,14 +1,10 @@
 package com.moyu.boot.common.authZ.model;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
-
 
 /**
  * 登陆用户对象

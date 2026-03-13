@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.enums;
 
-
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 

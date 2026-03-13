@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.model.bo;
 
-
 import lombok.Data;
 
 /**

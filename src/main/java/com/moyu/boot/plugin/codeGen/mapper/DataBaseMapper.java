@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.mapper;
 
-
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.moyu.boot.plugin.codeGen.model.bo.ColumnMetaData;

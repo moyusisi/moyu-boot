@@ -1,6 +1,5 @@
 package com.moyu.boot.authN.service;
 
-
 import com.moyu.boot.authN.model.param.UserLoginParam;
 
 /**

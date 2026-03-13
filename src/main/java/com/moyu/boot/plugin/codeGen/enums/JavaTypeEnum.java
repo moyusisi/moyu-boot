@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.enums;
 
-
 import lombok.Getter;
 
 import java.util.HashMap;

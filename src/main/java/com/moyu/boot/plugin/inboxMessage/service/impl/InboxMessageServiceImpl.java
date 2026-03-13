@@ -31,7 +31,6 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * 站内消息服务实现类
  *

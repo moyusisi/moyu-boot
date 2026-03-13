@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-
 /**
  * 站内信接收服务实现类
  *

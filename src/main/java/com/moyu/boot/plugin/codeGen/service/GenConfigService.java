@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.service;
 
-
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codeGen.model.entity.GenConfig;

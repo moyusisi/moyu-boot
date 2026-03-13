@@ -1,6 +1,5 @@
 package com.moyu.boot.plugin.codeGen.controller;
 
-
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
