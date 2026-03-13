@@ -1,6 +1,5 @@
 package com.moyu.boot.common.core.annotation;
 
-
 import java.lang.annotation.*;
 
 /**
