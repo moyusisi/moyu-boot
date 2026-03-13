@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-@ConditionalOnProperty(value = "custom.security.session.type", havingValue = "redis", matchIfMissing = true)
+@ConditionalOnProperty(value = "custom.auth.session.type", havingValue = "redis", matchIfMissing = true)
 public class RedisTokenServiceImpl implements TokenService {
 
     @Override

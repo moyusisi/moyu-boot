@@ -8,7 +8,6 @@
     <artifactId>moyu-boot</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <description>基于 Java 8 + SpringBoot 2.7 + Spring Security 构建的权限管理系统</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -55,11 +54,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- spring-security  -->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
         <!-- Spring Boot Redis 核心依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

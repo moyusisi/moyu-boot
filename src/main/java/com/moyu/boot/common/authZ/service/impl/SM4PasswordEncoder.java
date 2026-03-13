@@ -19,7 +19,7 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-@ConditionalOnProperty(value = "custom.security.crypto-type", havingValue = "sm4", matchIfMissing = true)
+@ConditionalOnProperty(value = "custom.auth.crypto-type", havingValue = "sm4", matchIfMissing = true)
 public class SM4PasswordEncoder implements PasswordEncoder {
 
     @Resource
