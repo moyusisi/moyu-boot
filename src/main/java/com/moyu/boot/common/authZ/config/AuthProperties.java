@@ -20,8 +20,8 @@ import java.util.List;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "custom.security")
-public class SecurityProperties {
+@ConfigurationProperties(prefix = "custom.auth")
+public class AuthProperties {
 
     /**
      * 是否启用登录鉴权功能(false等同于全加白)

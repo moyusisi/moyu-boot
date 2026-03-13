@@ -1,7 +1,7 @@
 package com.moyu.boot.common.authZ.service.impl;
 
 import cn.hutool.crypto.SmUtil;
-import com.moyu.boot.common.authZ.config.SecurityProperties;
+import com.moyu.boot.common.authZ.config.AuthProperties;
 import com.moyu.boot.common.authZ.service.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -23,7 +23,7 @@ import java.util.Objects;
 public class SM4PasswordEncoder implements PasswordEncoder {
 
     @Resource
-    private SecurityProperties properties;
+    private AuthProperties properties;
 
     public String encode(String rawPassword) {
         // 自定义密钥

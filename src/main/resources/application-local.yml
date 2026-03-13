@@ -92,8 +92,8 @@ sa-token:
 
 # 自定义配置
 custom:
-  # 自定义Spring Security配置
-  security:
+  # 自定义认证鉴权配置
+  auth:
     # 是否启用认证，为false时等同于全加白
     enabled: true
     # 会话配置
