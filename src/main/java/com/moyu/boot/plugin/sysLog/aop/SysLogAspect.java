@@ -122,7 +122,7 @@ public class SysLogAspect {
             try {
                 // 客户端ip
                 sysLog.setIp(ServletUtil.getClientIP(request));
-                if (StrUtil.isNotBlank(sysLog.getIp())) {
+                if (StrUtil.isNotBlank(sysLog.getIp()) && !sysLog.getIp().equals("127.0.0.1")) {
                     // 国家|区域|省份|城市|运营商
                     String region = IpUtils.getRegion(sysLog.getIp());
                     if (StrUtil.isNotBlank(region)) {
