@@ -47,21 +47,33 @@ public class SysLog {
      */
     private String content;
     /**
-     * 操作ip
+     * ip地址
      */
-    private String opIp;
+    private String ip;
+    /**
+     * 省份
+     */
+    private String province;
+    /**
+     * 城市
+     */
+    private String city;
     /**
      * 浏览器
      */
-    private String opBrowser;
+    private String browser;
+    /**
+     * 浏览器版本
+     */
+    private String browserVersion;
     /**
      * 操作系统
      */
-    private String opOs;
+    private String os;
     /**
-     * 操作平台
+     * 平台
      */
-    private String opPlatform;
+    private String platform;
     /**
      * 请求路径地址
      */

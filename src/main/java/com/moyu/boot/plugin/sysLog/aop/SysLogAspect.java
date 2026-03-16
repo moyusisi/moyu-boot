@@ -9,6 +9,7 @@ import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
+import com.moyu.boot.common.core.util.IpUtils;
 import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
@@ -120,25 +121,29 @@ public class SysLogAspect {
             // 客户端信息
             try {
                 // 客户端ip
-                sysLog.setOpIp(ServletUtil.getClientIP(request));
+                sysLog.setIp(ServletUtil.getClientIP(request));
+                if (StrUtil.isNotBlank(sysLog.getIp())) {
+                    // 国家|区域|省份|城市|运营商
+                    String region = IpUtils.getRegion(sysLog.getIp());
+                    if (StrUtil.isNotBlank(region)) {
+                        String[] regionArray = region.split("\\|");
+                        if (regionArray.length > 2) {
+                            sysLog.setProvince(regionArray[2]);
+                            sysLog.setCity(regionArray[3]);
+                        }
+                    }
+                }
                 // 用户代理，简称 UA，是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、浏览器及版本、浏览器渲染引擎等。
                 UserAgent userAgent = getUserAgent(request);
                 if (ObjectUtil.isNotEmpty(userAgent)) {
                     // 浏览器
-                    String browser = userAgent.getBrowser().toString();
-                    if (StrUtil.isNotBlank(browser)) {
-                        sysLog.setOpBrowser(StrUtil.sub(browser, 0, 50));
-                    }
+                    sysLog.setBrowser(userAgent.getBrowser().getName());
+                    // 浏览器版本
+                    sysLog.setBrowserVersion(userAgent.getBrowser().getVersion(userAgent.toString()));
                     // 操作系统
-                    String os = userAgent.getOs().toString();
-                    if (StrUtil.isNotBlank(os)) {
-                        sysLog.setOpOs(StrUtil.sub(os, 0, 50));
-                    }
+                    sysLog.setOs(userAgent.getOs().getName());
                     // 平台
-                    String platform = userAgent.getPlatform().toString();
-                    if (StrUtil.isNotBlank(platform)) {
-                        sysLog.setOpPlatform(StrUtil.sub(platform, 0, 50));
-                    }
+                    sysLog.setPlatform(userAgent.getPlatform().getName());
                 }
             } catch (Exception err) {
                 log.error("获取客户端信息异常：", e);

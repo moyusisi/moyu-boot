@@ -3,6 +3,7 @@ package com.moyu.boot;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import com.google.common.base.CaseFormat;
+import com.moyu.boot.common.core.util.IpUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -47,4 +48,8 @@ public class UnitTest {
         log.info(RandomUtil.randomString(10));
     }
 
+    @Test
+    public void testIp() {
+        log.info(IpUtils.getRegion("127.0.0.1"));
+    }
 }

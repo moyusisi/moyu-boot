@@ -71,22 +71,31 @@ public class SysLogParam extends PageParam {
     /**
      * 操作ip
      */
-    private String opIp;
+    private String ip;
     /**
-     * 操作浏览器
+     * 省份
      */
-    @Size(max = 50, message = "content长度不能超过50个字符")
-    private String opBrowser;
+    private String province;
+    /**
+     * 城市
+     */
+    private String city;
+    /**
+     * 浏览器
+     */
+    private String browser;
+    /**
+     * 浏览器版本
+     */
+    private String browserVersion;
     /**
      * 操作系统
      */
-    @Size(max = 50, message = "content长度不能超过50个字符")
-    private String opOs;
+    private String os;
     /**
-     * 操作平台
+     * 平台
      */
-    @Size(max = 50, message = "content长度不能超过50个字符")
-    private String opPlatform;
+    private String platform;
     /**
      * 请求路径地址
      */
