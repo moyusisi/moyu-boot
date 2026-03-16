@@ -97,6 +97,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
         </dependency>
+        <!-- 离线 IP 地址定位库，基于本地 ip2region.xdb 数据库文件 -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>2.7.0</version>
+        </dependency>
         <!-- mybatis-plus 增强CRUD 参考：https://baomidou.com/introduce/ -->
         <dependency>
             <groupId>com.baomidou</groupId>
