@@ -193,7 +193,7 @@ CREATE TABLE `sys_log`
     `province`         VARCHAR(50)  DEFAULT NULL COMMENT '省份',
     `city`             VARCHAR(50)  DEFAULT NULL COMMENT '城市',
     `browser`          VARCHAR(50)  DEFAULT NULL COMMENT '浏览器',
-    `browserVersion`   VARCHAR(50)  DEFAULT NULL COMMENT '浏览器版本',
+    `browser_version`  VARCHAR(50)  DEFAULT NULL COMMENT '浏览器版本',
     `os`               VARCHAR(50)  DEFAULT NULL COMMENT '操作系统',
     `platform`         VARCHAR(50)  DEFAULT NULL COMMENT '系统平台',
     `request_url`      VARCHAR(255) DEFAULT NULL COMMENT '请求路径地址',
