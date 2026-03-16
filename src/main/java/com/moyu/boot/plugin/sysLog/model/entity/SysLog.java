@@ -63,10 +63,6 @@ public class SysLog {
      */
     private String browser;
     /**
-     * 浏览器版本
-     */
-    private String browserVersion;
-    /**
      * 操作系统
      */
     private String os;

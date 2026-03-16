@@ -138,8 +138,6 @@ public class SysLogAspect {
                 if (ObjectUtil.isNotEmpty(userAgent)) {
                     // 浏览器
                     sysLog.setBrowser(userAgent.getBrowser().getName());
-                    // 浏览器版本
-                    sysLog.setBrowserVersion(userAgent.getBrowser().getVersion(userAgent.toString()));
                     // 操作系统
                     sysLog.setOs(userAgent.getOs().getName());
                     // 平台
