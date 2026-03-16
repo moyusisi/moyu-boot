@@ -1,6 +1,5 @@
 package com.moyu.boot.common.authZ.config;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -49,21 +48,10 @@ public class AuthProperties {
     private String sm4Key = "KeyMustBe16Size.";
 
     /**
-     * 会话配置
+     * 令牌类型
+     * * jwt   : JWT令牌
+     * * redis : 有状态令牌
      */
-    private SessionConfig session;
-
-    /**
-     * 会话配置类
-     */
-    @Data
-    public static class SessionConfig {
-        /**
-         * 认证策略类型
-         * * jwt   : 基于JWT的认证
-         * * redis : 基于Redis的有状态认证
-         */
-        private String type = "redis";
-    }
+    private String tokenType = "redis";
 
 }

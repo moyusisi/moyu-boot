@@ -96,10 +96,8 @@ custom:
   auth:
     # 是否启用认证，为false时等同于全加白
     enabled: true
-    # 会话配置
-    session:
-      # 认证策略类型 jwt redis
-      type: redis
+    # 令牌类型 支持:jwt redis
+    token-type: redis
     # 白名单列表，仅跳过 AuthorizationFilter 过滤器，还是会走其他过滤器(CSRF、CORS等)
     white-list:
       # 认证授权类

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * @since 2025-11-11
  */
 @Service
-@ConditionalOnProperty(value = "custom.auth.session.type", havingValue = "jwt")
+@ConditionalOnProperty(value = "custom.auth.token-type", havingValue = "jwt")
 public class JwtTokenServiceImpl implements TokenService {
 
     @Override

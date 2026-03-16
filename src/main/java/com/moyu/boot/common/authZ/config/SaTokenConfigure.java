@@ -67,7 +67,7 @@ public class SaTokenConfigure {
 
     // Sa-Token 整合 jwt https://sa-token.cc/doc.html#/plugin/jwt-extend
     @Bean
-    @ConditionalOnProperty(value = "custom.auth.session.type", havingValue = "jwt")
+    @ConditionalOnProperty(value = "custom.auth.token-type", havingValue = "jwt")
     public StpLogic getStpLogicJwt() {
         // 仅Token风格替换，仍然需要Redis
         return new StpLogicJwtForSimple();
