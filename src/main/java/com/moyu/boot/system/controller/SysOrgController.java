@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
-import com.moyu.boot.common.core.annotation.PreDataScope;
+import com.moyu.boot.common.core.annotation.DataScope;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
@@ -40,7 +40,7 @@ public class SysOrgController {
      */
     @SysLog(module = "system", logType = 2, value = "分页查询组织列表")
     @SaCheckPermission(value = "sys:org:page", orRole = "ROOT")
-    @PreDataScope("sys:org:page")
+    @DataScope("sys:org:page")
     @PostMapping("/page")
     public Result<PageData<SysOrgVO>> pageList(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(orgParam.getPageNum(), orgParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -52,7 +52,7 @@ public class SysOrgController {
      * 获取组织树
      */
     @Log(jsonLog = true, response = false)
-    @PreDataScope("sys:org:tree")
+    @DataScope("sys:org:tree")
     @PostMapping("/tree")
     public Result<List<Tree<String>>> tree() {
         List<Tree<String>> list = sysOrgService.tree();

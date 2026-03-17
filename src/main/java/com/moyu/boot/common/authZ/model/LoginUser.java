@@ -53,7 +53,8 @@ public class LoginUser implements Serializable {
 
     /**
      * 数据范围(动态变化)
-     * @see com.moyu.boot.common.core.annotation.PreDataScope
+     *
+     * @see com.moyu.boot.common.core.annotation.DataScope
      */
     private Integer dataScope;
     /**

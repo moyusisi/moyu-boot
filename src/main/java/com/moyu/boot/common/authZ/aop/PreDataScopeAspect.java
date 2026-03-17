@@ -27,7 +27,7 @@ public class PreDataScopeAspect {
     /**
      * 切点
      */
-    @Pointcut("@annotation(com.moyu.boot.common.core.annotation.PreDataScope)")
+    @Pointcut("@annotation(com.moyu.boot.common.core.annotation.DataScope)")
     public void pointcut() {
     }
 
@@ -35,9 +35,8 @@ public class PreDataScopeAspect {
      * 切面处理
      */
     @Before("pointcut() && @annotation(annotation)")
-    public void logHandler(com.moyu.boot.common.core.annotation.PreDataScope annotation) {
-        // 先从上下文中获取当前用户
-        // 当前登陆用户
+    public void logHandler(com.moyu.boot.common.core.annotation.DataScope annotation) {
+        // 从上下文中获取当前登录用户
         Optional<LoginUser> optUser = LoginUserUtils.getLoginUser();
         if (optUser.isPresent()) {
             LoginUser loginUser = optUser.get();
