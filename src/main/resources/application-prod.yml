@@ -94,7 +94,7 @@ sa-token:
 custom:
   # 自定义认证鉴权配置
   auth:
-    # 是否启用认证，为false时等同于全加白
+    # 是否启用鉴权，为false时等同于全加白
     enabled: true
     # 令牌类型 支持:jwt redis
     token-type: redis
