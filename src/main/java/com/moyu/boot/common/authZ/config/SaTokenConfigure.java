@@ -19,6 +19,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,8 @@ public class SaTokenConfigure {
 
     @Resource
     private AuthProperties properties;
+    @Resource
+    private TokenService tokenService;
 
     // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc/doc.html#/use/config
     @Resource
@@ -90,7 +94,16 @@ public class SaTokenConfigure {
                 // 放行路由
                 .addExclude(whiteList.toArray(new String[0]))
                 // 认证函数: 每次请求执行
-                .setAuth(obj -> StpUtil.checkLogin())
+                .setAuth(obj -> {
+                    StpUtil.checkLogin();
+                    // 向Security上下文中设置认证令牌.(避免覆盖)
+                    if (ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
+                        // 从token中解析出认证信息
+                        Authentication authentication = tokenService.parseToken();
+                        // 放到Security上下文中
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                })
 
                 // 异常处理函数：过滤器中抛出的异常无法进入全局@ExceptionHandler
                 .setError(e -> {
@@ -130,7 +143,7 @@ public class SaTokenConfigure {
         // 记录日志
         String ip = ServletUtil.getClientIP(request);
         if (ObjectUtil.isNotEmpty(ip)) {
-            log.info("From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+            log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
         }
         log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
         return responseBody;

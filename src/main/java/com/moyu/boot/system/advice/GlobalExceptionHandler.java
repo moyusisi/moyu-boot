@@ -5,14 +5,16 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
 import cn.hutool.json.JSONUtil;
+import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.nio.file.AccessDeniedException;
 import java.util.stream.Collectors;
 
 /**
@@ -170,6 +173,24 @@ public class GlobalExceptionHandler {
         return result;
     }
 
+    // security的认证异常(用户进行认证过程中，认证失败时触发。)
+    @ExceptionHandler(AuthenticationException.class)
+    public Result<?> authenticationException(AuthenticationException e) {
+        if (e instanceof BadCredentialsException) {
+            // 用户名或密码错误
+            return new Result<>(ResultCodeEnum.USER_PASSWORD_ERROR);
+        }
+        // 登录异常
+        return new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
+    }
+
+    // security的授权异常(AccessDeniedException及子类) 先于filter层的exceptionHandling处理
+    @ExceptionHandler({AccessDeniedException.class})
+    public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
+        log.warn("未授权访问：{}", request.getRequestURI());
+        return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+    }
+
     /**
      * 鉴权异常
      * 未登录异常单独处理(如果已在全局过滤器SaServletFilter中处理，则不会走到全局@ExceptionHandler中)
@@ -189,7 +210,7 @@ public class GlobalExceptionHandler {
      * sa鉴权的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
      */
     @ExceptionHandler({NotRoleException.class, NotPermissionException.class})
-    public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
+    public Result<?> noPermissionException(HttpServletRequest request, Exception e) {
         log.info("未授权访问：{}", request.getRequestURI());
         return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
     }

@@ -1,5 +1,7 @@
 package com.moyu.boot.common.authZ.config;
 
+import com.moyu.boot.common.authZ.handler.CustomAccessDeniedHandler;
+import com.moyu.boot.common.authZ.handler.CustomAuthenticationEntryPoint;
 import com.moyu.boot.common.authZ.service.TokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -8,9 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -34,34 +33,6 @@ public class SecurityConfig {
     private TokenService tokenService;
 
     /**
-     * 跨域资源共享过滤器
-     */
-    @Bean
-    public CorsFilter corsFilter() {
-        // 1. 构建跨域配置规则
-        CorsConfiguration config = new CorsConfiguration();
-        // 设置允许的跨域源(credentials设置为include时，服务端的Access-Control-Allow-Origin不能设置为*)
-        config.addAllowedOriginPattern("*");
-        // 设置跨域访问可以携带cookie
-        config.setAllowCredentials(true);
-        // 设置允许的请求方法 允许所有的请求方法
-        config.addAllowedMethod("*");
-        // 设置允许的请求头 允许携带任何头信息
-        config.addAllowedHeader("*");
-        // 暴露的响应头（前端可获取的自定义头）
-        config.addExposedHeader("Authorization");
-        // 预检请求缓存时间(单位s)
-        config.setMaxAge(3600L);
-
-        //  2. 应用跨域配置规则到所有接口
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-
-        // 3. 返回配置好的CorsFilter
-        return new CorsFilter(source);
-    }
-
-    /**
      * 配置安全过滤器链
      */
     @Bean
@@ -76,7 +47,7 @@ public class SecurityConfig {
         }
         // 白名单放行
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
-        // 设置需要认证才可访问的接口
+        // 设置需要认证才可访问的接口(与在SaServletFilter中设置认证等效)
 //        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
 
         // 允许跨域访问
@@ -96,17 +67,17 @@ public class SecurityConfig {
         // 禁用 HTTP Basic 认证，避免弹窗式登录
         http.httpBasic().disable();
 
-        // 添加Token认证解析过滤器
+        // 添加Token认证解析过滤器(与SaServletFilter有一个就行，目的是向Security中存放认证令牌)
 //        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 //        // 添加CORS filter
 //        http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
-//
-//        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
-//        http.exceptionHandling()
-//                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
-//                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                // 授权异常处理，访问权限不足时的处理
-//                .accessDeniedHandler(new CustomAccessDeniedHandler());
+
+        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
+        http.exceptionHandling()
+                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                // 鉴权异常处理，访问权限不足时的处理
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
         return http.build();
     }
 
