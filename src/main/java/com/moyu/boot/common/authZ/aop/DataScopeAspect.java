@@ -22,7 +22,7 @@ import java.util.Optional;
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 200)
 @Component
-public class PreDataScopeAspect {
+public class DataScopeAspect {
 
     /**
      * 切点
