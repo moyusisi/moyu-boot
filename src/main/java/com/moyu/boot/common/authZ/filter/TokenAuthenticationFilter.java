@@ -1,4 +1,4 @@
-package com.moyu.boot.common.security.filter;
+package com.moyu.boot.common.authZ.filter;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
