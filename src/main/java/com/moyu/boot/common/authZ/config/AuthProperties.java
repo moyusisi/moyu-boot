@@ -38,6 +38,11 @@ public class AuthProperties {
     private List<String> whiteList = new ArrayList<>();
 
     /**
+     * 忽略列表，不经过Security的任何过滤器
+     */
+    private List<String> ignoreList = new ArrayList<>();
+
+    /**
      * 密码加密方式
      */
     private String cryptoType = "sm4";
