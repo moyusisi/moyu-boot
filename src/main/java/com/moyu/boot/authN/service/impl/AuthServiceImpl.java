@@ -4,14 +4,13 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.authN.service.AuthService;
-import com.moyu.boot.authN.service.UserDetailsService;
+import com.moyu.boot.common.authZ.model.LoginUser;
+import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
-import com.moyu.boot.common.authZ.model.LoginUser;
-import com.moyu.boot.common.authZ.service.PasswordEncoder;
-import com.moyu.boot.common.authZ.service.TokenService;
-import com.moyu.boot.system.model.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -50,20 +49,27 @@ public class AuthServiceImpl implements AuthService {
             // 账户被冻结(临时冻结)
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_FROZEN);
         }
-        // 通过account获取用户
-        SysUser sysUser = userDetailsService.loadUserByUsername(username);
+        // 认证令牌（Security方式认证）
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
+//        // 认证，会调用 UserDetailsServiceImpl#loadUserByUsername，认证失败会抛出AuthenticationException
+//        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+//        // 放到Security上下文中(，不会往下走)
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        // 认证成功获取已认证的用户主体
+//        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+
+        // 普通方式认证
+        LoginUser loginUser = (LoginUser) userDetailsService.loadUserByUsername(username);
         // 检查状态
-        if (sysUser.getStatus() != 0) {
+        if (!loginUser.isEnabled()) {
             // 账户已停用、已作废
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_DISABLED);
         }
         // 对比密码
-        if (!passwordEncoder.matches(password, sysUser.getPassword())) {
+        if (!passwordEncoder.matches(password, loginUser.getPassword())) {
             // 用户名或密码错误
             throw new BusinessException(ResultCodeEnum.USER_PASSWORD_ERROR);
         }
-        // 构造登录用户
-        LoginUser loginUser = userDetailsService.buildUserDetails(sysUser);
         // 生成token
         return tokenService.generateToken(loginUser);
     }
