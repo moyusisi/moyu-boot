@@ -78,7 +78,7 @@ public class SaTokenConfigure {
     }
 
     // 注册 Sa-Token全局过滤器 https://sa-token.cc/doc.html#/up/global-filter
-    @Bean
+//    @Bean
     public SaServletFilter getSaServletFilter() {
         // 放行白名单
         List<String> whiteList = new ArrayList<>();
