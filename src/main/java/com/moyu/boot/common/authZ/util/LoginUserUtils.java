@@ -1,8 +1,9 @@
 package com.moyu.boot.common.authZ.util;
 
-import cn.dev33.satoken.stp.StpUtil;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -23,25 +24,17 @@ public class LoginUserUtils {
     public static final String ROOT_ROLE = "ROOT";
 
     /**
-     * 存储当前线程的 LoginUser（线程隔离）
-     */
-    private static final ThreadLocal<LoginUser> LOCAL_USER = new ThreadLocal<>();
-
-    /**
      * 获取当前登录用户信息
      **/
     public static Optional<LoginUser> getLoginUser() {
         Optional<LoginUser> optUser = Optional.empty();
-        // 先检查登录，否则StpUtil.getTokenSession()时会校验是否登录，无则抛出异常
-        if (StpUtil.isLogin()) {
-            // 1.优先从线程变量中获取LoginUser
-            LoginUser loginUser = LOCAL_USER.get();
-            // 2.无则从缓存中获取LoginUser，并存入线程变量
-            if (loginUser == null) {
-                loginUser = (LoginUser) StpUtil.getTokenSession().get("loginUser");
-                LOCAL_USER.set(loginUser);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            // 用户凭证，已登录用户为 LoginUser，未登录用户为username
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof LoginUser) {
+                optUser = Optional.of((LoginUser) principal);
             }
-            optUser = Optional.of(loginUser);
         }
         return optUser;
     }
@@ -98,11 +91,4 @@ public class LoginUserUtils {
         return getRoles().contains(ROOT_ROLE);
     }
 
-    /**
-     * 清理当前线程的 ThreadLocal 数据（关键：防止内存泄漏）
-     * 建议在请求结束时调用（如 Spring 拦截器的 afterCompletion 方法）
-     */
-    public static void clearLoginUser() {
-        LOCAL_USER.remove();
-    }
 }
