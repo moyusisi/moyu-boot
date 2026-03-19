@@ -22,7 +22,7 @@ public class ExceptionWrapperUtils {
         switch (nle.getType()) {
             // 未能读取到有效 token
             case NotLoginException.NOT_TOKEN:
-                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.NOT_TOKEN_MESSAGE);
                 break;
             // token 无效
             case NotLoginException.INVALID_TOKEN:
@@ -46,7 +46,7 @@ public class ExceptionWrapperUtils {
                 break;
             // 未按照指定前缀提交 token
             case NotLoginException.NO_PREFIX:
-                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.NO_PREFIX_MESSAGE);
                 break;
             // 当前会话未登录
             default:
