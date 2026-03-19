@@ -49,7 +49,7 @@ public class SecurityConfig {
         }
         // 设置不需要认证访问的接口(白名单放行)
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
-        // 设置需要认证才可访问的接口(与在SaServletFilter中设置认证等效)
+        // 设置需要认证才可访问的接口
         http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
         // 认证异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
         http.exceptionHandling()

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
@@ -28,7 +29,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.nio.file.AccessDeniedException;
 import java.util.stream.Collectors;
 
 /**
@@ -184,35 +184,26 @@ public class GlobalExceptionHandler {
         return new Result<>(ResultCodeEnum.USER_LOGIN_EXCEPTION);
     }
 
-    // security的授权异常(AccessDeniedException及子类) 先于filter层的exceptionHandling处理
+    // security的授权异常(AccessDeniedException及子类)
     @ExceptionHandler({AccessDeniedException.class})
     public Result<?> accessDeniedException(HttpServletRequest request, Exception e) {
-        log.warn("未授权访问：{}", request.getRequestURI());
-        return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
-    }
-
-    /**
-     * 鉴权异常
-     * 未登录异常单独处理(如果已在全局过滤器SaServletFilter中处理，则不会走到全局@ExceptionHandler中)
-     */
-    @ExceptionHandler(NotLoginException.class)
-    public Result<?> notLoginException(HttpServletRequest request, Exception e) {
-        Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
-        if (e instanceof NotLoginException) {
-            // 处理登录异常，区分未认证的具体场景
-            result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
-        }
-        return result;
-    }
-
-    /**
-     * 鉴权异常
-     * sa鉴权的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
-     */
-    @ExceptionHandler({NotRoleException.class, NotPermissionException.class})
-    public Result<?> noPermissionException(HttpServletRequest request, Exception e) {
         log.info("未授权访问：{}", request.getRequestURI());
         return new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+    }
+
+    /**
+     * 认证鉴权异常
+     * sa鉴权的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
+     */
+    @ExceptionHandler({NotLoginException.class, NotRoleException.class, NotPermissionException.class})
+    public Result<?> noPermissionException(HttpServletRequest request, Exception e) {
+        Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
+        if (e instanceof NotLoginException) {
+            // 处理未登录异常，区分未认证的具体场景
+            result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
+        }
+        log.info("未授权访问：{}", request.getRequestURI());
+        return result;
     }
 
     /**
@@ -220,7 +211,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result<?> exceptionHandler(Exception e) {
-        // 确保AuthExceptionHandler优先级比Global高，否则认证异常就会在此捕获
+        // Filter层的异常不会经过ExceptionHandler处理
         log.error("系统异常", e);
         Result<?> result = Result.failed(e.getMessage());
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
