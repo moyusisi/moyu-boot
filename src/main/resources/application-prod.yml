@@ -96,9 +96,9 @@ custom:
   auth:
     # 是否启用鉴权，为false时等同于全加白
     enabled: true
-    # 令牌类型 支持:jwt redis
+    # 令牌类型，默认redis 支持: jwt | redis
     token-type: redis
-    # 白名单列表，仅跳过 AuthorizationFilter 过滤器，还是会走其他过滤器(CSRF、CORS等)
+    # 白名单列表，跳过 AuthorizationFilter 认证过滤器
     white-list:
       # 认证授权类
       - /api/auth/login/**

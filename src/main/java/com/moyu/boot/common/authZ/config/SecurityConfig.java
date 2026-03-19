@@ -1,5 +1,6 @@
 package com.moyu.boot.common.authZ.config;
 
+import com.moyu.boot.common.authZ.filter.TokenAuthenticationFilter;
 import com.moyu.boot.common.authZ.handler.CustomAccessDeniedHandler;
 import com.moyu.boot.common.authZ.handler.CustomAuthenticationEntryPoint;
 import com.moyu.boot.common.authZ.service.TokenService;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -45,10 +47,16 @@ public class SecurityConfig {
         } else {
             whiteList.addAll(properties.getWhiteList());
         }
-        // 白名单放行
+        // 设置不需要认证访问的接口(白名单放行)
         http.authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll();
         // 设置需要认证才可访问的接口(与在SaServletFilter中设置认证等效)
-//        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
+        http.authorizeRequests().antMatchers(properties.getAuthList().toArray(new String[0])).authenticated();
+        // 认证异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
+        http.exceptionHandling()
+                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
+                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                // 鉴权异常处理，访问权限不足时的处理
+                .accessDeniedHandler(new CustomAccessDeniedHandler());
 
         // 允许跨域访问
         http.cors();
@@ -64,20 +72,11 @@ public class SecurityConfig {
         http.formLogin().disable();
         // 禁用Spring Security默认注销功能
         http.logout().disable();
-        // 禁用 HTTP Basic 认证，避免弹窗式登录
+        // 禁用 HTTP Basic 认证，避免弹窗式登录(前后端分离、使用Token认证的场景下不需要)
         http.httpBasic().disable();
 
-        // 添加Token认证解析过滤器(与SaServletFilter有一个就行，目的是向Security中存放认证令牌)
-//        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-//        // 添加CORS filter
-//        http.addFilterBefore(corsFilter(), TokenAuthenticationFilter.class);
-
-        // 异常处理。filter层，在HttpSecurity中设置的authenticated()或hasAuthority()会触发此异常处理机制
-        http.exceptionHandling()
-                // 认证异常处理，未认证访问的情况处理(不设置默认处理端点为：LoginUrlAuthenticationEntryPoint("/login"))
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                // 鉴权异常处理，访问权限不足时的处理
-                .accessDeniedHandler(new CustomAccessDeniedHandler());
+        // 添加Token认证解析过滤器(认证后向Security中存放认证令牌)
+        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * 令牌认证过滤器，支持多种tokenService实现。
+ * Security令牌认证过滤器，作用是解析处登录令牌放到Security上下文中。
  *
  * @author shisong
  * @since 2024-01-04
