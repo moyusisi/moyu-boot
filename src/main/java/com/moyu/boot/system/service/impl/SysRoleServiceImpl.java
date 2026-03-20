@@ -288,8 +288,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public void grantMenu(SysRoleParam roleParam) {
-        // 查询指定模块的所有可授权内容(菜单、按钮、链接)
-        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+        // 本模块所有可授权内容(菜单、按钮、链接)
+        List<SysResource> moduleMenuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
                 .select(SysResource::getCode)
                 // 指定模块
                 .eq(SysResource::getModule, roleParam.getModule())
@@ -297,21 +297,24 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .in(SysResource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.IFRAME.getCode(), ResourceTypeEnum.LINK.getCode(), ResourceTypeEnum.BUTTON.getCode())
                 .eq(SysResource::getDeleted, 0));
         // 本模块的所有权限
-        List<String> allMenuCode = menuList.stream().map(SysResource::getCode).collect(Collectors.toList());
+        List<String> moduleMenuCodeList = moduleMenuList.stream().map(SysResource::getCode).collect(Collectors.toList());
         // 如果本模块无任何可用资源，则不用授权
-        if (ObjectUtil.isEmpty(allMenuCode)) {
+        if (ObjectUtil.isEmpty(moduleMenuCodeList)) {
             return;
         }
         // 本次授权内容
         Set<String> grantMenuSet = roleParam.getGrantMenuList();
-        // 本次授权内容中，仅保留可授权部分(目录不可授权)
-        grantMenuSet.retainAll(allMenuCode);
+        // 本次授权内容中，仅保留本模块可授权部分(排除目录和非本模块内容)
+        grantMenuSet.retainAll(moduleMenuCodeList);
         // role原来已有的权限
         Set<String> oldPermSet = sysRelationService.rolePerm(roleParam.getCode());
+        // 仅保留本模块中的老权限
+        oldPermSet.retainAll(moduleMenuCodeList);
+        // grantMenuSet 和 oldPermSet 都限定在本模块内
         // 要移除的权限 = 老权限 - 新权限
         Set<String> toDeleteSet = new HashSet<>(oldPermSet);
         toDeleteSet.removeAll(grantMenuSet);
-        // 要新增的权限 = 新权限 - 老权限
+        // 本次要新增的权限 = 新权限 - 老权限
         grantMenuSet.removeAll(oldPermSet);
 
         // 删除旧权限和添加新权限放在一个事务中，有异常会自动回滚(使用模板事物精确控制粒度)
