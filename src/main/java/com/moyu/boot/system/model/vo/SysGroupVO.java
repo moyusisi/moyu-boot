@@ -43,14 +43,6 @@ public class SysGroupVO {
      */
     private String orgName;
     /**
-     * 数据范围(字典 0无限制 1本人数据 2本机构 3本机构及以下 4自定义)
-     */
-    private Integer dataScope;
-    /**
-     * 自定义scope集合,逗号分隔
-     */
-    private String scopeSet;
-    /**
      * 组织机构层级路径,逗号分隔,父节点在后
      */
     private String orgPath;
