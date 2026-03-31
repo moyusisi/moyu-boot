@@ -111,7 +111,7 @@
       <template #action="{row, rowIndex, column, columnIndex}">
         <a-space>
           <a-tooltip title="编辑">
-            <a @click="formRef.onOpen(row, module)"><FormOutlined /></a>
+            <a @click="formRef.onOpen(row)"><FormOutlined /></a>
           </a-tooltip>
           <a-divider type="vertical" />
           <a-tooltip title="删除">
@@ -266,7 +266,7 @@
     let data = { ids: [record.id] }
     ${entityName?uncap_first}Api.delete${entityName}(data).then((res) => {
       message.success(res.message)
-      tableRef.value.refresh()
+      refresh()
     })
   }
 
