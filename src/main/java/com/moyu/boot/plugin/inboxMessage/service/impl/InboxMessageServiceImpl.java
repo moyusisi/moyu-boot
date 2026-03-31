@@ -124,6 +124,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         InboxMessage inboxMessage = BeanUtil.copyProperties(param, InboxMessage.class);
         inboxMessage.setCode("MSG" + IdUtil.getSnowflakeNextId());
         inboxMessage.setSendTime(new Date());
+        inboxMessage.setSendBy(LoginUserUtils.getUsername());
         // 其他处理
         inboxMessage.setId(null);
         List<String> userList = param.getReceiveUserList();
