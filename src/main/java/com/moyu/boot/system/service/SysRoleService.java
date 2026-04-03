@@ -2,8 +2,8 @@ package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.authZ.model.LoginUser;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
@@ -58,6 +58,13 @@ public interface SysRoleService extends IService<SysRole> {
      * 修改记录
      */
     void update(SysRoleParam param);
+
+    /**
+     * 角色(多个)拥有的菜单
+     *
+     * @param param code或codeSet必传一个
+     */
+    List<Tree<String>> menuTree(SysRoleParam param);
 
     /**
      * 获取菜单树，用于给角色授权时选择(treeNode不包含button)

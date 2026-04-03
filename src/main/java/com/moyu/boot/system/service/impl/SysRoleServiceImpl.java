@@ -9,6 +9,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -21,13 +22,13 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.moyu.boot.common.authZ.model.LoginUser;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.authZ.model.LoginUser;
-import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
@@ -186,6 +187,62 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 其他处理
         toUpdate.setId(param.getId());
         this.updateById(toUpdate);
+    }
+
+    @Override
+    public List<Tree<String>> menuTree(SysRoleParam param) {
+        Set<String> roleSet = new HashSet<>();
+        if (StrUtil.isNotBlank(param.getCode())) {
+            roleSet.add(param.getCode());
+        } else {
+            Assert.notEmpty(param.getCodeSet(), "codeSet不能为空");
+            roleSet.addAll(param.getCodeSet());
+        }
+        // role拥有的资源权限
+        Set<String> permSet = sysRelationService.rolePerm(roleSet);
+        // 查询所有模块的所有菜单(不含按钮)
+        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+                .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule()));
+
+        // 过滤出role有权限的菜单转为treeNode
+        List<TreeNode<String>> nodeList = new ArrayList<>();
+        menuList.forEach(menu -> {
+            TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
+            Map<String, Object> extMap = new HashMap<>();
+            extMap.put("menuType", menu.getResourceType());
+            if (StrUtil.isNotBlank(menu.getIcon())) {
+                // 图标
+                extMap.put("icon", menu.getIcon());
+            }
+            node.setExtra(extMap);
+            // 目录都包含，叶子结点有权限才包含
+            if (ResourceTypeEnum.MODULE.getCode().equals(menu.getResourceType()) || ResourceTypeEnum.DIR.getCode().equals(menu.getResourceType())) {
+                nodeList.add(node);
+            } else if (permSet.contains(menu.getCode())) {
+                nodeList.add(node);
+            }
+        });
+
+        // 配置TreeNode使用指定的字段名
+        TreeNodeConfig nodeConfig = new TreeNodeConfig();
+        nodeConfig.setIdKey("code");
+        nodeConfig.setParentIdKey("parentCode");
+        // 构建树
+        Tree<String> singleTree = TreeUtil.buildSingle(nodeList, SysConstants.ROOT_NODE_ID, nodeConfig, new DefaultNodeParser<>());
+
+        // 剪枝,移除空目录(本节点或子节点满足条件，则保留)
+        singleTree.filter(tree -> {
+            // 排除根
+            if (SysConstants.ROOT_NODE_ID.equals(tree.getId())) {
+                return false;
+            }
+            Integer menuType = (Integer) tree.get("menuType");
+            // 不是目录则返回true
+            boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(menuType) && !ResourceTypeEnum.MODULE.getCode().equals(menuType);
+            return notDir;
+        });
+        return singleTree.getChildren();
     }
 
     @Override

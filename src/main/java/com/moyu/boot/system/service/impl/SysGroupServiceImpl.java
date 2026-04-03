@@ -37,10 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 角色组服务实现类
@@ -368,6 +365,16 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
         }
+    }
+
+    @Override
+    public List<Tree<String>> menuTree(SysGroupParam param) {
+        // 查询指定group的所有role
+        Set<String> roleSet = sysRelationService.groupRole(param.getCode());
+        if (ObjectUtil.isEmpty(roleSet)) {
+            return new ArrayList<>();
+        }
+        return sysRoleService.menuTree(SysRoleParam.builder().codeSet(roleSet).build());
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.moyu.boot.system.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.DataScope;
@@ -9,6 +10,7 @@ import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
@@ -184,4 +186,15 @@ public class SysGroupController {
         List<SysGroupVO> list = sysGroupService.userGroupList(groupParam);
         return Result.success(list);
     }
+
+    /**
+     * 查看岗位拥有的菜单
+     */
+    @PostMapping("/menuTree")
+    @SysLog(module = "system", logType = 2, value = "查看岗位拥有的菜单")
+    public Result<List<Tree<String>>> menuTree(@RequestBody SysGroupParam param) {
+        Assert.notEmpty(param.getCode(), "岗位code不能为空");
+        return Result.success(sysGroupService.menuTree(param));
+    }
+
 }

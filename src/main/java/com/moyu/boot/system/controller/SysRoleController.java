@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -102,6 +103,16 @@ public class SysRoleController {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
         sysRoleService.update(roleParam);
         return Result.success();
+    }
+
+    /**
+     * 查看角色拥有的菜单
+     */
+    @PostMapping("/menuTree")
+    @SysLog(module = "system", logType = 2, value = "查看角色拥有的菜单")
+    public Result<List<Tree<String>>> menuTree(@RequestBody SysRoleParam roleParam) {
+        Assert.notEmpty(roleParam.getCode(), "角色code不能为空");
+        return Result.success(sysRoleService.menuTree(roleParam));
     }
 
     /**

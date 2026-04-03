@@ -150,7 +150,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 构建菜单路由树结构
         Tree<String> singleTree = buildMenuTree(userMenuList, SysConstants.ROOT_NODE_ID);
 
-        // 移除空目录(本节点或子节点满足条件，则保留当前节点及其所有子节点)
+        // 剪枝,移除空目录(本节点或子节点满足条件，则保留当前节点及其所有子节点)
         singleTree.filter(tree -> {
             // id=0或parentId=0均不符合要求(排除根和模块)
             if (SysConstants.ROOT_NODE_ID.equals(tree.getId()) || SysConstants.ROOT_NODE_ID.equals(tree.getParentId())) {

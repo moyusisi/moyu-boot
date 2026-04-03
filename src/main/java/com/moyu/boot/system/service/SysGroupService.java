@@ -1,10 +1,12 @@
 package com.moyu.boot.system.service;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
+import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.SysGroupVO;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
@@ -97,6 +99,13 @@ public interface SysGroupService extends IService<SysGroup> {
      * group删除用户
      */
     void groupDeleteUser(SysGroupParam param);
+
+    /**
+     * 岗位拥有的菜单
+     *
+     * @param param code必传
+     */
+    List<Tree<String>> menuTree(SysGroupParam param);
 
     /**
      * 用户默认的分组(根据用户生成,并非持久化的分组)
