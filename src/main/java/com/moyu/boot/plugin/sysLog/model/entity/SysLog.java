@@ -47,30 +47,6 @@ public class SysLog {
      */
     private String content;
     /**
-     * ip地址
-     */
-    private String ip;
-    /**
-     * 省份
-     */
-    private String province;
-    /**
-     * 城市
-     */
-    private String city;
-    /**
-     * 浏览器
-     */
-    private String browser;
-    /**
-     * 操作系统
-     */
-    private String os;
-    /**
-     * 平台
-     */
-    private String platform;
-    /**
      * 请求路径地址
      */
     private String requestUrl;
@@ -94,6 +70,31 @@ public class SysLog {
      * 执行耗时(ms)
      */
     private Long executionTime;
+
+    /**
+     * 来源客户端
+     */
+    private String sourceClient;
+    /**
+     * 来源省份
+     */
+    private String sourceProvince;
+    /**
+     * 来源城市
+     */
+    private String sourceCity;
+    /**
+     * 浏览器
+     */
+    private String sourceBrowser;
+    /**
+     * 操作系统
+     */
+    private String sourceOs;
+    /**
+     * 平台
+     */
+    private String sourcePlatform;
 
     /**
      * 删除标志（0未删除  1已删除）

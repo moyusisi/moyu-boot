@@ -121,15 +121,15 @@ public class SysLogAspect {
             // 客户端信息
             try {
                 // 客户端ip
-                sysLog.setIp(ServletUtil.getClientIP(request));
-                if (StrUtil.isNotBlank(sysLog.getIp()) && !sysLog.getIp().equals("127.0.0.1")) {
+                sysLog.setSourceClient(ServletUtil.getClientIP(request));
+                if (StrUtil.isNotBlank(sysLog.getSourceClient()) && !sysLog.getSourceClient().equals("127.0.0.1")) {
                     // 国家|区域|省份|城市|运营商
-                    String region = IpUtils.getRegion(sysLog.getIp());
+                    String region = IpUtils.getRegion(sysLog.getSourceClient());
                     if (StrUtil.isNotBlank(region)) {
                         String[] regionArray = region.split("\\|");
                         if (regionArray.length > 2) {
-                            sysLog.setProvince(regionArray[2]);
-                            sysLog.setCity(regionArray[3]);
+                            sysLog.setSourceProvince(regionArray[2]);
+                            sysLog.setSourceCity(regionArray[3]);
                         }
                     }
                 }
@@ -137,11 +137,11 @@ public class SysLogAspect {
                 UserAgent userAgent = getUserAgent(request);
                 if (ObjectUtil.isNotEmpty(userAgent)) {
                     // 浏览器
-                    sysLog.setBrowser(userAgent.getBrowser().getName());
+                    sysLog.setSourceBrowser(userAgent.getBrowser().getName());
                     // 操作系统
-                    sysLog.setOs(userAgent.getOs().getName());
+                    sysLog.setSourceOs(userAgent.getOs().getName());
                     // 平台
-                    sysLog.setPlatform(userAgent.getPlatform().getName());
+                    sysLog.setSourcePlatform(userAgent.getPlatform().getName());
                 }
             } catch (Exception err) {
                 log.error("获取客户端信息异常：", e);

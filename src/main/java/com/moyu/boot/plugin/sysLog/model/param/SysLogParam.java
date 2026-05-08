@@ -69,29 +69,29 @@ public class SysLogParam extends PageParam {
     @Size(max = 255, message = "content长度不能超过255个字符")
     private String content;
     /**
-     * 操作ip
+     * 来源客户端/ip
      */
-    private String ip;
+    private String sourceClient;
     /**
-     * 省份
+     * 来源省份
      */
-    private String province;
+    private String sourceProvince;
     /**
-     * 城市
+     * 来源城市
      */
-    private String city;
+    private String sourceCity;
     /**
      * 浏览器
      */
-    private String browser;
+    private String sourceBrowser;
     /**
      * 操作系统
      */
-    private String os;
+    private String sourceOs;
     /**
      * 平台
      */
-    private String platform;
+    private String sourcePlatform;
     /**
      * 请求路径地址
      */
