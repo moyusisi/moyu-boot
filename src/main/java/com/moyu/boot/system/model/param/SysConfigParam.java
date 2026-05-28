@@ -1,0 +1,86 @@
+package com.moyu.boot.system.model.param;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.moyu.boot.common.core.model.PageParam;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * 系统配置请求参数(查询、修改)
+ *
+ * @author moyusisi
+ * @since 2026-05-28
+ */
+@Getter
+@Setter
+@ToString
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SysConfigParam extends PageParam {
+
+    //********** 额外字段 **********//
+    /**
+     * 待删除的id集合
+     */
+    private Set<Long> ids;
+
+    /**
+     * 搜索关键词
+     */
+    private String searchKey;
+
+    //********** db中存在的字段 **********//
+    /**
+     * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
+
+    /**
+    * 配置项
+    */
+    @Size(max=64, message="keyTitle长度不能超过64个字符")
+    private String keyTitle;
+    /**
+    * 配置name
+    */
+    @Size(max=64, message="keyName长度不能超过64个字符")
+    private String keyName;
+    /**
+    * 配置value
+    */
+    @Size(max=65535, message="keyValue长度不能超过65535个字符")
+    private String keyValue;
+    /**
+    * 配置项类型
+    */
+    @Size(max=64, message="keyType长度不能超过64个字符")
+    private String keyType;
+    /**
+    * 使用状态（0正常 1停用）
+    */
+    private Integer status;
+    /**
+    * 扩展信息
+    */
+    @Size(max=65535, message="extJson长度不能超过65535个字符")
+    private String extJson;
+    /**
+    * 备注
+    */
+    @Size(max=65535, message="remark长度不能超过65535个字符")
+    private String remark;
+}

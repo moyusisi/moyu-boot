@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moyu.boot.system.mapper.SysConfigMapper">
+
+    <!-- 获取系统配置分页列表 -->
+    <select id="getSysConfigPage" resultType="com.moyu.boot.system.model.vo.SysConfigVO">
+        SELECT * FROM sys_config
+        <where>
+            <if test="param.keyTitle != null and param.keyTitle != ''">
+                AND key_title LIKE CONCAT('%', #{param.keyTitle}, '%')
+            </if>
+            <if test="param.keyName != null and param.keyName != ''">
+                AND key_name LIKE CONCAT('%', #{param.keyName}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>
