@@ -139,6 +139,18 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public void deleteByIds(SysConfigParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
+        // 删除时先查再删
+        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        // 查询指定字段
+        queryWrapper.select(SysConfig::getId);
+        // 指定idSet集合查询
+        queryWrapper.in(ObjectUtil.isNotEmpty(idSet), SysConfig::getId, idSet);
+        // 查询
+        List<SysConfig> configList = this.list(queryWrapper);
+        // 要删除的和查询到的进行比对
+        if (ObjectUtil.notEqual(idSet.size(), configList.size())) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
+        }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
