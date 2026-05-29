@@ -1,10 +1,9 @@
 package com.moyu.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -19,12 +18,11 @@ import com.moyu.boot.system.model.vo.SysConfigVO;
 import com.moyu.boot.system.service.SysConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 系统配置服务实现类
@@ -86,6 +84,32 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 转换为vo
         SysConfigVO vo = BeanUtil.copyProperties(sysConfig, SysConfigVO.class);
         return vo;
+    }
+
+    @Override
+    public String getValue(String keyName) {
+        if (StrUtil.isEmpty(keyName)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "keyName不能为空");
+        }
+        // 查询条件
+        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        // 查询指定字段
+        queryWrapper.select(SysConfig::getKeyValue);
+        // 指定keyName查询
+        queryWrapper.eq(SysConfig::getKeyName, keyName);
+        // 仅查询未删除的
+        queryWrapper.eq(SysConfig::getDeleted, 0);
+        // 仅查询生效中的
+        queryWrapper.eq(SysConfig::getStatus, 0);
+
+        // 配置值
+        String keyValue = null;
+        // 单个查询
+        SysConfig config = this.getOne(queryWrapper);
+        if (ObjectUtil.isNotEmpty(config)) {
+            keyValue = config.getKeyValue();
+        }
+        return keyValue;
     }
 
     @Override

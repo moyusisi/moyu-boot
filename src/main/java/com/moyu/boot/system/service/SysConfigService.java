@@ -33,6 +33,11 @@ public interface SysConfigService extends IService<SysConfig> {
      SysConfigVO detail(SysConfigParam param);
 
     /**
+     * 通过keyName获取对应keyValue(仅查询未删除且有效的)
+     */
+    String getValue(String keyName);
+
+    /**
      * 添加记录
      */
     void add(SysConfigParam param);
