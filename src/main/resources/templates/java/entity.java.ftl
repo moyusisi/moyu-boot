@@ -25,8 +25,8 @@ public class ${entityName} extends BaseEntity {
             && fieldConfig.fieldName != "createTime" && fieldConfig.fieldName != "updateTime"
             && fieldConfig.fieldName != "createBy" && fieldConfig.fieldName != "updateBy">
     /**
-    * ${fieldConfig.fieldRemark}
-    */
+     * ${fieldConfig.fieldRemark}
+     */
     private ${fieldConfig.fieldType} ${fieldConfig.fieldName};
         </#if>
     </#list>
