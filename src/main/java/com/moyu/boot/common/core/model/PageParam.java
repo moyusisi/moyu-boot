@@ -22,6 +22,16 @@ public class PageParam implements Serializable {
      */
     private Integer pageSize;
 
+    /**
+     * 排序字段
+     */
+    private String sortField;
+
+    /**
+     * 排序方式, asc/desc
+     */
+    private String sortOrder;
+
     public Integer getPageNum() {
         return pageNum;
     }
@@ -38,11 +48,29 @@ public class PageParam implements Serializable {
         this.pageSize = pageSize;
     }
 
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
+    }
+
+    public String getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(String sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", PageParam.class.getSimpleName() + "[", "]")
                 .add("pageNum=" + pageNum)
                 .add("pageSize=" + pageSize)
+                .add("sortField='" + sortField + "'")
+                .add("sortOrder='" + sortOrder + "'")
                 .toString();
     }
 }

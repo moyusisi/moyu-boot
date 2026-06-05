@@ -1,7 +1,5 @@
 package com.moyu.boot.system.model.param;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -11,10 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.*;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 /**
@@ -50,37 +45,37 @@ public class SysConfigParam extends PageParam {
     private Long id;
 
     /**
-    * 配置项
-    */
-    @Size(max=64, message="keyTitle长度不能超过64个字符")
+     * 配置项
+     */
+    @Size(max = 64, message = "keyTitle长度不能超过64个字符")
     private String keyTitle;
     /**
-    * 配置name
-    */
-    @Size(max=64, message="keyName长度不能超过64个字符")
+     * 配置name
+     */
+    @Size(max = 64, message = "keyName长度不能超过64个字符")
     private String keyName;
     /**
-    * 配置value
-    */
-    @Size(max=65535, message="keyValue长度不能超过65535个字符")
+     * 配置value
+     */
+    @Size(max = 65535, message = "keyValue长度不能超过65535个字符")
     private String keyValue;
     /**
-    * 配置项类型
-    */
-    @Size(max=64, message="keyType长度不能超过64个字符")
+     * 配置项类型
+     */
+    @Size(max = 64, message = "keyType长度不能超过64个字符")
     private String keyType;
     /**
-    * 使用状态（0正常 1停用）
-    */
+     * 使用状态（0正常 1停用）
+     */
     private Integer status;
     /**
-    * 扩展信息
-    */
-    @Size(max=65535, message="extJson长度不能超过65535个字符")
+     * 扩展信息
+     */
+    @Size(max = 65535, message = "extJson长度不能超过65535个字符")
     private String extJson;
     /**
-    * 备注
-    */
-    @Size(max=65535, message="remark长度不能超过65535个字符")
+     * 备注
+     */
+    @Size(max = 65535, message = "remark长度不能超过65535个字符")
     private String remark;
 }

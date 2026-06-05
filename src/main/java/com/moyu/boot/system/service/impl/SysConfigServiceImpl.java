@@ -4,10 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
@@ -37,15 +39,20 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public List<SysConfigVO> list(SysConfigParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
         // 指定keyTitle查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
         // 指定keyName查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
         // 仅查询未删除的
-        queryWrapper.eq(SysConfig::getDeleted, 0);
-        // TODO 指定排序
-        queryWrapper.orderByDesc(SysConfig::getUpdateTime);
+        queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
+        // 指定排序
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        }
         // 查询
         List<SysConfig> sysConfigList = this.list(queryWrapper);
         // 转换为voList
@@ -56,17 +63,22 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public PageData<SysConfigVO> pageList(SysConfigParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
         // 指定keyTitle查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
         // 指定keyName查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
         // 指定keyvalue查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getKeyValue()), SysConfig::getKeyValue, param.getKeyValue());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyValue()), SysConfig::getKeyValue, param.getKeyValue());
         // 仅查询未删除的
-        queryWrapper.eq(SysConfig::getDeleted, 0);
-        // TODO 指定排序
-        queryWrapper.orderByDesc(SysConfig::getUpdateTime);
+        queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
+        // 排序方式
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        }
         // 分页查询
         Page<SysConfig> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysConfig> sysConfigPage = this.page(page, queryWrapper);
