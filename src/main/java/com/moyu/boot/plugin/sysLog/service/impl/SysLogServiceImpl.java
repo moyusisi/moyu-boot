@@ -2,11 +2,14 @@ package com.moyu.boot.plugin.sysLog.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.sysLog.mapper.SysLogMapper;
@@ -14,6 +17,7 @@ import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
 import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
 import com.moyu.boot.plugin.sysLog.model.vo.SysLogVO;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
+import com.moyu.boot.system.model.entity.SysConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -37,41 +41,49 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @Override
     public List<SysLogVO> list(SysLogParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysLog> queryWrapper = Wrappers.lambdaQuery(SysLog.class);
+        QueryWrapper<SysLog> queryWrapper = Wrappers.query(SysLog.class).checkSqlInjection();
         // 指定id查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
         // 指定logType查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
         // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
         // 指定module查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getBusiness()), SysLog::getBusiness, param.getBusiness());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getBusiness()), SysLog::getBusiness, param.getBusiness());
         // 指定operate查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOperate()), SysLog::getOperate, param.getOperate());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getOperate()), SysLog::getOperate, param.getOperate());
         // 指定content查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getContent()), SysLog::getContent, param.getContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getContent()), SysLog::getContent, param.getContent());
         // 指定requestUrl查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
         // 指定requestContent查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
         // 指定responseContent查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
         // 指定createBy查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定startTime范围查询
         Date start = param.getStartTime1();
         // 如果是日期，则end应为当日的结尾
         // end = DateUtil.endOfDay(end);
         Date end = param.getStartTime2();
         // 范围查询-起始
-        queryWrapper.ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
+        queryWrapper.lambda().ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
         // 范围查询-截止
-        queryWrapper.le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
+        queryWrapper.lambda().le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
         // 仅查询未删除的
-        queryWrapper.eq(SysLog::getDeleted, 0);
-        queryWrapper.orderByDesc(SysLog::getStartTime);
+        queryWrapper.lambda().eq(SysLog::getDeleted, 0);
+        // 指定排序
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        } else {
+            queryWrapper.lambda().orderByDesc(SysLog::getStartTime);
+        }
         // 查询
         List<SysLog> sysLogList = this.list(queryWrapper);
         // 转换为voList
@@ -82,41 +94,49 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
     @Override
     public PageData<SysLogVO> pageList(SysLogParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysLog> queryWrapper = Wrappers.lambdaQuery(SysLog.class);
+        QueryWrapper<SysLog> queryWrapper = Wrappers.query(SysLog.class).checkSqlInjection();
         // 指定id查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getId()), SysLog::getId, param.getId());
         // 指定logType查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getLogType()), SysLog::getLogType, param.getLogType());
         // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysLog::getName, param.getName());
         // 指定module查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getModule()), SysLog::getModule, param.getModule());
         // 指定business查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getBusiness()), SysLog::getBusiness, param.getBusiness());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getBusiness()), SysLog::getBusiness, param.getBusiness());
         // 指定operate查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getOperate()), SysLog::getOperate, param.getOperate());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getOperate()), SysLog::getOperate, param.getOperate());
         // 指定content查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getContent()), SysLog::getContent, param.getContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getContent()), SysLog::getContent, param.getContent());
         // 指定requestUrl查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getRequestUrl()), SysLog::getRequestUrl, param.getRequestUrl());
         // 指定requestContent查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getRequestContent()), SysLog::getRequestContent, param.getRequestContent());
         // 指定responseContent查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
         // 指定createBy查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
         // 指定startTime范围查询
         Date start = param.getStartTime1();
         // 如果是日期，则end应为当日的结尾
         // end = DateUtil.endOfDay(end);
         Date end = param.getStartTime2();
         // 范围查询-起始
-        queryWrapper.ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
+        queryWrapper.lambda().ge(ObjectUtil.isNotEmpty(start), SysLog::getStartTime, start);
         // 范围查询-截止
-        queryWrapper.le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
+        queryWrapper.lambda().le(ObjectUtil.isNotEmpty(end), SysLog::getStartTime, end);
         // 仅查询未删除的
-        queryWrapper.eq(SysLog::getDeleted, 0);
-        queryWrapper.orderByDesc(SysLog::getStartTime);
+        queryWrapper.lambda().eq(SysLog::getDeleted, 0);
+        // 指定排序
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        } else {
+            queryWrapper.lambda().orderByDesc(SysLog::getStartTime);
+        }
         // 分页查询
         Page<SysLog> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysLog> sysLogPage = this.page(page, queryWrapper);
