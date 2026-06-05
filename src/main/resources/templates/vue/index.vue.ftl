@@ -210,7 +210,7 @@
     columns: [
       { type: 'checkbox', width: 50 },
       { type: 'seq', width: 50 },
-      { field: 'id', title: '唯一ID', width: 100, slots: { default: 'id' } },
+      { field: 'id', title: '唯一ID', width: 100, sortable: true, slots: { default: 'id' } },
 <#if fieldList??>
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInList == 1>
