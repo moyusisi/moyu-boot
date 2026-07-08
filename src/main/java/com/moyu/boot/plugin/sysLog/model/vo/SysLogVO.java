@@ -87,17 +87,9 @@ public class SysLogVO {
      */
     private String sourceCity;
     /**
-     * 浏览器
+     * 客户端信息
      */
-    private String sourceBrowser;
-    /**
-     * 操作系统
-     */
-    private String sourceOs;
-    /**
-     * 平台
-     */
-    private String sourcePlatform;
+    private String userAgent;
     /**
      * 操作人ID
      */

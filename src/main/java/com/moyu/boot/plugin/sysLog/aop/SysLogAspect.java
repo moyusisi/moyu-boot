@@ -134,15 +134,8 @@ public class SysLogAspect {
                     }
                 }
                 // 用户代理，简称 UA，是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、浏览器及版本、浏览器渲染引擎等。
-                UserAgent userAgent = getUserAgent(request);
-                if (ObjectUtil.isNotEmpty(userAgent)) {
-                    // 浏览器
-                    sysLog.setSourceBrowser(userAgent.getBrowser().getName());
-                    // 操作系统
-                    sysLog.setSourceOs(userAgent.getOs().getName());
-                    // 平台
-                    sysLog.setSourcePlatform(userAgent.getPlatform().getName());
-                }
+                sysLog.setUserAgent(ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                // UserAgent userAgent = getUserAgent(request);
             } catch (Exception err) {
                 log.error("获取客户端信息异常：", e);
             }

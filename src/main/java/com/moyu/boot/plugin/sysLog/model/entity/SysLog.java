@@ -84,17 +84,9 @@ public class SysLog {
      */
     private String sourceCity;
     /**
-     * 浏览器
+     * 客户端信息
      */
-    private String sourceBrowser;
-    /**
-     * 操作系统
-     */
-    private String sourceOs;
-    /**
-     * 平台
-     */
-    private String sourcePlatform;
+    private String userAgent;
 
     /**
      * 删除标志（0未删除  1已删除）

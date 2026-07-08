@@ -81,21 +81,13 @@ public class SysLogParam extends PageParam {
      */
     private String sourceCity;
     /**
-     * 浏览器
+     * 客户端信息
      */
-    private String sourceBrowser;
-    /**
-     * 操作系统
-     */
-    private String sourceOs;
-    /**
-     * 平台
-     */
-    private String sourcePlatform;
+    private String userAgent;
     /**
      * 请求路径地址
      */
-    @Size(max = 255, message = "requestUrl长度不能超过255个字符")
+    @Size(max = 512, message = "requestUrl长度不能超过512个字符")
     private String requestUrl;
     /**
      * 请求参数
