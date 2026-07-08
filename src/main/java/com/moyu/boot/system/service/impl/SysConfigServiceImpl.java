@@ -101,16 +101,16 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     @Override
-    public String getValue(String keyName) {
-        if (StrUtil.isEmpty(keyName)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "keyName不能为空");
+    public String getValue(String configKey) {
+        if (StrUtil.isEmpty(configKey)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "configKey不能为空");
         }
         // 查询条件
         LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
         // 查询指定字段
         queryWrapper.select(SysConfig::getConfigValue);
-        // 指定keyName查询
-        queryWrapper.eq(SysConfig::getConfigKey, keyName);
+        // 指定configKey查询
+        queryWrapper.eq(SysConfig::getConfigKey, configKey);
         // 仅查询未删除的
         queryWrapper.eq(SysConfig::getDeleted, 0);
         // 仅查询生效中的
