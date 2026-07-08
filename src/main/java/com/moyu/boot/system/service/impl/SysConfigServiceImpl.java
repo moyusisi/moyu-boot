@@ -40,10 +40,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public List<SysConfigVO> list(SysConfigParam param) {
         // 查询条件
         QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
-        // 指定keyTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
-        // 指定keyName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
+        // 指定configTitle查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigTitle()), SysConfig::getConfigTitle, param.getConfigTitle());
+        // 指定configKey查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
+        // 指定configValue查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigValue()), SysConfig::getConfigValue, param.getConfigValue());
         // 仅查询未删除的
         queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
         // 指定排序
@@ -64,12 +66,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public PageData<SysConfigVO> pageList(SysConfigParam param) {
         // 查询条件
         QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
-        // 指定keyTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyTitle()), SysConfig::getKeyTitle, param.getKeyTitle());
-        // 指定keyName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyName()), SysConfig::getKeyName, param.getKeyName());
-        // 指定keyvalue查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getKeyValue()), SysConfig::getKeyValue, param.getKeyValue());
+        // 指定configTitle查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigTitle()), SysConfig::getConfigTitle, param.getConfigTitle());
+        // 指定configKey查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
+        // 指定configValue查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigValue()), SysConfig::getConfigValue, param.getConfigValue());
         // 仅查询未删除的
         queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
         // 排序方式
@@ -106,9 +108,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 查询条件
         LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
         // 查询指定字段
-        queryWrapper.select(SysConfig::getKeyValue);
+        queryWrapper.select(SysConfig::getConfigValue);
         // 指定keyName查询
-        queryWrapper.eq(SysConfig::getKeyName, keyName);
+        queryWrapper.eq(SysConfig::getConfigKey, keyName);
         // 仅查询未删除的
         queryWrapper.eq(SysConfig::getDeleted, 0);
         // 仅查询生效中的
@@ -119,7 +121,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 单个查询
         SysConfig config = this.getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(config)) {
-            keyValue = config.getKeyValue();
+            keyValue = config.getConfigValue();
         }
         return keyValue;
     }

@@ -6,11 +6,11 @@
     <select id="getSysConfigPage" resultType="com.moyu.boot.system.model.vo.SysConfigVO">
         SELECT * FROM sys_config
         <where>
-            <if test="param.keyTitle != null and param.keyTitle != ''">
-                AND key_title LIKE CONCAT('%', #{param.keyTitle}, '%')
+            <if test="param.configTitle != null and param.configTitle != ''">
+                AND config_title LIKE CONCAT('%', #{param.configTitle}, '%')
             </if>
-            <if test="param.keyName != null and param.keyName != ''">
-                AND key_name LIKE CONCAT('%', #{param.keyName}, '%')
+            <if test="param.configKey != null and param.configKey != ''">
+                AND config_key LIKE CONCAT('%', #{param.configKey}, '%')
             </if>
         </where>
     </select>

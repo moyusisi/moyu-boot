@@ -1,13 +1,11 @@
 package com.moyu.boot.system.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -29,19 +27,19 @@ public class SysConfigVO {
     /**
      * 配置项
      */
-    private String keyTitle;
+    private String configTitle;
     /**
-     * 配置name
+     * 配置key
      */
-    private String keyName;
+    private String configKey;
     /**
      * 配置value
      */
-    private String keyValue;
+    private String configValue;
     /**
-     * 配置项类型
+     * 配置类型
      */
-    private String keyType;
+    private String configType;
     /**
      * 使用状态（0正常 1停用）
      */

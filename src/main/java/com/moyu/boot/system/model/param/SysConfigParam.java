@@ -47,23 +47,23 @@ public class SysConfigParam extends PageParam {
     /**
      * 配置项
      */
-    @Size(max = 64, message = "keyTitle长度不能超过64个字符")
-    private String keyTitle;
+    @Size(max = 64, message = "configTitle长度不能超过64个字符")
+    private String configTitle;
     /**
-     * 配置name
+     * 配置key
      */
-    @Size(max = 64, message = "keyName长度不能超过64个字符")
-    private String keyName;
+    @Size(max = 64, message = "configKey长度不能超过64个字符")
+    private String configKey;
     /**
      * 配置value
      */
-    @Size(max = 65535, message = "keyValue长度不能超过65535个字符")
-    private String keyValue;
+    @Size(max = 1024, message = "keyValue长度不能超过1024个字符")
+    private String configValue;
     /**
-     * 配置项类型
+     * 配置类型
      */
-    @Size(max = 64, message = "keyType长度不能超过64个字符")
-    private String keyType;
+    @Size(max = 64, message = "configType长度不能超过64个字符")
+    private String configType;
     /**
      * 使用状态（0正常 1停用）
      */

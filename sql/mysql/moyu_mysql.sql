@@ -210,22 +210,22 @@ CREATE TABLE `sys_log`
 drop table if exists sys_config;
 create table sys_config
 (
-    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `key_title`   VARCHAR(64) DEFAULT NULL COMMENT '配置项',
-    `key_name`    VARCHAR(64) DEFAULT NULL COMMENT '配置name',
-    `key_value`   TEXT        DEFAULT NULL COMMENT '配置value',
-    `key_type`    VARCHAR(64) DEFAULT NULL COMMENT '配置项类型',
+    `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `config_title` VARCHAR(64)   DEFAULT NULL COMMENT '配置项',
+    `config_key`   VARCHAR(64)   DEFAULT NULL COMMENT '配置key',
+    `config_value` VARCHAR(1024) DEFAULT NULL COMMENT '配置value',
+    `config_type`  VARCHAR(64)   DEFAULT NULL COMMENT '配置类型',
 
-    `status`      TINYINT     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
-    `ext_json`    TEXT        DEFAULT NULL COMMENT '扩展信息',
-    `remark`      TEXT        DEFAULT NULL comment '备注',
-    `deleted`     TINYINT     DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time` DATETIME    DEFAULT NULL COMMENT '创建时间',
-    `create_by`   VARCHAR(32) DEFAULT NULL COMMENT '创建人',
-    `update_time` DATETIME    DEFAULT NULL COMMENT '修改时间',
-    `update_by`   VARCHAR(32) DEFAULT NULL COMMENT '修改人',
+    `status`       TINYINT       DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
+    `ext_json`     TEXT          DEFAULT NULL COMMENT '扩展信息',
+    `remark`       TEXT          DEFAULT NULL comment '备注',
+    `deleted`      TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time`  DATETIME      DEFAULT NULL COMMENT '创建时间',
+    `create_by`    VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
+    `update_time`  DATETIME      DEFAULT NULL COMMENT '修改时间',
+    `update_by`    VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
     primary key (`id`),
-    UNIQUE INDEX `uniq_key_name` (`key_name`)
+    UNIQUE INDEX `uniq_config_key` (`config_key`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci

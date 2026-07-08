@@ -5,9 +5,6 @@ import com.moyu.boot.common.core.model.BaseEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * 系统配置表(sys_config)实体对象
  *
@@ -22,19 +19,19 @@ public class SysConfig extends BaseEntity {
     /**
     * 配置项
     */
-    private String keyTitle;
+    private String configTitle;
     /**
-    * 配置name
+    * 配置key
     */
-    private String keyName;
+    private String configKey;
     /**
     * 配置value
     */
-    private String keyValue;
+    private String configValue;
     /**
-    * 配置项类型
+    * 配置类型
     */
-    private String keyType;
+    private String configType;
     /**
     * 使用状态（0正常 1停用）
     */
