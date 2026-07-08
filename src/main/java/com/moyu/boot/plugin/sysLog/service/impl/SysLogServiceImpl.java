@@ -3,7 +3,7 @@ package com.moyu.boot.plugin.sysLog.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -17,7 +17,6 @@ import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
 import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
 import com.moyu.boot.plugin.sysLog.model.vo.SysLogVO;
 import com.moyu.boot.plugin.sysLog.service.SysLogService;
-import com.moyu.boot.system.model.entity.SysConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -116,7 +115,12 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 指定responseContent查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getResponseContent()), SysLog::getResponseContent, param.getResponseContent());
         // 指定createBy查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
+        if (ObjectUtil.equal(param.getLogType(), 1)) {
+            // 登陆日志查操作人
+            queryWrapper.lambda().and(ObjectUtil.isNotEmpty(param.getCreateBy()), qw -> qw.like(SysLog::getCreateBy, param.getCreateBy()).or().like(SysLog::getRequestContent, param.getCreateBy()));
+        } else {
+            queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCreateBy()), SysLog::getCreateBy, param.getCreateBy());
+        }
         // 指定startTime范围查询
         Date start = param.getStartTime1();
         // 如果是日期，则end应为当日的结尾
@@ -199,6 +203,10 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         }
         for (SysLog entity : entityList) {
             SysLogVO vo = BeanUtil.copyProperties(entity, SysLogVO.class);
+            if (vo.getLogType().equals(1) && ObjectUtil.isEmpty(vo.getCreateBy())) {
+                String account = JSONUtil.parseArray(entity.getRequestContent()).getJSONObject(0).getByPath("account", String.class);
+                vo.setCreateBy(account);
+            }
             voList.add(vo);
         }
         return voList;
