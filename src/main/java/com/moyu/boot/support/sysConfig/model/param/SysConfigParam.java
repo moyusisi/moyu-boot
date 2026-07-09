@@ -1,4 +1,4 @@
-package com.moyu.boot.system.model.param;
+package com.moyu.boot.support.sysConfig.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

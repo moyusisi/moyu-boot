@@ -1,10 +1,9 @@
-package com.moyu.boot.system.service;
+package com.moyu.boot.support.sysConfig.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.system.model.entity.SysConfig;
-import com.moyu.boot.system.model.param.SysConfigParam;
-import com.moyu.boot.system.model.vo.SysConfigVO;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.moyu.boot.support.sysConfig.model.entity.SysConfig;
+import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
+import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;

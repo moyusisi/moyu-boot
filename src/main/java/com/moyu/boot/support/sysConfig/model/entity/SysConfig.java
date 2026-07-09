@@ -1,4 +1,4 @@
-package com.moyu.boot.system.model.entity;
+package com.moyu.boot.support.sysConfig.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.moyu.boot.common.core.model.BaseEntity;

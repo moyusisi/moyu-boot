@@ -1,13 +1,13 @@
-package com.moyu.boot.system.controller;
+package com.moyu.boot.support.sysConfig.controller;
 
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.param.SysConfigParam;
-import com.moyu.boot.system.model.vo.SysConfigVO;
-import com.moyu.boot.system.service.SysConfigService;
+import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
+import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
+import com.moyu.boot.support.sysConfig.service.SysConfigService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

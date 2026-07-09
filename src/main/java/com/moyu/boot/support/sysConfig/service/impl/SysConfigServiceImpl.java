@@ -1,4 +1,4 @@
-package com.moyu.boot.system.service.impl;
+package com.moyu.boot.support.sysConfig.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -13,11 +13,11 @@ import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.system.mapper.SysConfigMapper;
-import com.moyu.boot.system.model.entity.SysConfig;
-import com.moyu.boot.system.model.param.SysConfigParam;
-import com.moyu.boot.system.model.vo.SysConfigVO;
-import com.moyu.boot.system.service.SysConfigService;
+import com.moyu.boot.support.sysConfig.mapper.SysConfigMapper;
+import com.moyu.boot.support.sysConfig.model.entity.SysConfig;
+import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
+import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
+import com.moyu.boot.support.sysConfig.service.SysConfigService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
