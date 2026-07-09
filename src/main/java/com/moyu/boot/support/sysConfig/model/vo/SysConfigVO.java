@@ -25,9 +25,9 @@ public class SysConfigVO {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
-     * 配置项
+     * 配置项名称
      */
-    private String configTitle;
+    private String configName;
     /**
      * 配置key
      */

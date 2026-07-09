@@ -45,10 +45,10 @@ public class SysConfigParam extends PageParam {
     private Long id;
 
     /**
-     * 配置项
+     * 配置项名称
      */
-    @Size(max = 64, message = "configTitle长度不能超过64个字符")
-    private String configTitle;
+    @Size(max = 64, message = "configName长度不能超过64个字符")
+    private String configName;
     /**
      * 配置key
      */

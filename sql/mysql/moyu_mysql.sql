@@ -211,7 +211,7 @@ drop table if exists sys_config;
 create table sys_config
 (
     `id`           BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `config_title` VARCHAR(64)   DEFAULT NULL COMMENT '配置项',
+    `config_name`  VARCHAR(64)   DEFAULT NULL COMMENT '配置项名称',
     `config_key`   VARCHAR(64)   DEFAULT NULL COMMENT '配置key',
     `config_value` VARCHAR(1024) DEFAULT NULL COMMENT '配置value',
     `config_type`  VARCHAR(64)   DEFAULT NULL COMMENT '配置类型',

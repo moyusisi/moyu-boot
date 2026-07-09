@@ -17,9 +17,9 @@ import lombok.Setter;
 public class SysConfig extends BaseEntity {
 
     /**
-    * 配置项
+    * 配置项名称
     */
-    private String configTitle;
+    private String configName;
     /**
     * 配置key
     */

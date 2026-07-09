@@ -107,7 +107,7 @@ public class SysConfigController {
      * 刷新系统配置缓存
      */
     @SysLog(value = "刷新系统配置缓存", logType = 2, module = "system", request = false, response = true)
-    @PreAuthorize("hasAuthority('sys:config:refresh')")
+    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:config:refresh')")
     //@SaCheckPermission("sys:config:refresh")
     @PostMapping("/refresh")
     public Result<?> refresh() {

@@ -51,7 +51,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 查询条件
         QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
         // 指定configTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigTitle()), SysConfig::getConfigTitle, param.getConfigTitle());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigName()), SysConfig::getConfigName, param.getConfigName());
         // 指定configKey查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
         // 指定configValue查询
@@ -77,7 +77,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 查询条件
         QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
         // 指定configTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigTitle()), SysConfig::getConfigTitle, param.getConfigTitle());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigName()), SysConfig::getConfigName, param.getConfigName());
         // 指定configKey查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
         // 指定configValue查询
