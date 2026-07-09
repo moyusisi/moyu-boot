@@ -19,12 +19,16 @@ import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
 import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
 import com.moyu.boot.support.sysConfig.service.SysConfigService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 系统配置服务实现类
@@ -35,6 +39,12 @@ import java.util.Set;
 @Slf4j
 @Service
 public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig> implements SysConfigService {
+
+    // 缓存的key
+    private static final String SYS_CONFIG_REDIS_KEY = "sys:config";
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public List<SysConfigVO> list(SysConfigParam param) {
@@ -105,6 +115,14 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         if (StrUtil.isEmpty(configKey)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "configKey不能为空");
         }
+        Object objValue = redisTemplate.opsForHash().get(SYS_CONFIG_REDIS_KEY, configKey);
+        // 配置的值
+        String configValue = StrUtil.toString(objValue);
+        // 缓存中有则直接返回
+        if (configValue != null) {
+            return configValue;
+        }
+        // 缓存没有则接下来查询数据库
         // 查询条件
         LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
         // 查询指定字段
@@ -116,14 +134,12 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 仅查询生效中的
         queryWrapper.eq(SysConfig::getStatus, 0);
 
-        // 配置值
-        String keyValue = null;
         // 单个查询
         SysConfig config = this.getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(config)) {
-            keyValue = config.getConfigValue();
+            configValue = config.getConfigValue();
         }
-        return keyValue;
+        return configValue;
     }
 
     @Override
@@ -169,6 +185,31 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         //this.removeByIds(idSet);
         // 逻辑删除
         this.update(Wrappers.lambdaUpdate(SysConfig.class).in(SysConfig::getId, idSet).set(SysConfig::getDeleted, 1));
+    }
+
+    /**
+     * 刷新系统配置缓存
+     */
+    @Override
+    public void refreshCache() {
+        // 查询条件
+        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        // 查询指定字段
+        queryWrapper.select(SysConfig::getConfigKey, SysConfig::getConfigValue);
+        // 仅查询未删除的
+        queryWrapper.eq(SysConfig::getDeleted, 0);
+        // 仅查询生效中的
+        queryWrapper.eq(SysConfig::getStatus, 0);
+        // 查询
+        List<SysConfig> list = this.list(queryWrapper);
+
+        // 清空缓存中的数据
+        redisTemplate.delete(SYS_CONFIG_REDIS_KEY);
+
+        if (list != null) {
+            Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getConfigKey, SysConfig::getConfigValue));
+            redisTemplate.opsForHash().putAll(SYS_CONFIG_REDIS_KEY, map);
+        }
     }
 
     /**

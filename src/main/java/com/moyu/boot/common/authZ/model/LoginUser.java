@@ -32,6 +32,11 @@ public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 角色前缀，用于区分 authorities 角色和权限， ROLE_* 角色 、没有前缀的是权限
+     */
+    private static final String ROLE_PREFIX = "ROLE_";
+
+    /**
      * 用户id
      */
     private String userId;
@@ -153,7 +158,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
         if (!CollectionUtils.isEmpty(roles)) {
             roles.forEach(role -> {
                 // SecurityExpressionRoot#hasRole中会根据前缀判断
-                authorities.add("ROLE_" + role);
+                authorities.add(ROLE_PREFIX + role);
             });
         }
         if (!CollectionUtils.isEmpty(perms)) {

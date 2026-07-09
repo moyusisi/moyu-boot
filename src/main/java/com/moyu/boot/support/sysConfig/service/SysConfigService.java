@@ -1,10 +1,10 @@
 package com.moyu.boot.support.sysConfig.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.support.sysConfig.model.entity.SysConfig;
 import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
 import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
-import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public interface SysConfigService extends IService<SysConfig> {
     /**
      * 获取记录详情(通过主键或唯一键)
      */
-     SysConfigVO detail(SysConfigParam param);
+    SysConfigVO detail(SysConfigParam param);
 
     /**
      * 通过key获取对应的value(仅查询未删除且有效的)
@@ -50,4 +50,10 @@ public interface SysConfigService extends IService<SysConfig> {
      * 通过ids删除记录
      */
     void deleteByIds(SysConfigParam param);
+
+    /**
+     * 刷新系统配置缓存
+     */
+    void refreshCache();
+
 }
