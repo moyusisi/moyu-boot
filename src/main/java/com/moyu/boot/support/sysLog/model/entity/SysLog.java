@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.sysLog.model.entity;
+package com.moyu.boot.support.sysLog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Getter;

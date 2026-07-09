@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.sysLog.enums;
+package com.moyu.boot.support.sysLog.enums;
 
 
 import lombok.Getter;

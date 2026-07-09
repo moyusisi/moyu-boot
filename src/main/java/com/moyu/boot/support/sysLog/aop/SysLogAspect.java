@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.sysLog.aop;
+package com.moyu.boot.support.sysLog.aop;
 
 
 import cn.hutool.core.util.ObjectUtil;
@@ -10,8 +10,8 @@ import cn.hutool.http.useragent.UserAgentUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.util.IpUtils;
-import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
-import com.moyu.boot.plugin.sysLog.service.SysLogService;
+import com.moyu.boot.support.sysLog.model.entity.SysLog;
+import com.moyu.boot.support.sysLog.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;

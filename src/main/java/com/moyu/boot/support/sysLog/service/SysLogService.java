@@ -1,9 +1,9 @@
-package com.moyu.boot.plugin.sysLog.service;
+package com.moyu.boot.support.sysLog.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.sysLog.model.entity.SysLog;
-import com.moyu.boot.plugin.sysLog.model.param.SysLogParam;
-import com.moyu.boot.plugin.sysLog.model.vo.SysLogVO;
+import com.moyu.boot.support.sysLog.model.entity.SysLog;
+import com.moyu.boot.support.sysLog.model.param.SysLogParam;
+import com.moyu.boot.support.sysLog.model.vo.SysLogVO;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
