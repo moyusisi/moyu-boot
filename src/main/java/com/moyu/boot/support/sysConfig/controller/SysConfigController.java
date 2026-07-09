@@ -3,11 +3,13 @@ package com.moyu.boot.support.sysConfig.controller;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
+import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
 import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
 import com.moyu.boot.support.sysConfig.service.SysConfigService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -98,6 +100,18 @@ public class SysConfigController {
     public Result<?> delete(@RequestBody SysConfigParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
         sysConfigService.deleteByIds(param);
+        return Result.success();
+    }
+
+    /**
+     * 刷新系统配置缓存
+     */
+    @SysLog(value = "刷新系统配置缓存", logType = 2, module = "system", request = false, response = true)
+    @PreAuthorize("hasAuthority('sys:config:refresh')")
+    //@SaCheckPermission("sys:config:refresh")
+    @PostMapping("/refresh")
+    public Result<?> refresh() {
+        sysConfigService.refreshCache();
         return Result.success();
     }
 
