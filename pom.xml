@@ -147,7 +147,7 @@
             <artifactId>sa-token-spring-boot-starter</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
-        <!-- Sa-Token 整合 SpringAOP 实现注解鉴权 -->
+        <!-- Sa-Token AOP模式实现注解鉴权 https://sa-token.cc/doc.html#/plugin/aop-at -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-aop</artifactId>
