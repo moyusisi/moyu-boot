@@ -1,5 +1,6 @@
 package com.moyu.boot.common.authZ.util;
 
+import com.moyu.boot.common.authZ.constant.SecurityConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -17,11 +18,6 @@ import java.util.Set;
  */
 @Slf4j
 public class LoginUserUtils {
-
-    /**
-     * ROOT管理员角色编码
-     */
-    public static final String ROOT_ROLE = "ROOT";
 
     /**
      * 获取当前登录用户信息
@@ -88,7 +84,7 @@ public class LoginUserUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        return getRoles().contains(ROOT_ROLE);
+        return getRoles().contains(SecurityConstants.ROOT_ROLE);
     }
 
 }

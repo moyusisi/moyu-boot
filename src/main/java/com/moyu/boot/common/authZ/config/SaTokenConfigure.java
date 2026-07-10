@@ -10,6 +10,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
+import com.moyu.boot.common.authZ.constant.SecurityConstants;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
@@ -48,9 +49,9 @@ public class SaTokenConfigure {
     @Resource
     public void configSaToken(SaTokenConfig config) {
         // token 名称（同时也是 cookie 名称）
-        config.setTokenName(TokenService.TOKEN_NAME);
+        config.setTokenName(SecurityConstants.TOKEN_NAME);
         // 指定 token 提交时的前缀
-        config.setTokenPrefix(TokenService.TOKEN_PREFIX);
+        config.setTokenPrefix(SecurityConstants.TOKEN_PREFIX);
         // token 有效期（单位：秒），默认2天，-1代表永不过期
         config.setTimeout(2 * 24 * 60 * 60);
         // token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结

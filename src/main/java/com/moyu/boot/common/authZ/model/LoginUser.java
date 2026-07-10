@@ -2,6 +2,7 @@ package com.moyu.boot.common.authZ.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.moyu.boot.common.authZ.constant.SecurityConstants;
 import lombok.*;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +10,6 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.CollectionUtils;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,11 +30,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class LoginUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 角色前缀，用于区分 authorities 角色和权限， ROLE_* 角色 、没有前缀的是权限
-     */
-    private static final String ROLE_PREFIX = "ROLE_";
 
     /**
      * 用户id
@@ -158,7 +153,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
         if (!CollectionUtils.isEmpty(roles)) {
             roles.forEach(role -> {
                 // SecurityExpressionRoot#hasRole中会根据前缀判断
-                authorities.add(ROLE_PREFIX + role);
+                authorities.add(SecurityConstants.ROLE_PREFIX + role);
             });
         }
         if (!CollectionUtils.isEmpty(perms)) {

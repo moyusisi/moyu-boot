@@ -14,15 +14,6 @@ import org.springframework.security.core.Authentication;
 public interface TokenService {
 
     /**
-     * 令牌key
-     */
-    String TOKEN_NAME = "Authorization";
-    /**
-     * 令牌前缀
-     */
-    String TOKEN_PREFIX = "Bearer";
-
-    /**
      * 生成token
      */
     String generateToken(LoginUser loginUser);
