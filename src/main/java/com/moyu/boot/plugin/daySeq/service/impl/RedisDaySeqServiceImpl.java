@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class RedisDaySeqServiceImpl implements DaySeqService {
 
-    // 固定前缀
-    private static final String INTRADAY_SEQ = "seq:day:";
+    // 日内序列的缓存key
+    private static final String INTRADAY_SEQ_REDIS_KEY = "seq:day:";
 
     // 日期格式
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -69,7 +69,7 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
             return null;
         }
         // 构造fullKey,格式为: seq:day:idKey
-        String fullKey = INTRADAY_SEQ + idKey;
+        String fullKey = INTRADAY_SEQ_REDIS_KEY + idKey;
         // 从redis读取值并返回
         return stringRedisTemplate.opsForValue().get(fullKey);
     }
@@ -78,14 +78,14 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
     public List<DaySeqVO> list(String keyword) {
         List<DaySeqVO> voList = new ArrayList<>();
         // 构造模糊匹配表达式：前缀 + * [+ keyword + *]
-        String keyPattern = INTRADAY_SEQ + (StrUtil.isBlank(keyword) ? "*" : "*" + keyword + "*");
+        String keyPattern = INTRADAY_SEQ_REDIS_KEY + (StrUtil.isBlank(keyword) ? "*" : "*" + keyword + "*");
         // 获取所有匹配前缀的 key 集合（Set 类型，避免重复）
         Set<String> matchKeys = stringRedisTemplate.keys(keyPattern);
         // 遍历匹配到的key并取值
         for (String key : matchKeys) {
             DaySeqVO vo = new DaySeqVO();
             String value = stringRedisTemplate.opsForValue().get(key);
-            vo.setIdKey(StrUtil.subAfter(key, INTRADAY_SEQ, false));
+            vo.setIdKey(StrUtil.subAfter(key, INTRADAY_SEQ_REDIS_KEY, false));
             vo.setIdValue(value);
             vo.setSeq(vo.getIdKey() + String.format("%04d", Long.valueOf(vo.getIdValue())));
             voList.add(vo);
@@ -100,7 +100,7 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
      */
     private Long generatorId(String prefix, String today) {
         // 1. 构造当日的key,格式为: seq:day:[prefix]today
-        String key = INTRADAY_SEQ + (StrUtil.isEmpty(prefix) ? today : prefix + today);
+        String key = INTRADAY_SEQ_REDIS_KEY + (StrUtil.isEmpty(prefix) ? today : prefix + today);
         // 2. redis原子递增（初始值为 0，第一次递增后返回 1，后续依次+1）
         Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
         // 3. 设置过期时间（仅第一次递增时设置，避免重复设置）
