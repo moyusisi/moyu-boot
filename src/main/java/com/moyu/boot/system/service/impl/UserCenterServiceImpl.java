@@ -1,6 +1,5 @@
 package com.moyu.boot.system.service.impl;
 
-
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeNode;
@@ -14,12 +13,12 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
-import com.moyu.boot.common.core.enums.ResultCodeEnum;
-import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
+import com.moyu.boot.common.core.enums.DataScopeEnum;
+import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
