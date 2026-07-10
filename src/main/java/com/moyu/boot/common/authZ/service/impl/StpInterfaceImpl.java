@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Sa-Token 的权限加载接口实现类，每次调用鉴权代码时才会执行
@@ -22,7 +23,11 @@ public class StpInterfaceImpl implements StpInterface {
      */
     @Override
     public List<String> getPermissionList(Object loginId, String loginType) {
-        return new ArrayList<>(LoginUserUtils.getPerms());
+        Set<String> permSet = LoginUserUtils.getPerms();
+        if (LoginUserUtils.isRoot()) {
+            permSet.add("*");
+        }
+        return new ArrayList<>(permSet);
     }
 
     /**
