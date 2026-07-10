@@ -1,7 +1,6 @@
 ## 鉴权组件
-
-通过Sa-Token实现认证鉴权
-依赖redis
+authZ = Authorization 授权权限  
+菜单权限、接口鉴权、角色RBAC
 
 ### 功能
 * 提供了全局认证过滤器(可配置需要认证访问的地址、白名单地址)
@@ -9,3 +8,7 @@
 * 默认的sm4加密器
 * 登陆用户信息对象LoginUser及上下文工具类LoginUserUtils
 * 提供了数据权限与处理能力
+
+### 说明
+通过Sa-Token实现认证鉴权
+依赖redis
