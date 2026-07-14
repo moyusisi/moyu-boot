@@ -5,7 +5,7 @@ import com.moyu.boot.common.authZ.handler.CustomAccessDeniedHandler;
 import com.moyu.boot.common.authZ.handler.CustomAuthenticationEntryPoint;
 import com.moyu.boot.common.authZ.service.TokenService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,7 +25,7 @@ import java.util.List;
  * @author shisong
  * @since 2025-01-24
  */
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Resource

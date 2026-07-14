@@ -1,5 +1,6 @@
 package com.moyu.boot.support.sysConfig.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
@@ -9,7 +10,6 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.support.sysConfig.model.param.SysConfigParam;
 import com.moyu.boot.support.sysConfig.model.vo.SysConfigVO;
 import com.moyu.boot.support.sysConfig.service.SysConfigService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -107,8 +107,8 @@ public class SysConfigController {
      * 刷新系统配置缓存
      */
     @SysLog(value = "刷新系统配置缓存", logType = 2, module = "system", request = false, response = true)
-    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:config:refresh')")
-    //@SaCheckPermission("sys:config:refresh")
+    //@PreAuthorize("hasRole('ROOT') || hasAuthority('sys:config:refresh')")
+    @SaCheckPermission("sys:config:refresh")
     @PostMapping("/refresh")
     public Result<?> refresh() {
         sysConfigService.refreshCache();
