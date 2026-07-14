@@ -26,7 +26,7 @@ public class ExceptionWrapperUtils {
                 break;
             // token 无效
             case NotLoginException.INVALID_TOKEN:
-                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.INVALID_TOKEN);
                 break;
             // token 已过期
             case NotLoginException.TOKEN_TIMEOUT:
@@ -34,15 +34,15 @@ public class ExceptionWrapperUtils {
                 break;
             // token 已被顶下线
             case NotLoginException.BE_REPLACED:
-                result = new Result<>(ResultCodeEnum.USER_LOGIN_REPLACED);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED, NotLoginException.BE_REPLACED_MESSAGE);
                 break;
             // token 已被踢下线
             case NotLoginException.KICK_OUT:
-                result = new Result<>(ResultCodeEnum.USER_LOGIN_KICKOUT);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED, NotLoginException.KICK_OUT_MESSAGE);
                 break;
-            // token 已被冻结
+            // token 已被冻结（超时未访问，activeTimeout）
             case NotLoginException.TOKEN_FREEZE:
-                result = new Result<>(ResultCodeEnum.USER_ACCOUNT_FROZEN);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
                 break;
             // 未按照指定前缀提交 token
             case NotLoginException.NO_PREFIX:

@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
         // 登录参数
         String username = param.getAccount();
         String password = param.getPassword();
-        // 检查封禁
+        // 检查封禁(checkDisable会抛出DisableServiceException)
         if (StpUtil.isDisable(username)) {
             // 账户被冻结(临时冻结)
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_FROZEN);

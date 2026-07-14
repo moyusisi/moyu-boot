@@ -52,10 +52,10 @@ public class SaTokenConfigure {
         config.setTokenName(SecurityConstants.TOKEN_NAME);
         // 指定 token 提交时的前缀
         config.setTokenPrefix(SecurityConstants.TOKEN_PREFIX);
-        // token 有效期（单位：秒），默认2天，-1代表永不过期
-        config.setTimeout(2 * 24 * 60 * 60);
+        // token 有效期（单位：秒），默认3天，-1代表永不过期
+        config.setTimeout(60 * 60 * 24 * 3);
         // token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
-        config.setActiveTimeout(-1);
+        config.setActiveTimeout(60 * 60 * 8);
         // 是否允许同一账号多地同时登录（为 false 时新登录挤掉旧登录）
         config.setIsConcurrent(true);
         // 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token，为 false 时每次登录新建一个 token）
