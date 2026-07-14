@@ -26,7 +26,7 @@ public interface SysConstants {
     String ROOT_NODE_ID = "0";
 
     /**
-     * 系统默认密码
+     * 用户默认口令
      */
     String DEFAULT_PASSWORD = "qwer@123!";
 
@@ -34,4 +34,12 @@ public interface SysConstants {
     String GROUP_PREFIX = "G";
     String SCOPE_PREFIX = "S";
     String ROLE_PREFIX = "R";
+
+    /**
+     * 配置key
+     */
+    interface Config {
+        // 用户默认口令
+        String DEFAULT_PWD = "sys.user.defaultPwd";
+    }
 }

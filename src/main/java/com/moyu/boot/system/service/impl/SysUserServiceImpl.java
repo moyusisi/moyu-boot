@@ -19,6 +19,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.daySeq.service.DaySeqService;
+import com.moyu.boot.support.sysConfig.service.SysConfigService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -50,6 +51,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Resource
     private PasswordEncoder passwordEncoder;
+
+    @Resource
+    private SysConfigService sysConfigService;
 
     @Resource
     private DaySeqService daySeqService;
@@ -182,7 +186,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         // 初始密码为系统默认
         if (ObjectUtil.isEmpty(user.getPassword())) {
-            user.setPassword(passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD));
+            String defaultPwd = sysConfigService.getCacheValue(SysConstants.Config.DEFAULT_PWD);
+            defaultPwd = StrUtil.emptyToDefault(defaultPwd, SysConstants.DEFAULT_PASSWORD);
+            user.setPassword(passwordEncoder.encode(defaultPwd));
         }
         this.save(user);
     }
@@ -241,9 +247,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
+        String defaultPwd = sysConfigService.getCacheValue(SysConstants.Config.DEFAULT_PWD);
+        defaultPwd = StrUtil.emptyToDefault(defaultPwd, SysConstants.DEFAULT_PASSWORD);
         this.update(Wrappers.lambdaUpdate(SysUser.class)
                 .eq(SysUser::getId, old.getId())
-                .set(SysUser::getPassword, passwordEncoder.encode(SysConstants.DEFAULT_PASSWORD)));
+                .set(SysUser::getPassword, passwordEncoder.encode(defaultPwd)));
     }
 
     /**

@@ -32,11 +32,6 @@ public interface SysConfigService extends IService<SysConfig> {
     SysConfigVO detail(SysConfigParam param);
 
     /**
-     * 通过key获取对应的value(仅查询未删除且有效的)
-     */
-    String getValue(String configKey);
-
-    /**
      * 添加记录
      */
     void add(SysConfigParam param);
@@ -55,5 +50,10 @@ public interface SysConfigService extends IService<SysConfig> {
      * 刷新系统配置缓存
      */
     void refreshCache();
+
+    /**
+     * 通过key获取对应的value(仅查缓存)
+     */
+    String getCacheValue(String configKey);
 
 }

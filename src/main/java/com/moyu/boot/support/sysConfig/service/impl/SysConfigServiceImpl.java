@@ -111,38 +111,6 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     @Override
-    public String getValue(String configKey) {
-        if (StrUtil.isEmpty(configKey)) {
-            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "configKey不能为空");
-        }
-        Object objValue = redisTemplate.opsForHash().get(SYS_CONFIG_REDIS_KEY, configKey);
-        // 配置的值
-        String configValue = StrUtil.toString(objValue);
-        // 缓存中有则直接返回
-        if (configValue != null) {
-            return configValue;
-        }
-        // 缓存没有则接下来查询数据库
-        // 查询条件
-        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
-        // 查询指定字段
-        queryWrapper.select(SysConfig::getConfigValue);
-        // 指定configKey查询
-        queryWrapper.eq(SysConfig::getConfigKey, configKey);
-        // 仅查询未删除的
-        queryWrapper.eq(SysConfig::getDeleted, 0);
-        // 仅查询生效中的
-        queryWrapper.eq(SysConfig::getStatus, 0);
-
-        // 单个查询
-        SysConfig config = this.getOne(queryWrapper);
-        if (ObjectUtil.isNotEmpty(config)) {
-            configValue = config.getConfigValue();
-        }
-        return configValue;
-    }
-
-    @Override
     public void add(SysConfigParam param) {
         // 属性复制
         SysConfig sysConfig = BeanUtil.copyProperties(param, SysConfig.class);
@@ -210,6 +178,15 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             Map<String, String> map = list.stream().collect(Collectors.toMap(SysConfig::getConfigKey, SysConfig::getConfigValue));
             redisTemplate.opsForHash().putAll(SYS_CONFIG_REDIS_KEY, map);
         }
+    }
+
+    @Override
+    public String getCacheValue(String configKey) {
+        if (StrUtil.isNotEmpty(configKey)) {
+            Object objValue = redisTemplate.opsForHash().get(SYS_CONFIG_REDIS_KEY, configKey);
+            return StrUtil.toString(objValue);
+        }
+        return null;
     }
 
     /**
