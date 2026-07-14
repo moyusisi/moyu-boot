@@ -103,11 +103,13 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                         return tokenTimeout != -2;
                     })
                     .map(terminalInfo -> {
+                        String tokenValue = terminalInfo.getTokenValue();
                         AuthSessionVO.SignTokenInfo tokenInfo = new AuthSessionVO.SignTokenInfo();
-                        tokenInfo.setTokenValue(terminalInfo.getTokenValue());
+                        tokenInfo.setTokenValue(tokenValue);
                         tokenInfo.setTokenDevice(terminalInfo.getDeviceType());
                         tokenInfo.setCreateTime(new Date(terminalInfo.getCreateTime()));
-                        long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
+
+                        long tokenTimeout = StpUtil.getTokenTimeout(tokenValue);
                         tokenInfo.setTokenTimeout(tokenTimeout);
                         if (tokenTimeout == -1) {
                             tokenInfo.setDeadline(DateTime.now().plusDays(100).toDate());
@@ -119,6 +121,27 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                             } else {
                                 tokenInfo.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, configTimeout));
                             }
+                        }
+
+                        // 获取指定 token 的最后活跃时间
+                        long tokenLastActiveTime = StpUtil.getStpLogic().getTokenLastActiveTime(tokenValue);
+                        if (tokenLastActiveTime > 0) {
+                            tokenInfo.setLastActiveTime(new Date(tokenLastActiveTime));
+                        }
+                        // 配置的闲置冻结时长activeTimeout
+                        long activeTimeout = StpUtil.getStpLogic().getTokenUseActiveTimeoutOrGlobalConfig(tokenValue);
+                        // 获取指定 token 剩余活跃有效期
+                        long tokenActiveTimeout = StpUtil.getStpLogic().getTokenActiveTimeoutByToken(tokenValue);
+                        tokenInfo.setActiveTimeout(tokenActiveTimeout);
+                        if (tokenActiveTimeout == -1) {
+                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().plusDays(100).toDate());
+                            tokenInfo.setActiveTimeoutPercent(1d);
+                        } else if (tokenActiveTimeout == -2) {
+                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().toDate());
+                            tokenInfo.setActiveTimeoutPercent(0d);
+                        } else {
+                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenActiveTimeout)).toDate());
+                            tokenInfo.setActiveTimeoutPercent(NumberUtil.div(tokenActiveTimeout, activeTimeout));
                         }
                         return tokenInfo;
                     }).collect(Collectors.toList());

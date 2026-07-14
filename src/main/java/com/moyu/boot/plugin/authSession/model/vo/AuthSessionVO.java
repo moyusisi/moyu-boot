@@ -74,7 +74,7 @@ public class AuthSessionVO {
     private Long sessionTimeout;
 
     /**
-     * 会话剩余有效期(s)
+     * 会话有效期截止时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date deadline;
@@ -116,7 +116,7 @@ public class AuthSessionVO {
         private Long tokenTimeout;
 
         /**
-         * 会话剩余有效期(s)
+         * token有效期截止时间
          */
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private Date deadline;
@@ -125,6 +125,29 @@ public class AuthSessionVO {
          * token剩余有效期百分比
          */
         private Double tokenTimeoutPercent;
+
+        /**
+         * token闲置冻结有效期(s)
+         */
+        private Long activeTimeout;
+
+        /**
+         * token闲置冻有效期截止时间
+         */
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date activeTimeoutDeadline;
+
+        /**
+         * token闲置冻结剩余有效期百分比
+         */
+        private Double activeTimeoutPercent;
+
+        /**
+         * 最后活跃时间
+         */
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        private Date lastActiveTime;
+
         /**
          * 令牌创建时间
          */

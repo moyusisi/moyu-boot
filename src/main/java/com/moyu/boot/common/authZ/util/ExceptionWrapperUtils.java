@@ -26,7 +26,7 @@ public class ExceptionWrapperUtils {
                 break;
             // token 无效
             case NotLoginException.INVALID_TOKEN:
-                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.INVALID_TOKEN);
+                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.INVALID_TOKEN_MESSAGE);
                 break;
             // token 已过期
             case NotLoginException.TOKEN_TIMEOUT:
