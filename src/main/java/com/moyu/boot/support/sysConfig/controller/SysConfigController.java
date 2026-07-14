@@ -95,7 +95,7 @@ public class SysConfigController {
      * 删除数据
      */
     //@PreAuthorize("hasAuthority('sys:config:delete')")
-    //@SaCheckPermission("sys:config:delete")
+    @SaCheckPermission("sys:config:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody SysConfigParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
