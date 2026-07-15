@@ -2,6 +2,7 @@ package com.moyu.boot.common.authZ.config;
 
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.context.SaHolder;
+import cn.dev33.satoken.context.model.SaStorage;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
@@ -11,6 +12,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
 import com.moyu.boot.common.authZ.constant.SecurityConstants;
+import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
@@ -20,8 +22,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -97,12 +97,14 @@ public class SaTokenConfigure {
                 // 认证函数: 每次请求执行
                 .setAuth(obj -> {
                     StpUtil.checkLogin();
-                    // 向Security上下文中设置认证令牌.(避免覆盖)
-                    if (ObjectUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication())) {
-                        // 从token中解析出认证信息
-                        Authentication authentication = tokenService.parseToken();
-                        // 放到Security上下文中
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
+                    SaStorage storage = SaHolder.getStorage();
+                    // 向上下文中设置已认证用户.(避免覆盖)
+                    if (ObjectUtil.isEmpty(storage.get(SecurityConstants.LOGIN_USER))) {
+                        // 从会话中获取登陆用户信息
+                        LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(SecurityConstants.LOGIN_USER);
+                        // loginUser放入本次请求作用域存储
+                        storage.set(SecurityConstants.LOGIN_USER, loginUser);
                     }
                 })
 
@@ -119,6 +121,8 @@ public class SaTokenConfigure {
                 .setBeforeAuth(r -> {
                     // ---------- 设置一些安全响应头 ----------
                     SaHolder.getResponse()
+                            // 是否可以在iframe显示： DENY=不可以 | SAMEORIGIN=同域下可以 | ALLOW-FROM uri=指定域名下可以
+                            //.setHeader("X-Frame-Options", "SAMEORIGIN") // 不设置标识允许iframe嵌套
                             // 是否启用浏览器默认XSS防护： 0=禁用 | 1=启用 | 1; mode=block 启用, 并在检查到XSS攻击时，停止渲染页面
                             .setHeader("X-XSS-Protection", "1; mode=block")
                             // 禁用浏览器内容嗅探

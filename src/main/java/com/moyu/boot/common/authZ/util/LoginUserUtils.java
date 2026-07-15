@@ -25,7 +25,7 @@ public class LoginUserUtils {
         Optional<LoginUser> optUser = Optional.empty();
         // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
         Object userObj = SaHolder.getStorage().get(SecurityConstants.LOGIN_USER);
-
+        // set动作再SaServletFilter中完成
         if (userObj instanceof LoginUser) {
             optUser = Optional.of((LoginUser) userObj);
         }
