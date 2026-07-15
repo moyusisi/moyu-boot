@@ -179,4 +179,10 @@ public class AuthSessionServiceImpl implements AuthSessionService {
     public void removeToken(AuthSessionParam param) {
         param.getCodes().forEach(StpUtil::logoutByTokenValue);
     }
+
+    @Override
+    public void renewActive(String tokenValue) {
+        // 为指定 Token 续签
+        StpUtil.stpLogic.updateLastActiveToNow(tokenValue);
+    }
 }

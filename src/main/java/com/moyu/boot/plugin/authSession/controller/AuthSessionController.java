@@ -92,4 +92,18 @@ public class AuthSessionController {
         authSessionService.removeToken(param);
         return Result.success();
     }
+
+    /**
+     * 续签token的activeTime
+     */
+    @SysLog(module = "system", business = "会话管理", value = "续签token[更新最后操作时间]", response = true)
+    @Log(jsonLog = true, response = false)
+    @SaCheckPermission(value = "auth:session:renewActive")
+    @PostMapping("/renewActive")
+    public Result<?> renewActive(@RequestBody AuthSessionParam param) {
+        Assert.notEmpty(param.getTokenValue(), "tokenValue不能为空");
+        authSessionService.renewActive(param.getTokenValue());
+        return Result.success();
+    }
+
 }

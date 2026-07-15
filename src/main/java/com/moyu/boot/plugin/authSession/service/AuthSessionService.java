@@ -40,4 +40,9 @@ public interface AuthSessionService {
      * 移除token(强退指定token)
      */
     void removeToken(AuthSessionParam param);
+
+    /**
+     * 续签指定Token：(将 [最后操作时间] 更新为当前时间)
+     */
+    void renewActive(String tokenValue);
 }

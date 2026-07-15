@@ -36,4 +36,10 @@ public class AuthSessionParam extends PageParam {
      */
     private String name;
 
+    /**
+     * token值
+     */
+    private String tokenValue;
+
+
 }
