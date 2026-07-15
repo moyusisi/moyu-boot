@@ -35,7 +35,7 @@ public class SysLogController {
     /**
      * 系统日志列表
      */
-//    @PreAuthorize("hasAuthority('sys:log:list')")
+//    @SaCheckPermission("sys:log:list")
     @PostMapping("/list")
     public Result<List<SysLogVO>> list(@RequestBody SysLogParam param) {
         List<SysLogVO> list = sysLogService.list(param);
@@ -45,7 +45,7 @@ public class SysLogController {
     /**
      * 系统日志分页列表
      */
-    //@PreAuthorize("hasAuthority('sys:log:page')")
+    //@SaCheckPermission("sys:log:page")
     @PostMapping("/page")
     public Result<PageData<SysLogVO>> pageList(@RequestBody SysLogParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -56,7 +56,7 @@ public class SysLogController {
     /**
      * 系统日志详情
      */
-    //@PreAuthorize("hasAuthority('sys:log:detail')")
+    //@SaCheckPermission("sys:log:detail")
     @PostMapping("/detail")
     public Result<SysLogVO> detail(@RequestBody SysLogParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -66,7 +66,7 @@ public class SysLogController {
     /**
      * 新增系统日志
      */
-    //@PreAuthorize("hasAuthority('sys:log:add')")
+    //@SaCheckPermission("sys:log:add")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody SysLogParam param) {
         sysLogService.add(param);
@@ -76,7 +76,7 @@ public class SysLogController {
     /**
      * 修改系统日志
      */
-    //@PreAuthorize("hasAuthority('sys:log:edit')")
+    //@SaCheckPermission("sys:log:edit")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysLogParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -87,7 +87,7 @@ public class SysLogController {
     /**
      * 删除数据
      */
-    //@PreAuthorize("hasAuthority('sys:log:delete')")
+    //@SaCheckPermission("sys:log:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody SysLogParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");

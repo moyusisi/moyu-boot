@@ -37,7 +37,6 @@ public class SysConfigController {
     /**
      * 系统配置列表
      */
-    //@PreAuthorize("hasAuthority('sys:config:list')")
     //@SaCheckPermission("sys:config:list")
     @PostMapping("/list")
     public Result<List<SysConfigVO>> list(@RequestBody SysConfigParam param) {
@@ -48,7 +47,6 @@ public class SysConfigController {
     /**
      * 系统配置分页列表
      */
-    //@PreAuthorize("hasAuthority('sys:config:page')")
     //@SaCheckPermission("sys:config:page")
     @PostMapping("/page")
     public Result<PageData<SysConfigVO>> pageList(@RequestBody SysConfigParam param) {
@@ -60,7 +58,6 @@ public class SysConfigController {
     /**
      * 系统配置详情
      */
-    //@PreAuthorize("hasAuthority('sys:config:detail')")
     //@SaCheckPermission("sys:config:detail")
     @PostMapping("/detail")
     public Result<SysConfigVO> detail(@RequestBody SysConfigParam param) {
@@ -71,7 +68,6 @@ public class SysConfigController {
     /**
      * 新增系统配置
      */
-    //@PreAuthorize("hasAuthority('sys:config:add')")
     //@SaCheckPermission("sys:config:add")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody SysConfigParam param) {
@@ -82,7 +78,6 @@ public class SysConfigController {
     /**
      * 修改系统配置
      */
-    //@PreAuthorize("hasAuthority('sys:config:edit')")
     //@SaCheckPermission("sys:config:edit")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysConfigParam param) {
@@ -94,7 +89,6 @@ public class SysConfigController {
     /**
      * 删除数据
      */
-    //@PreAuthorize("hasAuthority('sys:config:delete')")
     @SaCheckPermission("sys:config:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody SysConfigParam param) {
@@ -107,7 +101,6 @@ public class SysConfigController {
      * 刷新系统配置缓存
      */
     @SysLog(value = "刷新系统配置缓存", logType = 2, module = "system", request = false, response = true)
-    //@PreAuthorize("hasRole('ROOT') || hasAuthority('sys:config:refresh')")
     @SaCheckPermission("sys:config:refresh")
     @PostMapping("/refresh")
     public Result<?> refresh() {

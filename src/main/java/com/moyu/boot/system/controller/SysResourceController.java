@@ -48,7 +48,7 @@ public class SysResourceController {
      */
     @Log(jsonLog = true, response = false)
     @SysLog(module = "system", logType = 2, value = "查询资源列表")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:page')")
+//    @SaCheckPermission("sys:resource:page")
     @PostMapping("/page")
     public Result<PageData<SysResourceVO>> pageList(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -60,7 +60,7 @@ public class SysResourceController {
      * 获取资源树(可指定module)
      */
     @SysLog(module = "system", logType = 2, value = "获取资源树")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:tree')")
+//    @SaCheckPermission("sys:resource:tree")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
     public Result<List<Tree<String>>> tree(@RequestBody SysResourceParam resourceParam) {
@@ -72,7 +72,7 @@ public class SysResourceController {
      * 获取资源详情
      */
     @SysLog(module = "system", logType = 2, value = "查询资源详情")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:resource:detail')")
+//    @SaCheckPermission("sys:resource:detail")
     @PostMapping("/detail")
     public Result<SysResourceVO> detail(@RequestBody SysResourceParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");

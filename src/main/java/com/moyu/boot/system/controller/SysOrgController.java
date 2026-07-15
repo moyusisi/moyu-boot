@@ -63,7 +63,7 @@ public class SysOrgController {
      * 获取详情
      */
     @SysLog(module = "system", logType = 2, value = "查询组织详情")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:org:detail')")
+//    @SaCheckPermission("sys:org:detail")
     @PostMapping("/detail")
     public Result<SysOrgVO> detail(@RequestBody SysOrgParam orgParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(orgParam.getId(), orgParam.getCode()), "id和code不能同时为空");

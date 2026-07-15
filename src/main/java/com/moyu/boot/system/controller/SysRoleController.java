@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -51,7 +50,7 @@ public class SysRoleController {
      * 分页获取角色列表
      */
     @SysLog(module = "system", logType = 2, value = "分页查询角色列表")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:page')")
+//    @SaCheckPermission("sys:role:page")
     @PostMapping("/page")
     public Result<PageData<SysRoleVO>> pageList(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(roleParam.getPageNum(), roleParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -63,7 +62,7 @@ public class SysRoleController {
      * 获取详情
      */
     @SysLog(module = "system", logType = 2, value = "查询角色详情", response = true)
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:detail')")
+//    @SaCheckPermission("sys:role:detail")
     @PostMapping("/detail")
     public Result<SysRoleVO> detail(@RequestBody SysRoleParam roleParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(roleParam.getId(), roleParam.getCode()), "id和code不能同时为空");
@@ -166,7 +165,7 @@ public class SysRoleController {
      * 查询指定角色的用户列表(仅直接通过 USER_HAS_ROLE 关系指定的用户，即全局角色用户)
      */
     @SysLog(module = "system", logType = 2, value = "查询角色关联的用户列表")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:role:userList')")
+//    @SaCheckPermission("sys:role:userList")
     @PostMapping("/userList")
     public Result<List<SysUserVO>> userList(@RequestBody SysRoleParam roleParam) {
         Assert.notEmpty(roleParam.getCode(), "分组code不能为空");

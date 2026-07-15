@@ -38,7 +38,7 @@ public class InboxMessageController {
     /**
      * 站内消息列表
      */
-//    @PreAuthorize("hasAuthority('dev:message:list')")
+//    @SaCheckPermission("dev:message:list")
     @PostMapping("/list")
     public Result<List<InboxMessageVO>> list(@RequestBody InboxMessageParam param) {
         List<InboxMessageVO> list = inboxMessageService.list(param);
@@ -48,7 +48,7 @@ public class InboxMessageController {
     /**
      * 站内消息分页列表
      */
-    //@PreAuthorize("hasAuthority('dev:message:page')")
+    //@SaCheckPermission("dev:message:page")
     @PostMapping("/page")
     public Result<PageData<InboxMessageVO>> pageList(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -59,7 +59,7 @@ public class InboxMessageController {
     /**
      * 站内消息详情
      */
-    //@PreAuthorize("hasAuthority('dev:message:detail')")
+    //@SaCheckPermission("dev:message:detail")
     @PostMapping("/detail")
     public Result<InboxMessageVO> detail(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -69,7 +69,7 @@ public class InboxMessageController {
     /**
      * 新增站内消息
      */
-    //@PreAuthorize("hasAuthority('dev:message:add')")
+    //@SaCheckPermission("dev:message:add")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody InboxMessageParam param) {
         inboxMessageService.add(param);
@@ -79,7 +79,7 @@ public class InboxMessageController {
     /**
      * 删除数据
      */
-    //@PreAuthorize("hasAuthority('dev:message:delete')")
+    //@SaCheckPermission("dev:message:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody InboxMessageParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
@@ -90,7 +90,7 @@ public class InboxMessageController {
     /**
      * 触达记录、阅读列表
      */
-    //@PreAuthorize("hasAuthority('dev:message:page')")
+    //@SaCheckPermission("dev:message:page")
     @PostMapping("/userMessagePage")
     public Result<PageData<UserMessageVO>> userMessagePage(@RequestBody InboxMessageParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");

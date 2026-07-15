@@ -50,7 +50,7 @@ public class SysUserController {
      * 获取详情
      */
     @SysLog(module = "system", logType = 2, value = "查询用户详情")
-//    @PreAuthorize("hasRole('ROOT') || hasAuthority('sys:user:detail')")
+//    @SaCheckPermission("sys:user:detail")
     @PostMapping("/detail")
     public Result<SysUserVO> detail(@RequestBody SysUserParam userParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(userParam.getId(), userParam.getAccount()), "id和account不能同时为空");
