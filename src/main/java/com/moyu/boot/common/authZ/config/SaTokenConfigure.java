@@ -11,7 +11,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
-import com.moyu.boot.common.authZ.constant.SecurityConstants;
+import com.moyu.boot.common.authZ.constant.AuthConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
@@ -49,9 +49,9 @@ public class SaTokenConfigure {
     @Resource
     public void configSaToken(SaTokenConfig config) {
         // token 名称（同时也是 cookie 名称）
-        config.setTokenName(SecurityConstants.TOKEN_NAME);
+        config.setTokenName(AuthConstants.TOKEN_NAME);
         // 指定 token 提交时的前缀
-        config.setTokenPrefix(SecurityConstants.TOKEN_PREFIX);
+        config.setTokenPrefix(AuthConstants.TOKEN_PREFIX);
         // token 有效期（单位：秒），默认3天，-1代表永不过期
         config.setTimeout(60 * 60 * 24 * 3);
         // token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
@@ -100,11 +100,11 @@ public class SaTokenConfigure {
                     // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
                     SaStorage storage = SaHolder.getStorage();
                     // 向上下文中设置已认证用户.(避免覆盖)
-                    if (ObjectUtil.isEmpty(storage.get(SecurityConstants.LOGIN_USER))) {
+                    if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
                         // 从会话中获取登陆用户信息
-                        LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(SecurityConstants.LOGIN_USER);
+                        LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
                         // loginUser放入本次请求作用域存储
-                        storage.set(SecurityConstants.LOGIN_USER, loginUser);
+                        storage.set(AuthConstants.LOGIN_USER, loginUser);
                     }
                 })
 

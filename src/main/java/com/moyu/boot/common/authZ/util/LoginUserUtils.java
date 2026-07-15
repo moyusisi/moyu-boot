@@ -1,7 +1,7 @@
 package com.moyu.boot.common.authZ.util;
 
 import cn.dev33.satoken.context.SaHolder;
-import com.moyu.boot.common.authZ.constant.SecurityConstants;
+import com.moyu.boot.common.authZ.constant.AuthConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class LoginUserUtils {
     public static Optional<LoginUser> getLoginUser() {
         Optional<LoginUser> optUser = Optional.empty();
         // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
-        Object userObj = SaHolder.getStorage().get(SecurityConstants.LOGIN_USER);
+        Object userObj = SaHolder.getStorage().get(AuthConstants.LOGIN_USER);
         // set动作再SaServletFilter中完成
         if (userObj instanceof LoginUser) {
             optUser = Optional.of((LoginUser) userObj);
@@ -81,7 +81,7 @@ public class LoginUserUtils {
      * 是否为root超级管理员
      */
     public static boolean isRoot() {
-        return getRoles().contains(SecurityConstants.ROOT_ROLE);
+        return getRoles().contains(AuthConstants.ROOT_ROLE);
     }
 
 }

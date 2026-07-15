@@ -6,7 +6,7 @@ package com.moyu.boot.common.authZ.constant;
  * @author moyusisi
  * @since 2026-07-10
  */
-public interface SecurityConstants {
+public interface AuthConstants {
     /**
      * 令牌key
      */

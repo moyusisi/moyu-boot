@@ -2,7 +2,7 @@ package com.moyu.boot.common.authZ.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.moyu.boot.common.authZ.constant.SecurityConstants;
+import com.moyu.boot.common.authZ.constant.AuthConstants;
 import lombok.*;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -153,7 +153,7 @@ public class LoginUser implements UserDetails, CredentialsContainer {
         if (!CollectionUtils.isEmpty(roles)) {
             roles.forEach(role -> {
                 // SecurityExpressionRoot#hasRole中会根据前缀判断
-                authorities.add(SecurityConstants.ROLE_PREFIX + role);
+                authorities.add(AuthConstants.ROLE_PREFIX + role);
             });
         }
         if (!CollectionUtils.isEmpty(perms)) {

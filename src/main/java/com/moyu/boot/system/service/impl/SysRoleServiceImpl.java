@@ -22,7 +22,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.moyu.boot.common.authZ.constant.SecurityConstants;
+import com.moyu.boot.common.authZ.constant.AuthConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
@@ -91,7 +91,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 指定指定状态
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, AuthConstants.ROOT_ROLE);
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
@@ -116,7 +116,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 指定指定状态
         queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, SecurityConstants.ROOT_ROLE);
+        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, AuthConstants.ROOT_ROLE);
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
