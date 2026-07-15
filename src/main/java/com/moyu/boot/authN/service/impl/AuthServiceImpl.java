@@ -5,12 +5,12 @@ import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.authN.service.AuthService;
 import com.moyu.boot.common.authZ.model.LoginUser;
+import com.moyu.boot.common.authZ.service.PasswordEncoder;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
