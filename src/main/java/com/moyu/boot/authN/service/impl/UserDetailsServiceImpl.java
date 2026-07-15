@@ -1,6 +1,7 @@
 package com.moyu.boot.authN.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
@@ -10,8 +11,6 @@ import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRoleService;
 import com.moyu.boot.system.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,7 +40,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * 通过username加载登录用户信息
      */
     @Override
-    public UserDetails loadUserByUsername(String username) {
+    public SysUser loadUserByUsername(String username) {
         log.info("加载{}的用户信息", username);
         // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
         SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
@@ -50,7 +49,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_NOT_EXIST);
         }
         // 创建 UserDetails
-        return buildUserDetails(sysUser);
+        return sysUser;
     }
 
     /**

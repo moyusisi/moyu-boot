@@ -1,17 +1,8 @@
 package com.moyu.boot.common.authZ.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.moyu.boot.common.authZ.constant.AuthConstants;
 import lombok.*;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,7 +10,6 @@ import java.util.Set;
  * 登陆用户对象
  *
  * @author shisong
- * @see org.springframework.security.core.userdetails.User
  * @since 2024-12-27
  */
 @Getter
@@ -28,13 +18,17 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser implements UserDetails, CredentialsContainer {
+public class LoginUser implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * 用户id
      */
     private String userId;
+    /**
+     * 用户账号，唯一标识 account
+     */
+    private String username;
     /**
      * 用户姓名
      */
@@ -73,46 +67,6 @@ public class LoginUser implements UserDetails, CredentialsContainer {
      */
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
 
-    //***** 下面是UserDetails接口所需字段 *****//
-    /**
-     * 用户账号，唯一标识 account
-     *
-     * @see org.springframework.security.core.userdetails.User
-     */
-    private String username;
-
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-    /**
-     * 授权集合，角色标识、权限标识均位于此集合。SecurityExpressionRoot中的hasRole等方法会使用此字段
-     *
-     * @see org.springframework.security.access.expression.SecurityExpressionRoot
-     */
-    @JsonIgnore
-    private Collection<GrantedAuthority> authorities;
-
-    /**
-     * 账户是否未过期,过期无法验证
-     */
-    @JsonIgnore
-    private boolean accountNonExpired;
-    /**
-     * 用户是否解锁,锁定的用户无法进行身份验证
-     */
-    @JsonIgnore
-    private boolean accountNonLocked;
-    /**
-     * 指示是否已过期的用户的凭据(密码),过期的凭据防止认证
-     */
-    @JsonIgnore
-    private boolean credentialsNonExpired;
-
-    /**
-     * 是否可用 ,禁用的用户不能身份验证
-     */
-    @JsonIgnore
-    private boolean enabled;
-
     /**
      * 数据范围信息
      **/
@@ -130,70 +84,5 @@ public class LoginUser implements UserDetails, CredentialsContainer {
          * 数据范围集合
          */
         private Set<String> scopeSet;
-    }
-
-    @Override
-    public Collection<GrantedAuthority> getAuthorities() {
-        return this.authorities;
-    }
-
-    public void setAuthorities(String... authorities) {
-        this.authorities = AuthorityUtils.createAuthorityList(authorities);
-    }
-
-    public void setAuthorities(Collection<String> authorities) {
-        this.authorities = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
-    }
-
-    /**
-     * 根据perms和roles生成授权列表
-     */
-    public void initAuthorities() {
-        Set<String> authorities = new HashSet<>();
-        if (!CollectionUtils.isEmpty(roles)) {
-            roles.forEach(role -> {
-                // SecurityExpressionRoot#hasRole中会根据前缀判断
-                authorities.add(AuthConstants.ROLE_PREFIX + role);
-            });
-        }
-        if (!CollectionUtils.isEmpty(perms)) {
-            authorities.addAll(perms);
-        }
-        this.authorities = AuthorityUtils.createAuthorityList(authorities.toArray(new String[0]));
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.enabled;
-    }
-
-    @Override
-    public void eraseCredentials() {
-        this.password = null;
     }
 }
