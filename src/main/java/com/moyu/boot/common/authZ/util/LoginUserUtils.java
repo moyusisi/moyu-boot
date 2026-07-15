@@ -1,10 +1,9 @@
 package com.moyu.boot.common.authZ.util;
 
+import cn.dev33.satoken.context.SaHolder;
 import com.moyu.boot.common.authZ.constant.SecurityConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -24,13 +23,11 @@ public class LoginUserUtils {
      **/
     public static Optional<LoginUser> getLoginUser() {
         Optional<LoginUser> optUser = Optional.empty();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            // 用户凭证，已登录用户为 LoginUser，未登录用户为username
-            Object principal = authentication.getPrincipal();
-            if (principal instanceof LoginUser) {
-                optUser = Optional.of((LoginUser) principal);
-            }
+        // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
+        Object userObj = SaHolder.getStorage().get(SecurityConstants.LOGIN_USER);
+
+        if (userObj instanceof LoginUser) {
+            optUser = Optional.of((LoginUser) userObj);
         }
         return optUser;
     }
