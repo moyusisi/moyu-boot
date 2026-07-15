@@ -135,9 +135,11 @@ values  ('0', '系统模块', 'sys_module', 1, '/sysModule', 'Layout', 'appstore
         ('menu_sys_button', '按钮列表', 'btn_sys_button_list', 6, '/api/sys/resource/page', '', null, 'sys:resource:page', 0, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
         ('menu_sys_button', '按钮详情', 'btn_sys_button_detail', 6, '/api/sys/resource/detail', '', null, 'sys:resource:detail', 0, null, 'sys_module', 303005, null, null, 0, null, null, null, null),
 
-        ('menu_sys_session', '强制退出', 'btn_sys_session_delete', 6, '/api/auth/session/delete', '', null, 'auth:session:delete', 0, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
-        ('menu_sys_session', '强退令牌', 'btn_sys_session_deleteToken', 6, '/api/auth/session/deleteToken', '', null, 'auth:session:deleteToken', 0, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
-        ('menu_sys_session', '会话列表', 'btn_sys_session_list', 6, '/api/auth/session/page', '', null, 'auth:session:page', 0, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
+        ('menu_sys_session', '强制退出', 'btn_sys_session_delete', 6, '/api/auth/session/delete', '', null, 'auth:session:delete', 0, null, 'sys_module', 500202, null, null, 0, null, null, null, null),
+        ('menu_sys_session', '强退令牌', 'btn_sys_session_deleteToken', 6, '/api/auth/session/deleteToken', '', null, 'auth:session:deleteToken', 0, null, 'sys_module', 500204, null, null, 0, null, null, null, null),
+        ('menu_sys_session', '续签令牌', 'btn_sys_session_renewActive', 6, '/api/auth/session/renewActive', '', null, 'auth:session:renewActive', 0, null, 'sys_module', 500206, null, null, 0, null, null, null, null),
+        ('menu_sys_session', '会话列表', 'btn_sys_session_list', 6, '/api/auth/session/page', '', null, 'auth:session:page', 0, null, 'sys_module', 500208, null, null, 0, null, null, null, null),
+        ('menu_sys_session', '令牌列表', 'btn_sys_session_tokenList', 6, '/api/auth/session/tokenList', '', null, 'auth:session:tokenList', 0, null, 'sys_module', 500210, null, null, 0, null, null, null, null),
 
         ('menu_biz_org', '新增机构', 'btn_biz_org_add', 6, null, null, null, null, 0, null, 'biz_module', 511001, null, '', 0, null, null, null, null),
         ('menu_biz_org', '删除机构', 'btn_biz_org_del', 6, null, null, null, null, 0, null, 'biz_module', 511002, null, '', 0, null, null, null, null),
