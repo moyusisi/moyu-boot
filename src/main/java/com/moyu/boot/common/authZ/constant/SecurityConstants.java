@@ -17,6 +17,11 @@ public interface SecurityConstants {
     String TOKEN_PREFIX = "Bearer";
 
     /**
+     * 登陆用户key
+     */
+    String LOGIN_USER = "loginUser";
+
+    /**
      * ROOT角色编码
      */
     String ROOT_ROLE = "ROOT";
