@@ -11,6 +11,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
@@ -71,85 +72,40 @@ public class AuthSessionServiceImpl implements AuthSessionService {
                 .collect(Collectors.toList());
         loginIdList.forEach(loginId -> {
             SaSession saSession = StpUtil.getSessionByLoginId(loginId, false);
-            AuthSessionVO vo = new AuthSessionVO();
-            vo.setAccount(loginId);
-            vo.setName(saSession.get("name", ""));
+            AuthSessionVO sessionVO = new AuthSessionVO();
+            sessionVO.setLoginId(loginId);
+            sessionVO.setName(saSession.get("name", ""));
             // sessionId为 Authorization:login:session:loginId
-            vo.setSessionId(saSession.getId());
-            vo.setSessionCreateTime(new Date(saSession.getCreateTime()));
-            vo.setSessionTimeout(saSession.timeout());
+            sessionVO.setSessionId(saSession.getId());
+            sessionVO.setSessionCreateTime(new Date(saSession.getCreateTime()));
+            sessionVO.setSessionTimeout(saSession.timeout());
             // 配置的过期时长
             long configTimeout = SaManager.getConfig().getTimeout();
-            long sessionTimeout = vo.getSessionTimeout();
+            long sessionTimeout = sessionVO.getSessionTimeout();
             // 剩余时间百分比
             if (sessionTimeout == -1) {
-                vo.setDeadline(DateTime.now().plusDays(100).toDate());
-                vo.setSessionTimeoutPercent(1d);
+                sessionVO.setDeadline(DateTime.now().plusDays(100).toDate());
+                sessionVO.setSessionTimeoutPercent(1d);
             } else {
-                vo.setDeadline(DateTime.now().plusSeconds(Convert.toInt(sessionTimeout)).toDate());
+                sessionVO.setDeadline(DateTime.now().plusSeconds(Convert.toInt(sessionTimeout)).toDate());
                 if (configTimeout == -1) {
-                    vo.setSessionTimeoutPercent(1d);
+                    sessionVO.setSessionTimeoutPercent(1d);
                 } else {
-                    vo.setSessionTimeoutPercent(NumberUtil.div(sessionTimeout, configTimeout));
+                    sessionVO.setSessionTimeoutPercent(NumberUtil.div(sessionTimeout, configTimeout));
                 }
             }
             // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
-            List<SaTerminalInfo> terminalList = saSession.getTerminalList();
-            List<AuthSessionVO.SignTokenInfo> tokenInfoList = terminalList.stream()
+            List<SaTerminalInfo> terminalList = saSession.getTerminalList().stream()
                     .filter(terminalInfo -> {
                         // 获取指定 token 剩余有效时间（单位: 秒，返回 -1 代表永久有效，-2 代表没有这个值）
                         long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
                         // 过滤掉不存在的
                         return tokenTimeout != -2;
-                    })
-                    .map(terminalInfo -> {
-                        String tokenValue = terminalInfo.getTokenValue();
-                        AuthSessionVO.SignTokenInfo tokenInfo = new AuthSessionVO.SignTokenInfo();
-                        tokenInfo.setTokenValue(tokenValue);
-                        tokenInfo.setTokenDevice(terminalInfo.getDeviceType());
-                        tokenInfo.setCreateTime(new Date(terminalInfo.getCreateTime()));
-
-                        long tokenTimeout = StpUtil.getTokenTimeout(tokenValue);
-                        tokenInfo.setTokenTimeout(tokenTimeout);
-                        if (tokenTimeout == -1) {
-                            tokenInfo.setDeadline(DateTime.now().plusDays(100).toDate());
-                            tokenInfo.setTokenTimeoutPercent(1d);
-                        } else {
-                            tokenInfo.setDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenTimeout)).toDate());
-                            if (configTimeout == -1) {
-                                tokenInfo.setTokenTimeoutPercent(1d);
-                            } else {
-                                tokenInfo.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, configTimeout));
-                            }
-                        }
-
-                        // 获取指定 token 的最后活跃时间
-                        long tokenLastActiveTime = StpUtil.getStpLogic().getTokenLastActiveTime(tokenValue);
-                        if (tokenLastActiveTime > 0) {
-                            tokenInfo.setLastActiveTime(new Date(tokenLastActiveTime));
-                        }
-                        // 配置的闲置冻结时长activeTimeout
-                        long activeTimeout = StpUtil.getStpLogic().getTokenUseActiveTimeoutOrGlobalConfig(tokenValue);
-                        // 获取指定 token 剩余活跃有效期
-                        long tokenActiveTimeout = StpUtil.getStpLogic().getTokenActiveTimeoutByToken(tokenValue);
-                        tokenInfo.setActiveTimeout(tokenActiveTimeout);
-                        if (tokenActiveTimeout == -1) {
-                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().plusDays(100).toDate());
-                            tokenInfo.setActiveTimeoutPercent(1d);
-                        } else if (tokenActiveTimeout == -2) {
-                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().toDate());
-                            tokenInfo.setActiveTimeoutPercent(0d);
-                        } else {
-                            tokenInfo.setActiveTimeoutDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenActiveTimeout)).toDate());
-                            tokenInfo.setActiveTimeoutPercent(NumberUtil.div(tokenActiveTimeout, activeTimeout));
-                        }
-                        return tokenInfo;
                     }).collect(Collectors.toList());
-
-            vo.setTokenCount(tokenInfoList.size());
-            vo.setTokenList(tokenInfoList);
-            vo.setLatestLoginTime(tokenInfoList.get(vo.getTokenCount() - 1).getCreateTime());
-            voList.add(vo);
+            sessionVO.setTokenCount(terminalList.size());
+            long createTime = terminalList.get(sessionVO.getTokenCount() - 1).getCreateTime();
+            sessionVO.setLastLoginTime(new Date(createTime));
+            voList.add(sessionVO);
         });
         return new PageData<>(Convert.toLong(voList.size()), voList);
     }
@@ -157,6 +113,66 @@ public class AuthSessionServiceImpl implements AuthSessionService {
     @Override
     public void removeSession(AuthSessionParam param) {
         param.getCodes().forEach(StpUtil::logout);
+    }
+
+    @Override
+    public List<SignTokenVO> tokenList(String loginId) {
+        // 并发登录数 受到 isConcurrent 和 maxLoginCount 影响，超限将会主动注销第一个登录的会话（先进先出）
+        List<SaTerminalInfo> terminalList = StpUtil.getTerminalListByLoginId(loginId);
+        List<SignTokenVO> tokenList = terminalList.stream()
+                .filter(terminalInfo -> {
+                    // 获取指定 token 剩余有效时间（单位: 秒，返回 -1 代表永久有效，-2 代表没有这个值）
+                    long tokenTimeout = StpUtil.getTokenTimeout(terminalInfo.getTokenValue());
+                    // 过滤掉不存在的
+                    return tokenTimeout != -2;
+                })
+                .map(terminalInfo -> {
+                    String tokenValue = terminalInfo.getTokenValue();
+                    SignTokenVO tokenVO = new SignTokenVO();
+                    tokenVO.setTokenValue(tokenValue);
+                    tokenVO.setTokenDevice(terminalInfo.getDeviceType());
+                    tokenVO.setCreateTime(new Date(terminalInfo.getCreateTime()));
+
+                    // 配置的过期时长
+                    long configTimeout = SaManager.getConfig().getTimeout();
+                    long tokenTimeout = StpUtil.getTokenTimeout(tokenValue);
+                    tokenVO.setTokenTimeout(tokenTimeout);
+                    if (tokenTimeout == -1) {
+                        tokenVO.setDeadline(DateTime.now().plusDays(100).toDate());
+                        tokenVO.setTokenTimeoutPercent(1d);
+                    } else {
+                        tokenVO.setDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenTimeout)).toDate());
+                        if (configTimeout == -1) {
+                            tokenVO.setTokenTimeoutPercent(1d);
+                        } else {
+                            tokenVO.setTokenTimeoutPercent(NumberUtil.div(tokenTimeout, configTimeout));
+                        }
+                    }
+
+                    // 获取指定 token 的最后活跃时间
+                    long tokenLastActiveTime = StpUtil.getStpLogic().getTokenLastActiveTime(tokenValue);
+                    if (tokenLastActiveTime > 0) {
+                        tokenVO.setLastActiveTime(new Date(tokenLastActiveTime));
+                    }
+                    // 配置的闲置冻结时长activeTimeout
+                    long activeTimeout = StpUtil.getStpLogic().getTokenUseActiveTimeoutOrGlobalConfig(tokenValue);
+                    // 获取指定 token 剩余活跃有效期
+                    long tokenActiveTimeout = StpUtil.getStpLogic().getTokenActiveTimeoutByToken(tokenValue);
+                    tokenVO.setActiveTimeout(tokenActiveTimeout);
+                    if (tokenActiveTimeout == -1) {
+                        tokenVO.setActiveTimeoutDeadline(DateTime.now().plusDays(100).toDate());
+                        tokenVO.setActiveTimeoutPercent(1d);
+                    } else if (tokenActiveTimeout == -2) {
+                        tokenVO.setActiveTimeoutDeadline(DateTime.now().toDate());
+                        tokenVO.setActiveTimeoutPercent(0d);
+                    } else {
+                        tokenVO.setActiveTimeoutDeadline(DateTime.now().plusSeconds(Convert.toInt(tokenActiveTimeout)).toDate());
+                        tokenVO.setActiveTimeoutPercent(NumberUtil.div(tokenActiveTimeout, activeTimeout));
+                    }
+                    return tokenVO;
+                }).collect(Collectors.toList());
+
+        return tokenList;
     }
 
     @Override

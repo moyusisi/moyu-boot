@@ -4,6 +4,9 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
+
+import java.util.List;
 
 /**
  * 会话管理服务类Service
@@ -27,6 +30,11 @@ public interface AuthSessionService {
      * 移除session(强退所有)
      */
     void removeSession(AuthSessionParam param);
+
+    /**
+     * 获取指定用户loginId的令牌列表
+     */
+    List<SignTokenVO> tokenList(String loginId);
 
     /**
      * 移除token(强退指定token)

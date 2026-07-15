@@ -10,6 +10,7 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
 import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
 import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 会话管理控制器
@@ -64,6 +66,19 @@ public class AuthSessionController {
         Assert.notEmpty(param.getCodes(), "删除列表codes不能为空");
         authSessionService.removeSession(param);
         return Result.success();
+    }
+
+    /**
+     * 分页查询会话列表
+     */
+    @SysLog(module = "system", business = "会话管理", value = "查询会话的令牌列表", response = true)
+    @Log(jsonLog = true, response = false)
+    @SaCheckPermission(value = "auth:session:tokenList")
+    @PostMapping("/tokenList")
+    public Result<List<SignTokenVO>> tokenList(@RequestBody AuthSessionParam param) {
+        Assert.notEmpty(param.getLoginId(), "登陆标识loginId不能为空");
+        List<SignTokenVO> tokenList = authSessionService.tokenList(param.getLoginId());
+        return Result.success(tokenList);
     }
 
     /**

@@ -27,9 +27,9 @@ public class AuthSessionParam extends PageParam {
     private String searchKey;
 
     /**
-     * 账号
+     * loginId,对应用户账号
      */
-    private String account;
+    private String loginId;
 
     /**
      * 姓名

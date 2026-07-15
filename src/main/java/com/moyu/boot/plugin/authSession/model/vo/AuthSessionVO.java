@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 会话视图对象
@@ -18,9 +17,9 @@ import java.util.List;
 public class AuthSessionVO {
 
     /**
-     * 账号
+     * loginId，对应用户账号
      */
-    private String account;
+    private String loginId;
 
     /**
      * 姓名
@@ -35,28 +34,7 @@ public class AuthSessionVO {
     /**
      * 上次登录时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date lastLoginTime;
-
-    /**
-     * 上次登录设备
-     */
-    private String lastLoginDevice;
-
-    /**
-     * 最新登录ip
-     */
-    private String latestLoginIp;
-
-    /**
-     * 最新登录时间
-     */
-    private Date latestLoginTime;
-
-    /**
-     * 最新登录设备
-     */
-    private String latestLoginDevice;
 
     /**
      * 会话id
@@ -89,68 +67,4 @@ public class AuthSessionVO {
      */
     private Integer tokenCount;
 
-    /**
-     * 令牌数量
-     */
-    private List<SignTokenInfo> tokenList;
-
-    /**
-     * 令牌信息
-     **/
-    @Data
-    public static class SignTokenInfo {
-
-        /**
-         * token值
-         */
-        private String tokenValue;
-
-        /**
-         * 登录设备
-         */
-        private String tokenDevice;
-
-        /**
-         * token剩余有效期(s)
-         */
-        private Long tokenTimeout;
-
-        /**
-         * token有效期截止时间
-         */
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private Date deadline;
-
-        /**
-         * token剩余有效期百分比
-         */
-        private Double tokenTimeoutPercent;
-
-        /**
-         * token闲置冻结有效期(s)
-         */
-        private Long activeTimeout;
-
-        /**
-         * token闲置冻有效期截止时间
-         */
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private Date activeTimeoutDeadline;
-
-        /**
-         * token闲置冻结剩余有效期百分比
-         */
-        private Double activeTimeoutPercent;
-
-        /**
-         * 最后活跃时间
-         */
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-        private Date lastActiveTime;
-
-        /**
-         * 令牌创建时间
-         */
-        private Date createTime;
-    }
 }
