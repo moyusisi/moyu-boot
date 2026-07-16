@@ -3,7 +3,7 @@ package com.moyu.boot.common.mybatis.annotation;
 import java.lang.annotation.*;
 
 /**
- * 数据权限注解(支持指定org或user列名,同时指定则org优先)
+ * 数据权限注解(用于指定控制数据权限的列名)
  * <a href="https://baomidou.com/plugins/data-permission/">数据权限插件</a>
  *
  * @author shisong
