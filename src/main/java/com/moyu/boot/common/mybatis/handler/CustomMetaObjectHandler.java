@@ -21,7 +21,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         try {
-            // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(null 值不填充)。
+            // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(有值不覆盖,新值为null也不填充)。
             this.strictInsertFill(metaObject, BaseEntity.DELETED, Integer.class, 0);
             this.strictInsertFill(metaObject, BaseEntity.CREATE_TIME, Date.class, new Date());
             this.strictInsertFill(metaObject, BaseEntity.CREATE_BY, String.class, getUserId());
@@ -35,7 +35,7 @@ public class CustomMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void updateFill(MetaObject metaObject) {
         try {
-            // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(null 值不填充)。
+            // 严格填充,只针对非主键的字段,只有该表注解了fill 并且 字段名和字段属性 能匹配到才会进行填充(有值不覆盖,新值为null也不填充)。
             this.strictUpdateFill(metaObject, BaseEntity.UPDATE_TIME, Date.class, new Date());
             this.strictUpdateFill(metaObject, BaseEntity.UPDATE_BY, String.class, getUserId());
         } catch (Exception e) {

@@ -324,23 +324,22 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         });
         Gson gson = new GsonBuilder().create();
         // 从btnList中找到已授权的部分
-        btnList.forEach(btn -> {
-            if (permMap.containsKey(btn.getCode())) {
-                SysRelation relation = permMap.get(btn.getCode());
-                PermScopeInfo vo = PermScopeInfo.builder()
-                        .code(btn.getCode())
-                        .name(btn.getName())
-                        .path(btn.getPath())
-                        .permission(btn.getPermission())
-                        .build();
-                RelationExt.ScopeExt ext = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
-                if (ext != null) {
-                    vo.setDataScope(ext.getDataScope());
-                    vo.setScopeList(ext.getScopeList());
-                }
-                permScopeList.add(vo);
-            }
-        });
+        btnList.stream().filter(btn -> permMap.containsKey(btn.getCode()))
+                .forEach(btn -> {
+                    SysRelation relation = permMap.get(btn.getCode());
+                    PermScopeInfo vo = PermScopeInfo.builder()
+                            .code(btn.getCode())
+                            .name(btn.getName())
+                            .path(btn.getPath())
+                            .permission(btn.getPermission())
+                            .build();
+                    RelationExt.ScopeExt ext = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
+                    if (ext != null) {
+                        vo.setDataScope(ext.getDataScope());
+                        vo.setScopeList(ext.getScopeList());
+                    }
+                    permScopeList.add(vo);
+                });
         return permScopeList;
     }
 
@@ -435,6 +434,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             } else {
                 relation.setExtJson(null);
             }
+            // 这个relation为原数据，字段有值不更新，设置为null会自动更新
             relation.setUpdateBy(null);
             relation.setUpdateTime(date);
         });
