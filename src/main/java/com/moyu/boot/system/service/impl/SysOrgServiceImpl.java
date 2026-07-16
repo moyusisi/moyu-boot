@@ -177,10 +177,11 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     }
 
     @Override
-    public String orgCompany(String orgCode) {
-        String companyCode = orgCode;
+    public String orgCompany(String orgCode, Tree<String> rootTree) {
+        rootTree = ObjectUtil.defaultIfNull(rootTree, singleTree());
         // 获取组织结构树
-        Tree<String> node = singleTree().getNode(orgCode);
+        Tree<String> node = rootTree.getNode(orgCode);
+        String companyCode = orgCode;
         while (null != node) {
             if (OrgTypeEnum.COMPANY.getCode().equals(node.get("orgType"))) {
                 companyCode = node.getId();
@@ -216,7 +217,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
     @Override
     public Tree<String> singleTree() {
-        // 没有把整个tree写入缓存，因为反序列化不好处理
+        // tree太大需要有缓存
         return loadRootTree();
     }
 

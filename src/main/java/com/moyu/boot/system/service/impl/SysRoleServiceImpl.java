@@ -611,25 +611,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Set<String> scopeSet = new HashSet<>();
         info.setScopeSet(scopeSet);
         if (scopeExt != null && scopeExt.getDataScope() != null) {
-            if (DataScopeEnum.ORG.getCode().equals(info.getDataScope())) {
-                // 本机构
-                scopeSet.add(orgCode);
-            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(info.getDataScope())) {
+            if (DataScopeEnum.ORG_CHILD.getCode().equals(info.getDataScope())) {
                 // 本机构及以下
                 scopeSet.add(orgCode);
                 // 从rootTree中获取所有child（有缓存时）
-                // Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
-                // orgTree.walk(node -> scopeSet.add(node.getId()));
-                // 从数据库中获取所有child（无缓存时）
-                List<String> childList = sysOrgService.childrenCodeList(orgCode);
-                scopeSet.addAll(childList);
+                Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
+                orgTree.walk(node -> scopeSet.add(node.getId()));
             } else if (DataScopeEnum.COMPANY.getCode().equals(info.getDataScope())) {
                 // 本公司及以下
-                String companyCode = sysOrgService.orgCompany(orgCode);
+                Tree<String> rootTree = sysOrgService.singleTree();
+                String companyCode = sysOrgService.orgCompany(orgCode, rootTree);
                 scopeSet.add(companyCode);
-                // 从数据库中获取所有child（无缓存时）
-                List<String> childList = sysOrgService.childrenCodeList(companyCode);
-                scopeSet.addAll(childList);
+                // 获取所有child
+                Tree<String> orgTree = rootTree.getNode(companyCode);
+                orgTree.walk(node -> scopeSet.add(node.getId()));
             } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(info.getDataScope())) {
                 // 自定义
                 scopeSet.addAll(scopeExt.getScopeList());

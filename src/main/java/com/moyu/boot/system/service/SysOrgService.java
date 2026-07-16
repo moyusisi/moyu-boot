@@ -54,7 +54,7 @@ public interface SysOrgService extends IService<SysOrg> {
     /**
      * 查询指定orgCode的所属公司code(若已是公司则直接返回原code)
      */
-    String orgCompany(String orgCode);
+    String orgCompany(String orgCode, Tree<String> rootTree);
 
     /**
      * 组织机构树（会有多颗树）
