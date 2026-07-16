@@ -19,11 +19,12 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.authZ.util.LoginUserUtils;
+import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
@@ -107,22 +108,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
 
         // 非ROOT则限制数据权限
         if (!LoginUserUtils.isRoot()) {
-            // 指定的列名
-            Integer dataScope = LoginUserUtils.getDataScope();
-            Set<String> scopeSet = LoginUserUtils.getScopes();
-            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = LoginUserUtils.getUsername();
-                queryWrapper.eq(SysOrg::getCreateBy, username);
-            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = LoginUserUtils.getOrgCode();
-                queryWrapper.eq(SysOrg::getCode, orgCode);
-            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
-            } else if (DataScopeEnum.COMPANY.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
-            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysOrg::getCode, scopeSet);
-            }
+            DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
         }
         // 分页查询
         Page<SysOrg> page = new Page<>(param.getPageNum(), param.getPageSize());
