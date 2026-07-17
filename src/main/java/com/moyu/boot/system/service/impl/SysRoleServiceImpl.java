@@ -12,7 +12,6 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -170,10 +169,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     public void deleteByIds(SysRoleParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
+        // 删除时先查再删
+        List<SysRole> roleList = this.listByIds(idSet);
+        // 要删除的和查询到的进行比对
+        if (ObjectUtil.notEqual(idSet.size(), roleList.size())) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
+        }
+        // 物理删除
+        //this.removeByIds(idSet);
         // 逻辑删除
-        UpdateWrapper<SysRole> updateWrapper = new UpdateWrapper<>();
-        updateWrapper.in("id", idSet).set("deleted", 1);
-        this.update(updateWrapper);
+        this.update(Wrappers.lambdaUpdate(SysRole.class).in(SysRole::getId, idSet).set(SysRole::getDeleted, 1));
     }
 
     @Override

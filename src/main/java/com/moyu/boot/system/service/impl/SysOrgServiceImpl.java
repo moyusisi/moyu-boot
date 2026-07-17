@@ -163,6 +163,12 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     public void deleteByIds(SysOrgParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
+        // 删除时先查再删
+        List<SysOrg> orgList = this.listByIds(idSet);
+        // 要删除的和查询到的进行比对
+        if (ObjectUtil.notEqual(idSet.size(), orgList.size())) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
+        }
         // 逻辑删除
         this.update(Wrappers.lambdaUpdate(SysOrg.class).in(SysOrg::getId, idSet).set(SysOrg::getDeleted, 1));
     }

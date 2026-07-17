@@ -178,7 +178,11 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     public void deleteByIds(SysResourceParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
-        Set<String> codeSet = listByIds(idSet).stream().map(SysResource::getCode).collect(Collectors.toSet());
+        Set<String> codeSet = this.listByIds(idSet).stream().map(SysResource::getCode).collect(Collectors.toSet());
+        // 要删除的和查询到的进行比对
+        if (ObjectUtil.notEqual(idSet.size(), codeSet.size())) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
+        }
         // 物理删除
         this.removeByIds(idSet);
         // 资源删除时,对应的role_has_menu也要删除
