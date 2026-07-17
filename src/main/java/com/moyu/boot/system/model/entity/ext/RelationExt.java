@@ -14,7 +14,7 @@ import java.util.List;
 public class RelationExt {
 
     /**
-     * 当ext_json表示数据范围信息时对应此对象
+     * 当ext_json表示数据范围信息时对应此对象(relationType为2:role_has_perm)
      **/
     @Data
     public static class ScopeExt {
