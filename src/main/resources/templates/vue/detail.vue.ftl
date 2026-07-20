@@ -27,7 +27,7 @@
   <#list fieldList as fieldConfig>
     <#if fieldConfig.showInForm == 1>
             <a-col :span="8">
-              <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="" <#if fieldConfig.required == 1>required</#if>>
+              <a-form-item name="${fieldConfig.fieldName}" label="${fieldConfig.fieldRemark[0..*6]}" tooltip="">
       <#if fieldConfig.formType == "SELECT">
                 <a-select v-model:value="formData.${fieldConfig.fieldName}" placeholder="${fieldConfig.fieldRemark}" :options="exampleOptions" disabled allowClear />
       <#elseif fieldConfig.formType == "RADIO">
