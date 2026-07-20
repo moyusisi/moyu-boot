@@ -26,11 +26,11 @@ public class ExceptionWrapperUtils {
                 break;
             // token 无效
             case NotLoginException.INVALID_TOKEN:
-                result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED, NotLoginException.INVALID_TOKEN_MESSAGE);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED, NotLoginException.INVALID_TOKEN_MESSAGE);
                 break;
             // token 已过期
             case NotLoginException.TOKEN_TIMEOUT:
-                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
+                result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED, NotLoginException.TOKEN_TIMEOUT_MESSAGE);
                 break;
             // token 已被顶下线
             case NotLoginException.BE_REPLACED:
