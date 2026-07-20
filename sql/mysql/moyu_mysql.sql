@@ -124,7 +124,7 @@ create table sys_group
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
--- 5. 资源权限表
+-- 5. 资源信息表
 drop table if exists sys_resource;
 create table sys_resource
 (
@@ -154,9 +154,34 @@ create table sys_resource
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  AUTO_INCREMENT = 2000 COMMENT = '资源权限表';
+  AUTO_INCREMENT = 2000 COMMENT = '资源信息表';
 
--- 6. 用户角色权限关系表
+-- 6. 接口信息表
+drop table if exists sys_api;
+create table sys_api
+(
+    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '接口名称',
+    `code`        VARCHAR(64)   DEFAULT NULL COMMENT '接口(权限)标识',
+    `path`        VARCHAR(1024) DEFAULT NULL COMMENT '接口地址',
+    `has_scope`   TINYINT       DEFAULT 0 COMMENT '是否有数据范围',
+    `api_type`    TINYINT       DEFAULT 0 COMMENT '接口类型（字典 1后端接口 2三方接口）',
+
+    `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
+    `remark`      TEXT          DEFAULT NULL comment '备注',
+    `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
+    `create_by`   VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
+    `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
+    `update_by`   VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
+    primary key (`id`),
+    UNIQUE INDEX `uniq_code` (`code`)
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_general_ci
+  AUTO_INCREMENT = 2000 COMMENT = '接口信息表';
+
+-- 7. 用户角色权限关系表
 DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation`
 (
@@ -176,7 +201,7 @@ CREATE TABLE `sys_relation`
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 2000 COMMENT = '用户角色权限关系表';
 
--- 7. 操作日志（可选）
+-- 8. 操作日志（可选）
 DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`
 (
@@ -206,7 +231,7 @@ CREATE TABLE `sys_log`
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci COMMENT ='系统日志表';
 
--- 8. 系统配置表（可选）
+-- 9. 系统配置表（可选）
 drop table if exists sys_config;
 create table sys_config
 (
