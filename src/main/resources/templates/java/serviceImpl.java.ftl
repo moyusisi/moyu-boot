@@ -3,6 +3,7 @@ package ${packageName}.${moduleName}.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -196,15 +197,9 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        LambdaQueryWrapper<${entityName}> queryWrapper = Wrappers.lambdaQuery(${entityName}.class);
-        // 查询指定字段
-        queryWrapper.select(SysConfig::getId);
-        // 指定idSet集合查询
-        queryWrapper.in(ObjectUtil.isNotEmpty(idSet), ${entityName}::getId, idSet);
-        // 查询
-        List<${entityName}> ${entityName?uncap_first}List = this.list(queryWrapper);
+        List<${entityName}> toDelList = this.listByIds(idSet);
         // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), ${entityName?uncap_first}List.size())) {
+        if (ObjectUtil.notEqual(idSet.size(), toDelList.size())) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
