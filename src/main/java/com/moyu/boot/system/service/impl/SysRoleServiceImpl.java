@@ -386,7 +386,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             // 移除本次删除的权限
             if (ObjectUtil.isNotEmpty(toDeleteSet)) {
                 sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
-                        .eq(SysRelation::getObjectId, roleParam.getCode()).in(SysRelation::getTargetId, toDeleteSet));
+                        .eq(SysRelation::getObjectId, roleParam.getCode())
+                        .in(SysRelation::getTargetId, toDeleteSet));
             }
             // 非空则新加权限
             if (ObjectUtil.isNotEmpty(grantMenuSet)) {
