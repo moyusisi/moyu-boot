@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
@@ -33,6 +34,7 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.ResourceTypeEnum;
 import com.moyu.boot.system.mapper.SysRoleMapper;
+import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysRole;
@@ -306,45 +308,74 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<PermScopeInfo> permScopeListForGrant(SysRoleParam param) {
         List<PermScopeInfo> permScopeList = new ArrayList<>();
-        // 查询模块所有按钮资源
-        List<SysResource> btnList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                // 有数据权限的接口
-                .eq(SysResource::getVisible, 1)
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
-                // 指定name查询
-                .like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName())
-                // 指定path查询
-                .like(ObjectUtil.isNotEmpty(param.getSearchKey()), SysResource::getPath, param.getSearchKey())
-        );
 
         // role已经拥有的资源权限 permCode -> Relation
         Map<String, SysRelation> permMap = new HashMap<>();
-        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+        Db.list(Wrappers.lambdaQuery(SysRelation.class)
                 .eq(SysRelation::getObjectId, param.getCode())
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .eq(SysRelation::getDeleted, 0)
         ).forEach(e -> {
             permMap.put(e.getTargetId(), e);
         });
+
+        // role拥有的所有按钮 code -> SysResource
+        Map<String, SysResource> btnMap = new HashMap<>();
+        Set<String> btnPermSet = new HashSet<>();
+        // 查询模块所有按钮
+        Db.list(Wrappers.lambdaQuery(SysResource.class)
+                        .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                        .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
+                ).stream()
+                // 过滤出role有权限的按钮
+                .filter(btn -> permMap.containsKey(btn.getCode()))
+                .forEach(btn -> {
+                    btnMap.put(btn.getCode(), btn);
+                    btnPermSet.add(btn.getPermission());
+                });
+        // role无按钮则返回
+        if (CollectionUtils.isEmpty(btnMap)) {
+            return permScopeList;
+        }
+
+        // 按钮关联的接口(必须有数据范围) code -> SysApi
+        Map<String, SysApi> apiMap = new HashMap<>();
+        // 查询接口列表
+        Db.list(Wrappers.lambdaQuery(SysApi.class)
+                // 只要有数据范围的接口
+                .eq(SysApi::getHasScope, 1)
+                // 指定name查询
+                .like(ObjectUtil.isNotEmpty(param.getName()), SysApi::getName, param.getName())
+                // 指定path查询
+                .like(ObjectUtil.isNotEmpty(param.getSearchKey()), SysApi::getPath, param.getSearchKey())
+                // 权限标识
+                .in(SysApi::getCode, btnPermSet)
+        ).forEach(api -> {
+            apiMap.put(api.getCode(), api);
+        });
+
         Gson gson = new GsonBuilder().create();
         // 从btnList中找到已授权的部分
-        btnList.stream().filter(btn -> permMap.containsKey(btn.getCode()))
-                .forEach(btn -> {
-                    SysRelation relation = permMap.get(btn.getCode());
-                    PermScopeInfo vo = PermScopeInfo.builder()
-                            .code(btn.getCode())
-                            .name(btn.getName())
-                            .path(btn.getPath())
-                            .permission(btn.getPermission())
-                            .build();
-                    RelationExt.ScopeExt ext = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
-                    if (ext != null) {
-                        vo.setDataScope(ext.getDataScope());
-                        vo.setScopeList(ext.getScopeList());
-                    }
-                    permScopeList.add(vo);
-                });
+        btnMap.forEach((code, btn) -> {
+            SysApi api = apiMap.get(btn.getPermission());
+            // apiMap中仅包含有数据范围的接口
+            if (ObjectUtil.isNotNull(api)) {
+                PermScopeInfo vo = PermScopeInfo.builder()
+                        .code(code)
+                        .btnName(btn.getName())
+                        .name(api.getName())
+                        .path(api.getPath())
+                        .permission(api.getCode())
+                        .build();
+                SysRelation relation = permMap.get(code);
+                RelationExt.ScopeExt ext = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
+                if (ext != null) {
+                    vo.setDataScope(ext.getDataScope());
+                    vo.setScopeList(ext.getScopeList());
+                }
+                permScopeList.add(vo);
+            }
+        });
         return permScopeList;
     }
 
