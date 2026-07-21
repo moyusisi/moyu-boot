@@ -1,5 +1,6 @@
 package com.moyu.boot.system.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
@@ -66,7 +67,7 @@ public class SysApiController {
     /**
      * 新增接口信息
      */
-    //@SaCheckPermission("sys:api:add")
+    @SaCheckPermission("sys:api:add")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody SysApiParam param) {
         sysApiService.add(param);
@@ -76,7 +77,7 @@ public class SysApiController {
     /**
      * 修改接口信息
      */
-    //@SaCheckPermission("sys:api:edit")
+    @SaCheckPermission("sys:api:edit")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody SysApiParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -87,7 +88,7 @@ public class SysApiController {
     /**
      * 删除数据
      */
-    //@SaCheckPermission("sys:api:delete")
+    @SaCheckPermission("sys:api:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody SysApiParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
