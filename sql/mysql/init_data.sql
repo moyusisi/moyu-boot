@@ -185,7 +185,7 @@ values ('sys:org:tree', '组织树', '/api/sys/org/tree', 1, 1, null, null, 0, n
        ('sys:resource:delete', '删除菜单', '/api/sys/resource/delete', 0, 1, null, null, 0, null, null, null, null),
        ('sys:resource:deleteTree', '删除菜单树', '/api/sys/resource/deleteTree', 0, 1, null, null, 0, null, null, null, null),
        ('sys:resource:edit', '修改菜单', '/api/sys/resource/edit', 0, 1, null, null, 0, null, null, null, null),
-       ('sys:resource:page', '菜单列表', '/api/sys/resource/page', 0, 1, null, null, 0, null, null, null, null),
+       ('sys:resource:page', '菜单列表', '/api/sys/resource/page', 1, 1, null, null, 0, null, null, null, null),
        ('sys:resource:detail', '菜单详情', '/api/sys/resource/detail', 0, 1, null, null, 0, null, null, null, null),
        ('sys:resource:tree', '菜单树', '/api/sys/resource/tree', 0, 1, null, null, 0, null, null, null, null),
        ('auth:session:delete', '强制退出', '/api/auth/session/delete', 0, 1, null, null, 0, null, null, null, null),
