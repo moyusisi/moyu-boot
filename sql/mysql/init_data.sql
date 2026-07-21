@@ -130,11 +130,11 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('btn_sys_menu_tree', '菜单树', 'menu_sys_menu', 6, '/api/sys/resource/tree', '', 'sys:resource:tree', null, 0, null, 'sys_module', 302004, null, null, 0, null, null, null, null),
         ('btn_sys_menu_detail', '菜单详情', 'menu_sys_menu', 6, '/api/sys/resource/detail', '', 'sys:resource:detail', null, 0, null, 'sys_module', 302005, null, null, 0, null, null, null, null),
 
-        ('btn_sys_api_add', '新增接口', 'menu_sys_api', 6, '/api/sys/api/add', '', 'sys:resource:add', null, 0, null, 'sys_module', 303001, null, null, 0, null, null, null, null),
-        ('btn_sys_api_delete', '删除接口', 'menu_sys_api', 6, '/api/sys/api/delete', '', 'sys:resource:delete', null, 0, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
-        ('btn_sys_api_edit', '修改接口', 'menu_sys_api', 6, '/api/sys/api/edit', '', 'sys:resource:edit', null, 0, null, 'sys_module', 303003, null, null, 0, null, null, null, null),
-        ('btn_sys_api_list', '接口列表', 'menu_sys_api', 6, '/api/sys/api/page', '', 'sys:resource:page', null, 0, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
-        ('btn_sys_api_detail', '接口详情', 'menu_sys_api', 6, '/api/sys/api/detail', '', 'sys:resource:detail', null, 0, null, 'sys_module', 303005, null, null, 0, null, null, null, null),
+        ('btn_sys_api_add', '新增接口', 'menu_sys_api', 6, '/api/sys/api/add', '', 'sys:api:add', null, 0, null, 'sys_module', 303001, null, null, 0, null, null, null, null),
+        ('btn_sys_api_delete', '删除接口', 'menu_sys_api', 6, '/api/sys/api/delete', '', 'sys:api:delete', null, 0, null, 'sys_module', 303002, null, null, 0, null, null, null, null),
+        ('btn_sys_api_edit', '修改接口', 'menu_sys_api', 6, '/api/sys/api/edit', '', 'sys:api:edit', null, 0, null, 'sys_module', 303003, null, null, 0, null, null, null, null),
+        ('btn_sys_api_list', '接口列表', 'menu_sys_api', 6, '/api/sys/api/page', '', 'sys:api:page', null, 0, null, 'sys_module', 303004, null, null, 0, null, null, null, null),
+        ('btn_sys_api_detail', '接口详情', 'menu_sys_api', 6, '/api/sys/api/detail', '', 'sys:api:detail', null, 0, null, 'sys_module', 303005, null, null, 0, null, null, null, null),
 
         ('btn_sys_session_delete', '强制退出', 'menu_sys_session', 6, '/api/auth/session/delete', '', 'auth:session:delete', null, 0, null, 'sys_module', 500202, null, null, 0, null, null, null, null),
         ('btn_sys_session_deleteToken', '强退令牌', 'menu_sys_session', 6, '/api/auth/session/deleteToken', '', 'auth:session:deleteToken', null, 0, null, 'sys_module', 500204, null, null, 0, null, null, null, null),
