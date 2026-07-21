@@ -3,9 +3,9 @@ DROP TABLE IF EXISTS `sys_org`;
 CREATE TABLE `sys_org`
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code` VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
-    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
+    `parent_code` VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
     `org_type`    TINYINT       DEFAULT NULL COMMENT '组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)',
     `org_level`   TINYINT       DEFAULT NULL COMMENT '组织层级(字典 1一级公司 2二级公司 3三级公司)',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
@@ -77,8 +77,8 @@ drop table if exists sys_role;
 create table sys_role
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64) DEFAULT NULL COMMENT '角色名称',
     `code`        VARCHAR(64) DEFAULT NULL COMMENT '角色编码',
+    `name`        VARCHAR(64) DEFAULT NULL COMMENT '角色名称',
 
     `sort_num`    INT         DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT     DEFAULT 0 COMMENT '使用状态（0正常 1停用）',
@@ -101,8 +101,8 @@ drop table if exists sys_group;
 create table sys_group
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `org_code`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
@@ -129,9 +129,9 @@ drop table if exists sys_resource;
 create table sys_resource
 (
     `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `parent_code`   VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
-    `name`          VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `code`          VARCHAR(64)   DEFAULT NULL COMMENT '编码',
+    `name`          VARCHAR(64)   DEFAULT NULL COMMENT '名称',
+    `parent_code`   VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
     `resource_type` TINYINT       DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
     `path`          VARCHAR(1024) DEFAULT NULL COMMENT '路由地址',
     `component`     VARCHAR(64)   DEFAULT NULL COMMENT '组件地址',
@@ -161,8 +161,8 @@ drop table if exists sys_api;
 create table sys_api
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '接口名称',
     `code`        VARCHAR(64)   DEFAULT NULL COMMENT '接口(权限)标识',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '接口名称',
     `path`        VARCHAR(1024) DEFAULT NULL COMMENT '接口地址',
     `has_scope`   TINYINT       DEFAULT 0 COMMENT '是否有数据范围',
     `api_type`    TINYINT       DEFAULT 0 COMMENT '接口类型（字典 1后端接口 2三方接口）',
