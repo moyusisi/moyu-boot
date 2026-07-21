@@ -45,6 +45,8 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getCode()), SysApi::getCode, param.getCode());
         // 指定path查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysApi::getPath, param.getPath());
+        // 指定apiType查询
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getApiType()), SysApi::getApiType, param.getApiType());
         // 仅查询未删除的
         queryWrapper.lambda().eq(SysApi::getDeleted, 0);
         // 指定排序
@@ -73,6 +75,8 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getCode()), SysApi::getCode, param.getCode());
         // 指定path查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysApi::getPath, param.getPath());
+        // 指定apiType查询
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getApiType()), SysApi::getApiType, param.getApiType());
         // 仅查询未删除的
         queryWrapper.lambda().eq(SysApi::getDeleted, 0);
         // 指定排序
