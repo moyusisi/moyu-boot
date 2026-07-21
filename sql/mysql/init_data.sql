@@ -1,16 +1,17 @@
 -- 组织机构
-insert into moyu.sys_org (id, parent_code, name, code, org_type, org_level, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (2001, '0', 'MY集团', '10000000', 1, 1, '0', 1, 0, null, null, 0, null, null, null, null),
-        (2002, '10000000', '集团总部', '11000000', 1, 2, '10000000,0', 2, 0, null, null, 0, null, null, null, null),
-        (2003, '10000000', '北京公司', '12000000', 1, 2, '10000000,0', 4, 0, null, null, 0, null, null, null, null),
-        (2004, '10000000', '华东公司', '14000000', 1, 2, '10000000,0', 6, 0, null, null, 0, null, null, null, null),
-        (2005, '10000000', '华南公司', '16000000', 1, 2, '10000000,0', 8, 0, null, null, 0, null, null, null, null),
-        (2006, '11000000', '总部财务部', '11001000', 2, 2, '11000000,10000000,0', 22, 0, null, null, 0, null, null, null, null),
-        (2007, '11000000', '总部科技部', '11002000', 2, 2, '11000000,10000000,0', 24, 0, null, null, 0, null, null, null, null),
-        (2008, '12000000', '北京运营部', '12001000', 2, 2, '12000000,10000000,0', 42, 0, null, null, 0, null, null, null, null),
-        (2009, '12000000', '北京技术部', '12002000', 2, 2, '12000000,10000000,0', 44, 0, null, null, 0, null, null, null, null),
-        (2010, '14000000', '华东技术部', '14001000', 2, 2, '14000000,10000000,0', 62, 0, null, null, 0, null, null, null, null),
-        (2011, '16000000', '华南行政部', '16001000', 2, 2, '16000000,10000000,0', 84, 0, null, null, 0, null, null, null, null);
+insert into moyu.sys_org (id, code, name, parent_code, org_type, org_level, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+values
+    (2001, '10000000', 'MY集团', '0', 1, 1, '0', 1, 0, null, null, 0, null, null, null, null),
+    (2002, '11000000', '集团总部', '10000000', 1, 2, '10000000,0', 2, 0, null, null, 0, null, null, null, null),
+    (2003, '12000000', '北京公司', '10000000', 1, 2, '10000000,0', 4, 0, null, null, 0, null, null, null, null),
+    (2004, '14000000', '华东公司', '10000000', 1, 2, '10000000,0', 6, 0, null, null, 0, null, null, null, null),
+    (2005, '16000000', '华南公司', '10000000', 1, 2, '10000000,0', 8, 0, null, null, 0, null, null, null, null),
+    (2006, '11001000', '总部财务部', '11000000', 2, 2, '11000000,10000000,0', 22, 0, null, null, 0, null, null, null, null),
+    (2007, '11002000', '总部科技部', '11000000', 2, 2, '11000000,10000000,0', 24, 0, null, null, 0, null, null, null, null),
+    (2008, '12001000', '北京运营部', '12000000', 2, 2, '12000000,10000000,0', 42, 0, null, null, 0, null, null, null, null),
+    (2009, '12002000', '北京技术部', '12000000', 2, 2, '12000000,10000000,0', 44, 0, null, null, 0, null, null, null, null),
+    (2010, '14001000', '华东技术部', '14000000', 2, 2, '14000000,10000000,0', 62, 0, null, null, 0, null, null, null, null),
+    (2011, '16001000', '华南行政部', '16000000', 2, 2, '16000000,10000000,0', 84, 0, null, null, 0, null, null, null, null);
 
 -- 用户
 insert into moyu.sys_user (user_id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, deleted, create_time, create_by, update_time, update_by)
@@ -20,19 +21,19 @@ values  ('202602121001', 'superAdmin', '255a58278b06e24018d1f042e8657ea3', null,
         ('202602121004', 'auditor', '255a58278b06e24018d1f042e8657ea3', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
 
 -- 角色
-insert into moyu.sys_role (id, name, code, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (100, '默认角色', 'r_default', 1, 0, null, '', 0, null, null, null, null),
-        (110, 'ROOT管理员', 'ROOT', 1, 0, null, '', 0, null, null, null, null),
-        (120, '超级管理员', 'r_superAdmin', 2, 0, null, null, 0, null, null, null, null),
-        (130, '角色管理员', 'r_roleAdmin', 3, 0, null, '', 0, null, null, null, null),
-        (140, '公司管理员', 'r_orgAdmin', 4, 0, null, '', 0, null, null, null, null),
-        (150, '审计员', 'r_auditor', 5, 0, null, '', 0, null, null, null, null);
+insert into moyu.sys_role (id, code, name, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+values (100, 'r_default', ' 默认角色 ', 1, 0, null, '', 0, null, null, null, null),
+       (110, 'ROOT', 'ROOT 管理员 ', 1, 0, null, '', 0, null, null, null, null),
+       (120, 'r_superAdmin', ' 超级管理员 ', 2, 0, null, null, 0, null, null, null, null),
+       (130, 'r_roleAdmin', ' 角色管理员 ', 3, 0, null, '', 0, null, null, null, null),
+       (140, 'r_orgAdmin', ' 公司管理员 ', 4, 0, null, '', 0, null, null, null, null),
+       (150, 'r_auditor', ' 审计员 ', 5, 0, null, '', 0, null, null, null, null);
 
 -- 功能权限组
-insert into moyu.sys_group (id, name, code, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, '总部管理岗', 'g_zongbu', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
-        (1894925631903645701, '北京公司管理岗', 'g_beijing', '12000000', '北京公司', '12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
-        (1894925631903645702, '全局审计岗', 'g_auditor', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
+insert into moyu.sys_group (id, code, name, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+values  (1894925631903645700, 'g_zongbu', '总部管理岗', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
+        (1894925631903645701, 'g_beijing', '北京公司管理岗', '12000000', '北京公司', '12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
+        (1894925631903645702, 'g_auditor', '全局审计岗', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
 
 -- 菜单数据
 insert into moyu.sys_resource (parent_code, name, code, resource_type, path, component, icon, permission, visible, link, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
