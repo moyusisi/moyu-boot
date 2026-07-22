@@ -42,7 +42,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
 
         ('dir_sys_org', '组织架构', 'sys_module', 2, '/org', null, '', 'apartment-outlined', 1, null, 'sys_module', 10, null, '', 0, null, null, null, null),
         ('dir_sys_perm', '权限控制', 'sys_module', 2, '/perm', null, '', 'unlock-outlined', 1, null, 'sys_module', 20, null, '', 0, null, null, null, null),
-        ('dir_sys_resource', '资源管理', 'sys_module', 2, '/sys/resource', null, null, 'trademark-circle-outlined', 1, null, 'sys_module', 30, null, null, 0, null, null, null, null),
+        ('dir_sys_resource', '资源管理', 'sys_module', 2, '/resource', null, null, 'trademark-circle-outlined', 1, null, 'sys_module', 30, null, null, 0, null, null, null, null),
         ('dir_sys_dev', '系统工具', 'sys_module', 2, '/dev', null, '', 'tool-outlined', 1, null, 'sys_module', 40, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '系统运维', 'sys_module', 2, '/ops', null, '', 'hdd-outlined', 1, null, 'sys_module', 50, null, '', 0, null, null, null, null),
         ('dir_sys_mobile', '移动端管理', 'sys_module', 2, '/mobile', null, '', 'mobile-outlined', 1, null, 'sys_module', 60, null, '', 0, null, null, null, null),
@@ -57,6 +57,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_sys_module', '模块管理', 'dir_sys_resource', 3, '/sys/module', 'system/resource/module/index', '', 'appstore-add-outlined', 1, null, 'sys_module', 3010, null, '', 0, null, null, null, null),
         ('menu_sys_menu', '菜单管理', 'dir_sys_resource', 3, '/sys/menu', 'system/resource/menu/index', '', 'pic-left-outlined', 1, null, 'sys_module', 3020, null, '', 0, null, null, null, null),
         ('menu_sys_api', '接口管理', 'dir_sys_resource', 3, '/sys/button', 'system/resource/api/index', '', 'api-outlined', 1, null, 'sys_module', 3030, null, null, 0, null, null, null, null),
+        ('menu_sys_resource', '资源查询', 'dir_sys_resource', 3, '/sys/resource', 'system/resource/index', '', 'unordered-list-outlined', 1, null, 'sys_module', 3040, null, null, 0, null, null, null, null),
 
         ('menu_sys_gen', '代码生成', 'dir_sys_dev', 3, '/dev/gen', 'dev/gen/index', '', 'code-outlined', 1, null, 'sys_module', 4010, null, '', 0, null, null, null, null),
         ('menu_sys_file', '文件管理', 'dir_sys_dev', 3, '/dev/file/index', 'dev/file/index', null, 'copy-outlined', 1, null, 'sys_module', 4020, null, '', 0, null, null, null, null),
@@ -141,6 +142,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('btn_sys_session_renewActive', '续签令牌', 'menu_sys_session', 6, '/api/auth/session/renewActive', '', 'auth:session:renewActive', null, 0, null, 'sys_module', 500206, null, null, 0, null, null, null, null),
         ('btn_sys_session_list', '会话列表', 'menu_sys_session', 6, '/api/auth/session/page', '', 'auth:session:page', null, 0, null, 'sys_module', 500208, null, null, 0, null, null, null, null),
         ('btn_sys_session_tokenList', '令牌列表', 'menu_sys_session', 6, '/api/auth/session/tokenList', '', 'auth:session:tokenList', null, 0, null, 'sys_module', 500210, null, null, 0, null, null, null, null),
+        ('btn_sys_resource_list', '资源列表', 'menu_sys_resource', 6, '/api/sys/resource/list', '', 'sys:resource:list', null, 0, null, 'sys_module', 304001, null, null, 0, null, null, null, null),
 
         ('btn_biz_org_add', '新增机构', 'menu_biz_org', 6, null, null, null, null, 0, null, 'biz_module', 511001, null, '', 0, null, null, null, null),
         ('btn_biz_org_del', '删除机构', 'menu_biz_org', 6, null, null, null, null, 0, null, 'biz_module', 511002, null, '', 0, null, null, null, null),
