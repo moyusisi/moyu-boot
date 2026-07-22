@@ -47,7 +47,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('dir_sys_ops', '系统运维', 'sys_module', 2, '/ops', null, '', 'hdd-outlined', 1, 'sys_module', 50, null, '', 0, null, null, null, null),
         ('dir_sys_mobile', '移动端管理', 'sys_module', 2, '/mobile', null, '', 'mobile-outlined', 1, 'sys_module', 60, null, '', 0, null, null, null, null),
         ('dir_sys_common', '通用资源', 'sys_module', 2, '/sys/common', null, '', 'folder-open-outlined', 0, 'sys_module', 100, null, '', 0, null, null, null, null),
-        ('dir_biz_company', '公司架构', 'biz_module', 2, '/1nlpdpnief', null, '', 'cluster-outlined', 1, 'biz_module', 20, null, '', 0, null, null, null, null),
+        ('dir_biz_company', '公司架构', 'biz_module', 2, '/biz/co', null, '', 'cluster-outlined', 1, 'biz_module', 20, null, '', 0, null, null, null, null),
         ('menu_biz_notice', '通知公告', 'biz_module', 3, '/biz/notice', 'biz/notice/index', null, 'appstore-outlined', 1, 'biz_module', 30, null, '', 0, null, null, null, null),
 
         ('menu_sys_org', '组织管理', 'dir_sys_org', 3, '/sys/org', 'system/org/index', null, 'cluster-outlined', 1, 'sys_module', 1010, null, '', 0, null, null, null, null),
