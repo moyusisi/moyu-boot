@@ -136,7 +136,6 @@ create table sys_resource
     `path`          VARCHAR(1024) DEFAULT NULL COMMENT '路由地址',
     `component`     VARCHAR(64)   DEFAULT NULL COMMENT '组件地址',
     `permission`    VARCHAR(64)   DEFAULT NULL COMMENT '权限标识',
-    `link`          VARCHAR(1024) DEFAULT NULL COMMENT '链接地址',
     `icon`          VARCHAR(64)   DEFAULT NULL COMMENT '图标',
     `visible`       TINYINT       DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
     `module`        VARCHAR(64)   DEFAULT NULL COMMENT '归属模块',
