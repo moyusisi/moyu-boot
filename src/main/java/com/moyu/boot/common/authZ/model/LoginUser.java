@@ -63,7 +63,7 @@ public class LoginUser implements Serializable {
     private Set<String> scopeSet;
 
     /**
-     * 接口权限对应的数据范围
+     * 接口对应的数据范围
      */
     private Map<String, LoginUser.DataScopeInfo> permScopeMap;
 

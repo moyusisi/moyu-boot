@@ -103,6 +103,8 @@ public class SaTokenConfigure {
                     if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
                         // 从会话中获取登陆用户信息
                         LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
+                        // 处理数据范围
+                        dataScopeHandler(loginUser);
                         // loginUser放入本次请求作用域存储
                         storage.set(AuthConstants.LOGIN_USER, loginUser);
                     }
@@ -152,5 +154,16 @@ public class SaTokenConfigure {
         }
         log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
         return responseBody;
+    }
+
+    private void dataScopeHandler(LoginUser loginUser) {
+        // 获取原始请求对象
+        HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
+        String apiUrl = request.getServletPath();
+        LoginUser.DataScopeInfo dataScopeInfo = loginUser.getPermScopeMap().get(apiUrl);
+        if (dataScopeInfo != null) {
+            loginUser.setDataScope(dataScopeInfo.getDataScope());
+            loginUser.setScopeSet(dataScopeInfo.getScopeSet());
+        }
     }
 }

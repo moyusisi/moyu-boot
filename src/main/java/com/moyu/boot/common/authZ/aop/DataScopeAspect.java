@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 @Aspect
 @Order(Ordered.HIGHEST_PRECEDENCE + 200)
-@Component
+//@Component
 public class DataScopeAspect {
 
     /**

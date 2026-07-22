@@ -337,7 +337,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return permScopeList;
         }
 
-        // 按钮关联的接口(必须有数据范围) code -> SysApi
+        // 按钮关联的接口(必须有数据范围) perm -> SysApi
         Map<String, SysApi> apiMap = new HashMap<>();
         // 查询接口列表
         Db.list(Wrappers.lambdaQuery(SysApi.class)
@@ -577,9 +577,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public Map<String, LoginUser.DataScopeInfo> rolePermScopeMap(Set<String> roleSet, String orgCode) {
         // 权限标识集合
-        Map<String, LoginUser.DataScopeInfo> permScopeMap = new HashMap<>();
+        Map<String, LoginUser.DataScopeInfo> apiScopeMap = new HashMap<>();
         if (ObjectUtil.isEmpty(roleSet)) {
-            return permScopeMap;
+            return apiScopeMap;
         }
         // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
         Map<String, SysRelation> allPermMap = new HashMap<>();
@@ -588,31 +588,68 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .in(SysRelation::getObjectId, roleSet)
         ).forEach(e -> allPermMap.put(e.getTargetId(), e));
         if (ObjectUtil.isEmpty(allPermMap)) {
-            return permScopeMap;
+            return apiScopeMap;
         }
+        // roleSet拥有的所有按钮 code -> SysResource
+        Map<String, SysResource> btnMap = new HashMap<>();
+        Set<String> btnPermSet = new HashSet<>();
+        // 查询模块所有按钮
+        Db.list(Wrappers.lambdaQuery(SysResource.class)
+                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
+                .in(SysResource::getCode, allPermMap.keySet())
+                .eq(SysResource::getDeleted, 0)
+        ).forEach(btn -> {
+            btnMap.put(btn.getCode(), btn);
+            btnPermSet.add(btn.getPermission());
+        });
+        // role无按钮则返回
+        if (CollectionUtils.isEmpty(btnMap)) {
+            return apiScopeMap;
+        }
+
+
         // roleSet拥有Resource(仅包含按钮)
         List<SysResource> btnList = Db.list(Wrappers.lambdaQuery(SysResource.class)
                 .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .in(SysResource::getCode, allPermMap.keySet())
                 .eq(SysResource::getDeleted, 0));
+
+        // 按钮关联的接口(必须有数据范围) perm -> SysApi
+        Map<String, SysApi> apiMap = new HashMap<>();
+        // 查询接口列表
+        Db.list(Wrappers.lambdaQuery(SysApi.class)
+                // 只要有数据范围的接口
+                .eq(SysApi::getHasScope, 1)
+                // 权限标识
+                .in(SysApi::getCode, btnPermSet)
+        ).forEach(api -> {
+            apiMap.put(api.getCode(), api);
+        });
+
+        Gson gson = new GsonBuilder().create();
         // 接口数据范围组装
-        btnList.forEach(e -> {
-            if (ObjectUtil.isNotEmpty(e.getPermission())) {
-                SysRelation relation = allPermMap.get(e.getCode());
-                LoginUser.DataScopeInfo info = buildDataScopeInfo(orgCode, relation);
-                if (permScopeMap.containsKey(e.getPermission())) {
-                    // 已有重复的，则要合并数据范围
-                    LoginUser.DataScopeInfo mergedInfo = mergeDataScope(permScopeMap.get(e.getPermission()), info);
-                    permScopeMap.put(e.getPermission(), mergedInfo);
-                } else {
-                    // 不重复直接添加
-                    permScopeMap.put(e.getPermission(), info);
+        btnMap.forEach((code, btn) -> {
+            SysApi api = apiMap.get(btn.getPermission());
+            if (api != null) {
+                // 不同btn可能有不同数据范围
+                SysRelation relation = allPermMap.get(btn.getCode());
+                RelationExt.ScopeExt scopeExt = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
+                if (scopeExt != null && scopeExt.getDataScope() != null) {
+                    LoginUser.DataScopeInfo info = buildDataScopeInfo(orgCode, scopeExt);
+                    if (apiScopeMap.containsKey(api.getPath())) {
+                        // 已有重复的，则要合并数据范围
+                        LoginUser.DataScopeInfo mergedInfo = mergeDataScope(apiScopeMap.get(api.getPath()), info);
+                        apiScopeMap.put(api.getPath(), mergedInfo);
+                    } else {
+                        // 不重复直接添加
+                        apiScopeMap.put(api.getPath(), info);
+                    }
                 }
             }
         });
         // 对于不限制(DataScopeEnum.ALL)数据范围的接口，为了减少缓存大小，将其移出（即无数据权限时不限制）
-        permScopeMap.entrySet().removeIf(entry -> DataScopeEnum.ALL.getCode().equals(entry.getValue().getDataScope()));
-        return permScopeMap;
+        apiScopeMap.entrySet().removeIf(entry -> DataScopeEnum.ALL.getCode().equals(entry.getValue().getDataScope()));
+        return apiScopeMap;
     }
 
     /**
@@ -642,33 +679,33 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         return max;
     }
 
-    private LoginUser.DataScopeInfo buildDataScopeInfo(String orgCode, SysRelation relation) {
+    private LoginUser.DataScopeInfo buildDataScopeInfo(String orgCode, RelationExt.ScopeExt scopeExt) {
+        // 未设置过数据范围直接返回
+        if (scopeExt == null || scopeExt.getDataScope() == null) {
+            return null;
+        }
         LoginUser.DataScopeInfo info = new LoginUser.DataScopeInfo();
-        Gson gson = new GsonBuilder().create();
-        RelationExt.ScopeExt scopeExt = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
         // 不限制时设置值，防止null
-        info.setDataScope(scopeExt == null || scopeExt.getDataScope() == null ? DataScopeEnum.ALL.getCode() : scopeExt.getDataScope());
+        info.setDataScope(scopeExt.getDataScope());
         Set<String> scopeSet = new HashSet<>();
         info.setScopeSet(scopeSet);
-        if (scopeExt != null && scopeExt.getDataScope() != null) {
-            if (DataScopeEnum.ORG_CHILD.getCode().equals(info.getDataScope())) {
-                // 本机构及以下
-                scopeSet.add(orgCode);
-                // 从rootTree中获取所有child（有缓存时）
-                Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
-                orgTree.walk(node -> scopeSet.add(node.getId()));
-            } else if (DataScopeEnum.COMPANY.getCode().equals(info.getDataScope())) {
-                // 本公司及以下
-                Tree<String> rootTree = sysOrgService.singleTree();
-                String companyCode = sysOrgService.orgCompany(orgCode, rootTree);
-                scopeSet.add(companyCode);
-                // 获取所有child
-                Tree<String> orgTree = rootTree.getNode(companyCode);
-                orgTree.walk(node -> scopeSet.add(node.getId()));
-            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(info.getDataScope())) {
-                // 自定义
-                scopeSet.addAll(scopeExt.getScopeList());
-            }
+        if (DataScopeEnum.ORG_CHILD.getCode().equals(info.getDataScope())) {
+            // 本机构及以下
+            scopeSet.add(orgCode);
+            // 从rootTree中获取所有child（有缓存时）
+            Tree<String> orgTree = sysOrgService.singleTree().getNode(orgCode);
+            orgTree.walk(node -> scopeSet.add(node.getId()));
+        } else if (DataScopeEnum.COMPANY.getCode().equals(info.getDataScope())) {
+            // 本公司及以下
+            Tree<String> rootTree = sysOrgService.singleTree();
+            String companyCode = sysOrgService.orgCompany(orgCode, rootTree);
+            scopeSet.add(companyCode);
+            // 获取所有child
+            Tree<String> orgTree = rootTree.getNode(companyCode);
+            orgTree.walk(node -> scopeSet.add(node.getId()));
+        } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(info.getDataScope())) {
+            // 自定义
+            scopeSet.addAll(ObjectUtil.defaultIfNull(scopeExt.getScopeList(), new ArrayList<>()));
         }
         return info;
     }
