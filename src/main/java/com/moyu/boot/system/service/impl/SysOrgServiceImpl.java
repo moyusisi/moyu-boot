@@ -105,11 +105,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         queryWrapper.eq(SysOrg::getDeleted, 0);
         // 指定排序
         queryWrapper.orderByAsc(SysOrg::getSortNum);
-
         // 非ROOT则限制数据权限
-        if (!LoginUserUtils.isRoot()) {
-            DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
-        }
+        DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
         // 分页查询
         Page<SysOrg> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);
