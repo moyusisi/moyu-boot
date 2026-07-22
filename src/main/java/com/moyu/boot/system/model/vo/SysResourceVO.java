@@ -53,10 +53,6 @@ public class SysResourceVO {
      */
     private String permission;
     /**
-     * 链接地址
-     */
-    private String link;
-    /**
      * 图标
      */
     private String icon;

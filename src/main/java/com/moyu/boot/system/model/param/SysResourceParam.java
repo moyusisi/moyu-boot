@@ -95,11 +95,6 @@ public class SysResourceParam extends PageParam {
     private String permission;
 
     /**
-     * 链接地址
-     */
-    private String link;
-
-    /**
      * 图标
      */
     private String icon;
