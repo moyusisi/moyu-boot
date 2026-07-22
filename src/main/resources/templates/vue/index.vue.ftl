@@ -110,10 +110,12 @@
       </template>
       <template #action="{row, rowIndex, column, columnIndex}">
         <a-space>
+          <template #split>
+            <a-divider type="vertical" />
+          </template>
           <a-tooltip title="编辑">
             <a @click="formRef.onOpen(row)"><FormOutlined /></a>
           </a-tooltip>
-          <a-divider type="vertical" />
           <a-tooltip title="删除">
             <a-popconfirm title="确定要删除吗？" @confirm="delete${entityName}(row)">
               <a style="color:#FF4D4F;"><DeleteOutlined/></a>
