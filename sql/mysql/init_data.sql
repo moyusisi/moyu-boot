@@ -46,7 +46,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('dir_sys_dev', '系统工具', 'sys_module', 2, '/dev', null, '', 'tool-outlined', 1, null, 'sys_module', 40, null, '', 0, null, null, null, null),
         ('dir_sys_ops', '系统运维', 'sys_module', 2, '/ops', null, '', 'hdd-outlined', 1, null, 'sys_module', 50, null, '', 0, null, null, null, null),
         ('dir_sys_mobile', '移动端管理', 'sys_module', 2, '/mobile', null, '', 'mobile-outlined', 1, null, 'sys_module', 60, null, '', 0, null, null, null, null),
-        ('dir_sys_api', '通用接口', 'sys_module', 2, '/sys/api', null, '', 'folder-open-outlined', 0, null, 'sys_module', 100, null, '', 0, null, null, null, null),
+        ('dir_sys_common', '通用资源', 'sys_module', 2, '/sys/common', null, '', 'folder-open-outlined', 0, null, 'sys_module', 100, null, '', 0, null, null, null, null),
         ('dir_biz_company', '公司架构', 'biz_module', 2, '/1nlpdpnief', null, '', 'cluster-outlined', 1, null, 'biz_module', 20, null, '', 0, null, null, null, null),
         ('menu_biz_notice', '通知公告', 'biz_module', 3, '/biz/notice', 'biz/notice/index', null, 'appstore-outlined', 1, null, 'biz_module', 30, null, '', 0, null, null, null, null),
 
@@ -81,7 +81,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_biz_user', '人员管理', 'dir_biz_company', 3, '/biz/user', 'biz/user/index', null, 'user-outlined', 1, null, 'biz_module', 53, null, '', 0, null, null, null, null),
         ('menu_biz_pos', '岗位管理', 'dir_biz_company', 3, '/biz/position', 'biz/position/index', null, 'apartment-outlined', 1, null, 'biz_module', 54, null, '', 0, null, null, null, null),
 
-        ('api_sys_org_tree', '组织树', 'dir_sys_api', 6, '/api/sys/org/tree', '', 'sys:org:tree', null, 1, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
+        ('api_sys_org_tree', '组织树', 'dir_sys_common', 6, '/api/sys/org/tree', '', 'sys:org:tree', null, 1, null, 'sys_module', 101006, null, null, 0, null, null, null, null),
         ('btn_sys_org_add', '新增组织', 'menu_sys_org', 6, '/api/sys/org/add', '', 'sys:org:add', '', 0, null, 'sys_module', 101001, null, '', 0, null, null, null, null),
         ('btn_sys_org_delete', '删除组织', 'menu_sys_org', 6, '/api/sys/org/delete', '', 'sys:org:delete', '', 0, null, 'sys_module', 101002, null, '', 0, null, null, null, null),
         ('btn_sys_org_edit', '修改组织', 'menu_sys_org', 6, '/api/sys/org/edit', '', 'sys:org:edit', '', 0, null, 'sys_module', 101003, null, '', 0, null, null, null, null),
