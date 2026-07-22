@@ -39,7 +39,6 @@ import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysResource;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.ext.RelationExt;
-import com.moyu.boot.system.model.param.SysRelationParam;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
@@ -517,8 +516,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 要删除的ids
         Set<Long> ids = new HashSet<>();
         // 查询指定role中已存在的user，加入ids待删
-        sysRelationService.list(SysRelationParam.builder().targetId(roleParam.getCode()).objectSet(userSet)
-                .relationType(RelationTypeEnum.USER_HAS_ROLE.getCode()).build()
+        Db.list(Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
+                .in(SysRelation::getObjectId, userSet)
+                .eq(SysRelation::getTargetId, roleParam.getCode())
         ).forEach(e -> ids.add(e.getId()));
         // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {
@@ -582,8 +583,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
         Map<String, SysRelation> allPermMap = new HashMap<>();
-        sysRelationService.list(SysRelationParam.builder().relationType(RelationTypeEnum.ROLE_HAS_PERM.getCode())
-                .objectSet(roleSet).build()).forEach(e -> allPermMap.put(e.getTargetId(), e));
+        Db.list(Wrappers.lambdaQuery(SysRelation.class)
+                .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .in(SysRelation::getObjectId, roleSet)
+        ).forEach(e -> allPermMap.put(e.getTargetId(), e));
         if (ObjectUtil.isEmpty(allPermMap)) {
             return permScopeMap;
         }
