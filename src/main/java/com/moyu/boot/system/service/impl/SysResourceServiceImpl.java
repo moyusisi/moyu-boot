@@ -11,6 +11,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,6 +19,7 @@ import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
@@ -69,23 +71,32 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public List<SysResourceVO> list(SysResourceParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        QueryWrapper<SysResource> queryWrapper = Wrappers.query(SysResource.class).checkSqlInjection();
         // 指定模块
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
         // 指定资源类型 resourceType
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
-        // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
         // 指定code查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        // 指定name查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
         // 指定path查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
-        // 指定visible查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getVisible()), SysResource::getVisible, param.getVisible());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
+        // 指定component查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getComponent()), SysResource::getComponent, param.getComponent());
+        // 指定permission查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPermission()), SysResource::getPermission, param.getPermission());
         // 仅查询未删除的
-        queryWrapper.eq(SysResource::getDeleted, 0);
+        queryWrapper.lambda().eq(SysResource::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderByAsc(SysResource::getSortNum);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        } else {
+            queryWrapper.lambda().orderByAsc(SysResource::getSortNum);
+        }
         // 查询
         List<SysResource> resourceList = this.list(queryWrapper);
         // 转换为voList
@@ -96,21 +107,32 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
     @Override
     public PageData<SysResourceVO> pageList(SysResourceParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysResource> queryWrapper = Wrappers.lambdaQuery(SysResource.class);
+        QueryWrapper<SysResource> queryWrapper = Wrappers.query(SysResource.class).checkSqlInjection();
         // 指定模块
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule());
         // 指定资源类型 resourceType
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
-        // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getResourceType()), SysResource::getResourceType, param.getResourceType());
         // 指定code查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCode()), SysResource::getCode, param.getCode());
+        // 指定name查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysResource::getName, param.getName());
         // 指定path查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysResource::getPath, param.getPath());
+        // 指定component查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getComponent()), SysResource::getComponent, param.getComponent());
+        // 指定permission查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPermission()), SysResource::getPermission, param.getPermission());
         // 仅查询未删除的
-        queryWrapper.eq(SysResource::getDeleted, 0);
+        queryWrapper.lambda().eq(SysResource::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderByAsc(SysResource::getSortNum);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
+                    StrUtil.toUnderlineCase(param.getSortField()));
+        } else {
+            queryWrapper.lambda().orderByAsc(SysResource::getSortNum);
+        }
         // 分页查询
         Page<SysResource> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysResource> resourcePage = this.page(page, queryWrapper);
