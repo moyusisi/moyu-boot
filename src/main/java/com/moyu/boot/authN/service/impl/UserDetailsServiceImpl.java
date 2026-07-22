@@ -70,7 +70,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .perms(sysRoleService.rolePerms(roleSet))
                 // 接口权限的数据范围
                 .dataScopeMap(sysRoleService.roleDataScopeMap(roleSet, sysUser.getOrgCode()))
-                // 数据范围默认本人数据，真正的数据范围在PreDataScope切面中赋值
+                // 不设置数据范围时，默认本人数据，真正的数据范围在认证后处理
                 .dataScope(DataScopeEnum.SELF.getCode())
                 // 默认岗位
                 .groupCode(sysGroupService.defaultGroup())
