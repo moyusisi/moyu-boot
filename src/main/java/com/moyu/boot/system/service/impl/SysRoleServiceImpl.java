@@ -590,13 +590,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(allPermMap)) {
             return permScopeMap;
         }
-        // roleSet拥有Resource(仅包含按钮/接口)
-        List<SysResource> apiList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
+        // roleSet拥有Resource(仅包含按钮)
+        List<SysResource> btnList = Db.list(Wrappers.lambdaQuery(SysResource.class)
                 .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
                 .in(SysResource::getCode, allPermMap.keySet())
                 .eq(SysResource::getDeleted, 0));
         // 接口数据范围组装
-        apiList.forEach(e -> {
+        btnList.forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 SysRelation relation = allPermMap.get(e.getCode());
                 LoginUser.DataScopeInfo info = buildDataScopeInfo(orgCode, relation);
