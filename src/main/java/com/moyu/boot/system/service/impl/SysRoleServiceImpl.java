@@ -648,7 +648,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
         });
         // 对于不限制(DataScopeEnum.ALL)数据范围的接口，为了减少缓存大小，将其移出（即无数据权限时不限制）
-        apiScopeMap.entrySet().removeIf(entry -> DataScopeEnum.ALL.getCode().equals(entry.getValue().getDataScope()));
+        //apiScopeMap.entrySet().removeIf(entry -> DataScopeEnum.ALL.getCode().equals(entry.getValue().getDataScope()));
         return apiScopeMap;
     }
 
