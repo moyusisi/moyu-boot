@@ -4,7 +4,6 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.util.ObjectUtil;
-import com.moyu.boot.common.core.annotation.DataScope;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
@@ -42,7 +41,6 @@ public class SysGroupController {
      */
     @SysLog(module = "system", logType = 2, value = "分页查询岗位列表")
 //    @SaCheckPermission("sys:group:page")
-    @DataScope("sys:group:page")
     @PostMapping("/page")
     public Result<PageData<SysGroupVO>> pageList(@RequestBody SysGroupParam groupParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(groupParam.getPageNum(), groupParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");

@@ -214,7 +214,7 @@ public class UserCenterServiceImpl implements UserCenterService {
         // 岗位权限 权限标识集合(仅接口,无菜单)
         loginUser.setPerms(sysRoleService.rolePerms(roleSet));
         // 接口权限的数据范围
-        loginUser.setPermScopeMap(sysRoleService.rolePermScopeMap(roleSet, group.getOrgCode()));
+        loginUser.setDataScopeMap(sysRoleService.roleDataScopeMap(roleSet, group.getOrgCode()));
         // 数据范围默认本人数据，真正的数据范围在PreDataScope切面中赋值
         loginUser.setDataScope(DataScopeEnum.SELF.getCode());
         tokenService.switchUser(loginUser);

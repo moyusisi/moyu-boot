@@ -160,7 +160,7 @@ public class SaTokenConfigure {
         // 获取原始请求对象
         HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
         String apiUrl = request.getServletPath();
-        LoginUser.DataScopeInfo dataScopeInfo = loginUser.getPermScopeMap().get(apiUrl);
+        LoginUser.DataScopeInfo dataScopeInfo = loginUser.getDataScopeMap().get(apiUrl);
         if (dataScopeInfo != null) {
             loginUser.setDataScope(dataScopeInfo.getDataScope());
             loginUser.setScopeSet(dataScopeInfo.getScopeSet());

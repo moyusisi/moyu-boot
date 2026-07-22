@@ -124,9 +124,9 @@ public interface SysRoleService extends IService<SysRole> {
     Set<String> rolePerms(Set<String> roleSet);
 
     /**
-     * 获取角色的权限标识+数据范围(数据权限自动合并)
+     * 获取角色的拥有的接口的数据范围(数据权限自动合并)
      *
-     * @return Map:接口perm标识 -> dataScope
+     * @return Map:接口path -> dataScope
      */
-    Map<String, LoginUser.DataScopeInfo> rolePermScopeMap(Set<String> roleSet, String orgCode);
+    Map<String, LoginUser.DataScopeInfo> roleDataScopeMap(Set<String> roleSet, String orgCode);
 }

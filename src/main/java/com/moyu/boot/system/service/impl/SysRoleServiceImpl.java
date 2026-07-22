@@ -575,7 +575,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     @Override
-    public Map<String, LoginUser.DataScopeInfo> rolePermScopeMap(Set<String> roleSet, String orgCode) {
+    public Map<String, LoginUser.DataScopeInfo> roleDataScopeMap(Set<String> roleSet, String orgCode) {
         // 权限标识集合
         Map<String, LoginUser.DataScopeInfo> apiScopeMap = new HashMap<>();
         if (ObjectUtil.isEmpty(roleSet)) {
