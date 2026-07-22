@@ -168,7 +168,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "唯一编码重复，请更换或留空自动生成");
             }
         }
-        // 非root节点的parent必须存在(module为root节点)
+        // 非module必须有parent存在(module为root节点)
         if (!Objects.equals(ResourceTypeEnum.MODULE.getCode(), param.getResourceType())) {
             Assert.notEmpty(param.getParentCode(), "上级菜单parentCode不能为空");
             // 查询所选父节点
@@ -294,7 +294,6 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
         sysResource.setPath(param.getPath());
         sysResource.setComponent(param.getComponent());
         sysResource.setPermission(param.getPermission());
-        sysResource.setLink(param.getLink());
         sysResource.setIcon(param.getIcon());
         sysResource.setVisible(param.getVisible());
         sysResource.setModule(param.getModule());
@@ -332,6 +331,7 @@ public class SysResourceServiceImpl extends ServiceImpl<SysResourceMapper, SysRe
             Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
         }
         if (Objects.equals(ResourceTypeEnum.MODULE, resourceType)) {
+            Assert.notEmpty(menu.getCode(), "模块编码code不能为空");
             // 模块要设置布局
             if (StrUtil.isEmpty(menu.getComponent())) {
                 menu.setComponent("Layout");
