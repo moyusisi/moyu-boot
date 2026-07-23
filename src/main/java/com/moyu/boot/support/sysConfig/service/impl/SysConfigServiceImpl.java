@@ -150,9 +150,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
-        //this.removeByIds(idSet);
+        this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(SysConfig.class).in(SysConfig::getId, idSet).set(SysConfig::getDeleted, 1));
+        //this.update(Wrappers.lambdaUpdate(SysConfig.class).in(SysConfig::getId, idSet).set(SysConfig::getDeleted, 1));
     }
 
     /**
