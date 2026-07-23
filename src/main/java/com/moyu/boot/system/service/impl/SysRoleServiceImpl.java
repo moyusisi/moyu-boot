@@ -607,13 +607,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return apiScopeMap;
         }
 
-        // roleSet拥有Resource(仅包含按钮)
-        List<SysResource> btnList = Db.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .in(SysResource::getCode, allPermMap.keySet())
-                .eq(SysResource::getDeleted, 0));
-
-        // 按钮关联的接口(必须有数据范围) perm -> SysApi
+        // 按钮关联的接口(必须有数据范围)Map:perm -> SysApi
         Map<String, SysApi> apiMap = new HashMap<>();
         // 查询接口列表
         Db.list(Wrappers.lambdaQuery(SysApi.class)
