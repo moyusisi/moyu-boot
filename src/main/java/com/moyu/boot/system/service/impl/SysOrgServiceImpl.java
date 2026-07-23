@@ -204,13 +204,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         if (LoginUserUtils.isRoot()) {
             return rootTree.getChildren();
         }
-        // 数据范围
-        Integer dataScope = LoginUserUtils.getDataScope();
-        // 未设置或设置为不限制时，返回全树
-        if (dataScope == null || DataScopeEnum.ALL.getCode().equals(dataScope)) {
-            return rootTree.getChildren();
-        }
-        // 其他情况都按照数据范围返回公司树
+        // 默认返回所属的公司树
         String orgCode = getUserCompanyCode(rootTree, LoginUserUtils.getOrgCode());
         // 用户直属公司orgTree
         Tree<String> orgTree = rootTree.getNode(orgCode);
