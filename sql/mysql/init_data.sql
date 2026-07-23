@@ -56,7 +56,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_sys_role', '角色管理', 'dir_sys_perm', 3, '/sys/role', 'system/role/index', '', 'deployment-unit-outlined', 1, 'sys_module', 2020, null, '', 0, null, null, null, null),
         ('menu_sys_module', '模块管理', 'dir_sys_resource', 3, '/sys/module', 'system/resource/module/index', '', 'appstore-add-outlined', 1, 'sys_module', 3010, null, '', 0, null, null, null, null),
         ('menu_sys_menu', '菜单管理', 'dir_sys_resource', 3, '/sys/menu', 'system/resource/menu/index', '', 'pic-left-outlined', 1, 'sys_module', 3020, null, '', 0, null, null, null, null),
-        ('menu_sys_api', '接口管理', 'dir_sys_resource', 3, '/sys/button', 'system/resource/api/index', '', 'api-outlined', 1, 'sys_module', 3030, null, null, 0, null, null, null, null),
+        ('menu_sys_api', '接口管理', 'dir_sys_resource', 3, '/sys/api', 'system/resource/api/index', '', 'api-outlined', 1, 'sys_module', 3030, null, null, 0, null, null, null, null),
         ('menu_sys_resource', '资源查询', 'dir_sys_resource', 3, '/sys/resource', 'system/resource/index', '', 'unordered-list-outlined', 1, 'sys_module', 3040, null, null, 0, null, null, null, null),
 
         ('menu_sys_gen', '代码生成', 'dir_sys_dev', 3, '/dev/gen', 'dev/gen/index', '', 'code-outlined', 1, 'sys_module', 4010, null, '', 0, null, null, null, null),
