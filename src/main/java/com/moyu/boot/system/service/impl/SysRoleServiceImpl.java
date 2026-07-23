@@ -607,7 +607,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return apiScopeMap;
         }
 
-
         // roleSet拥有Resource(仅包含按钮)
         List<SysResource> btnList = Db.list(Wrappers.lambdaQuery(SysResource.class)
                 .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
