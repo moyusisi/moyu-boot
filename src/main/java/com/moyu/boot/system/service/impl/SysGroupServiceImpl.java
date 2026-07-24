@@ -379,9 +379,8 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
     public List<Tree<String>> menuTree(SysGroupParam param) {
         // 查询指定group的所有role
         Set<String> roleSet = sysRelationService.groupRole(param.getCode());
-        if (ObjectUtil.isEmpty(roleSet)) {
-            return new ArrayList<>();
-        }
+        // 所有岗位都拥有默认角色
+        roleSet.add(sysRoleService.defaultRole());
         return sysRoleService.menuTree(SysRoleParam.builder().codeSet(roleSet).build());
     }
 
