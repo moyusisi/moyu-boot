@@ -135,10 +135,6 @@ public class UserCenterServiceImpl implements UserCenterService {
             if (ResourceTypeEnum.MODULE.getCode().equals(sysMenu.getResourceType())) {
                 userMenuList.add(sysMenu);
             } else if (ResourceTypeEnum.DIR.getCode().equals(sysMenu.getResourceType())) {
-                // 前端的路由对象path不能为空
-                if (ObjectUtil.isEmpty(sysMenu.getPath())) {
-                    sysMenu.setPath(StrUtil.SLASH + sysMenu.getCode());
-                }
                 userMenuList.add(sysMenu);
             } else {
                 // 有权限才添加(菜单、内链、外链等)
@@ -244,8 +240,10 @@ public class UserCenterServiceImpl implements UserCenterService {
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
                     if (ResourceTypeEnum.DIR.equals(resourceType)) {
+                        extra.put("path", StrUtil.SLASH + menu.getCode());
                         extra.put("redirect", menu.getPath());
                     } else if (ResourceTypeEnum.MODULE.equals(resourceType)) {
+                        extra.put("path", StrUtil.SLASH + menu.getCode());
                         extra.put("redirect", menu.getPath());
                     }
                     Meta meta = new Meta();
