@@ -239,13 +239,6 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    if (ResourceTypeEnum.DIR.equals(resourceType)) {
-                        extra.put("path", StrUtil.SLASH + menu.getCode());
-                        extra.put("redirect", menu.getPath());
-                    } else if (ResourceTypeEnum.MODULE.equals(resourceType)) {
-                        extra.put("path", StrUtil.SLASH + menu.getCode());
-                        extra.put("redirect", menu.getPath());
-                    }
                     Meta meta = new Meta();
                     meta.setIcon(menu.getIcon());
                     meta.setTitle(menu.getName());
@@ -262,8 +255,14 @@ public class UserCenterServiceImpl implements UserCenterService {
                         meta.setAffix(ObjectUtil.equal(ext.getAffix(), 1));
                         meta.setKeepAlive(ObjectUtil.equal(ext.getKeepAlive(), 1));
                     }
-                    // 如果是内链或者外链，设置url
-                    if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
+                    if (ResourceTypeEnum.MODULE.equals(resourceType)) {
+                        extra.put("path", StrUtil.SLASH + menu.getCode());
+                        extra.put("redirect", menu.getPath());
+                    } else if (ResourceTypeEnum.DIR.equals(resourceType)) {
+                        extra.put("path", StrUtil.SLASH + menu.getCode());
+                        extra.put("redirect", menu.getPath());
+                    } else if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
+                        // 如果是内链或者外链，设置url
                         meta.setUrl(menu.getPath());
                     }
                     extra.put("meta", meta);
