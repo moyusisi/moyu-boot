@@ -28,7 +28,7 @@ import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.entity.ext.ResourceExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.vo.GroupInfo;
-import com.moyu.boot.system.model.vo.Meta;
+import com.moyu.boot.system.model.vo.RouteMeta;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 import com.moyu.boot.system.service.*;
@@ -153,7 +153,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 return false;
             }
             if (ObjectUtil.isNotEmpty(tree.get("meta"))) {
-                Meta meta = (Meta) tree.get("meta");
+                RouteMeta meta = (RouteMeta) tree.get("meta");
                 String metaType = meta.getType();
                 // 结点不是目录则保留
                 boolean notDir = !ResourceTypeEnum.DIR.name().equalsIgnoreCase(metaType) && !ResourceTypeEnum.MODULE.name().equalsIgnoreCase(metaType);
@@ -239,7 +239,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                     Map<String, Object> extra = new HashMap<>();//BeanUtil.beanToMap(menu, false, true);
                     extra.put("path", menu.getPath());
                     extra.put("component", menu.getComponent());
-                    Meta meta = new Meta();
+                    RouteMeta meta = new RouteMeta();
                     meta.setIcon(menu.getIcon());
                     meta.setTitle(menu.getName());
                     // metaType 使用字符串

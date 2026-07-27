@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Meta {
+public class RouteMeta {
     /**
      * 路由title
      */
