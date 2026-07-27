@@ -42,4 +42,8 @@ public class JwtTokenServiceImpl implements TokenService {
         StpUtil.getTokenSession().set(AuthConstants.LOGIN_USER, loginUser);
     }
 
+    @Override
+    public void invalidateToken(String token) {
+        StpUtil.logoutByTokenValue(token);
+    }
 }
