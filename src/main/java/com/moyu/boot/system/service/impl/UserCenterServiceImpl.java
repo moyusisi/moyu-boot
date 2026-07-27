@@ -262,6 +262,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                         extra.put("path", StrUtil.SLASH + menu.getCode());
                         extra.put("redirect", menu.getPath());
                     } else if (ResourceTypeEnum.IFRAME.equals(resourceType) || ResourceTypeEnum.LINK.equals(resourceType)) {
+                        extra.put("path", StrUtil.SLASH + menu.getCode());
                         // 如果是内链或者外链，设置url
                         meta.setUrl(menu.getPath());
                     }
