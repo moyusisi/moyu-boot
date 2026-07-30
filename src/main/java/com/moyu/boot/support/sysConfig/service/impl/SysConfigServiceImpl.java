@@ -184,7 +184,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     public String getCacheValue(String configKey) {
         if (StrUtil.isNotEmpty(configKey)) {
             Object objValue = redisTemplate.opsForHash().get(SYS_CONFIG_REDIS_KEY, configKey);
-            return StrUtil.toString(objValue);
+            return StrUtil.toStringOrNull(objValue);
         }
         return null;
     }

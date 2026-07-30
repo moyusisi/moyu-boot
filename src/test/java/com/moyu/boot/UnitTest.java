@@ -2,11 +2,15 @@ package com.moyu.boot;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.SmUtil;
 import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.util.IpUtils;
+import com.moyu.boot.system.constant.SysConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * 本地测试类
@@ -51,5 +55,19 @@ public class UnitTest {
     @Test
     public void testIp() {
         log.info(IpUtils.getRegion("127.0.0.1"));
+    }
+
+    @Test
+    public void testEncode() {
+        String sm4Key = "KeyMustBe16Size.";
+        byte[] key = sm4Key.getBytes(StandardCharsets.UTF_8);
+
+        String rawPassword = SysConstants.DEFAULT_PASSWORD;
+        String pwd = SmUtil.sm4(key).encryptHex(rawPassword);
+
+        String encodedPassword = "5b0b3e32ecc28623dc0f9af02227f27c";
+        String plain = SmUtil.sm4(key).decryptStr(encodedPassword, StandardCharsets.UTF_8);
+
+        log.info(plain);
     }
 }
