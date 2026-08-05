@@ -26,7 +26,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1/moyu?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
     username: shisong
-    password: shisong
+    password: ENC(NaqrHWRoyjVZBM327RZnh2yOWJzToBRlscchwHlm9fWthWM3TJOeqKASs49SoiMt)
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
   # 业务redis配置
@@ -51,6 +51,11 @@ spring:
         max-idle: 8
         # 连接池中的最小空闲连接
         min-idle: 2
+
+# 加密配置
+jasypt:
+  encryptor:
+    password: shisong
 
 # Sa-Token 配置
 sa-token:

@@ -171,6 +171,18 @@
             <artifactId>sa-token-alone-redis</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
+        <!-- Sa-Token 整合 API参数签名校验 https://sa-token.cc/doc.html#/plugin/api-sign -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-sign</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+        <!-- Jasypt 配置加密 https://www.cnblogs.com/hanease/p/18772373 -->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>3.0.5</version>
+        </dependency>
     </dependencies>
 
     <build>
