@@ -8,6 +8,8 @@ import com.moyu.boot.common.core.util.IpUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -70,4 +72,29 @@ public class UnitTest {
 
         log.info(plain);
     }
+
+    @Test
+    public void testJasyptEncode() {
+        // 编码配置
+        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
+        config.setPassword("mySecretKey");
+        config.setAlgorithm("PBEWithMD5AndDES");
+        config.setKeyObtentionIterations("1000");
+        config.setPoolSize("1");
+        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
+        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
+        config.setStringOutputType("base64");
+        // 加密器
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setConfig(config);
+
+        // 加解密示例
+        String plainText = "123456";
+        String encryptedText = encryptor.encrypt(plainText);
+        log.info("encryptedText:{}", encryptedText);
+        encryptedText = "NaqrHWRoyjVZBM327RZnh2yOWJzToBRlscchwHlm9fWthWM3TJOeqKASs49SoiMt";
+        plainText = encryptor.decrypt(encryptedText);
+        log.info("plainText:{}", plainText);
+    }
+
 }
