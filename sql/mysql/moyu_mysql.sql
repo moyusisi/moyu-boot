@@ -205,25 +205,25 @@ DROP TABLE IF EXISTS `sys_log`;
 CREATE TABLE `sys_log`
 (
     `id`               BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `name`             VARCHAR(50)  DEFAULT NULL COMMENT '日志名称',
-    `log_type`         TINYINT      DEFAULT NULL COMMENT '日志类型(字典 0默认日志 1访问日志 2操作日志 3交互日志)',
-    `module`           VARCHAR(50)  DEFAULT NULL COMMENT '系统/模块',
-    `business`         VARCHAR(50)  DEFAULT NULL COMMENT '业务',
-    `operate`          VARCHAR(50)  DEFAULT NULL COMMENT '操作/接口',
-    `content`          VARCHAR(255) DEFAULT NULL COMMENT '内容说明',
-    `request_url`      VARCHAR(512) DEFAULT NULL COMMENT '请求路径地址',
-    `request_content`  TEXT         DEFAULT NULL comment '请求参数',
-    `response_content` TEXT         DEFAULT NULL comment '返回结果',
-    `start_time`       DATETIME     DEFAULT NULL COMMENT '开始时间',
-    `end_time`         DATETIME     DEFAULT NULL COMMENT '结束时间',
-    `execution_time`   BIGINT       DEFAULT NULL COMMENT '执行耗时(ms)',
-    `source_client`    VARCHAR(50)  DEFAULT NULL COMMENT '客户端/ip',
-    `source_province`  VARCHAR(50)  DEFAULT NULL COMMENT '来源省份',
-    `source_city`      VARCHAR(50)  DEFAULT NULL COMMENT '来源城市',
-    `user_agent`       VARCHAR(512) DEFAULT NULL COMMENT '客户端信息',
-    `deleted`          TINYINT      DEFAULT NULL COMMENT '删除标志（0未删除  1已删除）',
-    `create_by`        VARCHAR(32)  DEFAULT NULL COMMENT '创建人',
-    `create_time`      DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `name`             VARCHAR(50)   DEFAULT NULL COMMENT '日志名称',
+    `log_type`         TINYINT       DEFAULT NULL COMMENT '日志类型(字典 0默认日志 1访问日志 2操作日志 3交互日志)',
+    `module`           VARCHAR(50)   DEFAULT NULL COMMENT '系统/模块',
+    `business`         VARCHAR(50)   DEFAULT NULL COMMENT '业务',
+    `operate`          VARCHAR(50)   DEFAULT NULL COMMENT '操作/接口',
+    `content`          VARCHAR(255)  DEFAULT NULL COMMENT '内容说明',
+    `request_url`      VARCHAR(1024) DEFAULT NULL COMMENT '请求路径地址',
+    `request_content`  TEXT          DEFAULT NULL comment '请求参数',
+    `response_content` TEXT          DEFAULT NULL comment '返回结果',
+    `start_time`       DATETIME      DEFAULT NULL COMMENT '开始时间',
+    `end_time`         DATETIME      DEFAULT NULL COMMENT '结束时间',
+    `execution_time`   BIGINT        DEFAULT NULL COMMENT '执行耗时(ms)',
+    `source_client`    VARCHAR(50)   DEFAULT NULL COMMENT '客户端/ip',
+    `source_province`  VARCHAR(50)   DEFAULT NULL COMMENT '来源省份',
+    `source_city`      VARCHAR(50)   DEFAULT NULL COMMENT '来源城市',
+    `user_agent`       VARCHAR(512)  DEFAULT NULL COMMENT '客户端信息',
+    `deleted`          TINYINT       DEFAULT NULL COMMENT '删除标志（0未删除  1已删除）',
+    `create_by`        VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
+    `create_time`      DATETIME      DEFAULT NULL COMMENT '创建时间',
     primary key (`id`),
     KEY `idx_create_time` (`create_time`)
 ) ENGINE = InnoDB
@@ -254,3 +254,4 @@ create table sys_config
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 100 COMMENT = '系统配置表';
+
