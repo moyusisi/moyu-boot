@@ -1,9 +1,9 @@
-package com.moyu.boot.plugin.jasypt.service.impl;
+package com.moyu.boot.plugin.pbe.service.impl;
 
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
-import com.moyu.boot.plugin.jasypt.model.param.EncryptorParam;
-import com.moyu.boot.plugin.jasypt.service.JasyptService;
+import com.moyu.boot.plugin.pbe.model.param.PbeParam;
+import com.moyu.boot.plugin.pbe.service.PbeService;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-public class JasyptServiceImpl implements JasyptService {
+public class PbeServiceImpl implements PbeService {
 
 
     @Override
-    public String encrypt(EncryptorParam param) {
+    public String encrypt(PbeParam param) {
         // 编码配置
         EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
         config.setPassword(param.getSecretKey());
@@ -50,7 +50,7 @@ public class JasyptServiceImpl implements JasyptService {
     }
 
     @Override
-    public String decrypt(EncryptorParam param) {
+    public String decrypt(PbeParam param) {
         // 编码配置
         EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
         config.setPassword(param.getSecretKey());

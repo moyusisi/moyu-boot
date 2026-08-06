@@ -1,12 +1,12 @@
-package com.moyu.boot.plugin.jasypt.controller;
+package com.moyu.boot.plugin.pbe.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.jasypt.model.param.EncryptorParam;
-import com.moyu.boot.plugin.jasypt.service.JasyptService;
+import com.moyu.boot.plugin.pbe.model.param.PbeParam;
+import com.moyu.boot.plugin.pbe.service.PbeService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,22 +23,22 @@ import javax.annotation.Resource;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/dev/jasypt")
-public class JasyptController {
+@RequestMapping("/api/dev/pbe")
+public class PbeController {
 
     @Resource
-    private JasyptService jasyptService;
+    private PbeService pbeService;
 
     /**
      * 加密
      */
     @SysLog(module = "system", business = "加解密工具", value = "加密", response = true)
     @Log(jsonLog = true, response = false)
-    @SaCheckPermission(value = "dev:jasypt:encrypt")
+    @SaCheckPermission(value = "dev:pbe:encrypt")
     @PostMapping("/encrypt")
-    public Result<String> encrypt(@Validated @RequestBody EncryptorParam param) {
+    public Result<String> encrypt(@Validated @RequestBody PbeParam param) {
         Assert.notEmpty(param.getPlainText(), "要加密的内容不能为空");
-        return Result.success(jasyptService.encrypt(param));
+        return Result.success(pbeService.encrypt(param));
     }
 
     /**
@@ -46,11 +46,11 @@ public class JasyptController {
      */
     @SysLog(module = "system", business = "加解密工具", value = "加密", response = true)
     @Log(jsonLog = true, response = false)
-    @SaCheckPermission(value = "dev:jasypt:decrypt")
+    @SaCheckPermission(value = "dev:pbe:decrypt")
     @PostMapping("/decrypt")
-    public Result<String> decrypt(@Validated @RequestBody EncryptorParam param) {
+    public Result<String> decrypt(@Validated @RequestBody PbeParam param) {
         Assert.notEmpty(param.getEncryptedText(), "要解密的内容不能为空");
-        return Result.success(jasyptService.decrypt(param));
+        return Result.success(pbeService.decrypt(param));
     }
 
 

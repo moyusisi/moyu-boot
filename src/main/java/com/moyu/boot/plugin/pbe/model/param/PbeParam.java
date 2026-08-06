@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.jasypt.model.param;
+package com.moyu.boot.plugin.pbe.model.param;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @since 2026-08-06
  */
 @Data
-public class EncryptorParam {
+public class PbeParam {
 
     /**
      * PEB的密钥
