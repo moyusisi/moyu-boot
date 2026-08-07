@@ -54,6 +54,8 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), ThirdPartyApi::getName, param.getName());
         // 指定url查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getUrl()), ThirdPartyApi::getUrl, param.getUrl());
+        // 指定debugStatus查询
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getDebugStatus()), ThirdPartyApi::getDebugStatus, param.getDebugStatus());
         // 仅查询未删除的
         queryWrapper.lambda().eq(ThirdPartyApi::getDeleted, 0);
         // 指定排序
@@ -82,6 +84,8 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), ThirdPartyApi::getName, param.getName());
         // 指定url查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getUrl()), ThirdPartyApi::getUrl, param.getUrl());
+        // 指定debugStatus查询
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getDebugStatus()), ThirdPartyApi::getDebugStatus, param.getDebugStatus());
         // 仅查询未删除的
         queryWrapper.lambda().eq(ThirdPartyApi::getDeleted, 0);
         // 指定排序
