@@ -35,10 +35,6 @@ public class ThirdPartyApi extends BaseEntity {
      */
     private String requestMethod;
     /**
-     * 三方系统名称
-     */
-    private String thirdAppName;
-    /**
      * 调试状态（0未调试 1已调试）
      */
     private Integer debugStatus;

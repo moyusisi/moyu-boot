@@ -41,10 +41,6 @@ public class ThirdPartyApiVO {
      */
     private String requestMethod;
     /**
-     * 三方系统名称
-     */
-    private String thirdAppName;
-    /**
      * 调试状态（0未调试 1已调试）
      */
     private Integer debugStatus;
@@ -67,12 +63,12 @@ public class ThirdPartyApiVO {
     /**
      * 请求时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date requestTime;
     /**
      * 响应时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date responseTime;
     /**
      * 备注

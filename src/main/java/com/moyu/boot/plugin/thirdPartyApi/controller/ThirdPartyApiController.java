@@ -84,4 +84,14 @@ public class ThirdPartyApiController {
         return Result.success();
     }
 
+    /**
+     * 三方集成接口调试
+     */
+    //@SaCheckPermission("dev:thirdPartyApi:debug")
+    @PostMapping("/debugApi")
+    public Result<ThirdPartyApiVO> debugApi(@RequestBody ThirdPartyApiParam param) {
+        Assert.isTrue(ObjectUtil.isNotEmpty(param.getCode()), "code不能为空");
+        return Result.success(thirdPartyApiService.debugApi(param));
+    }
+
 }

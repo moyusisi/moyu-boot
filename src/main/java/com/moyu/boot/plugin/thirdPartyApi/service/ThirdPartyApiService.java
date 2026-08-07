@@ -45,4 +45,9 @@ public interface ThirdPartyApiService extends IService<ThirdPartyApi> {
      * 通过ids删除记录
      */
     void deleteByIds(ThirdPartyApiParam param);
+
+    /**
+     * 调用接口
+     */
+    ThirdPartyApiVO debugApi(ThirdPartyApiParam param);
 }

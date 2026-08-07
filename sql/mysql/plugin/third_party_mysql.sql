@@ -6,10 +6,9 @@ create table third_party_api
     `code`           VARCHAR(64)   DEFAULT NULL COMMENT '三方接口唯一标识',
     `name`           VARCHAR(64)   DEFAULT NULL COMMENT '三方接口名称',
     `url`            VARCHAR(1024) DEFAULT NULL COMMENT '三方接口URL',
-    `request_method` VARCHAR(16)   DEFAULT NULL COMMENT '请求方式 GET/POST/PUT等',
-    `third_app_name` VARCHAR(64)   DEFAULT NULL COMMENT '三方系统名称',
+    `request_method` VARCHAR(16)   DEFAULT NULL COMMENT '请求方式 GET/POST等',
 
-    `debug_status`   TINYINT       DEFAULT 0 COMMENT '调试状态（0未调试 1已调试）',
+    `debug_status`   TINYINT       DEFAULT 0 COMMENT '调试状态（0未调通 1已调通）',
     `request_header` TEXT          DEFAULT NULL COMMENT '请求头参数',
     `request_body`   TEXT          DEFAULT NULL COMMENT '请求体参数',
     `response_body`  TEXT          DEFAULT NULL COMMENT '响应结果',

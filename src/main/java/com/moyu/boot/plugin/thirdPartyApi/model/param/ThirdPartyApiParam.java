@@ -65,12 +65,6 @@ public class ThirdPartyApiParam extends PageParam {
     @Size(max = 16, message = "requestMethod长度不能超过16个字符")
     private String requestMethod;
     /**
-     * 三方系统名称
-     */
-    @NotBlank(message = "thirdAppName不能为空")
-    @Size(max = 64, message = "thirdAppName长度不能超过64个字符")
-    private String thirdAppName;
-    /**
      * 调试状态（0未调试 1已调试）
      */
     private Integer debugStatus;

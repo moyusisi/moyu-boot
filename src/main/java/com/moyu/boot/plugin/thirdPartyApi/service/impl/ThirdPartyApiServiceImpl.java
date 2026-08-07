@@ -7,6 +7,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.dtflys.forest.Forest;
+import com.dtflys.forest.http.ForestRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -18,12 +25,12 @@ import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
 import com.moyu.boot.plugin.thirdPartyApi.model.vo.ThirdPartyApiVO;
 import com.moyu.boot.plugin.thirdPartyApi.service.ThirdPartyApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import javax.annotation.Resource;
+import java.util.*;
 
 /**
  * 三方集成接口服务实现类
@@ -35,6 +42,8 @@ import java.util.Set;
 @Service
 public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, ThirdPartyApi> implements ThirdPartyApiService {
 
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     @Override
     public List<ThirdPartyApiVO> list(ThirdPartyApiParam param) {
         // 查询条件
@@ -45,8 +54,6 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), ThirdPartyApi::getName, param.getName());
         // 指定url查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getUrl()), ThirdPartyApi::getUrl, param.getUrl());
-        // 指定thirdAppName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getThirdAppName()), ThirdPartyApi::getThirdAppName, param.getThirdAppName());
         // 仅查询未删除的
         queryWrapper.lambda().eq(ThirdPartyApi::getDeleted, 0);
         // 指定排序
@@ -75,8 +82,6 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), ThirdPartyApi::getName, param.getName());
         // 指定url查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getUrl()), ThirdPartyApi::getUrl, param.getUrl());
-        // 指定thirdAppName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getThirdAppName()), ThirdPartyApi::getThirdAppName, param.getThirdAppName());
         // 仅查询未删除的
         queryWrapper.lambda().eq(ThirdPartyApi::getDeleted, 0);
         // 指定排序
@@ -144,6 +149,73 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         //this.removeByIds(idSet);
         // 逻辑删除
         this.update(Wrappers.lambdaUpdate(ThirdPartyApi.class).in(ThirdPartyApi::getId, idSet).set(ThirdPartyApi::getDeleted, 1));
+    }
+
+    @Override
+    public ThirdPartyApiVO debugApi(ThirdPartyApiParam param) {
+        // 查询原有数据
+        ThirdPartyApi old = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApi.class)
+                .eq(ThirdPartyApi::getCode, param.getCode())
+                .eq(ThirdPartyApi::getDeleted, 0)
+        );
+        if (old == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未找到指定接口");
+        }
+
+        // 组装请求
+        String url = old.getUrl();
+        String method = old.getRequestMethod();
+        String header = param.getRequestHeader();
+        Map<String, Object> headerMap = null;
+        if (StrUtil.isNotEmpty(header)) {
+            headerMap = gson.fromJson(header, new TypeToken<Map<String, Object>>() {
+            }.getType());
+        }
+        String body = param.getRequestBody();
+        Map<String, Object> bodyMap = new HashMap<>();
+        if (StrUtil.isNotEmpty(body)) {
+            bodyMap = gson.fromJson(body, new TypeToken<Map<String, Object>>() {
+            }.getType());
+        }
+        ForestRequest<?> request;
+        if (method.equals(HttpMethod.GET.name())) {
+            request = Forest.get(url);
+        } else {
+            request = Forest.post(url);
+        }
+
+        // 属性复制
+        ThirdPartyApi toUpdate = BeanUtil.copyProperties(old, ThirdPartyApi.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
+        // 其他处理
+        toUpdate.setRequestHeader(header);
+        toUpdate.setRequestBody(body);
+        toUpdate.setRequestTime(new Date());
+        // 发送请求
+        String result = request.contentTypeJson().addHeader(headerMap).addBody(bodyMap)
+                // 设置成功条件
+                .successWhen(((req, res) -> {
+                    // 默认条件是 res.noException() && res.statusOk() 即没有异常 + 状态码在 100 ~ 399 范围内
+                    return res.noException();
+                }))
+                // 设置 onSuccess 回调函数
+                .onSuccess((data, req, res) -> {
+                    toUpdate.setDebugStatus(1);
+                    toUpdate.setStatusCode(Objects.toString(res.getStatusCode(), ""));
+                })
+                // 设置 onError 回调函数
+                .onError((ex, req, res) -> {
+                    toUpdate.setDebugStatus(0);
+                    toUpdate.setStatusCode(Objects.toString(res.getStatusCode(), ""));
+                    log.error("调用接口失败", ex);
+                })
+                .executeAsString();
+        toUpdate.setResponseTime(new Date());
+        toUpdate.setResponseBody(StrUtil.emptyToDefault(result, ""));
+
+        // 更新数据
+        this.updateById(toUpdate);
+        ThirdPartyApiVO vo = BeanUtil.copyProperties(toUpdate, ThirdPartyApiVO.class);
+        return vo;
     }
 
     /**
