@@ -200,7 +200,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         toUpdate.setDebugStatus(response.isSuccess() ? 1 : 0);
         // http状态码，异常会被包装成-1
         toUpdate.setStatusCode(Objects.toString(response.getStatusCode()));
-        toUpdate.setResponseBody(response.readAsString());
+        toUpdate.setResponseBody(response.getContent());
 
         BusinessException ex = null;
         if (response.isTimeout()) {
@@ -254,7 +254,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
                 .addBody(params)
                 .executeAsResponse();
 
-        return response.readAsString();
+        return response.getContent();
     }
 
     /**
