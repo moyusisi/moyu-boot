@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.dtflys.forest.Forest;
-import com.dtflys.forest.http.ForestRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.dtflys.forest.http.ForestRequestType;
+import com.dtflys.forest.http.ForestResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -25,11 +25,10 @@ import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
 import com.moyu.boot.plugin.thirdPartyApi.model.vo.ThirdPartyApiVO;
 import com.moyu.boot.plugin.thirdPartyApi.service.ThirdPartyApiService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
+import java.net.ConnectException;
 import java.util.*;
 
 /**
@@ -156,7 +155,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
     }
 
     @Override
-    public ThirdPartyApiVO debugApi(ThirdPartyApiParam param) {
+    public void debugApi(ThirdPartyApiParam param) {
         // 查询原有数据
         ThirdPartyApi old = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApi.class)
                 .eq(ThirdPartyApi::getCode, param.getCode())
@@ -166,7 +165,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未找到指定接口");
         }
 
-        // 组装请求
+        // 组装请求参数
         String url = old.getUrl();
         String method = old.getRequestMethod();
         String header = param.getRequestHeader();
@@ -181,45 +180,55 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
             bodyMap = gson.fromJson(body, new TypeToken<Map<String, Object>>() {
             }.getType());
         }
-        ForestRequest<?> request;
-        if (method.equals(HttpMethod.GET.name())) {
-            request = Forest.get(url);
-        } else {
-            request = Forest.post(url);
-        }
-
         // 属性复制
-        ThirdPartyApi toUpdate = BeanUtil.copyProperties(old, ThirdPartyApi.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
-        // 其他处理
+        ThirdPartyApi toUpdate = new ThirdPartyApi();
+        toUpdate.setId(old.getId());
         toUpdate.setRequestHeader(header);
         toUpdate.setRequestBody(body);
-        toUpdate.setRequestTime(new Date());
-        // 发送请求
-        String result = request.contentTypeJson().addHeader(headerMap).addBody(bodyMap)
-                // 设置成功条件
-                .successWhen(((req, res) -> {
-                    // 默认条件是 res.noException() && res.statusOk() 即没有异常 + 状态码在 100 ~ 399 范围内
-                    return res.noException();
-                }))
-                // 设置 onSuccess 回调函数
-                .onSuccess((data, req, res) -> {
-                    toUpdate.setDebugStatus(1);
-                    toUpdate.setStatusCode(Objects.toString(res.getStatusCode(), ""));
-                })
-                // 设置 onError 回调函数
-                .onError((ex, req, res) -> {
-                    toUpdate.setDebugStatus(0);
-                    toUpdate.setStatusCode(Objects.toString(res.getStatusCode(), ""));
-                    log.error("调用接口失败", ex);
-                })
-                .executeAsString();
-        toUpdate.setResponseTime(new Date());
-        toUpdate.setResponseBody(StrUtil.emptyToDefault(result, ""));
 
+        // 构造请求对象 发送请求
+        ForestResponse<?> response = Forest.request().url(url)
+                .setType(ForestRequestType.findType(method))
+                .contentTypeJson()     // 指定请求体为JSON格式
+                .addHeader(headerMap)
+                .addBody(bodyMap)
+                .executeAsResponse();
+
+        toUpdate.setRequestTime(response.getRequestTime());
+        toUpdate.setResponseTime(response.getResponseTime());
+        // noException() && statusOk()
+        toUpdate.setDebugStatus(response.isSuccess() ? 1 : 0);
+        // http状态码，异常会被包装成-1
+        toUpdate.setStatusCode(Objects.toString(response.getStatusCode()));
+        toUpdate.setResponseBody(response.readAsString());
+
+        BusinessException ex = null;
+        if (response.isTimeout()) {
+            // 网络请求是否超时(SocketTimeoutException,状态码被包装成-1)
+            ex = new BusinessException(ResultCodeEnum.THIRD_PARTY_SERVICE_ERROR, "网络请求超时");
+        } else if (response.getException() != null) {
+            if (response.getException() instanceof ConnectException) {
+                // 建立连接失败
+                ex = new BusinessException(ResultCodeEnum.THIRD_PARTY_SERVICE_ERROR, "网络连接失败");
+            } else {
+                // 请求过程中产生异常
+                ex = new BusinessException(ResultCodeEnum.THIRD_PARTY_SERVICE_ERROR, "请求发生异常");
+                log.error("请求发生异常", response.getException());
+            }
+        } else if (!response.statusOk()) {
+            // http响应码不在 100 ~ 399 范围内 (网络请求成功但HTTP状态码错误)
+            ex = new BusinessException(ResultCodeEnum.THIRD_PARTY_SERVICE_ERROR, "网络请求成功但HTTP状态码错误");
+        }
+        // 若无信息且未成功
+        if (StrUtil.isEmpty(toUpdate.getResponseBody()) && ex != null) {
+            toUpdate.setResponseBody(ex.getMessage());
+        }
         // 更新数据
         this.updateById(toUpdate);
-        ThirdPartyApiVO vo = BeanUtil.copyProperties(toUpdate, ThirdPartyApiVO.class);
-        return vo;
+        // 调试反馈
+        if (ex != null) {
+            throw ex;
+        }
     }
 
     /**

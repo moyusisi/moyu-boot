@@ -91,7 +91,8 @@ public class ThirdPartyApiController {
     @PostMapping("/debugApi")
     public Result<ThirdPartyApiVO> debugApi(@RequestBody ThirdPartyApiParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getCode()), "code不能为空");
-        return Result.success(thirdPartyApiService.debugApi(param));
+        thirdPartyApiService.debugApi(param);
+        return Result.success();
     }
 
 }

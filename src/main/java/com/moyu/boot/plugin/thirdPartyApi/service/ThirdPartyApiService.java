@@ -49,5 +49,5 @@ public interface ThirdPartyApiService extends IService<ThirdPartyApi> {
     /**
      * 调用接口
      */
-    ThirdPartyApiVO debugApi(ThirdPartyApiParam param);
+    void debugApi(ThirdPartyApiParam param);
 }
