@@ -7,6 +7,7 @@ import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
 import com.moyu.boot.plugin.thirdPartyApi.model.vo.ThirdPartyApiVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 三方集成接口服务类Service
@@ -47,7 +48,17 @@ public interface ThirdPartyApiService extends IService<ThirdPartyApi> {
     void deleteByIds(ThirdPartyApiParam param);
 
     /**
-     * 调用接口
+     * 调试接口
      */
     void debugApi(ThirdPartyApiParam param);
+
+    /**
+     * 调用接口
+     *
+     * @param apiCode 接口唯一标识
+     * @param headers 请求头数据
+     * @param params  请求数据
+     * @return 返回结果(请求失败返回null)
+     */
+    String requestApi(String apiCode, Map<String, Object> headers, Map<String, Object> params);
 }

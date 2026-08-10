@@ -231,6 +231,32 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         }
     }
 
+    @Override
+    public String requestApi(String apiCode, Map<String, Object> headers, Map<String, Object> params) {
+        // 查询原有数据
+        ThirdPartyApi api = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApi.class)
+                .select(ThirdPartyApi::getUrl, ThirdPartyApi::getRequestMethod)
+                .eq(ThirdPartyApi::getCode, apiCode)
+                .eq(ThirdPartyApi::getDeleted, 0)
+        );
+        if (api == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未找到指定接口");
+        }
+        if (CollectionUtils.isEmpty(params)) {
+            params = new HashMap<>();
+        }
+
+        // 构造请求对象 发送请求
+        ForestResponse<?> response = Forest.request().url(api.getUrl())
+                .setType(ForestRequestType.findType(api.getRequestMethod()))
+                .contentTypeJson()     // 指定请求体为JSON格式
+                .addHeader(headers)
+                .addBody(params)
+                .executeAsResponse();
+
+        return response.readAsString();
+    }
+
     /**
      * 实体对象生成展示对象 entityList -> voList
      */
