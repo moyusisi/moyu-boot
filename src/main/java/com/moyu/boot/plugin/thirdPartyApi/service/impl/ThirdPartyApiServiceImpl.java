@@ -270,7 +270,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         // 操作人
         sysLog.setName("三方接口调用");
         sysLog.setLogType(3);
-        sysLog.setOperate(api.getName());
+        sysLog.setBusiness(api.getName());
         sysLog.setRequestUrl(api.getUrl());
         sysLog.setRequestContent(gson.toJson(params));
         sysLog.setResponseContent(response.getContent());
