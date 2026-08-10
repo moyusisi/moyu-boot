@@ -60,7 +60,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_sys_resource', '资源查询', 'dir_sys_resource', 3, '/sys/resource', 'system/resource/index', '', 'unordered-list-outlined', 1, 'sys_module', 3040, null, null, 0, null, null, null, null),
 
         ('menu_sys_gen', '代码生成', 'dir_sys_dev', 3, '/dev/gen', 'dev/gen/index', '', 'code-outlined', 1, 'sys_module', 4010, null, '', 0, null, null, null, null),
-        ('menu_sys_file', '文件管理', 'dir_sys_dev', 3, '/dev/file/index', 'dev/file/index', null, 'copy-outlined', 1, 'sys_module', 4020, null, '', 0, null, null, null, null),
+        ('menu_sys_pbe', 'PBE工具', 'dir_sys_dev', 3, '/dev/pbe/index', 'dev/pbe/index', null, 'key-outlined', 1, 'sys_module', 4020, null, '', 0, null, null, null, null),
         ('menu_sys_sms', '短信发送', 'dir_sys_dev', 3, '/dev/sms/index', 'dev/sms/index', null, 'mail-outlined', 1, 'sys_module', 4030, null, '', 0, null, null, null, null),
         ('menu_sys_email', '消息推送', 'dir_sys_dev', 3, '/dev/push/index', 'dev/push/index', null, 'send-outlined', 1, 'sys_module', 4040, null, '', 0, null, null, null, null),
         ('menu_sys_message', '站内信', 'dir_sys_dev', 3, '/dev/message/index', 'dev/message/index', null, 'message-outlined', 1, 'sys_module', 4050, null, '', 0, null, null, null, null),
