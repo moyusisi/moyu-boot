@@ -63,12 +63,12 @@ public class ThirdPartyApiVO {
     /**
      * 请求时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date requestTime;
     /**
      * 响应时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date responseTime;
     /**
      * 备注

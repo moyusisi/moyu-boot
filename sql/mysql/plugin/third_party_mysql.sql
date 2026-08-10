@@ -13,8 +13,8 @@ create table third_party_api
     `request_body`   TEXT          DEFAULT NULL COMMENT '请求体参数',
     `response_body`  TEXT          DEFAULT NULL COMMENT '响应结果',
     `status_code`    VARCHAR(64)   DEFAULT NULL COMMENT 'HTTP状态码',
-    `request_time`   DATETIME      DEFAULT NULL COMMENT '请求时间',
-    `response_time`  DATETIME      DEFAULT NULL COMMENT '响应时间',
+    `request_time`   DATETIME(3)   DEFAULT NULL COMMENT '请求时间',
+    `response_time`  DATETIME(3)   DEFAULT NULL COMMENT '响应时间',
 
     `remark`         TEXT          DEFAULT NULL COMMENT '备注',
     `deleted`        TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
