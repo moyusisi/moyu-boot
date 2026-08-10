@@ -14,6 +14,7 @@ import com.dtflys.forest.http.ForestResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -24,6 +25,7 @@ import com.moyu.boot.plugin.thirdPartyApi.model.entity.ThirdPartyApi;
 import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
 import com.moyu.boot.plugin.thirdPartyApi.model.vo.ThirdPartyApiVO;
 import com.moyu.boot.plugin.thirdPartyApi.service.ThirdPartyApiService;
+import com.moyu.boot.support.sysLog.model.entity.SysLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -225,6 +227,8 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         }
         // 更新数据
         this.updateById(toUpdate);
+        // 保存日志
+        saveLog(old, bodyMap, response);
         // 调试反馈
         if (ex != null) {
             throw ex;
@@ -235,7 +239,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
     public String requestApi(String apiCode, Map<String, Object> headers, Map<String, Object> params) {
         // 查询原有数据
         ThirdPartyApi api = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApi.class)
-                .select(ThirdPartyApi::getUrl, ThirdPartyApi::getRequestMethod)
+                .select(ThirdPartyApi::getUrl, ThirdPartyApi::getRequestMethod, ThirdPartyApi::getName)
                 .eq(ThirdPartyApi::getCode, apiCode)
                 .eq(ThirdPartyApi::getDeleted, 0)
         );
@@ -253,8 +257,35 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
                 .addHeader(headers)
                 .addBody(params)
                 .executeAsResponse();
-
+        // 保存日志
+        saveLog(api, params, response);
         return response.getContent();
+    }
+
+    /**
+     * 保存三方请求记录
+     */
+    private void saveLog(ThirdPartyApi api, Map<String, Object> params, ForestResponse<?> response) {
+        SysLog sysLog = new SysLog();
+        // 操作人
+        sysLog.setName("三方接口调用");
+        sysLog.setLogType(3);
+        sysLog.setOperate(api.getName());
+        sysLog.setRequestUrl(api.getUrl());
+        sysLog.setRequestContent(gson.toJson(params));
+        sysLog.setResponseContent(response.getContent());
+        if (StrUtil.isEmpty(sysLog.getResponseContent())) {
+            sysLog.setResponseContent("HTTP状态码:" + response.getStatusCode());
+        }
+        sysLog.setStartTime(response.getRequestTime());
+        sysLog.setEndTime(response.getResponseTime());
+        sysLog.setExecutionTime(response.getTimeAsMillisecond());
+
+        sysLog.setCreateTime(new Date());
+        sysLog.setCreateBy(LoginUserUtils.getUsername());
+
+        // 保存记录
+        Db.save(sysLog);
     }
 
     /**
