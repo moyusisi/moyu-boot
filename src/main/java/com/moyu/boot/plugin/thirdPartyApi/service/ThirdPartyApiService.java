@@ -61,4 +61,11 @@ public interface ThirdPartyApiService extends IService<ThirdPartyApi> {
      * @return 返回结果(请求失败返回null)
      */
     String requestApi(String apiCode, Map<String, Object> headers, Map<String, Object> params);
+
+    /**
+     * 调用接口(只支持get和postJson)
+     */
+    default String requestApi(String apiCode, Map<String, Object> params) {
+        return requestApi(apiCode, null, params);
+    }
 }
