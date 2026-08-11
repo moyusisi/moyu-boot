@@ -6,8 +6,9 @@ import com.moyu.boot.plugin.pbe.model.param.PbeParam;
 import com.moyu.boot.plugin.pbe.service.PbeService;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
 import org.jasypt.exceptions.EncryptionInitializationException;
+import org.jasypt.iv.RandomIvGenerator;
+import org.jasypt.salt.RandomSaltGenerator;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,20 +22,8 @@ public class PbeServiceImpl implements PbeService {
 
     @Override
     public String encrypt(PbeParam param) {
-        // 编码配置
-        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
-        config.setPassword(param.getSecretKey());
-        config.setAlgorithm(param.getAlgorithm());
-//        // 下面这些都是默认配置
-//        config.setKeyObtentionIterations("1000");
-//        config.setPoolSize("1");
-//        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
-//        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
-//        config.setStringOutputType("base64");
-
         // 加密器
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setConfig(config);
+        StandardPBEStringEncryptor encryptor = buildEncryptor(param);
         // 加密
         String encryptedText = null;
         try {
@@ -51,13 +40,8 @@ public class PbeServiceImpl implements PbeService {
 
     @Override
     public String decrypt(PbeParam param) {
-        // 编码配置
-        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
-        config.setPassword(param.getSecretKey());
-        config.setAlgorithm(param.getAlgorithm());
         // 加密器
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setConfig(config);
+        StandardPBEStringEncryptor encryptor = buildEncryptor(param);
         // 解密
         String plainText = null;
         try {
@@ -70,5 +54,17 @@ public class PbeServiceImpl implements PbeService {
             throw new BusinessException(ResultCodeEnum.SYSTEM_ERROR.getCode(), "解密失败");
         }
         return plainText;
+    }
+
+    /**
+     * 构造加密器
+     */
+    private StandardPBEStringEncryptor buildEncryptor(PbeParam param) {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(param.getSecretKey());
+        encryptor.setAlgorithm(param.getAlgorithm());
+        encryptor.setSaltGenerator(new RandomSaltGenerator());
+        encryptor.setIvGenerator(new RandomIvGenerator());
+        return encryptor;
     }
 }
