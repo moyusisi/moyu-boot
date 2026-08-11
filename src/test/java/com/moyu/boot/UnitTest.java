@@ -5,11 +5,14 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SmUtil;
 import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.util.IpUtils;
+import com.moyu.boot.plugin.pbe.model.param.PbeParam;
 import com.moyu.boot.system.constant.SysConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
+import org.jasypt.iv.RandomIvGenerator;
+import org.jasypt.salt.RandomSaltGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -73,26 +76,29 @@ public class UnitTest {
         log.info(plain);
     }
 
+
+    /**
+     * 构建加密器
+     */
+    private StandardPBEStringEncryptor buildEncryptor() {
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword("mySecretKey");
+        encryptor.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");
+        encryptor.setSaltGenerator(new RandomSaltGenerator());
+        encryptor.setIvGenerator(new RandomIvGenerator());
+        return encryptor;
+    }
+
     @Test
     public void testJasyptEncode() {
-        // 编码配置
-        EnvironmentStringPBEConfig config = new EnvironmentStringPBEConfig();
-        config.setPassword("mySecretKey");
-        config.setAlgorithm("PBEWithMD5AndDES");
-        config.setKeyObtentionIterations("1000");
-        config.setPoolSize("1");
-        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
-        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
-        config.setStringOutputType("base64");
         // 加密器
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setConfig(config);
+        StandardPBEStringEncryptor encryptor = buildEncryptor();
 
         // 加解密示例
         String plainText = "123456";
         String encryptedText = encryptor.encrypt(plainText);
         log.info("encryptedText:{}", encryptedText);
-        encryptedText = "NaqrHWRoyjVZBM327RZnh2yOWJzToBRlscchwHlm9fWthWM3TJOeqKASs49SoiMt";
+        encryptedText = "RpUCoqFV5RXBxCHYVFcdKn1Nb13rCbhOXWhHDk2hDDHe79e8IoQia3cejJD2Hn6o";
         plainText = encryptor.decrypt(encryptedText);
         log.info("plainText:{}", plainText);
     }
