@@ -1,21 +1,26 @@
 package com.moyu.boot;
 
+import cn.dev33.satoken.sign.SaSignManager;
+import cn.dev33.satoken.sign.config.SaSignConfig;
+import cn.dev33.satoken.sign.template.SaSignMany;
+import cn.dev33.satoken.sign.template.SaSignUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SmUtil;
 import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.util.IpUtils;
-import com.moyu.boot.plugin.pbe.model.param.PbeParam;
 import com.moyu.boot.system.constant.SysConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jasypt.salt.RandomSaltGenerator;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * 本地测试类
@@ -103,4 +108,25 @@ public class UnitTest {
         log.info("plainText:{}", plainText);
     }
 
+    @Test
+    public void testSign() {
+        // 请求参数
+        Map<String, Object> paramMap = new LinkedHashMap<>();
+        paramMap.put("userId", 10001);
+        paramMap.put("money", 1000);
+        SaSignConfig signConfig = new SaSignConfig("0123456789hijklmnopq");
+        SaSignManager.setConfig(signConfig);
+
+        Map<String, SaSignConfig> signMany = new HashMap<>();
+        signMany.put("app1", signConfig);
+        SaSignManager.setSignMany(signMany);
+
+        // 补全 timestamp、nonce、sign 参数，并序列化为 kv 字符串
+        String paramStr = SaSignUtil.addSignParamsAndJoin(paramMap);
+        String paramStr2 = SaSignMany.getSignTemplate("app1").addSignParamsAndJoin(paramMap);
+        log.info("paramStr:{}", paramStr);
+        log.info("paramStr2:{}", paramStr2);
+//        SaSignUtil.checkRequest(SaHolder.getRequest(), "id", "name");
+
+    }
 }
