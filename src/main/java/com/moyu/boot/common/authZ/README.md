@@ -7,7 +7,7 @@ authZ = Authorization 授权权限
 * Jwt、Token等令牌处理Service
 * 默认的sm4加密器
 * 登陆用户信息对象LoginUser及上下文工具类LoginUserUtils
-* 提供了数据权限与处理能力
+* 提供了数据范围信息模型
 
 ### 说明
 通过Sa-Token实现认证鉴权

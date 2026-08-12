@@ -7,6 +7,7 @@ authN = Authentication 身份认证
 * 登录认证，颁发令牌
 * 登录后用户信息、角色权限信息缓存
 * 对接第三方认证服务(SSO、OAuth) TODO
+* 提供`/api/auth/login`、`/api/auth/logout`入口
 
 ### 说明
 通过Sa-Token颁发令牌
