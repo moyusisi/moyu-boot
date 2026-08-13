@@ -13,7 +13,6 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
 import com.moyu.boot.common.authZ.constant.AuthConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
-import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
@@ -42,8 +41,6 @@ public class SaTokenConfigure {
 
     @Resource
     private AuthProperties properties;
-    @Resource
-    private TokenService tokenService;
 
     // Sa-Token 参数配置，此配置会与配置文件中的配置合并(代码配置优先) 参考文档：https://sa-token.cc/doc.html#/use/config
     @Resource
