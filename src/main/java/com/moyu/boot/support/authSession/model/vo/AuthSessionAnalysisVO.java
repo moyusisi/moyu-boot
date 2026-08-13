@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.authSession.model.vo;
+package com.moyu.boot.support.authSession.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

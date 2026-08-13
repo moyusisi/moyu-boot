@@ -1,10 +1,10 @@
-package com.moyu.boot.plugin.authSession.service;
+package com.moyu.boot.support.authSession.service;
 
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
-import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
-import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
+import com.moyu.boot.support.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.support.authSession.model.vo.AuthSessionAnalysisVO;
+import com.moyu.boot.support.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.support.authSession.model.vo.SignTokenVO;
 
 import java.util.List;
 

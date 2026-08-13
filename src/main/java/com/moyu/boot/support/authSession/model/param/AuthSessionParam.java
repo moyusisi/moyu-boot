@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.authSession.model.param;
+package com.moyu.boot.support.authSession.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.PageParam;

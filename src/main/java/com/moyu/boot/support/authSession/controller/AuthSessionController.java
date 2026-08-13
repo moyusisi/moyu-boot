@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.authSession.controller;
+package com.moyu.boot.support.authSession.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
@@ -7,11 +7,11 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
-import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
-import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
-import com.moyu.boot.plugin.authSession.service.AuthSessionService;
+import com.moyu.boot.support.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.support.authSession.model.vo.AuthSessionAnalysisVO;
+import com.moyu.boot.support.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.support.authSession.model.vo.SignTokenVO;
+import com.moyu.boot.support.authSession.service.AuthSessionService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
