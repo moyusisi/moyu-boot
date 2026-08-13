@@ -1,4 +1,4 @@
-package com.moyu.boot.system.advice;
+package com.moyu.boot.common.web.advice;
 
 
 import cn.dev33.satoken.exception.NotLoginException;
