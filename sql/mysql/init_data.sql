@@ -66,7 +66,7 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_sys_message', '站内信', 'dir_sys_dev', 3, '/dev/message/index', 'dev/message/index', null, 'message-outlined', 1, 'sys_module', 4050, null, '', 0, null, null, null, null),
 
         ('menu_sys_session', '会话管理', 'dir_sys_ops', 3, '/auth/monitor', 'auth/monitor/index', null, 'bars-outlined', 1, 'sys_module', 5002, null, '', 0, null, null, null, null),
-        ('menu_sys_config', '系统配置', 'dir_sys_ops', 3, '/sys/config', 'system/config/index', null, 'cloud-server-outlined', 1, 'sys_module', 5010, null, '', 0, null, null, null, null),
+        ('menu_sys_config', '配置管理', 'dir_sys_ops', 3, '/sys/config', 'system/config/index', null, 'cloud-server-outlined', 1, 'sys_module', 5010, null, '', 0, null, null, null, null),
         ('menu_sys_third', '三方接口', 'dir_sys_ops', 3, '/dev/third/api', 'dev/thirdPartyApi/index', null, 'api-outlined', 1, 'sys_module', 5020, null, '', 0, null, null, null, null),
         ('menu_sys_seq', '序列器', 'dir_sys_ops', 3, '/dev/seq', 'dev/seq/index', null, 'field-number-outlined', 1, 'sys_module', 5022, null, '', 0, null, null, null, null),
         ('menu_sys_job', '任务调度', 'dir_sys_ops', 3, '/dev/job', 'dev/job/index', null, 'field-time-outlined', 1, 'sys_module', 5030, null, '', 0, null, null, null, null),
