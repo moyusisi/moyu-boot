@@ -1,4 +1,4 @@
-package com.moyu.boot.support.authSession.service.impl;
+package com.moyu.boot.plugin.authSession.service.impl;
 
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.session.SaSession;
@@ -8,11 +8,11 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.support.authSession.model.param.AuthSessionParam;
-import com.moyu.boot.support.authSession.model.vo.AuthSessionAnalysisVO;
-import com.moyu.boot.support.authSession.model.vo.AuthSessionVO;
-import com.moyu.boot.support.authSession.model.vo.SignTokenVO;
-import com.moyu.boot.support.authSession.service.AuthSessionService;
+import com.moyu.boot.plugin.authSession.model.param.AuthSessionParam;
+import com.moyu.boot.plugin.authSession.model.vo.AuthSessionAnalysisVO;
+import com.moyu.boot.plugin.authSession.model.vo.AuthSessionVO;
+import com.moyu.boot.plugin.authSession.model.vo.SignTokenVO;
+import com.moyu.boot.plugin.authSession.service.AuthSessionService;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
