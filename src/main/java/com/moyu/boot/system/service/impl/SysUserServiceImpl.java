@@ -19,7 +19,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.daySeq.service.DaySeqService;
-import com.moyu.boot.support.sysConfig.service.SysConfigService;
+import com.moyu.boot.system.service.SysConfigService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
