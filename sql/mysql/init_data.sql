@@ -55,9 +55,9 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('menu_sys_group', '岗位权限', 'dir_sys_perm', 3, '/sys/group', 'system/group/index', '', 'team-outlined', 1, 'sys_module', 2010, null, '', 0, null, null, null, null),
         ('menu_sys_role', '角色管理', 'dir_sys_perm', 3, '/sys/role', 'system/role/index', '', 'deployment-unit-outlined', 1, 'sys_module', 2020, null, '', 0, null, null, null, null),
         ('menu_sys_module', '模块管理', 'dir_sys_resource', 3, '/sys/module', 'system/resource/module/index', '', 'appstore-add-outlined', 1, 'sys_module', 3010, null, '', 0, null, null, null, null),
-        ('menu_sys_menu', '菜单管理', 'dir_sys_resource', 3, '/sys/menu', 'system/resource/menu/index', '', 'pic-left-outlined', 1, 'sys_module', 3020, null, '', 0, null, null, null, null),
+        ('menu_sys_menu', '菜单树', 'dir_sys_resource', 3, '/sys/menu', 'system/resource/menu/index', '', 'pic-left-outlined', 1, 'sys_module', 3020, null, '', 0, null, null, null, null),
         ('menu_sys_api', '接口管理', 'dir_sys_resource', 3, '/sys/api', 'system/resource/api/index', '', 'api-outlined', 1, 'sys_module', 3030, null, null, 0, null, null, null, null),
-        ('menu_sys_resource', '资源查询', 'dir_sys_resource', 3, '/sys/resource', 'system/resource/index', '', 'unordered-list-outlined', 1, 'sys_module', 3040, null, null, 0, null, null, null, null),
+        ('menu_sys_resource', '菜单查询', 'dir_sys_resource', 3, '/sys/resource', 'system/resource/index', '', 'unordered-list-outlined', 1, 'sys_module', 3040, null, null, 0, null, null, null, null),
 
         ('menu_sys_gen', '代码生成', 'dir_sys_dev', 3, '/dev/gen', 'dev/gen/index', '', 'code-outlined', 1, 'sys_module', 4010, null, '', 0, null, null, null, null),
         ('menu_sys_pbe', 'PBE工具', 'dir_sys_dev', 3, '/dev/pbe/index', 'dev/pbe/index', null, 'key-outlined', 1, 'sys_module', 4020, null, '', 0, null, null, null, null),
@@ -131,13 +131,13 @@ values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'apps
         ('btn_sys_menu_edit', '修改菜单', 'menu_sys_menu', 6, null, '', 'sys:menu:edit', null, 0, 'sys_module', 302003, null, null, 0, null, null, null, null),
         ('btn_sys_menu_tree', '菜单树', 'menu_sys_menu', 6, null, '', 'sys:menu:tree', null, 0, 'sys_module', 302004, null, null, 0, null, null, null, null),
         ('btn_sys_menu_detail', '菜单详情', 'menu_sys_menu', 6, null, '', 'sys:menu:detail', null, 0, 'sys_module', 302005, null, null, 0, null, null, null, null),
+        ('btn_sys_menu_list', '菜单列表', 'menu_sys_resource', 6, null, '', 'sys:menu:list', null, 0, 'sys_module', 302011, null, null, 0, null, null, null, null),
 
         ('btn_sys_api_add', '新增接口', 'menu_sys_api', 6, null, '', 'sys:api:add', null, 0, 'sys_module', 303001, null, null, 0, null, null, null, null),
         ('btn_sys_api_delete', '删除接口', 'menu_sys_api', 6, null, '', 'sys:api:delete', null, 0, 'sys_module', 303002, null, null, 0, null, null, null, null),
         ('btn_sys_api_edit', '修改接口', 'menu_sys_api', 6, null, '', 'sys:api:edit', null, 0, 'sys_module', 303003, null, null, 0, null, null, null, null),
         ('btn_sys_api_list', '接口列表', 'menu_sys_api', 6, null, '', 'sys:api:page', null, 0, 'sys_module', 303004, null, null, 0, null, null, null, null),
         ('btn_sys_api_detail', '接口详情', 'menu_sys_api', 6, null, '', 'sys:api:detail', null, 0, 'sys_module', 303005, null, null, 0, null, null, null, null),
-        ('btn_sys_resource_list', '资源列表', 'menu_sys_resource', 6, null, '', 'sys:menu:list', null, 0, 'sys_module', 304001, null, null, 0, null, null, null, null),
 
         ('btn_sys_session_delete', '强制退出', 'menu_sys_session', 6, null, '', 'auth:session:delete', null, 0, 'sys_module', 500202, null, null, 0, null, null, null, null),
         ('btn_sys_session_deleteToken', '强退令牌', 'menu_sys_session', 6, null, '', 'auth:session:deleteToken', null, 0, 'sys_module', 500204, null, null, 0, null, null, null, null),
