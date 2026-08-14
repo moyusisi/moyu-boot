@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 资源菜单权限控制器
+ * 菜单资源控制器
  *
  * @author shisong
  * @since 2024-12-11
