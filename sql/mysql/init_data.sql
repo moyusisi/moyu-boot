@@ -36,7 +36,7 @@ values  (1894925631903645700, 'g_zongbu', '总部管理岗', '11000000', '集团
         (1894925631903645702, 'g_auditor', '全局审计岗', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
 
 -- 菜单数据
-insert into moyu.sys_resource (code, name, parent_code, resource_type, path, component, permission, icon, visible, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+insert into moyu.sys_menu (code, name, parent_code, menu_type, path, component, permission, icon, visible, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
 values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'appstore-add-outlined', 1, 'sys_module', 1, null, '', 0, null, null, null, null),
         ('biz_module', '业务模块', '0', 1, '/bizModule', 'Layout', '', 'profile-outlined', 1, null, 2, null, '', 0, null, null, null, null),
 
