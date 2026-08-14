@@ -16,6 +16,7 @@ create table third_party_api
     `request_time`   DATETIME(3)   DEFAULT NULL COMMENT '请求时间',
     `response_time`  DATETIME(3)   DEFAULT NULL COMMENT '响应时间',
 
+    `ext_json`       TEXT          DEFAULT NULL COMMENT '扩展信息',
     `remark`         TEXT          DEFAULT NULL COMMENT '备注',
     `deleted`        TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time`    DATETIME      DEFAULT NULL COMMENT '创建时间',
