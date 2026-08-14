@@ -1,10 +1,10 @@
-package com.moyu.boot.support.authN.service.impl;
+package com.moyu.boot.authN.service.impl;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
-import com.moyu.boot.support.authN.model.param.UserLoginParam;
-import com.moyu.boot.support.authN.service.AuthService;
-import com.moyu.boot.support.authN.service.UserDetailsService;
+import com.moyu.boot.authN.model.param.UserLoginParam;
+import com.moyu.boot.authN.service.AuthService;
+import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.service.PasswordEncoder;
 import com.moyu.boot.common.authZ.service.TokenService;

@@ -1,6 +1,6 @@
-package com.moyu.boot.support.authN.service;
+package com.moyu.boot.authN.service;
 
-import com.moyu.boot.support.authN.model.param.UserLoginParam;
+import com.moyu.boot.authN.model.param.UserLoginParam;
 
 /**
  * 登陆服务类
