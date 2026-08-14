@@ -1,26 +1,28 @@
-package com.moyu.boot.support.sysLog.model.entity;
+package com.moyu.boot.system.model.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Data;
 
 import java.util.Date;
 
 /**
- * 系统日志表(sys_log)实体对象
+ * 系统日志视图对象
  *
  * @author moyusisi
  * @since 2025-10-22
  */
-@Getter
-@Setter
-@TableName("sys_log")
-public class SysLog {
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SysLogVO {
 
     /**
      * 主键id
+     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
-    @TableId(value = "id", type = IdType.AUTO)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 日志名称
@@ -61,18 +63,19 @@ public class SysLog {
     /**
      * 开始时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
     /**
      * 结束时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
     /**
      * 执行耗时(ms)
      */
     private Long executionTime;
-
     /**
-     * 来源客户端
+     * 来源客户端/ip
      */
     private String sourceClient;
     /**
@@ -87,23 +90,13 @@ public class SysLog {
      * 客户端信息
      */
     private String userAgent;
-
     /**
-     * 删除标志（0未删除  1已删除）
+     * 操作人ID
      */
-    @TableField(fill = FieldFill.INSERT)
-    private Integer deleted;
-
-    /**
-     * 创建时间
-     */
-    @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-
-    /**
-     * 创建人
-     */
-    @TableField(fill = FieldFill.INSERT)
     private String createBy;
-
+    /**
+     * 记录时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
 }

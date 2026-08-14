@@ -1,4 +1,4 @@
-package com.moyu.boot.support.sysLog.service.impl;
+package com.moyu.boot.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -12,11 +12,11 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.support.sysLog.mapper.SysLogMapper;
-import com.moyu.boot.support.sysLog.model.entity.SysLog;
-import com.moyu.boot.support.sysLog.model.param.SysLogParam;
-import com.moyu.boot.support.sysLog.model.vo.SysLogVO;
-import com.moyu.boot.support.sysLog.service.SysLogService;
+import com.moyu.boot.system.mapper.SysLogMapper;
+import com.moyu.boot.system.model.entity.SysLog;
+import com.moyu.boot.system.model.param.SysLogParam;
+import com.moyu.boot.system.model.vo.SysLogVO;
+import com.moyu.boot.system.service.SysLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;

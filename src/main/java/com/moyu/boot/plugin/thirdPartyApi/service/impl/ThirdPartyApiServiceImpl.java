@@ -25,7 +25,7 @@ import com.moyu.boot.plugin.thirdPartyApi.model.entity.ThirdPartyApi;
 import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
 import com.moyu.boot.plugin.thirdPartyApi.model.vo.ThirdPartyApiVO;
 import com.moyu.boot.plugin.thirdPartyApi.service.ThirdPartyApiService;
-import com.moyu.boot.support.sysLog.model.entity.SysLog;
+import com.moyu.boot.system.model.entity.SysLog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
