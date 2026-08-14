@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/sys/resource")
+@RequestMapping("/api/sys/menu")
 public class SysMenuController {
 
 
@@ -48,7 +48,7 @@ public class SysMenuController {
      */
     @Log(jsonLog = true, response = false)
     @SysLog(module = "system", logType = 2, value = "查询资源列表")
-//    @SaCheckPermission("sys:resource:page")
+//    @SaCheckPermission("sys:menu:page")
     @PostMapping("/page")
     public Result<PageData<SysMenuVO>> pageList(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -60,7 +60,7 @@ public class SysMenuController {
      * 获取资源树(可指定module)
      */
     @SysLog(module = "system", logType = 2, value = "获取资源树")
-//    @SaCheckPermission("sys:resource:tree")
+//    @SaCheckPermission("sys:menu:tree")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
     public Result<List<Tree<String>>> tree(@RequestBody SysMenuParam resourceParam) {
@@ -72,7 +72,7 @@ public class SysMenuController {
      * 获取资源详情
      */
     @SysLog(module = "system", logType = 2, value = "查询资源详情")
-//    @SaCheckPermission("sys:resource:detail")
+//    @SaCheckPermission("sys:menu:detail")
     @PostMapping("/detail")
     public Result<SysMenuVO> detail(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
@@ -83,7 +83,7 @@ public class SysMenuController {
      * 添加资源
      */
     @SysLog(module = "system", logType = 2, value = "添加资源")
-    @SaCheckPermission(value = "sys:resource:add", orRole = "ROOT")
+    @SaCheckPermission(value = "sys:menu:add", orRole = "ROOT")
     @PostMapping("/add")
     public Result<String> add(@RequestBody SysMenuParam resourceParam) {
         sysMenuService.add(resourceParam);
@@ -94,7 +94,7 @@ public class SysMenuController {
      * 删除资源
      */
     @SysLog(module = "system", logType = 2, value = "删除资源")
-    @SaCheckPermission(value = "sys:resource:delete", orRole = "ROOT")
+    @SaCheckPermission(value = "sys:menu:delete", orRole = "ROOT")
     @PostMapping("/delete")
     public Result<String> delete(@RequestBody SysMenuParam resourceParam) {
         Assert.notEmpty(resourceParam.getIds(), "删除列表ids不能为空");
@@ -106,7 +106,7 @@ public class SysMenuController {
      * 删除资源树,会集联删除
      */
     @SysLog(module = "system", logType = 2, value = "集联删除资源树")
-    @SaCheckPermission(value = "sys:resource:deleteTree", orRole = "ROOT")
+    @SaCheckPermission(value = "sys:menu:deleteTree", orRole = "ROOT")
     @PostMapping("/deleteTree")
     public Result<String> deleteTree(@RequestBody SysMenuParam resourceParam) {
         Assert.notEmpty(resourceParam.getCodes(), "删除列表codes不能为空");
@@ -118,7 +118,7 @@ public class SysMenuController {
      * 编辑资源
      */
     @SysLog(module = "system", logType = 2, value = "修改资源信息")
-    @SaCheckPermission(value = "sys:resource:edit", orRole = "ROOT")
+    @SaCheckPermission(value = "sys:menu:edit", orRole = "ROOT")
     @PostMapping("/edit")
     public Result<String> edit(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
