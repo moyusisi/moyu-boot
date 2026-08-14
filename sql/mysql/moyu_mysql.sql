@@ -124,7 +124,7 @@ create table sys_group
   COLLATE = utf8mb4_general_ci
   AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
--- 5. 资源信息表
+-- 5. 菜单资源信息表
 drop table if exists sys_menu;
 create table sys_menu
 (
