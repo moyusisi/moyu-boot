@@ -1,98 +1,109 @@
-package com.moyu.boot.system.model.entity;
+package com.moyu.boot.system.model.vo;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.moyu.boot.common.core.model.BaseEntity;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
- * 菜单权限表
+ * 菜单资源视图对象
  *
- * @TableName sys_menu
+ * @author moyusisi
+ * @since 2026-02-13
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_resource")
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysResource extends BaseEntity {
+public class SysMenuVO {
+
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
-    @TableId(value = "id", type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
-
     /**
      * 父编码
      */
     private String parentCode;
-
     /**
      * 名称
      */
     private String name;
-
     /**
      * 编码
      */
     private String code;
-
     /**
-     * 资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
-     *
-     * @see com.moyu.boot.system.enums.ResourceTypeEnum
+     * 菜单类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
      */
-    private Integer resourceType;
-
+    private Integer menuType;
     /**
      * 路由地址
      */
     private String path;
-
     /**
      * 组件地址
      */
     private String component;
-
     /**
      * 权限标识
      */
     private String permission;
-
     /**
      * 图标
      */
     private String icon;
-
     /**
      * 是否可见（0不可见 1可见）
      */
     private Integer visible;
-
     /**
      * 归属模块
      */
     private String module;
-
     /**
      * 排序顺序
      */
     private Integer sortNum;
-
-    /**
-     * 扩展信息
-     */
-    private String extJson;
-
     /**
      * 备注
      */
     private String remark;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    /**
+     * 创建人
+     */
+    private String createBy;
+    /**
+     * 修改时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    /**
+     * 修改人
+     */
+    private String updateBy;
 
+    //***** 扩展信息extJson的展开 *****
+    /**
+     * 【目录】是否简洁模式(只有一个菜单时，不显示目录直接显示该菜单)
+     */
+    private Integer brief;
+
+    /**
+     * 【菜单】是否固定显示
+     */
+    private Integer affix;
+
+    /**
+     * 【菜单】是否支持页面缓存
+     */
+    private Integer keepAlive;
 }

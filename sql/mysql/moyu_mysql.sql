@@ -125,35 +125,35 @@ create table sys_group
   AUTO_INCREMENT = 1000 COMMENT = '分组信息表';
 
 -- 5. 资源信息表
-drop table if exists sys_resource;
-create table sys_resource
+drop table if exists sys_menu;
+create table sys_menu
 (
-    `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `code`          VARCHAR(64)   DEFAULT NULL COMMENT '编码',
-    `name`          VARCHAR(64)   DEFAULT NULL COMMENT '名称',
-    `parent_code`   VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
-    `resource_type` TINYINT       DEFAULT NULL COMMENT '资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
-    `path`          VARCHAR(1024) DEFAULT NULL COMMENT '路由地址',
-    `component`     VARCHAR(64)   DEFAULT NULL COMMENT '组件地址',
-    `permission`    VARCHAR(64)   DEFAULT NULL COMMENT '权限标识',
-    `icon`          VARCHAR(64)   DEFAULT NULL COMMENT '图标',
-    `visible`       TINYINT       DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
-    `module`        VARCHAR(64)   DEFAULT NULL COMMENT '归属模块',
+    `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
+    `code`        VARCHAR(64)   DEFAULT NULL COMMENT '编码',
+    `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
+    `parent_code` VARCHAR(64)   DEFAULT '0' COMMENT '父编码',
+    `menu_type`   TINYINT       DEFAULT NULL COMMENT '菜单类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）',
+    `path`        VARCHAR(1024) DEFAULT NULL COMMENT '路由地址',
+    `component`   VARCHAR(64)   DEFAULT NULL COMMENT '组件地址',
+    `permission`  VARCHAR(64)   DEFAULT NULL COMMENT '权限标识',
+    `icon`        VARCHAR(64)   DEFAULT NULL COMMENT '图标',
+    `visible`     TINYINT       DEFAULT 1 COMMENT '是否可见（0不可见 1可见）',
+    `module`      VARCHAR(64)   DEFAULT NULL COMMENT '归属模块',
 
-    `sort_num`      INT           DEFAULT NULL COMMENT '排序顺序',
-    `ext_json`      TEXT          DEFAULT NULL COMMENT '扩展信息',
-    `remark`        TEXT          DEFAULT NULL COMMENT '备注',
-    `deleted`       TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time`   DATETIME      DEFAULT NULL COMMENT '创建时间',
-    `create_by`     VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
-    `update_time`   DATETIME      DEFAULT NULL COMMENT '修改时间',
-    `update_by`     VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
+    `sort_num`    INT           DEFAULT NULL COMMENT '排序顺序',
+    `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
+    `remark`      TEXT          DEFAULT NULL COMMENT '备注',
+    `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
+    `create_by`   VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
+    `update_time` DATETIME      DEFAULT NULL COMMENT '修改时间',
+    `update_by`   VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
     primary key (`id`),
     UNIQUE INDEX `uniq_code` (`code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
-  AUTO_INCREMENT = 2000 COMMENT = '资源信息表';
+  AUTO_INCREMENT = 2000 COMMENT = '菜单资源信息表';
 
 -- 6. 接口信息表
 drop table if exists sys_api;

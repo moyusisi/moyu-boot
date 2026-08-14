@@ -8,9 +8,9 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.system.model.param.SysResourceParam;
-import com.moyu.boot.system.model.vo.SysResourceVO;
-import com.moyu.boot.system.service.SysResourceService;
+import com.moyu.boot.system.model.param.SysMenuParam;
+import com.moyu.boot.system.model.vo.SysMenuVO;
+import com.moyu.boot.system.service.SysMenuService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,18 +28,18 @@ import java.util.List;
 @Log(jsonLog = true)
 @RestController
 @RequestMapping("/api/sys/resource")
-public class SysResourceController {
+public class SysMenuController {
 
 
     @Resource
-    private SysResourceService sysResourceService;
+    private SysMenuService sysMenuService;
 
     /**
      * 资源列表
      */
     @PostMapping("/list")
-    public Result<List<SysResourceVO>> list(@RequestBody SysResourceParam resourceParam) {
-        List<SysResourceVO> list = sysResourceService.list(resourceParam);
+    public Result<List<SysMenuVO>> list(@RequestBody SysMenuParam resourceParam) {
+        List<SysMenuVO> list = sysMenuService.list(resourceParam);
         return Result.success(list);
     }
 
@@ -50,9 +50,9 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "查询资源列表")
 //    @SaCheckPermission("sys:resource:page")
     @PostMapping("/page")
-    public Result<PageData<SysResourceVO>> pageList(@RequestBody SysResourceParam resourceParam) {
+    public Result<PageData<SysMenuVO>> pageList(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(resourceParam.getPageNum(), resourceParam.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<SysResourceVO> list = sysResourceService.pageList(resourceParam);
+        PageData<SysMenuVO> list = sysMenuService.pageList(resourceParam);
         return Result.success(list);
     }
 
@@ -63,8 +63,8 @@ public class SysResourceController {
 //    @SaCheckPermission("sys:resource:tree")
     @Log(jsonLog = true, response = false)
     @PostMapping("/tree")
-    public Result<List<Tree<String>>> tree(@RequestBody SysResourceParam resourceParam) {
-        List<Tree<String>> treeList = sysResourceService.tree(resourceParam);
+    public Result<List<Tree<String>>> tree(@RequestBody SysMenuParam resourceParam) {
+        List<Tree<String>> treeList = sysMenuService.tree(resourceParam);
         return Result.success(treeList);
     }
 
@@ -74,9 +74,9 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "查询资源详情")
 //    @SaCheckPermission("sys:resource:detail")
     @PostMapping("/detail")
-    public Result<SysResourceVO> detail(@RequestBody SysResourceParam resourceParam) {
+    public Result<SysMenuVO> detail(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
-        return Result.success(sysResourceService.detail(resourceParam));
+        return Result.success(sysMenuService.detail(resourceParam));
     }
 
     /**
@@ -85,8 +85,8 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "添加资源")
     @SaCheckPermission(value = "sys:resource:add", orRole = "ROOT")
     @PostMapping("/add")
-    public Result<String> add(@RequestBody SysResourceParam resourceParam) {
-        sysResourceService.add(resourceParam);
+    public Result<String> add(@RequestBody SysMenuParam resourceParam) {
+        sysMenuService.add(resourceParam);
         return Result.success();
     }
 
@@ -96,9 +96,9 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "删除资源")
     @SaCheckPermission(value = "sys:resource:delete", orRole = "ROOT")
     @PostMapping("/delete")
-    public Result<String> delete(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> delete(@RequestBody SysMenuParam resourceParam) {
         Assert.notEmpty(resourceParam.getIds(), "删除列表ids不能为空");
-        sysResourceService.deleteByIds(resourceParam);
+        sysMenuService.deleteByIds(resourceParam);
         return Result.success();
     }
 
@@ -108,9 +108,9 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "集联删除资源树")
     @SaCheckPermission(value = "sys:resource:deleteTree", orRole = "ROOT")
     @PostMapping("/deleteTree")
-    public Result<String> deleteTree(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> deleteTree(@RequestBody SysMenuParam resourceParam) {
         Assert.notEmpty(resourceParam.getCodes(), "删除列表codes不能为空");
-        sysResourceService.deleteTree(resourceParam);
+        sysMenuService.deleteTree(resourceParam);
         return Result.success();
     }
 
@@ -120,9 +120,9 @@ public class SysResourceController {
     @SysLog(module = "system", logType = 2, value = "修改资源信息")
     @SaCheckPermission(value = "sys:resource:edit", orRole = "ROOT")
     @PostMapping("/edit")
-    public Result<String> edit(@RequestBody SysResourceParam resourceParam) {
+    public Result<String> edit(@RequestBody SysMenuParam resourceParam) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(resourceParam.getId(), resourceParam.getCode()), "id和code不能同时为空");
-        sysResourceService.update(resourceParam);
+        sysMenuService.update(resourceParam);
         return Result.success();
     }
 
@@ -130,8 +130,8 @@ public class SysResourceController {
      * 获取菜单树选择器
      */
     @PostMapping("/menuTreeSelector")
-    public Result<List<Tree<String>>> menuTreeSelector(@RequestBody SysResourceParam resourceParam) {
-        return Result.success(sysResourceService.menuTreeSelector(resourceParam));
+    public Result<List<Tree<String>>> menuTreeSelector(@RequestBody SysMenuParam resourceParam) {
+        return Result.success(sysMenuService.menuTreeSelector(resourceParam));
     }
 
 }

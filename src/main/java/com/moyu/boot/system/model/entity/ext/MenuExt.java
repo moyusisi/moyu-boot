@@ -3,13 +3,14 @@ package com.moyu.boot.system.model.entity.ext;
 import lombok.Data;
 
 /**
- * sys_relation表中扩展字段对应的实体
+ * 菜单资源扩展数据
+ * sys_menu表中扩展字段对应的实体
  *
  * @author shisong
  * @since 2026-02-27
  */
 @Data
-public class ResourceExt {
+public class MenuExt {
 
     /**
      * 菜单资源的扩展属性(目录、菜单、内链、外链 共用)

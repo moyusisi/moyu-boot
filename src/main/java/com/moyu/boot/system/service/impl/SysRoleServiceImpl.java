@@ -32,11 +32,11 @@ import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
-import com.moyu.boot.system.enums.ResourceTypeEnum;
+import com.moyu.boot.system.enums.MenuTypeEnum;
 import com.moyu.boot.system.mapper.SysRoleMapper;
 import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.entity.SysRelation;
-import com.moyu.boot.system.model.entity.SysResource;
+import com.moyu.boot.system.model.entity.SysMenu;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.ext.RelationExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -71,7 +71,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     private SysRelationService sysRelationService;
 
     @Resource
-    private SysResourceService sysResourceService;
+    private SysMenuService sysMenuService;
 
     @Resource
     private SysUserService sysUserService;
@@ -208,23 +208,23 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // role拥有的资源权限
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
         // 查询所有模块的所有菜单(不含按钮)
-        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .ne(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule()));
+        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+                .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule()));
 
         // 过滤出role有权限的菜单转为treeNode
         List<TreeNode<String>> nodeList = new ArrayList<>();
         menuList.forEach(menu -> {
             TreeNode<String> node = new TreeNode<>(menu.getCode(), menu.getParentCode(), menu.getName(), menu.getSortNum());
             Map<String, Object> extMap = new HashMap<>();
-            extMap.put("menuType", menu.getResourceType());
+            extMap.put("menuType", menu.getMenuType());
             if (StrUtil.isNotBlank(menu.getIcon())) {
                 // 图标
                 extMap.put("icon", menu.getIcon());
             }
             node.setExtra(extMap);
             // 目录都包含，叶子结点有权限才包含
-            if (ResourceTypeEnum.MODULE.getCode().equals(menu.getResourceType()) || ResourceTypeEnum.DIR.getCode().equals(menu.getResourceType())) {
+            if (MenuTypeEnum.MODULE.getCode().equals(menu.getMenuType()) || MenuTypeEnum.DIR.getCode().equals(menu.getMenuType())) {
                 nodeList.add(node);
             } else if (permSet.contains(menu.getCode())) {
                 nodeList.add(node);
@@ -246,7 +246,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             }
             Integer menuType = (Integer) tree.get("menuType");
             // 不是目录则返回true
-            boolean notDir = !ResourceTypeEnum.DIR.getCode().equals(menuType) && !ResourceTypeEnum.MODULE.getCode().equals(menuType);
+            boolean notDir = !MenuTypeEnum.DIR.getCode().equals(menuType) && !MenuTypeEnum.MODULE.getCode().equals(menuType);
             return notDir;
         });
         return singleTree.getChildren();
@@ -255,16 +255,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Tree<String>> menuTreeForGrant(SysRoleParam param) {
         // 查询模块所有资源(包括菜单按钮)
-        List<SysResource> menuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule()));
+        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule()));
 
         // role已经拥有的资源权限
         Set<String> permSet = sysRelationService.rolePerm(param.getCode());
 
         // 过滤出button，转为 parentCode->button 格式的的 multimap
-        Multimap<String, SysResource> allButtonMap = ArrayListMultimap.create();
+        Multimap<String, SysMenu> allButtonMap = ArrayListMultimap.create();
         Multimap<String, String> grantButtonMap = HashMultimap.create();
-        menuList.stream().filter(e -> ResourceTypeEnum.BUTTON.getCode().equals(e.getResourceType()))
+        menuList.stream().filter(e -> MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     allButtonMap.put(e.getParentCode(), e);
                     if (permSet.contains(e.getCode())) {
@@ -275,15 +275,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 过滤出menu转为treeNode
         List<TreeNode<String>> nodeList = new ArrayList<>();
         menuList.stream()
-                .filter(e -> !ResourceTypeEnum.BUTTON.getCode().equals(e.getResourceType()))
+                .filter(e -> !MenuTypeEnum.BUTTON.getCode().equals(e.getMenuType()))
                 .forEach(e -> {
                     TreeNode<String> node = new TreeNode<>(e.getCode(), e.getParentCode(), e.getName(), e.getSortNum());
                     Map<String, Object> extMap = new HashMap<>();
-                    if (ResourceTypeEnum.MODULE.getCode().equals(e.getResourceType())) {
+                    if (MenuTypeEnum.MODULE.getCode().equals(e.getMenuType())) {
                         // 模块只放图标
                         extMap.put("icon", e.getIcon());
                     } else {
-                        extMap.put("resourceType", e.getResourceType());
+                        extMap.put("menuType", e.getMenuType());
                         // rm关系中存在，表示有权限
                         extMap.put("checked", permSet.contains(e.getCode()));
                         // 将把包含的按钮加进来
@@ -319,12 +319,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         });
 
         // role拥有的所有按钮 code -> SysResource
-        Map<String, SysResource> btnMap = new HashMap<>();
+        Map<String, SysMenu> btnMap = new HashMap<>();
         Set<String> btnPermSet = new HashSet<>();
         // 查询模块所有按钮
-        Db.list(Wrappers.lambdaQuery(SysResource.class)
-                        .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                        .eq(ObjectUtil.isNotEmpty(param.getModule()), SysResource::getModule, param.getModule())
+        Db.list(Wrappers.lambdaQuery(SysMenu.class)
+                        .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
+                        .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule())
                 ).stream()
                 // 过滤出role有权限的按钮
                 .filter(btn -> permMap.containsKey(btn.getCode()))
@@ -381,15 +381,15 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void grantMenu(SysRoleParam roleParam) {
         // 本模块所有可授权内容(菜单、按钮、链接)
-        List<SysResource> moduleMenuList = sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .select(SysResource::getCode)
+        List<SysMenu> moduleMenuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+                .select(SysMenu::getCode)
                 // 指定模块
-                .eq(SysResource::getModule, roleParam.getModule())
+                .eq(SysMenu::getModule, roleParam.getModule())
                 // 指定菜单类型
-                .in(SysResource::getResourceType, ResourceTypeEnum.MENU.getCode(), ResourceTypeEnum.IFRAME.getCode(), ResourceTypeEnum.LINK.getCode(), ResourceTypeEnum.BUTTON.getCode())
-                .eq(SysResource::getDeleted, 0));
+                .in(SysMenu::getMenuType, MenuTypeEnum.MENU.getCode(), MenuTypeEnum.IFRAME.getCode(), MenuTypeEnum.LINK.getCode(), MenuTypeEnum.BUTTON.getCode())
+                .eq(SysMenu::getDeleted, 0));
         // 本模块的所有权限
-        List<String> moduleMenuCodeList = moduleMenuList.stream().map(SysResource::getCode).collect(Collectors.toList());
+        List<String> moduleMenuCodeList = moduleMenuList.stream().map(SysMenu::getCode).collect(Collectors.toList());
         // 如果本模块无任何可用资源，则不用授权
         if (ObjectUtil.isEmpty(moduleMenuCodeList)) {
             return;
@@ -564,9 +564,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return permSet;
         }
         // 获取资源上的权限标识
-        sysResourceService.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .in(SysResource::getCode, menuSet)).forEach(e -> {
+        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+                .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
+                .in(SysMenu::getCode, menuSet)).forEach(e -> {
             if (ObjectUtil.isNotEmpty(e.getPermission())) {
                 permSet.add(e.getPermission());
             }
@@ -591,13 +591,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return apiScopeMap;
         }
         // roleSet拥有的所有按钮 code -> SysResource
-        Map<String, SysResource> btnMap = new HashMap<>();
+        Map<String, SysMenu> btnMap = new HashMap<>();
         Set<String> btnPermSet = new HashSet<>();
         // 查询模块所有按钮
-        Db.list(Wrappers.lambdaQuery(SysResource.class)
-                .eq(SysResource::getResourceType, ResourceTypeEnum.BUTTON.getCode())
-                .in(SysResource::getCode, allPermMap.keySet())
-                .eq(SysResource::getDeleted, 0)
+        Db.list(Wrappers.lambdaQuery(SysMenu.class)
+                .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
+                .in(SysMenu::getCode, allPermMap.keySet())
+                .eq(SysMenu::getDeleted, 0)
         ).forEach(btn -> {
             btnMap.put(btn.getCode(), btn);
             btnPermSet.add(btn.getPermission());

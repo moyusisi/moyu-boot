@@ -22,7 +22,7 @@ public class RouteMeta {
     /**
      * 标识路由的类型
      *
-     * @see com.moyu.boot.system.enums.ResourceTypeEnum#name().toLowerCase
+     * @see com.moyu.boot.system.enums.MenuTypeEnum#name().toLowerCase
      */
     private String type;
 

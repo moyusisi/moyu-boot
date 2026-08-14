@@ -25,7 +25,7 @@ import java.util.Set;
 @ToString
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SysResourceParam extends PageParam {
+public class SysMenuParam extends PageParam {
     //********** 额外字段 **********//
     /**
      * 待删除的code列表，通常会集联删除
@@ -70,14 +70,14 @@ public class SysResourceParam extends PageParam {
     private String code;
 
     /**
-     * 资源类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
+     * 菜单类型（字典 1模块 2目录 3菜单 4内链 5外链 6按钮）
      *
-     * @see com.moyu.boot.system.enums.ResourceTypeEnum
+     * @see com.moyu.boot.system.enums.MenuTypeEnum
      */
-    @NotNull(message = "菜单类型resourceType不能为空")
-    @Min(value = 1, message = "资源类型resourceType有效取值范围为[1,5]")
-    @Max(value = 5, message = "资源类型resourceType有效取值范围为[1,5]")
-    private Integer resourceType;
+    @NotNull(message = "菜单类型menuType不能为空")
+    @Min(value = 1, message = "菜单类型menuType有效取值范围为[1,5]")
+    @Max(value = 6, message = "菜单类型menuType有效取值范围为[1,6]")
+    private Integer menuType;
 
     /**
      * 路由地址
