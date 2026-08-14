@@ -71,6 +71,10 @@ public class ThirdPartyApiVO {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private Date responseTime;
     /**
+     * 扩展信息
+     */
+    private String extJson;
+    /**
      * 备注
      */
     private String remark;

@@ -79,6 +79,11 @@ public class ThirdPartyApiParam extends PageParam {
     @Size(max = 65535, message = "requestBody长度不能超过65535个字符")
     private String requestBody;
     /**
+     * 扩展信息
+     */
+    @Size(max = 65535, message = "extJson长度不能超过65535个字符")
+    private String extJson;
+    /**
      * 备注
      */
     @Size(max = 65535, message = "remark长度不能超过65535个字符")

@@ -63,6 +63,10 @@ public class ThirdPartyApi extends BaseEntity {
      */
     private Date responseTime;
     /**
+     * 扩展信息
+     */
+    private String extJson;
+    /**
      * 备注
      */
     private String remark;
