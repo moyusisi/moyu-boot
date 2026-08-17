@@ -48,7 +48,7 @@ public class UnitTest {
     public void testId() {
         // 24位: 67c7b60fd19001d4b33539b6
         log.info(IdUtil.objectId());
-        // 20位随机NanoId: R06PP2RUZeS9j6g0bNxyW
+        // 21位随机NanoId: R06PP2RUZeS9j6g0bNxyW
         log.info(IdUtil.nanoId());
         // 指定位数: g4Pq_XFDRq
         log.info(IdUtil.nanoId(10));
