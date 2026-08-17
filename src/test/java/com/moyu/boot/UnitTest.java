@@ -110,10 +110,6 @@ public class UnitTest {
 
     @Test
     public void testSign() {
-        // 请求参数
-        Map<String, Object> paramMap = new LinkedHashMap<>();
-        paramMap.put("userId", 10001);
-        paramMap.put("money", 1000);
         SaSignConfig signConfig = new SaSignConfig("0123456789hijklmnopq");
         SaSignManager.setConfig(signConfig);
 
@@ -121,6 +117,10 @@ public class UnitTest {
         signMany.put("app1", signConfig);
         SaSignManager.setSignMany(signMany);
 
+        // 请求参数
+        Map<String, Object> paramMap = new LinkedHashMap<>();
+        paramMap.put("userId", 10001);
+        paramMap.put("money", 1000);
         // 补全 timestamp、nonce、sign 参数，并序列化为 kv 字符串
         String paramStr = SaSignUtil.addSignParamsAndJoin(paramMap);
         String paramStr2 = SaSignMany.getSignTemplate("app1").addSignParamsAndJoin(paramMap);
