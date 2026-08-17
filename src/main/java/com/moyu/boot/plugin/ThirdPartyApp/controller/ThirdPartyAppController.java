@@ -1,12 +1,10 @@
 package com.moyu.boot.plugin.ThirdPartyApp.controller;
 
-import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjectUtil;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.ThirdPartyApp.model.entity.ThirdPartyApp;
 import com.moyu.boot.plugin.ThirdPartyApp.model.param.ThirdPartyAppParam;
 import com.moyu.boot.plugin.ThirdPartyApp.model.vo.ThirdPartyAppVO;
 import com.moyu.boot.plugin.ThirdPartyApp.service.ThirdPartyAppService;
