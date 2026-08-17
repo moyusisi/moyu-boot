@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  */
 @Log(jsonLog = true)
 @RestController
-@RequestMapping("/api/dev/thirdPartyApi")
+@RequestMapping("/api/dev/thirdApi")
 public class ThirdPartyApiController {
 
 
@@ -34,7 +34,7 @@ public class ThirdPartyApiController {
     /**
      * 三方集成接口分页列表
      */
-    //@SaCheckPermission("dev:thirdPartyApi:page")
+    //@SaCheckPermission("dev:thirdApi:page")
     @PostMapping("/page")
     public Result<PageData<ThirdPartyApiVO>> pageList(@RequestBody ThirdPartyApiParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
@@ -45,7 +45,7 @@ public class ThirdPartyApiController {
     /**
      * 三方集成接口详情
      */
-    //@SaCheckPermission("dev:thirdPartyApi:detail")
+    //@SaCheckPermission("dev:thirdApi:detail")
     @PostMapping("/detail")
     public Result<ThirdPartyApiVO> detail(@RequestBody ThirdPartyApiParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -55,7 +55,7 @@ public class ThirdPartyApiController {
     /**
      * 新增三方集成接口
      */
-    //@SaCheckPermission("dev:thirdPartyApi:add")
+    //@SaCheckPermission("dev:thirdApi:add")
     @PostMapping("/add")
     public Result<?> add(@Validated @RequestBody ThirdPartyApiParam param) {
         thirdPartyApiService.add(param);
@@ -65,7 +65,7 @@ public class ThirdPartyApiController {
     /**
      * 修改三方集成接口
      */
-    //@SaCheckPermission("dev:thirdPartyApi:edit")
+    //@SaCheckPermission("dev:thirdApi:edit")
     @PostMapping("/edit")
     public Result<?> edit(@Validated @RequestBody ThirdPartyApiParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getId()), "id不能为空");
@@ -76,7 +76,7 @@ public class ThirdPartyApiController {
     /**
      * 删除数据
      */
-    //@SaCheckPermission("dev:thirdPartyApi:delete")
+    //@SaCheckPermission("dev:thirdApi:delete")
     @PostMapping("/delete")
     public Result<?> delete(@RequestBody ThirdPartyApiParam param) {
         Assert.notEmpty(param.getIds(), "删除列表ids不能为空");
@@ -87,7 +87,7 @@ public class ThirdPartyApiController {
     /**
      * 三方集成接口调试
      */
-    //@SaCheckPermission("dev:thirdPartyApi:debug")
+    //@SaCheckPermission("dev:thirdApi:debug")
     @PostMapping("/debugApi")
     public Result<ThirdPartyApiVO> debugApi(@RequestBody ThirdPartyApiParam param) {
         Assert.isTrue(ObjectUtil.isNotEmpty(param.getCode()), "code不能为空");
