@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
@@ -67,6 +68,7 @@ public class ThirdPartyAppParam extends PageParam {
      */
     @NotBlank(message = "digestAlgo不能为空")
     @Size(max = 16, message = "digestAlgo长度不能超过16个字符")
+    @Pattern(regexp = "^(md5|sha1|sha256|sha384|sha512)$", message = "签名算法仅支持:md5、sha1、sha256、sha384、sha512")
     private String digestAlgo;
     /**
      * 扩展信息
