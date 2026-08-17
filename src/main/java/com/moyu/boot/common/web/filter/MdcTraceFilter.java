@@ -5,6 +5,7 @@ package com.moyu.boot.common.web.filter;
  * @since 2026-08-13
  */
 
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,8 @@ public class MdcTraceFilter extends OncePerRequestFilter {
         String traceId = request.getHeader(HEADER_TRACE_ID);
         if (StrUtil.isBlank(traceId)) {
             // 生成链路ID
-            traceId = UUID.randomUUID().toString().replace("-", "");
+            traceId = IdUtil.objectId();
+            //traceId = UUID.randomUUID().toString().replace("-", "");
         }
         try {
             // 填充MDC上下文
