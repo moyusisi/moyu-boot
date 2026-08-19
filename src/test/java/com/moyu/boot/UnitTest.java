@@ -124,8 +124,10 @@ public class UnitTest {
         // 补全 timestamp、nonce、sign 参数，并序列化为 kv 字符串
         String paramStr = SaSignUtil.addSignParamsAndJoin(paramMap);
         String paramStr2 = SaSignMany.getSignTemplate("app1").addSignParamsAndJoin(paramMap);
+        Map<String, Object> paramStr3 = SaSignMany.getSignTemplate("app1").addSignParams(paramMap);
         log.info("paramStr:{}", paramStr);
         log.info("paramStr2:{}", paramStr2);
+        log.info("paramStr2:{}", paramStr3);
 //        SaSignUtil.checkRequest(SaHolder.getRequest(), "id", "name");
 
     }
