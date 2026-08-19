@@ -10,10 +10,14 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -50,9 +54,22 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     /**
-     * 绑定异常(MethodArgumentNotValidException extends BindException)
+     * 参数缺失异常(MissingServletRequestParameterException extends ServletRequestBindingException)
      * <p>
-     * 使用 @Valid 或者 @Validated 进行参数验证时绑定失败会触发
+     * 请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失(parameter、header、cookie、path等)
+     */
+    @ExceptionHandler(ServletRequestBindingException.class)
+    public Result<?> exceptionHandler(ServletRequestBindingException e) {
+        log.error("参数缺失异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 参数绑定异常(MethodArgumentNotValidException extends BindException)
+     * <p>
+     * 使用 @RequestBody @Valid 或者 @Validated 进行参数验证时绑定失败会触发
      */
     @ExceptionHandler(BindException.class)
     public Result<?> exceptionHandler(BindException e) {
@@ -74,19 +91,6 @@ public class GlobalExceptionHandler {
         log.error("违反约束条件异常:{}", e.getMessage());
         String message = e.getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(";"));
         Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, message);
-        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
-        return result;
-    }
-
-    /**
-     * 参数绑定异常(MissingServletRequestParameterException extends ServletRequestBindingException)
-     * <p>
-     * 请求参数绑定到JavaBean或模型属性时出现的异常，如必传参数缺失(parameter、header、cookie、path等)
-     */
-    @ExceptionHandler(ServletRequestBindingException.class)
-    public Result<?> exceptionHandler(ServletRequestBindingException e) {
-        log.error("参数绑定异常:{}", e.getMessage(), e);
-        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
         return result;
     }
@@ -117,24 +121,60 @@ public class GlobalExceptionHandler {
         return result;
     }
 
+    // ===================== 4xx 客户端异常 =====================
+
     /**
-     * 接口不存在
-     * <p>
-     * 当客户端请求一个不存在的路径时，会抛出 NoHandlerFoundException 异常
+     * 404 接口不存在
+     * 访问不存在的接口（404），默认不会抛出 NoHandlerFoundException，直接转发 /error，走 BasicErrorController
+     * 需两个配置，才能捕获 404 异常
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Result<?> exceptionHandler(NoHandlerFoundException e) {
-        log.error("访问接口不存在异常:{}", e.getMessage(), e);
+    public Result<?> handle404(NoHandlerFoundException e) {
+        log.warn("访问接口不存在异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.INTERFACE_NOT_EXIST);
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
         return result;
     }
 
     /**
-     * Servlet异常(此异常范围较大)
-     * <p>
-     * 当 Servlet 请求处理时发生的异常。
+     * 405 请求方法不支持 GET/POST 不匹配
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public Result<?> handle405(HttpRequestMethodNotSupportedException e) {
+        log.warn("405 请求方法错误:{}", e.getMethod(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.USER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 406 无法返回客户端接受的媒体类型
+     */
+    @ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public Result<?> handle406(HttpMediaTypeNotAcceptableException e) {
+        log.warn("406 无法返回客户端 Accept 指定格式:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.USER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * 415 媒体类型不支持（你之前表单传@RequestBody报错）
+     */
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    public Result<?> handle415(HttpMediaTypeNotSupportedException e) {
+        log.warn("415 不支持的请求类型:{}", e.getContentType(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.USER_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
+    }
+
+    /**
+     * Servlet异常(此异常范围较大) 兜底捕获400/416等未单独捕获的MVC异常
      */
     @ExceptionHandler(ServletException.class)
     public Result<?> exceptionHandler(ServletException e) {
@@ -142,6 +182,15 @@ public class GlobalExceptionHandler {
         Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
         return result;
+    }
+    // ===================== 容器IO异常 =====================
+
+    /**
+     * 客户端主动断开连接，避免大量ERROR日志刷屏
+     */
+    @ExceptionHandler(ClientAbortException.class)
+    public void handleClientAbort() {
+        log.debug("客户端主动断开TCP连接，无需返回响应");
     }
 
     /**
