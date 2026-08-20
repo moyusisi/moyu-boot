@@ -162,7 +162,7 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
     public void checkSign(String... paramNames) {
         SaRequest request = SaHolder.getRequest();
         String appid = request.getHeader("X-Appid");
-        SaSignException.notEmpty(appid, "参与参数签名的秘钥不可为空", SaSignErrorCode.CODE_12201);
+        SaSignException.notEmpty(appid, "应用标识appid不可为空", SaSignErrorCode.CODE_12201);
 
         // 验签的参数map
         Map<String, String> paramMap = new TreeMap<>();
