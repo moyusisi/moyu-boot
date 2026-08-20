@@ -46,8 +46,8 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
     public List<ThirdPartyAppVO> list(ThirdPartyAppParam param) {
         // 查询条件
         QueryWrapper<ThirdPartyApp> queryWrapper = Wrappers.query(ThirdPartyApp.class).checkSqlInjection();
-        // 指定appKey查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppKey()), ThirdPartyApp::getAppKey, param.getAppKey());
+        // 指定appCode查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppCode()), ThirdPartyApp::getAppCode, param.getAppCode());
         // 指定appName查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppName()), ThirdPartyApp::getAppName, param.getAppName());
         // 指定digestAlgo查询
@@ -74,8 +74,8 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
     public PageData<ThirdPartyAppVO> pageList(ThirdPartyAppParam param) {
         // 查询条件
         QueryWrapper<ThirdPartyApp> queryWrapper = Wrappers.query(ThirdPartyApp.class).checkSqlInjection();
-        // 指定appKey查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppKey()), ThirdPartyApp::getAppKey, param.getAppKey());
+        // 指定appCode查询
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppCode()), ThirdPartyApp::getAppCode, param.getAppCode());
         // 指定appName查询
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppName()), ThirdPartyApp::getAppName, param.getAppName());
         // 指定digestAlgo查询
@@ -161,8 +161,8 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
     @Override
     public void checkSign(String... paramNames) {
         SaRequest request = SaHolder.getRequest();
-        String appid = request.getHeader("X-Appid");
-        SaSignException.notEmpty(appid, "应用标识appid不可为空", SaSignErrorCode.CODE_12201);
+        String appid = request.getHeader("X-AppCode");
+        SaSignException.notEmpty(appid, "应用标识AppCode不可为空", SaSignErrorCode.CODE_12211);
 
         // 验签的参数map
         Map<String, String> paramMap = new TreeMap<>();

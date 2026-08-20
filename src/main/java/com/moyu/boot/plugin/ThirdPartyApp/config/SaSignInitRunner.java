@@ -25,13 +25,13 @@ public class SaSignInitRunner implements CommandLineRunner {
         SaSignMany.findSaSignConfigMethod = (appId -> {
             // DB读取
             ThirdPartyApp thirdPartyApp = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApp.class)
-                    .eq(ThirdPartyApp::getAppKey, appId));
+                    .eq(ThirdPartyApp::getAppCode, appId));
             if (thirdPartyApp == null) {
                 return null;
             }
             return new SaSignConfig(thirdPartyApp.getAppSecret()).setDigestAlgo(thirdPartyApp.getDigestAlgo());
         });
-        // 可以自定义签名参数的key
+        // 可以自定义签名参数的key,header中的应用标识名为X-AppCode
         SaSignTemplate.nonce = SaSignTemplate.nonce;
     }
 }

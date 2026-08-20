@@ -49,9 +49,9 @@ public class ThirdPartyAppParam extends PageParam {
     /**
      * 应用标识
      */
-    @NotBlank(message = "appKey不能为空")
-    @Size(max = 64, message = "appKey长度不能超过64个字符")
-    private String appKey;
+    @NotBlank(message = "appCode不能为空")
+    @Size(max = 64, message = "appCode长度不能超过64个字符")
+    private String appCode;
     /**
      * 应用名称
      */

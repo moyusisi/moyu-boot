@@ -19,7 +19,7 @@ public class ThirdPartyApp extends BaseEntity {
     /**
      * 应用标识
      */
-    private String appKey;
+    private String appCode;
     /**
      * 应用名称
      */

@@ -35,7 +35,7 @@ drop table if exists third_party_app;
 create table third_party_app
 (
     `id`          BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `app_key`     VARCHAR(64) DEFAULT NULL COMMENT '应用标识',
+    `app_code`    VARCHAR(64) DEFAULT NULL COMMENT '应用标识',
     `app_name`    VARCHAR(64) DEFAULT NULL COMMENT '应用名称',
     `app_secret`  VARCHAR(64) DEFAULT NULL COMMENT '应用密钥',
     `digest_algo` VARCHAR(16) DEFAULT NULL COMMENT '签名算法',
