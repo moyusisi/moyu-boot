@@ -110,7 +110,7 @@ public class UnitTest {
 
     @Test
     public void testSign() {
-        SaSignConfig signConfig = new SaSignConfig("0123456789hijklmnopq");
+        SaSignConfig signConfig = new SaSignConfig("6a82ddac41b2c4f7b568e2bb");
         SaSignManager.setConfig(signConfig);
 
         Map<String, SaSignConfig> signMany = new HashMap<>();
