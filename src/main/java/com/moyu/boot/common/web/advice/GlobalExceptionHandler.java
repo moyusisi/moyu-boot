@@ -4,6 +4,8 @@ package com.moyu.boot.common.web.advice;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
+import cn.dev33.satoken.exception.SaTokenException;
+import cn.dev33.satoken.sign.exception.SaSignException;
 import cn.hutool.json.JSONUtil;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
@@ -224,13 +226,23 @@ public class GlobalExceptionHandler {
      * sa鉴权的相关异常(SaTokenException的子类)(注意要使用AOP模式，不要使用拦截器模式,否则无法打印入参)
      */
     @ExceptionHandler({NotLoginException.class, NotRoleException.class, NotPermissionException.class})
-    public Result<?> noPermissionException(HttpServletRequest request, Exception e) {
+    public Result<?> noPermissionException(HttpServletRequest request, SaTokenException e) {
         Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
         if (e instanceof NotLoginException) {
             // 处理未登录异常，区分未认证的具体场景
             result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
         }
         log.info("未授权访问：{}", request.getRequestURI());
+        return result;
+    }
+
+    /**
+     * 验签异常
+     */
+    @ExceptionHandler({SaSignException.class})
+    public Result<?> signException(HttpServletRequest request, SaSignException e) {
+        Result<?> result = new Result<>(ResultCodeEnum.INVALID_PARAMETER_ERROR, e.getMessage());
+        log.info("验签异常：{}", request.getRequestURI());
         return result;
     }
 
