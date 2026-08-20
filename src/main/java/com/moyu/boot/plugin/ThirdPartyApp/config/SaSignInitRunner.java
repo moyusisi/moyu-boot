@@ -31,7 +31,7 @@ public class SaSignInitRunner implements CommandLineRunner {
             }
             return new SaSignConfig(thirdPartyApp.getAppSecret()).setDigestAlgo(thirdPartyApp.getDigestAlgo());
         });
-        // 可以定义签名参数的key
-        SaSignTemplate.nonce = "nonce";
+        // 可以自定义签名参数的key
+        SaSignTemplate.nonce = SaSignTemplate.nonce;
     }
 }
