@@ -8,7 +8,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SmUtil;
 import com.google.common.base.CaseFormat;
-import com.moyu.boot.common.core.util.IpUtils;
+import com.moyu.boot.system.util.IpUtils;
 import com.moyu.boot.system.constant.SysConstants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

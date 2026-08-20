@@ -1,4 +1,4 @@
-package com.moyu.boot.common.core.util;
+package com.moyu.boot.system.util;
 
 import cn.hutool.extra.servlet.ServletUtil;
 import lombok.extern.slf4j.Slf4j;
