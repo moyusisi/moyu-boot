@@ -29,7 +29,7 @@ public interface ThirdPartyAppService extends IService<ThirdPartyApp> {
     /**
      * 获取记录详情(通过主键或唯一键)
      */
-     ThirdPartyAppVO detail(ThirdPartyAppParam param);
+    ThirdPartyAppVO detail(ThirdPartyAppParam param);
 
     /**
      * 添加记录
@@ -45,4 +45,12 @@ public interface ThirdPartyAppService extends IService<ThirdPartyApp> {
      * 通过ids删除记录
      */
     void deleteByIds(ThirdPartyAppParam param);
+
+    /**
+     * 检查请求中的签名(仅从 Query / Form 参数中取参验签，不支持 application/json 的请求体字段)
+     * 必须的参数timestamp、nonce、sign 从Header中获取(包括X-Appid)
+     *
+     * @param paramNames 指定参与签名的参数，如不指定则默认为全部参数
+     */
+    void checkSign(String... paramNames);
 }
