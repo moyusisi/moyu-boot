@@ -1,4 +1,4 @@
-package com.moyu.boot.common.core.config;
+package com.moyu.boot.common.web.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
