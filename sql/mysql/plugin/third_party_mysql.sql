@@ -48,7 +48,7 @@ create table third_party_app
     `update_time` DATETIME    DEFAULT NULL COMMENT '修改时间',
     `update_by`   VARCHAR(32) DEFAULT NULL COMMENT '修改人',
     primary key (`id`),
-    UNIQUE INDEX `uniq_app_key` (`app_key`)
+    UNIQUE INDEX `uniq_app_code` (`app_code`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_general_ci
