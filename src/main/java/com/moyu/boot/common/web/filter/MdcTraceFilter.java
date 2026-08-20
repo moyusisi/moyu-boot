@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * MDC 链路追踪过滤器
@@ -25,7 +24,7 @@ import java.util.UUID;
 @Component
 public class MdcTraceFilter extends OncePerRequestFilter {
 
-    private static final String HEADER_TRACE_ID = "X-Trace-Id";
+    private static final String HEADER_TRACE_ID = "X-TraceId";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
