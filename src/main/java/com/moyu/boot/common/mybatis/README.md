@@ -1,6 +1,4 @@
-## 数据组件
-authZ = Authorization 授权权限  
-菜单权限、接口鉴权、角色RBAC
+## mybatis-plus组件
 
 ### 功能
 * `MyBatis-Plus`基础配置
@@ -9,4 +7,4 @@ authZ = Authorization 授权权限
 * 提供了编程式数据权限处理工具
 
 ### 说明
-使用`MyBatis-Plus`组件，数据库类型无关
+使用`MyBatis-Plus`组件
