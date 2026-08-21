@@ -1,6 +1,5 @@
 package com.moyu.boot.system.constant;
 
-
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 
