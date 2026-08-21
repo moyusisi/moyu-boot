@@ -15,7 +15,6 @@ import java.util.List;
  * @author shisong
  * @since 2025-01-24
  */
-
 @Getter
 @Setter
 @Configuration
