@@ -64,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .username(sysUser.getAccount())
                 .name(sysUser.getName())
                 .orgCode(sysUser.getOrgCode())
-                // 角色集合(默认角色+直接拥有的角色)
+                // 角色集合(默认岗位=直接拥有的角色)
                 .roles(roleSet)
                 // 权限标识集合(仅接口,无菜单)
                 .perms(sysRoleService.rolePerms(roleSet))
