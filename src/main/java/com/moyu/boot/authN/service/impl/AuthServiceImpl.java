@@ -6,7 +6,7 @@ import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.authN.service.AuthService;
 import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.authZ.model.LoginUser;
-import com.moyu.boot.common.authZ.service.PasswordEncoder;
+import com.moyu.boot.system.service.PasswordEncoder;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
