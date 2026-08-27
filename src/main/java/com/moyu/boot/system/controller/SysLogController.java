@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 系统日志控制器
@@ -31,16 +30,6 @@ public class SysLogController {
 
     @Resource
     private SysLogService sysLogService;
-
-    /**
-     * 系统日志列表
-     */
-//    @SaCheckPermission("sys:log:list")
-    @PostMapping("/list")
-    public Result<List<SysLogVO>> list(@RequestBody SysLogParam param) {
-        List<SysLogVO> list = sysLogService.list(param);
-        return Result.success(list);
-    }
 
     /**
      * 系统日志分页列表

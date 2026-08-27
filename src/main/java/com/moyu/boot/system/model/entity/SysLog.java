@@ -1,6 +1,5 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
 import com.mybatisflex.annotation.Table;
@@ -17,14 +16,12 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@TableName("sys_log")
 @Table(value = "sys_group", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysLog {
 
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
      * 日志名称
@@ -95,19 +92,16 @@ public class SysLog {
     /**
      * 删除标志（0未删除  1已删除）
      */
-    @TableField(fill = FieldFill.INSERT)
     private Integer deleted;
 
     /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 创建人
      */
-    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
 }
