@@ -13,15 +13,11 @@ import com.alibaba.druid.sql.ast.SQLStatement;
 import com.alibaba.druid.sql.ast.statement.SQLColumnDefinition;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.util.JdbcConstants;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.CaseFormat;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
-import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.BaseEntity;
+import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codeGen.config.CodegenProperties;
 import com.moyu.boot.plugin.codeGen.enums.FormTypeEnum;
 import com.moyu.boot.plugin.codeGen.enums.JavaTypeEnum;
@@ -38,6 +34,9 @@ import com.moyu.boot.plugin.codeGen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codeGen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codeGen.service.GenConfigService;
 import com.moyu.boot.plugin.codeGen.service.GenFieldService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -81,32 +80,31 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     @Override
     public PageData<GenConfig> pageList(GenConfigParam param) {
         // 查询条件
-        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
+        QueryWrapper queryWrapper = QueryWrapper.create()
                 // 关键词搜索(表表名、表描述)
-                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableName, param.getSearchKey())
-                .or()
-                .like(StrUtil.isNotBlank(param.getSearchKey()), GenConfig::getTableComment, param.getSearchKey())
-                .orderByDesc(GenConfig::getUpdateTime);
+                .like(GenConfig::getTableName, param.getSearchKey(), StrUtil.isNotBlank(param.getSearchKey()))
+                .or(qw -> qw.like(GenConfig::getTableComment, param.getSearchKey()), StrUtil.isNotBlank(param.getSearchKey()))
+                .orderBy(GenConfig::getUpdateTime, false);
         // 分页查询
-        Page<GenConfig> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<GenConfig> rolePage = this.page(page, queryWrapper);
-        return new PageData<>(rolePage.getTotal(), rolePage.getRecords());
+        Page<GenConfig> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<GenConfig> voPage = this.pageAs(page, queryWrapper, GenConfig.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
     public GenConfigInfo configDetail(GenConfigParam param) {
         // 查询表生成配置
-        LambdaQueryWrapper<GenConfig> queryWrapper = Wrappers.lambdaQuery(GenConfig.class)
-                .eq(ObjectUtil.isNotEmpty(param.getId()), GenConfig::getId, param.getId())
-                .eq(ObjectUtil.isNotEmpty(param.getTableName()), GenConfig::getTableName, param.getTableName());
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .eq(GenConfig::getId, param.getId(), ObjectUtil.isNotEmpty(param.getId()))
+                .eq(GenConfig::getTableName, param.getTableName(), ObjectUtil.isNotEmpty(param.getTableName()));
         // id、tableName 均为唯一标识
         GenConfig genConfig = this.getOne(queryWrapper);
         if (genConfig == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 字段配置
-        List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
-                .eq(GenField::getTableId, genConfig.getId()).orderByAsc(GenField::getFieldSort));
+        List<GenField> fieldList = genFieldService.list(QueryWrapper.create()
+                .eq(GenField::getTableId, genConfig.getId()).orderBy(GenField::getFieldSort, true));
         // 组装VO
         return buildGenConfigInfo(genConfig, fieldList);
     }
@@ -140,7 +138,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // 删除实体配置
         this.removeByIds(idSet);
         // 删除字段配置
-        genFieldService.remove(Wrappers.lambdaQuery(GenField.class).in(GenField::getTableId, idSet));
+        genFieldService.remove(QueryWrapper.create().in(GenField::getTableId, idSet));
     }
 
     @Override
@@ -150,7 +148,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         param.setExcludeTables(codegenProperties.getExcludeTables());
         //  分页查询
         Page<TableMetaData> tablePage = dataBaseMapper.getTablePage(page, param);
-        return new PageData<>(tablePage.getTotal(), tablePage.getRecords());
+        return new PageData<>(tablePage.getTotalRow(), tablePage.getRecords());
     }
 
     @Override
@@ -258,7 +256,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
                 }
             }
             // 删除字段配置
-            genFieldService.remove(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
+            genFieldService.remove(QueryWrapper.create().eq(GenField::getTableId, genConfig.getId()));
             // 写入新字段配置
             genFieldService.saveBatch(genFieldList);
         }
@@ -267,7 +265,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     @Override
     public List<CodePreviewVO> previewCode(GenConfigParam param) {
         // 查询表配置
-        GenConfig genConfig = this.getOne(Wrappers.lambdaQuery(GenConfig.class).eq(GenConfig::getId, param.getId()));
+        GenConfig genConfig = this.getOne(QueryWrapper.create().eq(GenConfig::getId, param.getId()));
         if (genConfig == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
@@ -278,7 +276,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
     public byte[] downloadZip(GenConfigParam param) {
         Assert.isTrue(param.getIds().size() <= 10, "下载内容过多，每次生成不能超过10个");
         // 查询表配置
-        List<GenConfig> genConfigList = this.list(Wrappers.lambdaQuery(GenConfig.class).in(GenConfig::getId, param.getIds()));
+        List<GenConfig> genConfigList = this.list(QueryWrapper.create().in(GenConfig::getId, param.getIds()));
         if (CollectionUtils.isEmpty(genConfigList)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "暂无数据");
         }
@@ -306,7 +304,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         // code代码列表
         List<CodePreviewVO> codeList = new ArrayList<>();
         // 字段配置
-        List<GenField> fieldList = genFieldService.list(Wrappers.lambdaQuery(GenField.class).eq(GenField::getTableId, genConfig.getId()));
+        List<GenField> fieldList = genFieldService.list(QueryWrapper.create().eq(GenField::getTableId, genConfig.getId()));
         if (CollectionUtil.isEmpty(fieldList)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }

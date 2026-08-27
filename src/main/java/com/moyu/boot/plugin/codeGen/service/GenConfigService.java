@@ -1,18 +1,18 @@
 package com.moyu.boot.plugin.codeGen.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.codeGen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codeGen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codeGen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codeGen.model.vo.GenConfigInfo;
 import com.moyu.boot.plugin.codeGen.model.vo.TableMetaData;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 import java.util.Set;
 
 /**
- * 针对表【gen_config(代码生成实体配置表)】的数据库操作Service
+ * 代码生成实体配置表服务类Service
  *
  * @author shisong
  * @since 2025-09-14
