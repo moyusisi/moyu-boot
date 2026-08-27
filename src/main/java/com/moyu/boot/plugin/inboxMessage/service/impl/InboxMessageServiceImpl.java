@@ -4,12 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.inboxMessage.mapper.InboxMessageMapper;
@@ -22,7 +20,10 @@ import com.moyu.boot.plugin.inboxMessage.service.InboxMessageService;
 import com.moyu.boot.plugin.inboxMessage.service.UserMessageService;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysUserService;
+import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -54,57 +55,66 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     @Override
     public List<InboxMessageVO> list(InboxMessageParam param) {
         // 查询条件
-        LambdaQueryWrapper<InboxMessage> queryWrapper = Wrappers.lambdaQuery(InboxMessage.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定code查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), InboxMessage::getCode, param.getCode());
+        queryWrapper.eq(InboxMessage::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定title查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getTitle()), InboxMessage::getTitle, param.getTitle());
+        queryWrapper.like(InboxMessage::getTitle, param.getTitle(), ObjectUtil.isNotEmpty(param.getTitle()));
         // 指定content查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getContent()), InboxMessage::getContent, param.getContent());
+        queryWrapper.like(InboxMessage::getContent, param.getContent(), ObjectUtil.isNotEmpty(param.getContent()));
         // 指定sendTime查询
         Date start = param.getSendTime1();
         Date end = param.getSendTime2();
         // 范围查询-起始
-        queryWrapper.ge(ObjectUtil.isNotEmpty(start), InboxMessage::getSendTime, start);
+        queryWrapper.ge(InboxMessage::getSendTime, start, ObjectUtil.isNotEmpty(start));
         // 范围查询-截止
-        queryWrapper.le(ObjectUtil.isNotEmpty(end), InboxMessage::getSendTime, end);
+        queryWrapper.le(InboxMessage::getSendTime, end, ObjectUtil.isNotEmpty(end));
         // 仅查询未删除的
         queryWrapper.eq(InboxMessage::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderByDesc(InboxMessage::getSendTime);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(InboxMessage::getSendTime, false);
+        }
         // 查询
-        List<InboxMessage> inboxMessageList = this.list(queryWrapper);
-        // 转换为voList
-        List<InboxMessageVO> voList = buildDevMessageVOList(inboxMessageList);
+        List<InboxMessageVO> voList = this.listAs(queryWrapper, InboxMessageVO.class);
         return voList;
     }
 
     @Override
     public PageData<InboxMessageVO> pageList(InboxMessageParam param) {
         // 查询条件
-        LambdaQueryWrapper<InboxMessage> queryWrapper = Wrappers.lambdaQuery(InboxMessage.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定code查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), InboxMessage::getCode, param.getCode());
+        queryWrapper.eq(InboxMessage::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定title查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getTitle()), InboxMessage::getTitle, param.getTitle());
+        queryWrapper.like(InboxMessage::getTitle, param.getTitle(), ObjectUtil.isNotEmpty(param.getTitle()));
         // 指定content查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getContent()), InboxMessage::getContent, param.getContent());
+        queryWrapper.like(InboxMessage::getContent, param.getContent(), ObjectUtil.isNotEmpty(param.getContent()));
         // 指定sendTime查询
         Date start = param.getSendTime1();
         Date end = param.getSendTime2();
         // 范围查询-起始
-        queryWrapper.ge(ObjectUtil.isNotEmpty(start), InboxMessage::getSendTime, start);
+        queryWrapper.ge(InboxMessage::getSendTime, start, ObjectUtil.isNotEmpty(start));
         // 范围查询-截止
-        queryWrapper.le(ObjectUtil.isNotEmpty(end), InboxMessage::getSendTime, end);
+        queryWrapper.le(InboxMessage::getSendTime, end, ObjectUtil.isNotEmpty(end));
         // 仅查询未删除的
         queryWrapper.eq(InboxMessage::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderByDesc(InboxMessage::getSendTime);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(InboxMessage::getSendTime, false);
+        }
         // 分页查询
-        Page<InboxMessage> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<InboxMessage> devMessagePage = this.page(page, queryWrapper);
-        List<InboxMessageVO> voList = buildDevMessageVOList(devMessagePage.getRecords());
-        return new PageData<>(devMessagePage.getTotal(), voList);
+        Page<InboxMessageVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<InboxMessageVO> voPage = this.pageAs(page, queryWrapper, InboxMessageVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
@@ -149,10 +159,19 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     public void deleteByIds(InboxMessageParam param) {
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
+        // 删除时先查再删
+        Long count = this.count(QueryWrapper.create().in(InboxMessage::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
+        }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(InboxMessage.class).in(InboxMessage::getId, idSet).set(InboxMessage::getDeleted, 1));
+        UpdateChain.of(InboxMessage.class)
+                .set(InboxMessage::getDeleted, 1)
+                .where(InboxMessage::getId).in(idSet)
+                .update();
     }
 
     @Override
@@ -164,7 +183,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         // 补充消息title
         Map<String, InboxMessage> messageMap = new HashMap<>();
         Set<String> messageSet = pageData.getRecords().stream().map(UserMessageVO::getFromId).collect(Collectors.toSet());
-        this.list(Wrappers.lambdaQuery(InboxMessage.class).select(InboxMessage::getCode, InboxMessage::getTitle)
+        this.list(QueryWrapper.create().select(InboxMessage::getCode, InboxMessage::getTitle)
                         .in(InboxMessage::getCode, messageSet))
                 .forEach(e -> messageMap.put(e.getCode(), e));
         // 补充用户name
@@ -188,14 +207,14 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         String userId = LoginUserUtils.getUsername();
         Assert.notEmpty(userId, "用户ID不能为空");
         // 查询消息
-        InboxMessage inboxMessage = this.getOne(Wrappers.lambdaQuery(InboxMessage.class).eq(InboxMessage::getCode, param.getCode()));
+        InboxMessage inboxMessage = this.getOne(QueryWrapper.create().eq(InboxMessage::getCode, param.getCode()));
         if (inboxMessage == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
         // 转换为vo
         InboxMessageVO vo = BeanUtil.copyProperties(inboxMessage, InboxMessageVO.class);
         // 查询触达记录
-        UserMessage userMessage = userMessageService.getOne(Wrappers.lambdaQuery(UserMessage.class)
+        UserMessage userMessage = userMessageService.getOne(QueryWrapper.create()
                 .eq(UserMessage::getFromId, param.getCode()).eq(UserMessage::getUserId, userId));
         // 用户消息未读则更新为已读
         if (userMessage != null && userMessage.getHasRead() != 1) {
@@ -213,7 +232,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
     public Long unreadCount(InboxMessageParam param) {
         String userId = LoginUserUtils.getUsername();
         Assert.notEmpty(userId, "用户ID不能为空");
-        Long count = userMessageService.count(Wrappers.lambdaQuery(UserMessage.class)
+        Long count = userMessageService.count(QueryWrapper.create()
                 .eq(UserMessage::getUserId, userId)
                 .eq(UserMessage::getHasRead, 0)
                 .eq(UserMessage::getDeleted, 0)
@@ -232,7 +251,7 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         // 补充消息title
         Map<String, InboxMessage> messageMap = new HashMap<>();
         Set<String> messageSet = pageData.getRecords().stream().map(UserMessageVO::getFromId).collect(Collectors.toSet());
-        this.list(Wrappers.lambdaQuery(InboxMessage.class).select(InboxMessage::getCode, InboxMessage::getTitle)
+        this.list(QueryWrapper.create().select(InboxMessage::getCode, InboxMessage::getTitle)
                         .in(InboxMessage::getCode, messageSet))
                 .forEach(e -> messageMap.put(e.getCode(), e));
         // 补充title

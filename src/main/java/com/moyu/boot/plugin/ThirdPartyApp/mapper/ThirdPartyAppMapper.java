@@ -1,7 +1,7 @@
 package com.moyu.boot.plugin.ThirdPartyApp.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moyu.boot.plugin.ThirdPartyApp.model.entity.ThirdPartyApp;
+import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

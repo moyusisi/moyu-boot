@@ -1,7 +1,7 @@
 package com.moyu.boot.plugin.thirdPartyApi.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moyu.boot.plugin.thirdPartyApi.model.entity.ThirdPartyApi;
+import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

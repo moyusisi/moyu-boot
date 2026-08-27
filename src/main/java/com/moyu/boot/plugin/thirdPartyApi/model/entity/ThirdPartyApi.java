@@ -1,7 +1,9 @@
 package com.moyu.boot.plugin.thirdPartyApi.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.moyu.boot.common.core.model.BaseEntity;
+import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
+import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +17,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@TableName("third_party_api")
+@Table(value = "third_party_api", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class ThirdPartyApi extends BaseEntity {
 
     /**

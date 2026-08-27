@@ -10,10 +10,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -24,6 +20,10 @@ import com.moyu.boot.plugin.ThirdPartyApp.model.entity.ThirdPartyApp;
 import com.moyu.boot.plugin.ThirdPartyApp.model.param.ThirdPartyAppParam;
 import com.moyu.boot.plugin.ThirdPartyApp.model.vo.ThirdPartyAppVO;
 import com.moyu.boot.plugin.ThirdPartyApp.service.ThirdPartyAppService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -45,57 +45,52 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
     @Override
     public List<ThirdPartyAppVO> list(ThirdPartyAppParam param) {
         // 查询条件
-        QueryWrapper<ThirdPartyApp> queryWrapper = Wrappers.query(ThirdPartyApp.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定appCode查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppCode()), ThirdPartyApp::getAppCode, param.getAppCode());
+        queryWrapper.like(ThirdPartyApp::getAppCode, param.getAppCode(), ObjectUtil.isNotEmpty(param.getAppCode()));
         // 指定appName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppName()), ThirdPartyApp::getAppName, param.getAppName());
+        queryWrapper.like(ThirdPartyApp::getAppName, param.getAppName(), ObjectUtil.isNotEmpty(param.getAppName()));
         // 指定digestAlgo查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getDigestAlgo()), ThirdPartyApp::getDigestAlgo, param.getDigestAlgo());
+        queryWrapper.eq(ThirdPartyApp::getDigestAlgo, param.getDigestAlgo(), ObjectUtil.isNotEmpty(param.getDigestAlgo()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(ThirdPartyApp::getDeleted, 0);
+        queryWrapper.eq(ThirdPartyApp::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByDesc(ThirdPartyApp::getUpdateTime);
+            queryWrapper.orderBy(ThirdPartyApp::getUpdateTime, false);
         }
         // 查询
-        List<ThirdPartyApp> thirdPartyAppList = this.list(queryWrapper);
-        // 转换为voList
-        List<ThirdPartyAppVO> voList = buildThirdPartyAppVOList(thirdPartyAppList);
+        List<ThirdPartyAppVO> voList = this.listAs(queryWrapper, ThirdPartyAppVO.class);
         return voList;
     }
 
     @Override
     public PageData<ThirdPartyAppVO> pageList(ThirdPartyAppParam param) {
         // 查询条件
-        QueryWrapper<ThirdPartyApp> queryWrapper = Wrappers.query(ThirdPartyApp.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定appCode查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppCode()), ThirdPartyApp::getAppCode, param.getAppCode());
+        queryWrapper.like(ThirdPartyApp::getAppCode, param.getAppCode(), ObjectUtil.isNotEmpty(param.getAppCode()));
         // 指定appName查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getAppName()), ThirdPartyApp::getAppName, param.getAppName());
+        queryWrapper.like(ThirdPartyApp::getAppName, param.getAppName(), ObjectUtil.isNotEmpty(param.getAppName()));
         // 指定digestAlgo查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getDigestAlgo()), ThirdPartyApp::getDigestAlgo, param.getDigestAlgo());
+        queryWrapper.eq(ThirdPartyApp::getDigestAlgo, param.getDigestAlgo(), ObjectUtil.isNotEmpty(param.getDigestAlgo()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(ThirdPartyApp::getDeleted, 0);
+        queryWrapper.eq(ThirdPartyApp::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByDesc(ThirdPartyApp::getUpdateTime);
+            queryWrapper.orderBy(ThirdPartyApp::getUpdateTime, false);
         }
         // 分页查询
-        Page<ThirdPartyApp> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<ThirdPartyApp> thirdPartyAppPage = this.page(page, queryWrapper);
-        List<ThirdPartyAppVO> voList = buildThirdPartyAppVOList(thirdPartyAppPage.getRecords());
-        return new PageData<>(thirdPartyAppPage.getTotal(), voList);
+        Page<ThirdPartyAppVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<ThirdPartyAppVO> voPage = this.pageAs(page, queryWrapper, ThirdPartyAppVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
@@ -147,15 +142,18 @@ public class ThirdPartyAppServiceImpl extends ServiceImpl<ThirdPartyAppMapper, T
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        List<ThirdPartyApp> toDelList = this.listByIds(idSet);
-        // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), toDelList.size())) {
+        Long count = this.count(QueryWrapper.create().in(ThirdPartyApp::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(ThirdPartyApp.class).in(ThirdPartyApp::getId, idSet).set(ThirdPartyApp::getDeleted, 1));
+        UpdateChain.of(ThirdPartyApp.class)
+                .set(ThirdPartyApp::getDeleted, 1)
+                .where(ThirdPartyApp::getId).in(idSet)
+                .update();
     }
 
     @Override

@@ -3,9 +3,8 @@ package com.moyu.boot.plugin.ThirdPartyApp.config;
 import cn.dev33.satoken.sign.config.SaSignConfig;
 import cn.dev33.satoken.sign.template.SaSignMany;
 import cn.dev33.satoken.sign.template.SaSignTemplate;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.moyu.boot.plugin.ThirdPartyApp.model.entity.ThirdPartyApp;
+import com.mybatisflex.core.query.QueryChain;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +23,8 @@ public class SaSignInitRunner implements CommandLineRunner {
         // 全局覆盖查找签名配置的静态方法，全局生效
         SaSignMany.findSaSignConfigMethod = (appId -> {
             // DB读取
-            ThirdPartyApp thirdPartyApp = Db.getOne(Wrappers.lambdaQuery(ThirdPartyApp.class)
-                    .eq(ThirdPartyApp::getAppCode, appId));
+            ThirdPartyApp thirdPartyApp = QueryChain.of(ThirdPartyApp.class)
+                    .eq(ThirdPartyApp::getAppCode, appId).one();
             if (thirdPartyApp == null) {
                 return null;
             }
