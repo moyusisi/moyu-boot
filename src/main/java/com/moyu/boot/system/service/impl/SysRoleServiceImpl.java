@@ -121,8 +121,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         queryWrapper.orderBy(SysRole::getSortNum, true);
         // 分页查询
         Page<SysRoleVO> page = Page.of(param.getPageNum(), param.getPageSize());
-        Page<SysRoleVO> rolePage = this.pageAs(page, queryWrapper, SysRoleVO.class);
-        return new PageData<>(rolePage.getTotalRow(), rolePage.getRecords());
+        Page<SysRoleVO> voPage = this.pageAs(page, queryWrapper, SysRoleVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override

@@ -197,7 +197,7 @@ public class UserCenterServiceImpl implements UserCenterService {
             roleSet = sysRoleService.userRoles(username);
         } else {
             // 通过唯一标识code查询group
-            group = sysGroupService.getOne(Wrappers.lambdaQuery(SysGroup.class).eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
+            group = sysGroupService.getOne(QueryWrapper.create().eq(SysGroup::getCode, groupCode).eq(SysGroup::getDeleted, 0));
             if (group == null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "切换失败，未查到岗位数据");
             }
