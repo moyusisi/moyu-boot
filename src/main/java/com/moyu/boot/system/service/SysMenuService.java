@@ -1,11 +1,11 @@
 package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysMenu;
 import com.moyu.boot.system.model.param.SysMenuParam;
 import com.moyu.boot.system.model.vo.SysMenuVO;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 

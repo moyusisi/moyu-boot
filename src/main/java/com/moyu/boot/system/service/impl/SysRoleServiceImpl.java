@@ -206,9 +206,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // role拥有的资源权限
         Set<String> permSet = sysRelationService.rolePerm(roleSet);
         // 查询所有模块的所有菜单(不含按钮)
-        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
-                .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule()));
+        List<SysMenu> menuList = sysMenuService.list(QueryWrapper.create()
+                .eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()))
+                .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode()));
 
         // 过滤出role有权限的菜单转为treeNode
         List<TreeNode<String>> nodeList = new ArrayList<>();
@@ -253,8 +253,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<Tree<String>> menuTreeForGrant(SysRoleParam param) {
         // 查询模块所有资源(包括菜单按钮)
-        List<SysMenu> menuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule()));
+        List<SysMenu> menuList = sysMenuService.list(QueryWrapper.create()
+                .eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule())));
 
         // role已经拥有的资源权限
         Set<String> permSet = sysRelationService.rolePerm(param.getCode());
@@ -379,7 +379,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public void grantMenu(SysRoleParam roleParam) {
         // 本模块所有可授权内容(菜单、按钮、链接)
-        List<SysMenu> moduleMenuList = sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+        List<SysMenu> moduleMenuList = sysMenuService.list(QueryWrapper.create()
                 .select(SysMenu::getCode)
                 // 指定模块
                 .eq(SysMenu::getModule, roleParam.getModule())
@@ -561,15 +561,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(menuSet)) {
             return permSet;
         }
-        // 获取资源上的权限标识
-        sysMenuService.list(Wrappers.lambdaQuery(SysMenu.class)
+        // 获取menu上的权限标识
+        List<String> permList = this.objListAs(QueryWrapper.create().select(SysMenu::getPermission)
                 .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
-                .in(SysMenu::getCode, menuSet)).forEach(e -> {
-            if (ObjectUtil.isNotEmpty(e.getPermission())) {
-                permSet.add(e.getPermission());
-            }
-        });
-        return permSet;
+                .in(SysMenu::getCode, menuSet), String.class);
+        return new HashSet<>(permList);
     }
 
     @Override
@@ -699,21 +695,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             scopeSet.addAll(ObjectUtil.defaultIfNull(scopeExt.getScopeList(), new ArrayList<>()));
         }
         return info;
-    }
-
-    /**
-     * 实体对象生成展示对象 entityList -> voList
-     */
-    private List<SysRoleVO> buildSysRoleVOList(List<SysRole> entityList) {
-        List<SysRoleVO> voList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(entityList)) {
-            return voList;
-        }
-        for (SysRole entity : entityList) {
-            SysRoleVO vo = BeanUtil.copyProperties(entity, SysRoleVO.class);
-            voList.add(vo);
-        }
-        return voList;
     }
 }
 

@@ -10,11 +10,6 @@ import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,11 +24,15 @@ import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysMenuMapper;
 import com.moyu.boot.system.model.entity.SysMenu;
 import com.moyu.boot.system.model.entity.SysRelation;
+import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.ext.MenuExt;
 import com.moyu.boot.system.model.param.SysMenuParam;
 import com.moyu.boot.system.model.vo.SysMenuVO;
 import com.moyu.boot.system.service.SysMenuService;
 import com.moyu.boot.system.service.SysRelationService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -42,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -61,91 +61,89 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<Tree<String>> tree(SysMenuParam param) {
         // 查询所有资源(可指定module)
-        List<SysMenu> resourceList = this.list(Wrappers.lambdaQuery(SysMenu.class)
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule()));
+        List<SysMenu> menuList = this.list(QueryWrapper.create()
+                .eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule())));
         // 构建树中包含记录的所有字段
         String rootId = ObjectUtil.isEmpty(param.getModule()) ? SysConstants.ROOT_NODE_ID : param.getModule();
-        return buildTree(resourceList, rootId);
+        return buildTree(menuList, rootId);
     }
 
     @Override
     public List<SysMenuVO> list(SysMenuParam param) {
         // 查询条件
-        QueryWrapper<SysMenu> queryWrapper = Wrappers.query(SysMenu.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定模块
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule());
+        queryWrapper.eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()));
         // 指定菜单类型 menuType
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getMenuType()), SysMenu::getMenuType, param.getMenuType());
+        queryWrapper.eq(SysMenu::getMenuType, param.getMenuType(), ObjectUtil.isNotEmpty(param.getMenuType()));
         // 指定code查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCode()), SysMenu::getCode, param.getCode());
+        queryWrapper.eq(SysMenu::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定name查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysMenu::getName, param.getName());
+        queryWrapper.like(SysMenu::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定path查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysMenu::getPath, param.getPath());
+        queryWrapper.like(SysMenu::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
         // 指定component查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getComponent()), SysMenu::getComponent, param.getComponent());
+        queryWrapper.like(SysMenu::getComponent, param.getComponent(), ObjectUtil.isNotEmpty(param.getComponent()));
         // 指定permission查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPermission()), SysMenu::getPermission, param.getPermission());
+        queryWrapper.like(SysMenu::getPermission, param.getPermission(), ObjectUtil.isNotEmpty(param.getPermission()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysMenu::getDeleted, 0);
+        queryWrapper.eq(SysMenu::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByAsc(SysMenu::getSortNum);
+            queryWrapper.orderBy(SysRole::getSortNum, true);
         }
         // 查询
-        List<SysMenu> resourceList = this.list(queryWrapper);
+        List<SysMenu> menuList = this.list(queryWrapper);
         // 转换为voList
-        List<SysMenuVO> voList = buildSysResourceVOList(resourceList);
+        List<SysMenuVO> voList = buildSysResourceVOList(menuList);
         return voList;
     }
 
     @Override
     public PageData<SysMenuVO> pageList(SysMenuParam param) {
         // 查询条件
-        QueryWrapper<SysMenu> queryWrapper = Wrappers.query(SysMenu.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定模块
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule());
+        queryWrapper.eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()));
         // 指定菜单类型 menuType
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getMenuType()), SysMenu::getMenuType, param.getMenuType());
+        queryWrapper.eq(SysMenu::getMenuType, param.getMenuType(), ObjectUtil.isNotEmpty(param.getMenuType()));
         // 指定code查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getCode()), SysMenu::getCode, param.getCode());
+        queryWrapper.eq(SysMenu::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定name查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysMenu::getName, param.getName());
+        queryWrapper.like(SysMenu::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定path查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysMenu::getPath, param.getPath());
+        queryWrapper.like(SysMenu::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
         // 指定component查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getComponent()), SysMenu::getComponent, param.getComponent());
+        queryWrapper.like(SysMenu::getComponent, param.getComponent(), ObjectUtil.isNotEmpty(param.getComponent()));
         // 指定permission查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPermission()), SysMenu::getPermission, param.getPermission());
+        queryWrapper.like(SysMenu::getPermission, param.getPermission(), ObjectUtil.isNotEmpty(param.getPermission()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysMenu::getDeleted, 0);
+        queryWrapper.eq(SysMenu::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByAsc(SysMenu::getSortNum);
+            queryWrapper.orderBy(SysRole::getSortNum, true);
         }
         // 分页查询
         Page<SysMenu> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysMenu> resourcePage = this.page(page, queryWrapper);
-        List<SysMenuVO> voList = buildSysResourceVOList(resourcePage.getRecords());
-        return new PageData<>(resourcePage.getTotal(), voList);
+        Page<SysMenu> menuPage = this.page(page, queryWrapper);
+        List<SysMenuVO> voList = buildSysResourceVOList(menuPage.getRecords());
+        return new PageData<>(menuPage.getTotalRow(), voList);
     }
 
     @Override
     public SysMenuVO detail(SysMenuParam param) {
         // 查询条件 id、code均为唯一标识
-        LambdaQueryWrapper<SysMenu> queryWrapper = Wrappers.lambdaQuery(SysMenu.class);
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getId()), SysMenu::getId, param.getId());
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysMenu::getCode, param.getCode());
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        queryWrapper.eq(SysMenu::getId, param.getId(), ObjectUtil.isNotEmpty(param.getId()));
+        queryWrapper.eq(SysMenu::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         SysMenu entity = this.getOne(queryWrapper);
         if (entity == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
@@ -161,7 +159,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 若指定了唯一编码code，则必须全局唯一
         if (!Strings.isNullOrEmpty(param.getCode())) {
             // 查询指定code
-            SysMenu menu = this.getOne(Wrappers.lambdaQuery(SysMenu.class)
+            SysMenu menu = this.getOne(QueryWrapper.create()
                     .eq(SysMenu::getCode, param.getCode())
                     .eq(SysMenu::getDeleted, 0));
             if (menu != null) {
@@ -172,7 +170,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         if (!Objects.equals(MenuTypeEnum.MODULE.getCode(), param.getMenuType())) {
             Assert.notEmpty(param.getParentCode(), "上级菜单parentCode不能为空");
             // 查询所选父节点
-            SysMenu parentMenu = this.getOne(new LambdaQueryWrapper<SysMenu>()
+            SysMenu parentMenu = this.getOne(QueryWrapper.create()
                     .eq(SysMenu::getCode, param.getParentCode())
                     .eq(SysMenu::getDeleted, 0));
             if (parentMenu == null) {
@@ -216,13 +214,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 待删除节点的code集合(要删除的节点下还有其他子节点则无法删除)
         Set<String> codeSet = param.getCodes();
         // 查询codeSet+子节点
-        LambdaQueryWrapper<SysMenu> queryWrapper = Wrappers.lambdaQuery(SysMenu.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 查询部分字段
         queryWrapper.select(SysMenu::getId, SysMenu::getCode, SysMenu::getParentCode);
         // 指定模块(有模块的情况下要过滤)
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule());
+        queryWrapper.eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()));
         // 指定codeSet+其子节点
-        queryWrapper.and(e -> e.in(SysMenu::getCode, codeSet).or().in(SysMenu::getParentCode, codeSet));
+        queryWrapper.and((Consumer<QueryWrapper>) qw -> qw.where(SysMenu::getCode).in(codeSet).or(SysMenu::getParentCode).in(codeSet));
         queryWrapper.eq(SysMenu::getDeleted, 0);
         // 所有的菜单
         List<SysMenu> allList = this.list(queryWrapper);
@@ -239,7 +237,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败,未查到指定数据");
         }
         // 物理删除
-        removeByIds(idSet);
+        this.removeByIds(idSet);
         // 资源删除时,对应的role_has_resource也要删除
         clearRoleMenu(codeSet);
     }
@@ -263,15 +261,13 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     @Override
     public List<Tree<String>> menuTreeSelector(SysMenuParam param) {
         // 查询所有菜单
-        List<SysMenu> menuList = this.list(new LambdaQueryWrapper<SysMenu>()
-                // 查询部分字段
-                .select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
+        List<SysMenu> menuList = this.list(QueryWrapper.create().select(SysMenu::getCode, SysMenu::getParentCode, SysMenu::getName, SysMenu::getSortNum, SysMenu::getId)
                 // 指定模块
-                .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule())
+                .eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()))
                 // 不能是按钮
                 .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleted, 0)
-                .orderByAsc(SysMenu::getSortNum)
+                .orderBy(SysMenu::getSortNum, true)
         );
         // 构建的树中仅包含部分字段
         String rootId = ObjectUtil.isEmpty(param.getModule()) ? SysConstants.ROOT_NODE_ID : param.getModule();

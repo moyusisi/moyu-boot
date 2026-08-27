@@ -1,27 +1,23 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
-import com.moyu.boot.system.enums.MenuTypeEnum;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 菜单权限表
+ * 菜单权限表(sys_menu)实体对象
  *
- * @TableName sys_menu
+ * @author moyusisi
+ * @since 2025-10-22
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_menu")
 @Table(value = "sys_menu", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysMenu extends BaseEntity {
@@ -29,7 +25,6 @@ public class SysMenu extends BaseEntity {
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
-    @TableId(value = "id", type = IdType.AUTO)
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
