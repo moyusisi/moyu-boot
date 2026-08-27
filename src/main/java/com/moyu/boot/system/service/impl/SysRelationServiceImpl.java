@@ -26,6 +26,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
 
     @Override
     public List<SysRelation> list(SysRelationParam param) {
+        // 查询条件
         QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定code查询
         queryWrapper.eq(SysRelation::getObjectId, param.getObjectId(), ObjectUtil.isNotEmpty(param.getObjectId()));

@@ -1,18 +1,19 @@
 package com.moyu.boot.system.service;
 
 import cn.hutool.core.lang.tree.Tree;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.model.vo.SysOrgVO;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 
 /**
+ * 组织机构服务类Service
+ *
  * @author shisong
- * @description 针对表【sys_org(组织机构表)】的数据库操作Service
- * @createDate 2024-11-26 09:55:33
+ * @since 2024-11-26 09:55:33
  */
 public interface SysOrgService extends IService<SysOrg> {
 
@@ -71,7 +72,7 @@ public interface SysOrgService extends IService<SysOrg> {
     Tree<String> singleTree();
 
     /**
-     * 通过codes删除，会集联删除树的所有节点
+     * 通过codes删除，会集联删除树的所有节点(包括子节点)
      */
     void deleteTree(SysOrgParam param);
 

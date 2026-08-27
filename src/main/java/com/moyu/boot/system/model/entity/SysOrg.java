@@ -1,6 +1,5 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
@@ -10,13 +9,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 组织机构表
+ * 组织机构表(sys_org)实体对象
  *
- * @TableName sys_org
+ * @author moyusisi
+ * @since 2025-10-22
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@TableName(value = "sys_org")
 @Table(value = "sys_org", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysOrg extends BaseEntity {
