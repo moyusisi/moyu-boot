@@ -413,7 +413,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
             // 移除本次删除的权限
             if (ObjectUtil.isNotEmpty(toDeleteSet)) {
-                sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
+                sysRelationService.remove(QueryWrapper.create()
                         .eq(SysRelation::getObjectId, roleParam.getCode())
                         .in(SysRelation::getTargetId, toDeleteSet));
             }
@@ -444,7 +444,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Map<String, PermScopeInfo> scopeMap = new HashMap<>();
         permScopeList.forEach(e -> scopeMap.put(e.getCode(), e));
         // 查询角色在本模块的已有权限(role+permCodeSet)
-        List<SysRelation> relationList = sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+        List<SysRelation> relationList = sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .eq(SysRelation::getObjectId, param.getCode())
                 .in(SysRelation::getTargetId, scopeMap.keySet()));
@@ -472,7 +472,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             relation.setUpdateBy(null);
             relation.setUpdateTime(date);
         });
-        sysRelationService.updateBatchById(relationList);
+        sysRelationService.updateBatch(relationList);
     }
 
     @Override

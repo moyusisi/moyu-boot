@@ -10,10 +10,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 角色信息实体对象
+ * 角色信息表(sys_role)实体对象
  *
  * @author moyusisi
- * @TableName sys_role
+ * @since 2025-10-22
  */
 @Getter
 @Setter

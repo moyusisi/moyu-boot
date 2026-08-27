@@ -1,16 +1,17 @@
 package com.moyu.boot.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.param.SysRelationParam;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 import java.util.Set;
 
 /**
+ * 用户角色权限关系服务类Service
+ *
  * @author shisong
- * @description 针对表【sys_relation(用户角色权限关系表)】的数据库操作Service
- * @createDate 2024-12-16 21:15:35
+ * @since 2024-12-16 21:15:35
  */
 public interface SysRelationService extends IService<SysRelation> {
 

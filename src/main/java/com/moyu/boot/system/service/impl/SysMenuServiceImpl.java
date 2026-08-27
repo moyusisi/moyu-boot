@@ -24,16 +24,16 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.constant.SysConstants;
-import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.MenuTypeEnum;
+import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysMenuMapper;
-import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysMenu;
+import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.ext.MenuExt;
 import com.moyu.boot.system.model.param.SysMenuParam;
 import com.moyu.boot.system.model.vo.SysMenuVO;
-import com.moyu.boot.system.service.SysRelationService;
 import com.moyu.boot.system.service.SysMenuService;
+import com.moyu.boot.system.service.SysRelationService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -383,7 +383,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return;
         }
         // 删除指定menuCode 的 ROLE_HAS_MENU
-        sysRelationService.remove(Wrappers.lambdaQuery(SysRelation.class)
+        sysRelationService.remove(com.mybatisflex.core.query.QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM)
                 .in(SysRelation::getTargetId, codeSet));
     }

@@ -325,7 +325,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         Set<String> oldUserSet = new HashSet<>();
         Set<String> otherGroupUserSet = new HashSet<>();
         // 查询指定group关联的的user，放入oldSet
-        sysRelationService.list(Wrappers.lambdaQuery(SysRelation.class)
+        sysRelationService.list(QueryWrapper.create()
                 .in(SysRelation::getObjectId, userSet)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_GROUP.getCode())
         ).forEach(e -> {
