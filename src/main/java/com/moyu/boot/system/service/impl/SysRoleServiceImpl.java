@@ -310,7 +310,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getObjectId, param.getCode())
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
-                .eq(SysRelation::getDeleted, 0)
         ).forEach(e -> {
             permMap.put(e.getTargetId(), e);
         });
