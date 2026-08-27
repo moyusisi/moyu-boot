@@ -52,5 +52,9 @@ public class SysConfig extends BaseEntity {
      * 备注
      */
     private String remark;
+    /**
+     * 删除标志（0未删除  1已删除）
+     */
+    private Integer deleted;
 
 }

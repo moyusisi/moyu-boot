@@ -94,4 +94,9 @@ public class SysMenu extends BaseEntity {
      */
     private String remark;
 
+    /**
+     * 删除标志（0未删除  1已删除）
+     */
+    private Integer deleted;
+
 }

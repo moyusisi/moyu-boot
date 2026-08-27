@@ -2,6 +2,7 @@ package com.moyu.boot.plugin.inboxMessage.model.entity;
 
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
@@ -20,7 +21,6 @@ import java.util.Date;
 @Setter
 @Table(value = "user_message", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class UserMessage {
-
     /**
      * 主键id
      */
@@ -43,12 +43,11 @@ public class UserMessage {
      * 已读时间
      */
     private Date readTime;
-
     /**
      * 删除标志（0未删除  1已删除）
      */
+    @Column(isLogicDelete = true)
     private Integer deleted;
-
     /**
      * 接收时间
      */
