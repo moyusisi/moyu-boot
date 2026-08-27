@@ -55,7 +55,7 @@ public class GenConfigController {
     }
 
     /**
-     * 查询生成代码配置(无则生成)
+     * 查询生成代码配置
      */
     @SysLog(module = "system", business = "代码生成", value = "查询代码生成配置详情")
     @PostMapping("/detail")

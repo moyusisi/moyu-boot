@@ -36,6 +36,7 @@ import com.moyu.boot.plugin.codeGen.service.GenConfigService;
 import com.moyu.boot.plugin.codeGen.service.GenFieldService;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.row.DbChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -118,6 +119,7 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
         // 新生成的表配置
         GenConfig genConfig = buildGenTable(genConfigVO);
+        genConfig.setUpdateTime(new Date());
         this.saveOrUpdate(genConfig);
 
         // 组装实体
@@ -143,11 +145,24 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
 
     @Override
     public PageData<TableMetaData> tablePageList(GenConfigParam param) {
-        Page<TableMetaData> page = new Page<>(param.getPageNum(), param.getPageSize());
         // 设置排除的表
-        param.setExcludeTables(codegenProperties.getExcludeTables());
+        List<String> excludeList = new ArrayList<>(codegenProperties.getExcludeTables());
+        // 查已有的
+        List<String> tableList = this.listAs(QueryWrapper.create().select(GenConfig::getTableName), String.class);
+        excludeList.addAll(tableList);
         //  分页查询
-        Page<TableMetaData> tablePage = dataBaseMapper.getTablePage(page, param);
+        Page<TableMetaData> page = Page.of(param.getPageNum(), param.getPageSize());
+        String key = "%" + param.getSearchKey() + "%";
+        QueryWrapper queryWrapper = DbChain.table("information_schema", "tables").as("t1")
+                .select("t1.TABLE_NAME as tableName", "t1.TABLE_COMMENT as tableComment", "t1.CREATE_TIME as createTime", "t1.UPDATE_TIME as updateTime")
+                .where("t1.TABLE_SCHEMA = (SELECT DATABASE())")
+                .and("t1.table_type = 'BASE TABLE'")
+                .and(qw -> qw.or("t1.TABLE_NAME LIKE ?", key).or("t1.TABLE_COMMENT LIKE ?", key),
+                        ObjectUtil.isNotEmpty(param.getSearchKey()))
+                .notIn("t1.TABLE_NAME", excludeList, ObjectUtil.isNotEmpty(excludeList))
+                .orderBy("t1.CREATE_TIME", false);
+
+        Page<TableMetaData> tablePage = this.pageAs(page, queryWrapper, TableMetaData.class);
         return new PageData<>(tablePage.getTotalRow(), tablePage.getRecords());
     }
 
@@ -458,6 +473,8 @@ public class GenConfigServiceImpl extends ServiceImpl<GenConfigMapper, GenConfig
         genConfig.setModuleName(codegenProperties.getModuleName());
         genConfig.setAuthor(codegenProperties.getAuthor());
         genConfig.setSourceType("TABLE");
+        genConfig.setCreateTime(new Date());
+        genConfig.setUpdateTime(new Date());
         return genConfig;
     }
 
