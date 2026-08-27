@@ -20,9 +20,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -144,18 +142,4 @@ public class UserMessageServiceImpl extends ServiceImpl<UserMessageMapper, UserM
                 .update();
     }
 
-    /**
-     * 实体对象生成展示对象 entityList -> voList
-     */
-    private List<UserMessageVO> buildUserMessageVOList(List<UserMessage> entityList) {
-        List<UserMessageVO> voList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(entityList)) {
-            return voList;
-        }
-        for (UserMessage entity : entityList) {
-            UserMessageVO vo = BeanUtil.copyProperties(entity, UserMessageVO.class);
-            voList.add(vo);
-        }
-        return voList;
-    }
 }

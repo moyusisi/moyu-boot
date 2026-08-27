@@ -226,6 +226,7 @@
     </#if>
   </#list>
 </#if>
+      { field: 'remark', title: '备注', minWidth: 150 },
       { field: 'action', title: '操作', width: 100, slots: { default: 'action' } },
     ],
     // 工具栏配置

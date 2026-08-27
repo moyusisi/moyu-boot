@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,6 +26,12 @@ import java.util.Date;
 @Table(value = "sys_user", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysUser extends BaseEntity {
+
+    /**
+     * 主键id
+     */
+    @Id(keyType = KeyType.Auto)
+    private Long id;
 
     /**
      * 用户唯一标识
@@ -139,6 +148,12 @@ public class SysUser extends BaseEntity {
      * 状态（0正常 1停用）
      */
     private Integer status;
+
+    /**
+     * 删除标志（0未删除  1已删除）
+     */
+    @Column(isLogicDelete = true)
+    private Integer deleted;
 
     /**
      * 备注

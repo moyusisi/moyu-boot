@@ -3,6 +3,8 @@ package com.moyu.boot.plugin.thirdPartyApi.model.entity;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +21,11 @@ import java.util.Date;
 @Setter
 @Table(value = "third_party_api", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class ThirdPartyApi extends BaseEntity {
-
+    /**
+     * 主键id
+     */
+    @Id(keyType = KeyType.Auto)
+    private Long id;
     /**
      * 三方接口唯一标识
      */

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +21,12 @@ import lombok.EqualsAndHashCode;
 @Table(value = "sys_org", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysOrg extends BaseEntity {
+    /**
+     * 主键id
+     */
+    @Id(keyType = KeyType.Auto)
+    private Long id;
+
     /**
      * 父编码
      */

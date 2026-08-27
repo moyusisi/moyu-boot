@@ -1,11 +1,11 @@
 package com.moyu.boot.system.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,9 +23,8 @@ import lombok.EqualsAndHashCode;
 public class SysMenu extends BaseEntity {
     /**
      * 主键id
-     * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
-    @JsonSerialize(using = ToStringSerializer.class)
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**

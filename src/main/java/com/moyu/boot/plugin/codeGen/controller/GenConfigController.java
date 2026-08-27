@@ -11,7 +11,7 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.codeGen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codeGen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codeGen.model.vo.CodePreviewVO;
-import com.moyu.boot.plugin.codeGen.model.vo.GenConfigInfo;
+import com.moyu.boot.plugin.codeGen.model.vo.GenConfigVO;
 import com.moyu.boot.plugin.codeGen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codeGen.service.GenConfigService;
 import lombok.extern.slf4j.Slf4j;
@@ -48,9 +48,9 @@ public class GenConfigController {
      */
     @SysLog(module = "system", business = "代码生成", value = "查询代码生成配置列表")
     @PostMapping("/page")
-    public Result<PageData<GenConfig>> pageList(@RequestBody GenConfigParam param) {
+    public Result<PageData<GenConfigVO>> pageList(@RequestBody GenConfigParam param) {
         Assert.isTrue(ObjectUtil.isAllNotEmpty(param.getPageNum(), param.getPageSize()), "分页参数pageNum,pageSize都不能为空");
-        PageData<GenConfig> page = genConfigService.pageList(param);
+        PageData<GenConfigVO> page = genConfigService.pageList(param);
         return Result.success(page);
     }
 
@@ -59,10 +59,10 @@ public class GenConfigController {
      */
     @SysLog(module = "system", business = "代码生成", value = "查询代码生成配置详情")
     @PostMapping("/detail")
-    public Result<GenConfigInfo> configDetail(@RequestBody GenConfigParam param) {
+    public Result<GenConfigVO> configDetail(@RequestBody GenConfigParam param) {
         Assert.isTrue(!ObjectUtil.isAllEmpty(param.getId(), param.getTableName()), "id和tableName不能同时为空");
-        GenConfigInfo genConfigInfo = genConfigService.configDetail(param);
-        return Result.success(genConfigInfo);
+        GenConfigVO genConfigVO = genConfigService.configDetail(param);
+        return Result.success(genConfigVO);
     }
 
     /**
@@ -70,7 +70,7 @@ public class GenConfigController {
      */
     @SysLog(module = "system", business = "代码生成", value = "保存代码生成配置")
     @PostMapping("/save")
-    public Result<GenConfigInfo> saveConfig(@RequestBody GenConfigInfo param) {
+    public Result<?> saveConfig(@RequestBody GenConfigVO param) {
         Assert.notNull(param.getId(), "id不能为空");
         genConfigService.saveConfig(param);
         return Result.success();

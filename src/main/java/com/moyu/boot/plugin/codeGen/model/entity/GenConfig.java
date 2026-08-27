@@ -1,10 +1,9 @@
 package com.moyu.boot.plugin.codeGen.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import lombok.Data;
 
@@ -18,14 +17,13 @@ import java.util.Date;
  */
 @Data
 @Table(value = "gen_config", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GenConfig {
 
     /**
      * 主键id
      * 注意Long值传递给前端精度丢失问题（JS最大精度整数是Math.pow(2,53)）
      */
-    @JsonSerialize(using = ToStringSerializer.class)
+    @Id(keyType = KeyType.Auto)
     private Long id;
 
     /**
