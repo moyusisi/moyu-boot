@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
+import com.mybatisflex.core.util.LambdaGetter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
@@ -18,6 +19,32 @@ import java.util.Set;
  */
 @Slf4j
 public class DataScopeHelper {
+
+    public static <T> void dataScopeFilter(com.mybatisflex.core.query.QueryWrapper queryWrapper, LambdaGetter<T> userColumn, LambdaGetter<T> orgColumn) {
+        // 非ROOT则限制数据范围
+        if (!LoginUserUtils.isRoot()) {
+            // 数据范围
+            Integer dataScope = LoginUserUtils.getDataScope();
+            Set<String> scopeSet = LoginUserUtils.getScopes();
+
+            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
+                String username = LoginUserUtils.getUsername();
+                queryWrapper.eq(userColumn, username);
+            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
+                String orgCode = LoginUserUtils.getOrgCode();
+                queryWrapper.eq(orgColumn, orgCode);
+            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
+                // 通过 scopeSet 处理
+                queryWrapper.in(orgColumn, scopeSet, ObjectUtil.isNotEmpty(scopeSet));
+            } else if (DataScopeEnum.COMPANY.getCode().equals(dataScope)) {
+                // 通过 scopeSet 处理
+                queryWrapper.in(orgColumn, scopeSet, ObjectUtil.isNotEmpty(scopeSet));
+            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
+                // 通过 scopeSet 处理
+                queryWrapper.in(orgColumn, scopeSet, ObjectUtil.isNotEmpty(scopeSet));
+            }
+        }
+    }
 
     public static <T, R> void dataScopeFilter(LambdaQueryWrapper<T> queryWrapper, SFunction<T, R> userColumn, SFunction<T, R> orgColumn) {
         // 非ROOT则限制数据范围

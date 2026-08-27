@@ -2,6 +2,9 @@ package com.moyu.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.moyu.boot.common.core.model.BaseEntity;
+import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
+import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,6 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName("sys_config")
+@Table(value = "sys_config", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysConfig extends BaseEntity {
 
     /**

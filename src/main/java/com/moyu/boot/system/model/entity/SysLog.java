@@ -1,6 +1,9 @@
 package com.moyu.boot.system.model.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
+import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @TableName("sys_log")
+@Table(value = "sys_group", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysLog {
 
     /**

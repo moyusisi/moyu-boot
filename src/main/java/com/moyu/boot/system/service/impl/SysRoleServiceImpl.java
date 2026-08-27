@@ -10,11 +10,7 @@ import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
@@ -31,12 +27,12 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.constant.SysConstants;
-import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.MenuTypeEnum;
+import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysRoleMapper;
 import com.moyu.boot.system.model.entity.SysApi;
-import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysMenu;
+import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.ext.RelationExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
@@ -45,6 +41,10 @@ import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.*;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -81,65 +81,60 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     @Override
     public List<SysRoleVO> list(SysRoleParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysRole::getName, param.getName());
+        queryWrapper.like(SysRole::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定code查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysRole::getCode, param.getCode());
+        queryWrapper.eq(SysRole::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定codeSet集合查询
-        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet());
+        queryWrapper.in(SysRole::getCode, param.getCodeSet(), ObjectUtil.isNotEmpty(param.getCodeSet()));
         // 指定指定状态
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
+        queryWrapper.eq(SysRole::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, AuthConstants.ROOT_ROLE);
+        queryWrapper.ne(SysRole::getCode, AuthConstants.ROOT_ROLE, !LoginUserUtils.isRoot());
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
-        queryWrapper.orderByAsc(SysRole::getSortNum);
+        queryWrapper.orderBy(SysRole::getSortNum, true);
         // 查询
-        List<SysRole> roleList = this.list(queryWrapper);
-        // 转换为voList
-        List<SysRoleVO> voList = buildSysRoleVOList(roleList);
+        List<SysRoleVO> voList = this.listAs(queryWrapper, SysRoleVO.class);
         return voList;
     }
 
     @Override
     public PageData<SysRoleVO> pageList(SysRoleParam param) {
         // 查询条件
-        LambdaQueryWrapper<SysRole> queryWrapper = Wrappers.lambdaQuery(SysRole.class);
-        // 指定name查询条件
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysRole::getName, param.getName());
-        // 指定code查询条件
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getCode()), SysRole::getCode, param.getCode());
-        // 指定codeSet集合
-        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysRole::getCode, param.getCodeSet());
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        // 指定name查询
+        queryWrapper.like(SysRole::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
+        // 指定code查询
+        queryWrapper.eq(SysRole::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
+        // 指定codeSet集合查询
+        queryWrapper.in(SysRole::getCode, param.getCodeSet(), ObjectUtil.isNotEmpty(param.getCodeSet()));
         // 指定指定状态
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysRole::getStatus, param.getStatus());
+        queryWrapper.eq(SysRole::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 非 ROOT 不可见ROOT
-        queryWrapper.ne(!LoginUserUtils.isRoot(), SysRole::getCode, AuthConstants.ROOT_ROLE);
+        queryWrapper.ne(SysRole::getCode, AuthConstants.ROOT_ROLE, !LoginUserUtils.isRoot());
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
-        queryWrapper.orderByAsc(SysRole::getSortNum);
+        queryWrapper.orderBy(SysRole::getSortNum, true);
         // 分页查询
-        Page<SysRole> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysRole> rolePage = this.page(page, queryWrapper);
-        List<SysRoleVO> voList = buildSysRoleVOList(rolePage.getRecords());
-        return new PageData<>(rolePage.getTotal(), voList);
+        Page<SysRoleVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<SysRoleVO> rolePage = this.pageAs(page, queryWrapper, SysRoleVO.class);
+        return new PageData<>(rolePage.getTotalRow(), rolePage.getRecords());
     }
 
     @Override
     public SysRoleVO detail(SysRoleParam roleParam) {
-        LambdaQueryWrapper<SysRole> queryWrapper = new QueryWrapper<SysRole>().checkSqlInjection().lambda()
-                .eq(ObjectUtil.isNotEmpty(roleParam.getId()), SysRole::getId, roleParam.getId())
-                .eq(ObjectUtil.isNotEmpty(roleParam.getCode()), SysRole::getCode, roleParam.getCode());
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        queryWrapper.eq(SysRole::getId, roleParam.getId(), ObjectUtil.isNotEmpty(roleParam.getId()))
+                .eq(SysRole::getCode, roleParam.getCode(), ObjectUtil.isNotEmpty(roleParam.getCode()));
         // id、code均为唯一标识
-        SysRole sysRole = this.getOne(queryWrapper);
-        if (sysRole == null) {
+        SysRoleVO vo = this.getOneAs(queryWrapper, SysRoleVO.class);
+        if (vo == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
-        // 转换为vo
-        SysRoleVO vo = BeanUtil.copyProperties(sysRole, SysRoleVO.class);
         return vo;
     }
 
@@ -148,7 +143,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 若指定了唯一编码code，则必须全局唯一
         if (!Strings.isNullOrEmpty(param.getCode())) {
             // 查询指定code
-            SysRole role = this.getOne(new LambdaQueryWrapper<SysRole>()
+            SysRole role = this.getOne(QueryWrapper.create()
                     .eq(SysRole::getCode, param.getCode())
                     .eq(SysRole::getDeleted, 0));
             if (role != null) {
@@ -171,15 +166,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        List<SysRole> roleList = this.listByIds(idSet);
-        // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), roleList.size())) {
+        Long count = this.count(QueryWrapper.create().in(SysRole::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(SysRole.class).in(SysRole::getId, idSet).set(SysRole::getDeleted, 1));
+        UpdateChain.of(SysRole.class)
+                .set(SysRole::getDeleted, 1)
+                .where(SysRole::getId).in(idSet)
+                .update();
     }
 
     @Override

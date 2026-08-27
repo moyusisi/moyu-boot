@@ -20,7 +20,6 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
@@ -107,6 +106,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         queryWrapper.orderByAsc(SysOrg::getSortNum);
         // 非ROOT则限制数据权限
         DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
+        DataScopeHelper.dataScopeFilter(com.mybatisflex.core.query.QueryWrapper.create(), SysOrg::getName, SysOrg::getCode);
         // 分页查询
         Page<SysOrg> page = new Page<>(param.getPageNum(), param.getPageSize());
         Page<SysOrg> orgPage = this.page(page, queryWrapper);

@@ -109,6 +109,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-jsqlparser-4.9</artifactId>
         </dependency>
+        <!-- MyBatis-Flex MyBatis的轻量增强框架 参考 https://mybatis-flex.com/zh/intro/comparison.html -->
+        <dependency>
+            <groupId>com.mybatis-flex</groupId>
+            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
+            <version>1.11.8</version>
+        </dependency>
         <!-- mysql JDBC驱动 -->
         <dependency>
             <groupId>com.mysql</groupId>

@@ -3,6 +3,9 @@ package com.moyu.boot.system.model.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.moyu.boot.common.core.model.BaseEntity;
+import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
+import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.mybatisflex.annotation.Table;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +18,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @TableName(value = "sys_role")
+@Table(value = "sys_role", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysRole extends BaseEntity {
 
     /**
