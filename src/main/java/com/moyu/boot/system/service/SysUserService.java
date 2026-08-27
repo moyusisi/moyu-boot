@@ -1,17 +1,18 @@
 package com.moyu.boot.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.SysUserVO;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 
 /**
+ * 用户信息服务类Service
+ *
  * @author shisong
- * @description 针对表【sys_user(用户信息表)】的数据库操作Service
- * @createDate 2024-12-25 20:35:45
+ * @since 2024-12-25 20:35:45
  */
 public interface SysUserService extends IService<SysUser> {
 

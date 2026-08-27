@@ -10,6 +10,7 @@ import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRoleService;
 import com.moyu.boot.system.service.SysUserService;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public SysUser loadUserByUsername(String username) {
         log.info("加载{}的用户信息", username);
         // 如果auth与user属于不同的服务，则这里应该通过远程调用获取用户信息
-        SysUser sysUser = sysUserService.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, username));
+        SysUser sysUser = sysUserService.getOne(QueryWrapper.create().eq(SysUser::getAccount, username));
         if (sysUser == null) {
             log.info("登录用户:{}不存在", username);
             throw new BusinessException(ResultCodeEnum.USER_ACCOUNT_NOT_EXIST);

@@ -5,31 +5,28 @@ import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.base.Strings;
-import com.moyu.boot.system.service.PasswordEncoder;
-import com.moyu.boot.common.authZ.util.LoginUserUtils;
-import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.plugin.daySeq.service.DaySeqService;
-import com.moyu.boot.system.service.SysConfigService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.SysUserVO;
+import com.moyu.boot.system.service.PasswordEncoder;
+import com.moyu.boot.system.service.SysConfigService;
 import com.moyu.boot.system.service.SysOrgService;
 import com.moyu.boot.system.service.SysUserService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -37,9 +34,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * 用户信息服务实现类
+ *
  * @author shisong
- * @description 针对表【sys_user(用户信息表)】的数据库操作Service实现
- * @createDate 2024-12-25 20:35:45
+ * @since 2024-12-25 20:35:45
  */
 @Slf4j
 @Service
@@ -59,99 +57,76 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Override
     public List<SysUserVO> list(SysUserParam param) {
-        // 查询指定的组织所有的children，包含本身
-        List<String> childrenCode = new ArrayList<>();
+        // 指定orgCode的所有的children，包含本身
+        List<String> children = new ArrayList<>();
         if (StrUtil.isNotBlank(param.getOrgCode())) {
-            childrenCode = sysOrgService.childrenCodeList(param.getOrgCode());
+            children = sysOrgService.childrenCodeList(param.getOrgCode());
         }
         // 查询条件
-        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定userId查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId());
+        queryWrapper.eq(SysUser::getUserId, param.getUserId(), ObjectUtil.isNotEmpty(param.getUserId()));
         // 指定account查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
+        queryWrapper.eq(SysUser::getAccount, param.getAccount(), ObjectUtil.isNotEmpty(param.getAccount()));
         // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
+        queryWrapper.like(SysUser::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定phone查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getPhone()), SysUser::getPhone, param.getPhone());
+        queryWrapper.eq(SysUser::getPhone, param.getPhone(), ObjectUtil.isNotEmpty(param.getPhone()));
         // 指定codeSet查询
-        queryWrapper.in(ObjectUtil.isNotEmpty(param.getCodeSet()), SysUser::getAccount, param.getCodeSet());
-        // 指定orgCode时查询所属组织
-        queryWrapper.in(ObjectUtil.isNotEmpty(childrenCode), SysUser::getOrgCode, childrenCode);
+        queryWrapper.in(SysUser::getAccount, param.getCodeSet(), ObjectUtil.isNotEmpty(param.getCodeSet()));
+        // 指定orgCode时查children
+        queryWrapper.in(SysUser::getOrgCode, children, ObjectUtil.isNotEmpty(children));
         // 指定status查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
+        queryWrapper.eq(SysUser::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 仅查询未删除的
         queryWrapper.eq(SysUser::getDeleted, 0);
         // 查询
-        List<SysUser> userList = this.list(queryWrapper);
-        // 转换为voList
-        List<SysUserVO> voList = buildSysUserVOList(userList);
+        List<SysUserVO> voList = this.listAs(queryWrapper, SysUserVO.class);
         return voList;
     }
 
     @Override
     public PageData<SysUserVO> pageList(SysUserParam param) {
-        // 查询条件
-        LambdaQueryWrapper<SysUser> queryWrapper = Wrappers.lambdaQuery(SysUser.class);
-        // 指定userId查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId());
-        // 指定account查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
-        // 指定name查询
-        queryWrapper.like(ObjectUtil.isNotEmpty(param.getName()), SysUser::getName, param.getName());
-        // 指定phone查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getPhone()), SysUser::getPhone, param.getPhone());
-        // 指定orgCode查询
-        String parentCode = param.getOrgCode();
-        if (ObjectUtil.isNotEmpty(parentCode)) {
-            // 查询指定的组织所有的children，包含本身
-            List<String> children = sysOrgService.childrenCodeList(parentCode);
-            queryWrapper.in(ObjectUtil.isNotEmpty(children), SysUser::getOrgCode, children);
+        // 指定orgCode的所有的children，包含本身
+        List<String> children = new ArrayList<>();
+        if (StrUtil.isNotBlank(param.getOrgCode())) {
+            children = sysOrgService.childrenCodeList(param.getOrgCode());
         }
+        // 查询条件
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        // 指定userId查询
+        queryWrapper.eq(SysUser::getUserId, param.getUserId(), ObjectUtil.isNotEmpty(param.getUserId()));
+        // 指定account查询
+        queryWrapper.eq(SysUser::getAccount, param.getAccount(), ObjectUtil.isNotEmpty(param.getAccount()));
+        // 指定name查询
+        queryWrapper.like(SysUser::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
+        // 指定phone查询
+        queryWrapper.eq(SysUser::getPhone, param.getPhone(), ObjectUtil.isNotEmpty(param.getPhone()));
+        // 指定orgCode时查children
+        queryWrapper.in(SysUser::getOrgCode, children, ObjectUtil.isNotEmpty(children));
         // 指定status查询
-        queryWrapper.eq(ObjectUtil.isNotEmpty(param.getStatus()), SysUser::getStatus, param.getStatus());
+        queryWrapper.eq(SysUser::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 仅查询未删除的
         queryWrapper.eq(SysUser::getDeleted, 0);
-        // 非ROOT则限制数据权限
-        if (!LoginUserUtils.isRoot()) {
-            // 指定的列名
-            Integer dataScope = LoginUserUtils.getDataScope();
-            Set<String> scopeSet = LoginUserUtils.getScopes();
-            if (DataScopeEnum.SELF.getCode().equals(dataScope)) {
-                String username = LoginUserUtils.getUsername();
-                queryWrapper.eq(SysUser::getCreateBy, username);
-            } else if (DataScopeEnum.ORG.getCode().equals(dataScope)) {
-                String orgCode = LoginUserUtils.getOrgCode();
-                queryWrapper.eq(SysUser::getOrgCode, orgCode);
-            } else if (DataScopeEnum.ORG_CHILD.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet);
-            } else if (DataScopeEnum.COMPANY.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet);
-            } else if (DataScopeEnum.ORG_DEFINE.getCode().equals(dataScope)) {
-                queryWrapper.in(ObjectUtil.isNotEmpty(scopeSet), SysUser::getOrgCode, scopeSet);
-            }
-            log.debug("数据权限为:{}, 已追加过滤条件", DataScopeEnum.getByCode(dataScope));
-        }
+        // 限制数据权限
+        DataScopeHelper.dataScopeFilter(queryWrapper, SysUser::getCreateBy, SysUser::getOrgCode);
         // 分页查询
-        Page<SysUser> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysUser> userPage = this.page(page, queryWrapper);
-        List<SysUserVO> voList = buildSysUserVOList(userPage.getRecords());
-        return new PageData<>(userPage.getTotal(), voList);
+        Page<SysUserVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<SysUserVO> voPage = this.pageAs(page, queryWrapper, SysUserVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
     public SysUserVO detail(SysUserParam param) {
-        LambdaQueryWrapper<SysUser> queryWrapper = new QueryWrapper<SysUser>().checkSqlInjection().lambda()
-                .eq(ObjectUtil.isNotEmpty(param.getId()), SysUser::getId, param.getId())
-                .eq(ObjectUtil.isNotEmpty(param.getUserId()), SysUser::getUserId, param.getUserId())
-                .eq(ObjectUtil.isNotEmpty(param.getAccount()), SysUser::getAccount, param.getAccount());
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        queryWrapper.eq(SysUser::getId, param.getId(), ObjectUtil.isNotEmpty(param.getId()))
+                .eq(SysUser::getUserId, param.getUserId(), ObjectUtil.isNotEmpty(param.getUserId()))
+                .eq(SysUser::getAccount, param.getAccount(), ObjectUtil.isNotEmpty(param.getAccount()));
         // id、code均为唯一标识
-        SysUser user = this.getOne(queryWrapper);
-        if (user == null) {
+        SysUserVO vo = this.getOneAs(queryWrapper, SysUserVO.class);
+        if (vo == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定数据");
         }
-        // 转换为vo
-        SysUserVO vo = BeanUtil.copyProperties(user, SysUserVO.class);
         return vo;
     }
 
@@ -160,7 +135,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 若指定了唯一编码code，则必须全局唯一
         if (!Strings.isNullOrEmpty(param.getAccount())) {
             // 查询指定code
-            SysUser user = this.getOne(new LambdaQueryWrapper<SysUser>()
+            SysUser user = this.getOne(QueryWrapper.create()
                     .eq(SysUser::getAccount, param.getAccount()));
             if (user != null) {
                 throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "此账号已存在，请更换账号");
@@ -222,56 +197,46 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        List<SysUser> userList = this.listByIds(idSet);
-        // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), userList.size())) {
+        Long count = this.count(QueryWrapper.create().in(SysUser::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(SysUser.class).in(SysUser::getId, idSet).set(SysUser::getDeleted, 1));
+        UpdateChain.of(SysUser.class)
+                .set(SysUser::getDeleted, 1)
+                .where(SysUser::getId).in(idSet)
+                .update();
     }
 
     @Override
     public void updatePassword(SysUserParam param) {
         // 先查原有数据
-        SysUser old = this.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, param.getAccount()));
+        SysUser old = this.getOne(QueryWrapper.create().eq(SysUser::getAccount, param.getAccount()));
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
-        this.update(Wrappers.lambdaUpdate(SysUser.class)
-                .eq(SysUser::getId, old.getId())
-                .set(SysUser::getPassword, passwordEncoder.encode(param.getPassword())));
+        UpdateChain.of(SysUser.class)
+                .set(SysUser::getPassword, passwordEncoder.encode(param.getPassword()))
+                .where(SysUser::getId).eq(old.getId())
+                .update();
     }
 
     @Override
     public void resetPassword(SysUserParam param) {
         // 先查原有数据
-        SysUser old = this.getOne(Wrappers.lambdaQuery(SysUser.class).eq(SysUser::getAccount, param.getAccount()));
+        SysUser old = this.getOne(QueryWrapper.create().eq(SysUser::getAccount, param.getAccount()));
         if (old == null) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         String defaultPwd = sysConfigService.getCacheValue(SysConstants.Config.DEFAULT_PWD);
         defaultPwd = StrUtil.emptyToDefault(defaultPwd, SysConstants.DEFAULT_PASSWORD);
-        this.update(Wrappers.lambdaUpdate(SysUser.class)
-                .eq(SysUser::getId, old.getId())
-                .set(SysUser::getPassword, passwordEncoder.encode(defaultPwd)));
-    }
-
-    /**
-     * 实体对象生成展示对象 entityList -> voList
-     */
-    private List<SysUserVO> buildSysUserVOList(List<SysUser> entityList) {
-        List<SysUserVO> voList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(entityList)) {
-            return voList;
-        }
-        for (SysUser entity : entityList) {
-            SysUserVO vo = BeanUtil.copyProperties(entity, SysUserVO.class);
-            voList.add(vo);
-        }
-        return voList;
+        UpdateChain.of(SysUser.class)
+                .set(SysUser::getPassword, passwordEncoder.encode(defaultPwd))
+                .where(SysUser::getId).eq(old.getId())
+                .update();
     }
 }
 

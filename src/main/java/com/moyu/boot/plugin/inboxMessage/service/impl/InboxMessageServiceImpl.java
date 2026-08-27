@@ -8,10 +8,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
-import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.plugin.inboxMessage.mapper.InboxMessageMapper;
 import com.moyu.boot.plugin.inboxMessage.model.entity.InboxMessage;
 import com.moyu.boot.plugin.inboxMessage.model.entity.UserMessage;
@@ -22,6 +22,7 @@ import com.moyu.boot.plugin.inboxMessage.service.InboxMessageService;
 import com.moyu.boot.plugin.inboxMessage.service.UserMessageService;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.service.SysUserService;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -169,9 +170,10 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
         // 补充用户name
         Map<String, SysUser> userMap = new HashMap<>();
         Set<String> userSet = pageData.getRecords().stream().map(UserMessageVO::getUserId).collect(Collectors.toSet());
-        sysUserService.list(Wrappers.lambdaQuery(SysUser.class).select(SysUser::getAccount, SysUser::getName)
-                        .in(SysUser::getAccount, userSet))
+        sysUserService.list(QueryWrapper.create()
+                        .where(SysUser::getAccount).in(userSet))
                 .forEach(e -> userMap.put(e.getAccount(), e));
+
         // 补充message和user信息
         pageData.getRecords().forEach(vo -> {
             vo.setName(userMap.get(vo.getUserId()).getName());
