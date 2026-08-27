@@ -168,15 +168,15 @@ public class InboxMessageServiceImpl extends ServiceImpl<InboxMessageMapper, Inb
                         .in(InboxMessage::getCode, messageSet))
                 .forEach(e -> messageMap.put(e.getCode(), e));
         // 补充用户name
-        Map<String, SysUser> userMap = new HashMap<>();
+        Map<String, String> userMap = new HashMap<>();
         Set<String> userSet = pageData.getRecords().stream().map(UserMessageVO::getUserId).collect(Collectors.toSet());
-        sysUserService.list(QueryWrapper.create()
+        sysUserService.list(QueryWrapper.create().select(SysUser::getAccount, SysUser::getName)
                         .where(SysUser::getAccount).in(userSet))
-                .forEach(e -> userMap.put(e.getAccount(), e));
+                .forEach(e -> userMap.put(e.getAccount(), e.getName()));
 
         // 补充message和user信息
         pageData.getRecords().forEach(vo -> {
-            vo.setName(userMap.get(vo.getUserId()).getName());
+            vo.setName(userMap.get(vo.getUserId()));
             vo.setTitle(messageMap.get(vo.getFromId()).getTitle());
         });
         // 补充用户name
