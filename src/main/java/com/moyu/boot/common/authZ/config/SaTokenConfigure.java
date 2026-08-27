@@ -109,7 +109,7 @@ public class SaTokenConfigure {
 
                 // 异常处理函数：过滤器中抛出的异常无法进入全局@ExceptionHandler
                 .setError(e -> {
-                    log.info("===== 进入Filter层异常处理 =====");
+                    log.info("===== 进入Filter层异常处理 =====", e);
                     // 获取原始请求对象
                     HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
                     HttpServletResponse response = (HttpServletResponse) SaHolder.getResponse().getSource();

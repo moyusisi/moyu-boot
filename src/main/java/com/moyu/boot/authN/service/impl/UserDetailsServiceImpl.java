@@ -1,6 +1,5 @@
 package com.moyu.boot.authN.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.core.enums.DataScopeEnum;

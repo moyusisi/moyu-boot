@@ -94,7 +94,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             SortOrderEnum.validate(param.getSortOrder());
             queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.orderBy(SysRole::getSortNum, true);
+            queryWrapper.orderBy(SysMenu::getSortNum, true);
         }
         // 查询
         List<SysMenu> menuList = this.list(queryWrapper);
@@ -129,7 +129,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             SortOrderEnum.validate(param.getSortOrder());
             queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.orderBy(SysRole::getSortNum, true);
+            queryWrapper.orderBy(SysMenu::getSortNum, true);
         }
         // 分页查询
         Page<SysMenu> page = new Page<>(param.getPageNum(), param.getPageSize());

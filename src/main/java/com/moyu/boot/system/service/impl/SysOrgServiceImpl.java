@@ -22,7 +22,6 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
 import com.moyu.boot.system.model.entity.SysOrg;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.model.vo.SysOrgVO;
 import com.moyu.boot.system.service.SysOrgService;
@@ -72,7 +71,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 仅查询未删除的
         queryWrapper.eq(SysOrg::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysRole::getSortNum, true);
+        queryWrapper.orderBy(SysOrg::getSortNum, true);
         // 查询
         List<SysOrgVO> voList = this.listAs(queryWrapper, SysOrgVO.class);
         return voList;
@@ -101,7 +100,7 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 仅查询未删除的
         queryWrapper.eq(SysOrg::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysRole::getSortNum, true);
+        queryWrapper.orderBy(SysOrg::getSortNum, true);
         // 非ROOT则限制数据权限
         DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
         DataScopeHelper.dataScopeFilter(com.mybatisflex.core.query.QueryWrapper.create(), SysOrg::getName, SysOrg::getCode);

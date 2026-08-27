@@ -16,7 +16,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@Table(value = "sys_group", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
+@Table(value = "sys_log", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysLog {
 
     /**

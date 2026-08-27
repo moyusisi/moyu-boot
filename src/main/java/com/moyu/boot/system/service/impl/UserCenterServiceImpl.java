@@ -127,7 +127,7 @@ public class UserCenterServiceImpl implements UserCenterService {
                 // 不能是按钮
                 .ne(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .eq(SysMenu::getDeleted, 0)
-                .orderBy(SysRole::getSortNum, true)
+                .orderBy(SysMenu::getSortNum, true)
         );
         // 用户有权限的菜单(不含按钮) + 所有模块、目录
         List<SysMenu> userMenuList = CollectionUtil.newArrayList();
