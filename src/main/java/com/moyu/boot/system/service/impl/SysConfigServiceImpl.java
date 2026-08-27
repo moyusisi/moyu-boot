@@ -8,6 +8,7 @@ import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
+import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysConfigMapper;
 import com.moyu.boot.system.model.entity.SysConfig;
 import com.moyu.boot.system.model.param.SysConfigParam;
@@ -59,6 +60,8 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
             queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysConfig::getUpdateTime, false);
         }
         // 查询
         List<SysConfigVO> voList = this.listAs(queryWrapper, SysConfigVO.class);
@@ -152,7 +155,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 仅查询未删除的
         queryWrapper.eq(SysConfig::getDeleted, 0);
         // 仅查询生效中的
-        queryWrapper.eq(SysConfig::getStatus, 0);
+        queryWrapper.eq(SysConfig::getStatus, StatusEnum.ENABLE.getCode());
         // 查询
         List<SysConfig> list = this.list(queryWrapper);
 

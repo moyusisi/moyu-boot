@@ -1,7 +1,5 @@
 package com.moyu.boot.system.enums;
 
-
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -23,8 +21,6 @@ public enum GenderEnum {
     MALE(1, "男"),
     FEMALE(2, "女");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    @EnumValue
     private final Integer code;
 
     private final String desc;

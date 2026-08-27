@@ -1,7 +1,5 @@
 package com.moyu.boot.system.enums;
 
-
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -26,8 +24,6 @@ public enum RelationTypeEnum {
     GROUP_HAS_ROLE(4, "分组-角色关系"),
     SCOPE_HAS_USER(5, "数据-用户关系");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    @EnumValue
     private final Integer code;
 
     private final String desc;

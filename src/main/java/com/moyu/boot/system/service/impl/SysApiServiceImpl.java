@@ -3,10 +3,6 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -17,11 +13,13 @@ import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.param.SysApiParam;
 import com.moyu.boot.system.model.vo.SysApiVO;
 import com.moyu.boot.system.service.SysApiService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -38,61 +36,56 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
     @Override
     public List<SysApiVO> list(SysApiParam param) {
         // 查询条件
-        QueryWrapper<SysApi> queryWrapper = Wrappers.query(SysApi.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定name查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysApi::getName, param.getName());
+        queryWrapper.like(SysApi::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定code查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getCode()), SysApi::getCode, param.getCode());
+        queryWrapper.like(SysApi::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定path查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysApi::getPath, param.getPath());
+        queryWrapper.like(SysApi::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
         // 指定apiType查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getApiType()), SysApi::getApiType, param.getApiType());
+        queryWrapper.eq(SysApi::getApiType, param.getApiType(), ObjectUtil.isNotEmpty(param.getApiType()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysApi::getDeleted, 0);
+        queryWrapper.eq(SysApi::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByDesc(SysApi::getUpdateTime);
+            queryWrapper.orderBy(SysApi::getUpdateTime, false);
         }
         // 查询
-        List<SysApi> sysApiList = this.list(queryWrapper);
-        // 转换为voList
-        List<SysApiVO> voList = buildSysApiVOList(sysApiList);
+        List<SysApiVO> voList = this.listAs(queryWrapper, SysApiVO.class);
         return voList;
     }
 
     @Override
     public PageData<SysApiVO> pageList(SysApiParam param) {
         // 查询条件
-        QueryWrapper<SysApi> queryWrapper = Wrappers.query(SysApi.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定name查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getName()), SysApi::getName, param.getName());
+        queryWrapper.like(SysApi::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定code查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getCode()), SysApi::getCode, param.getCode());
+        queryWrapper.like(SysApi::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定path查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getPath()), SysApi::getPath, param.getPath());
+        queryWrapper.like(SysApi::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
         // 指定apiType查询
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(param.getApiType()), SysApi::getApiType, param.getApiType());
+        queryWrapper.eq(SysApi::getApiType, param.getApiType(), ObjectUtil.isNotEmpty(param.getApiType()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysApi::getDeleted, 0);
+        queryWrapper.eq(SysApi::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         } else {
-            queryWrapper.lambda().orderByDesc(SysApi::getUpdateTime);
+            queryWrapper.orderBy(SysApi::getUpdateTime, false);
         }
         // 分页查询
-        Page<SysApi> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysApi> sysApiPage = this.page(page, queryWrapper);
-        List<SysApiVO> voList = buildSysApiVOList(sysApiPage.getRecords());
-        return new PageData<>(sysApiPage.getTotal(), voList);
+        Page<SysApiVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<SysApiVO> voPage = this.pageAs(page, queryWrapper, SysApiVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
@@ -135,29 +128,17 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        List<SysApi> toDelList = this.listByIds(idSet);
-        // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), toDelList.size())) {
+        Long count = this.count(QueryWrapper.create().in(SysApi::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
         //this.removeByIds(idSet);
         // 逻辑删除
-        this.update(Wrappers.lambdaUpdate(SysApi.class).in(SysApi::getId, idSet).set(SysApi::getDeleted, 1));
-    }
-
-    /**
-     * 实体对象生成展示对象 entityList -> voList
-     */
-    private List<SysApiVO> buildSysApiVOList(List<SysApi> entityList) {
-        List<SysApiVO> voList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(entityList)) {
-            return voList;
-        }
-        for (SysApi entity : entityList) {
-            SysApiVO vo = BeanUtil.copyProperties(entity, SysApiVO.class);
-            voList.add(vo);
-        }
-        return voList;
+        UpdateChain.of(SysApi.class)
+                .set(SysApi::getDeleted, 1)
+                .where(SysApi::getId).in(idSet)
+                .update();
     }
 }

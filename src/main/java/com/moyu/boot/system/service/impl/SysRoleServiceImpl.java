@@ -10,8 +10,6 @@ import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashMultimap;
@@ -72,7 +70,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Resource
     private SysMenuService sysMenuService;
-
+    @Resource
+    private SysApiService sysApiService;
     @Resource
     private SysUserService sysUserService;
     @Resource
@@ -308,7 +307,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         // role已经拥有的资源权限 permCode -> Relation
         Map<String, SysRelation> permMap = new HashMap<>();
-        Db.list(Wrappers.lambdaQuery(SysRelation.class)
+        sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getObjectId, param.getCode())
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .eq(SysRelation::getDeleted, 0)
@@ -320,9 +319,9 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Map<String, SysMenu> btnMap = new HashMap<>();
         Set<String> btnPermSet = new HashSet<>();
         // 查询模块所有按钮
-        Db.list(Wrappers.lambdaQuery(SysMenu.class)
+        sysMenuService.list(QueryWrapper.create()
                         .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
-                        .eq(ObjectUtil.isNotEmpty(param.getModule()), SysMenu::getModule, param.getModule())
+                        .eq(SysMenu::getModule, param.getModule(), ObjectUtil.isNotEmpty(param.getModule()))
                 ).stream()
                 // 过滤出role有权限的按钮
                 .filter(btn -> permMap.containsKey(btn.getCode()))
@@ -338,13 +337,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 按钮关联的接口(必须有数据范围) perm -> SysApi
         Map<String, SysApi> apiMap = new HashMap<>();
         // 查询接口列表
-        Db.list(Wrappers.lambdaQuery(SysApi.class)
+        sysApiService.list(QueryWrapper.create()
                 // 只要有数据范围的接口
                 .eq(SysApi::getHasScope, 1)
                 // 指定name查询
-                .like(ObjectUtil.isNotEmpty(param.getName()), SysApi::getName, param.getName())
+                .like(SysApi::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()))
                 // 指定path查询
-                .like(ObjectUtil.isNotEmpty(param.getSearchKey()), SysApi::getPath, param.getSearchKey())
+                .like(SysApi::getPath, param.getSearchKey(), ObjectUtil.isNotEmpty(param.getSearchKey()))
                 // 权限标识
                 .in(SysApi::getCode, btnPermSet)
         ).forEach(api -> {
@@ -511,14 +510,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (ObjectUtil.isEmpty(userSet)) {
             return;
         }
-        // 要删除的ids
-        Set<Long> ids = new HashSet<>();
         // 查询指定role中已存在的user，加入ids待删
-        Db.list(Wrappers.lambdaQuery(SysRelation.class)
+        List<Long> ids = sysRelationService.objListAs(QueryWrapper.create().select(SysRelation::getId)
                 .eq(SysRelation::getRelationType, RelationTypeEnum.USER_HAS_ROLE.getCode())
                 .in(SysRelation::getObjectId, userSet)
-                .eq(SysRelation::getTargetId, roleParam.getCode())
-        ).forEach(e -> ids.add(e.getId()));
+                .eq(SysRelation::getTargetId, roleParam.getCode()), Long.class);
         // 物理删除
         if (ObjectUtil.isNotEmpty(ids)) {
             sysRelationService.removeByIds(ids);
@@ -577,7 +573,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
         Map<String, SysRelation> allPermMap = new HashMap<>();
-        Db.list(Wrappers.lambdaQuery(SysRelation.class)
+        sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .in(SysRelation::getObjectId, roleSet)
         ).forEach(e -> allPermMap.put(e.getTargetId(), e));
@@ -588,7 +584,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Map<String, SysMenu> btnMap = new HashMap<>();
         Set<String> btnPermSet = new HashSet<>();
         // 查询模块所有按钮
-        Db.list(Wrappers.lambdaQuery(SysMenu.class)
+        sysMenuService.list(QueryWrapper.create()
                 .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .in(SysMenu::getCode, allPermMap.keySet())
                 .eq(SysMenu::getDeleted, 0)
@@ -604,7 +600,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 按钮关联的接口(必须有数据范围)Map:perm -> SysApi
         Map<String, SysApi> apiMap = new HashMap<>();
         // 查询接口列表
-        Db.list(Wrappers.lambdaQuery(SysApi.class)
+        sysApiService.list(QueryWrapper.create()
                 // 只要有数据范围的接口
                 .eq(SysApi::getHasScope, 1)
                 // 权限标识

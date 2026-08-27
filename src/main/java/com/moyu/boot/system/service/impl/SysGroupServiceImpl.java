@@ -14,6 +14,7 @@ import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
+import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysRelation;
@@ -230,7 +231,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 查询岗位分组
         List<SysGroup> groupList = this.list(QueryWrapper.create()
                 .in(SysGroup::getCode, groupSet)
-                .eq(SysGroup::getStatus, 0)
+                .eq(SysGroup::getStatus, StatusEnum.ENABLE.getCode())
                 .eq(SysGroup::getDeleted, 0)
         );
         return groupList;

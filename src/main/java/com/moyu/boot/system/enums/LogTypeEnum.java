@@ -1,6 +1,5 @@
 package com.moyu.boot.system.enums;
 
-
 import lombok.Getter;
 
 import java.util.Arrays;

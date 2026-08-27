@@ -1,6 +1,5 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
@@ -16,7 +15,6 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_api")
 @Table(value = "sys_api", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysApi extends BaseEntity {
 

@@ -1,7 +1,6 @@
 package com.moyu.boot.system.enums;
 
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -22,8 +21,6 @@ public enum StatusEnum {
     ENABLE(0, "正常"),
     DISABLE(1, "停用");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    @EnumValue
     private final Integer code;
 
     private final String desc;

@@ -1,10 +1,10 @@
 package com.moyu.boot.system.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.param.SysApiParam;
 import com.moyu.boot.system.model.vo.SysApiVO;
+import com.mybatisflex.core.service.IService;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public interface SysApiService extends IService<SysApi> {
     /**
      * 获取记录详情(通过主键或唯一键)
      */
-     SysApiVO detail(SysApiParam param);
+    SysApiVO detail(SysApiParam param);
 
     /**
      * 添加记录

@@ -1,7 +1,5 @@
 package com.moyu.boot.system.enums;
 
-
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -24,8 +22,6 @@ public enum OrgTypeEnum {
     DEPT(2, "部门机构"),
     NODE(3, "虚拟节点");
 
-    //  Mybatis-Plus 提供注解表示插入数据库时插入该值
-    @EnumValue
     private final Integer code;
 
     private final String desc;
