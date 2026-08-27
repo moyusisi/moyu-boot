@@ -221,7 +221,7 @@ CREATE TABLE `sys_log`
     `source_province`  VARCHAR(50)   DEFAULT NULL COMMENT '来源省份',
     `source_city`      VARCHAR(50)   DEFAULT NULL COMMENT '来源城市',
     `user_agent`       VARCHAR(512)  DEFAULT NULL COMMENT '客户端信息',
-    `deleted`          TINYINT       DEFAULT NULL COMMENT '删除标志（0未删除  1已删除）',
+    `deleted`          TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_by`        VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
     `create_time`      DATETIME      DEFAULT NULL COMMENT '创建时间',
     primary key (`id`),
