@@ -1,7 +1,7 @@
 package com.moyu.boot.system.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.moyu.boot.system.model.entity.SysConfig;
+import com.mybatisflex.core.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,6 +1,5 @@
 package com.moyu.boot.system.model.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
@@ -16,37 +15,36 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@TableName("sys_config")
 @Table(value = "sys_config", onInsert = CustomInsertListener.class, onUpdate = CustomUpdateListener.class)
 public class SysConfig extends BaseEntity {
 
     /**
-    * 配置项名称
-    */
+     * 配置项名称
+     */
     private String configName;
     /**
-    * 配置key
-    */
+     * 配置key
+     */
     private String configKey;
     /**
-    * 配置value
-    */
+     * 配置value
+     */
     private String configValue;
     /**
-    * 配置类型
-    */
+     * 配置类型
+     */
     private String configType;
     /**
-    * 使用状态（0正常 1停用）
-    */
+     * 使用状态（0正常 1停用）
+     */
     private Integer status;
     /**
-    * 扩展信息
-    */
+     * 扩展信息
+     */
     private String extJson;
     /**
-    * 备注
-    */
+     * 备注
+     */
     private String remark;
 
 }

@@ -379,7 +379,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             return;
         }
         // 删除指定menuCode 的 ROLE_HAS_MENU
-        sysRelationService.remove(com.mybatisflex.core.query.QueryWrapper.create()
+        sysRelationService.remove(QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM)
                 .in(SysRelation::getTargetId, codeSet));
     }

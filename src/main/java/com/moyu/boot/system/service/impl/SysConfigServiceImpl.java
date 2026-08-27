@@ -3,11 +3,6 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -18,13 +13,14 @@ import com.moyu.boot.system.model.entity.SysConfig;
 import com.moyu.boot.system.model.param.SysConfigParam;
 import com.moyu.boot.system.model.vo.SysConfigVO;
 import com.moyu.boot.system.service.SysConfigService;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,53 +45,48 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public List<SysConfigVO> list(SysConfigParam param) {
         // 查询条件
-        QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定configTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigName()), SysConfig::getConfigName, param.getConfigName());
+        queryWrapper.like(SysConfig::getConfigName, param.getConfigName(), ObjectUtil.isNotEmpty(param.getConfigName()));
         // 指定configKey查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
+        queryWrapper.like(SysConfig::getConfigKey, param.getConfigKey(), ObjectUtil.isNotEmpty(param.getConfigKey()));
         // 指定configValue查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigValue()), SysConfig::getConfigValue, param.getConfigValue());
+        queryWrapper.like(SysConfig::getConfigValue, param.getConfigValue(), ObjectUtil.isNotEmpty(param.getConfigValue()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
+        queryWrapper.eq(SysConfig::getDeleted, 0);
         // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         }
         // 查询
-        List<SysConfig> sysConfigList = this.list(queryWrapper);
-        // 转换为voList
-        List<SysConfigVO> voList = buildSysConfigVOList(sysConfigList);
+        List<SysConfigVO> voList = this.listAs(queryWrapper, SysConfigVO.class);
         return voList;
     }
 
     @Override
     public PageData<SysConfigVO> pageList(SysConfigParam param) {
         // 查询条件
-        QueryWrapper<SysConfig> queryWrapper = Wrappers.query(SysConfig.class).checkSqlInjection();
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定configTitle查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigName()), SysConfig::getConfigName, param.getConfigName());
+        queryWrapper.like(SysConfig::getConfigName, param.getConfigName(), ObjectUtil.isNotEmpty(param.getConfigName()));
         // 指定configKey查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigKey()), SysConfig::getConfigKey, param.getConfigKey());
+        queryWrapper.like(SysConfig::getConfigKey, param.getConfigKey(), ObjectUtil.isNotEmpty(param.getConfigKey()));
         // 指定configValue查询
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(param.getConfigValue()), SysConfig::getConfigValue, param.getConfigValue());
+        queryWrapper.like(SysConfig::getConfigValue, param.getConfigValue(), ObjectUtil.isNotEmpty(param.getConfigValue()));
         // 仅查询未删除的
-        queryWrapper.lambda().eq(SysConfig::getDeleted, 0);
-        // 排序方式
+        queryWrapper.eq(SysConfig::getDeleted, 0);
+        // 指定排序
         if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
-            queryWrapper.orderBy(true, param.getSortOrder().equals(SortOrderEnum.ASC.getValue()),
-                    StrUtil.toUnderlineCase(param.getSortField()));
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
         }
         // 分页查询
-        Page<SysConfig> page = new Page<>(param.getPageNum(), param.getPageSize());
-        Page<SysConfig> sysConfigPage = this.page(page, queryWrapper);
-        List<SysConfigVO> voList = buildSysConfigVOList(sysConfigPage.getRecords());
-        return new PageData<>(sysConfigPage.getTotal(), voList);
+        Page<SysConfigVO> page = Page.of(param.getPageNum(), param.getPageSize());
+        Page<SysConfigVO> voPage = this.pageAs(page, queryWrapper, SysConfigVO.class);
+        return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
     @Override
@@ -138,15 +129,9 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
-        // 查询指定字段
-        queryWrapper.select(SysConfig::getId);
-        // 指定idSet集合查询
-        queryWrapper.in(ObjectUtil.isNotEmpty(idSet), SysConfig::getId, idSet);
-        // 查询
-        List<SysConfig> configList = this.list(queryWrapper);
-        // 要删除的和查询到的进行比对
-        if (ObjectUtil.notEqual(idSet.size(), configList.size())) {
+        Long count = this.count(QueryWrapper.create().in(SysConfig::getId, idSet));
+        // 查到的数量比对
+        if (ObjectUtil.notEqual(idSet.size(), count)) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
@@ -161,7 +146,7 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     @Override
     public void refreshCache() {
         // 查询条件
-        LambdaQueryWrapper<SysConfig> queryWrapper = Wrappers.lambdaQuery(SysConfig.class);
+        QueryWrapper queryWrapper = QueryWrapper.create();
         // 查询指定字段
         queryWrapper.select(SysConfig::getConfigKey, SysConfig::getConfigValue);
         // 仅查询未删除的
@@ -189,18 +174,4 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
         return null;
     }
 
-    /**
-     * 实体对象生成展示对象 entityList -> voList
-     */
-    private List<SysConfigVO> buildSysConfigVOList(List<SysConfig> entityList) {
-        List<SysConfigVO> voList = new ArrayList<>();
-        if (CollectionUtils.isEmpty(entityList)) {
-            return voList;
-        }
-        for (SysConfig entity : entityList) {
-            SysConfigVO vo = BeanUtil.copyProperties(entity, SysConfigVO.class);
-            voList.add(vo);
-        }
-        return voList;
-    }
 }
