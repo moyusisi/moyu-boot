@@ -41,7 +41,6 @@ import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.*;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -165,18 +164,18 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        Long count = this.count(QueryWrapper.create().in(SysRole::getId, idSet));
+        long count = this.count(QueryWrapper.create().in(SysRole::getId, idSet));
         // 查到的数量比对
-        if (ObjectUtil.notEqual(idSet.size(), count)) {
+        if (idSet.size() != count) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
-        //this.removeByIds(idSet);
+        this.removeByIds(idSet);
         // 逻辑删除
-        UpdateChain.of(SysRole.class)
-                .set(SysRole::getDeleted, 1)
-                .where(SysRole::getId).in(idSet)
-                .update();
+//        UpdateChain.of(SysRole.class)
+//                .set(SysRole::getDeleted, 1)
+//                .where(SysRole::getId).in(idSet)
+//                .update();
     }
 
     @Override
