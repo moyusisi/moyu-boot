@@ -42,11 +42,6 @@ public class SysMenuParam extends PageParam {
      */
     private String roleCode;
 
-    /**
-     * 名称关键词
-     */
-    private String searchKey;
-
     //********** db中存在的字段 **********//
     /**
      * 主键id

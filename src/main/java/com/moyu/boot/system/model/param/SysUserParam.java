@@ -35,10 +35,6 @@ public class SysUserParam extends PageParam {
      * 指定的account集合
      */
     private Set<String> codeSet;
-    /**
-     * 搜索关键词
-     */
-    private String searchKey;
 
     //********** db中存在的字段 **********//
     /**

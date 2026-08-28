@@ -37,11 +37,6 @@ public class SysOrgParam extends PageParam {
      */
     private Set<Long> ids;
 
-    /**
-     * 名称关键词
-     */
-    private String searchKey;
-
     //********** db中存在的字段 **********//
     /**
      * 主键id

@@ -31,11 +31,6 @@ public class SysConfigParam extends PageParam {
      */
     private Set<Long> ids;
 
-    /**
-     * 搜索关键词
-     */
-    private String searchKey;
-
     //********** db中存在的字段 **********//
     /**
      * 主键id
