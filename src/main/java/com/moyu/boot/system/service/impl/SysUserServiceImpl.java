@@ -197,9 +197,9 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        Long count = this.count(QueryWrapper.create().in(SysUser::getId, idSet));
+        long count = this.count(QueryWrapper.create().in(SysUser::getId, idSet));
         // 查到的数量比对
-        if (ObjectUtil.notEqual(idSet.size(), count)) {
+        if (idSet.size() != count) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
         // 物理删除
