@@ -18,10 +18,10 @@ public class CustomUpdateListener implements UpdateListener {
     public void onUpdate(Object o) {
         if (o instanceof BaseEntity) {
             BaseEntity entity = (BaseEntity) o;
-            if (entity.getUpdateTime() != null) {
+            if (entity.getUpdateTime() == null) {
                 entity.setUpdateTime(new Date());
             }
-            if (entity.getUpdateBy() != null) {
+            if (entity.getUpdateBy() == null) {
                 entity.setUpdateBy(LoginUserUtils.getUsername());
             }
         }

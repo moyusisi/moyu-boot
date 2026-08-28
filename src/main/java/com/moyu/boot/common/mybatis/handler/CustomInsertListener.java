@@ -19,10 +19,10 @@ public class CustomInsertListener implements InsertListener {
     public void onInsert(Object o) {
         if (o instanceof BaseEntity) {
             BaseEntity entity = (BaseEntity) o;
-            if (entity.getCreateTime() != null) {
+            if (entity.getCreateTime() == null) {
                 entity.setCreateTime(new Date());
             }
-            if (entity.getCreateBy() != null) {
+            if (entity.getCreateBy() == null) {
                 entity.setCreateBy(LoginUserUtils.getUsername());
             }
         }
