@@ -16,6 +16,7 @@ import java.util.Set;
  */
 @Data
 public class BaseEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 表基类实体的实例属性
