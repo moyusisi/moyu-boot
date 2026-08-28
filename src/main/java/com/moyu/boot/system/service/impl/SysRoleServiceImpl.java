@@ -39,8 +39,10 @@ import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.*;
+import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -169,13 +171,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         if (idSet.size() != count) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
-        // 物理删除
+        // 物理删除 or 逻辑删除
         this.removeByIds(idSet);
+        //LogicDeleteManager.execWithoutLogicDelete(() -> this.removeByIds(idSet));
         // 逻辑删除
-//        UpdateChain.of(SysRole.class)
-//                .set(SysRole::getDeleted, 1)
-//                .where(SysRole::getId).in(idSet)
-//                .update();
+        //UpdateChain.of(SysRole.class).set(SysRole::getDeleted, 1).where(SysRole::getId).in(idSet).update();
     }
 
     @Override
