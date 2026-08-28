@@ -94,6 +94,7 @@ public class SysLog {
 
     /**
      * 删除标志（0未删除  1已删除）
+     * isLogicDelete逻辑删除标记 deleteById时会更新,查询时会过滤
      */
     @Column(isLogicDelete = true)
     private Integer deleted;
