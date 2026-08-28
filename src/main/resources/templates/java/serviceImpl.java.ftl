@@ -86,7 +86,6 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
             queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
-            StrUtil.toUnderlineCase(param.getSortField()));
         } else {
             queryWrapper.orderBy(${entityName}::getUpdateTime, false);
         }
@@ -143,13 +142,12 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
             // 检查排序方式
             SortOrderEnum.validate(param.getSortOrder());
             queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
-            StrUtil.toUnderlineCase(param.getSortField()));
         } else {
             queryWrapper.orderBy(${entityName}::getUpdateTime, false);
         }
         // 分页查询
         Page<${entityName}VO> page = Page.of(param.getPageNum(), param.getPageSize());
-        List<${entityName}VO> voPage = this.pageAs(page, queryWrapper, ${entityName}VO.class);
+        Page<${entityName}VO> voPage = this.pageAs(page, queryWrapper, ${entityName}VO.class);
         return new PageData<>(voPage.getTotalRow(), voPage.getRecords());
     }
 
