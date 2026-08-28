@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
+import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.system.mapper.SysLogMapper;
 import com.moyu.boot.system.model.entity.SysLog;
@@ -15,7 +16,6 @@ import com.moyu.boot.system.model.vo.SysLogVO;
 import com.moyu.boot.system.service.SysLogService;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-
 
 /**
  * 系统日志服务实现类
@@ -182,7 +181,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "更新失败，未查到原数据");
         }
         // 属性复制
-        SysLog toUpdate = BeanUtil.copyProperties(param, SysLog.class);
+        SysLog toUpdate = BeanUtil.copyProperties(param, SysLog.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         // 其他处理
         toUpdate.setId(param.getId());
         this.updateById(toUpdate);
@@ -194,17 +193,15 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
         long count = this.count(QueryWrapper.create().in(SysLog::getId, idSet));
-        // 查到的数量比对
+        // 要删除的和查询到的进行数量比对
         if (idSet.size() != count) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
         }
-        // 物理删除
-        //this.removeByIds(idSet);
+        // 物理删除 or 逻辑删除
+        this.removeByIds(idSet);
+        //LogicDeleteManager.execWithoutLogicDelete(() -> this.removeByIds(idSet));
         // 逻辑删除
-        UpdateChain.of(SysLog.class)
-                .set(SysLog::getDeleted, 1)
-                .where(SysLog::getId).in(idSet)
-                .update();
+        //UpdateChain.of(SysRole.class).set(SysRole::getDeleted, 1).where(SysRole::getId).in(idSet).update();
     }
 
     /**
