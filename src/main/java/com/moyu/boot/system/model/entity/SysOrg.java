@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.mybatis.handler.CustomInsertListener;
 import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
+import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
@@ -43,7 +44,7 @@ public class SysOrg extends BaseEntity {
     /**
      * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
      *
-     * @see com.moyu.boot.system.enums.OrgTypeEnum
+     * @see OrgTypeEnum
      */
     private Integer orgType;
     /**

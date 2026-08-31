@@ -1,8 +1,8 @@
 package com.moyu.boot.system.model.param;
 
-
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.PageParam;
+import com.moyu.boot.system.enums.OrgTypeEnum;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,7 +63,7 @@ public class SysOrgParam extends PageParam {
     /**
      * 组织机构类型(字典 1公司组织 2部门机构 3虚拟节点)
      *
-     * @see com.moyu.boot.system.enums.OrgTypeEnum
+     * @see OrgTypeEnum
      */
     @NotNull(message = "组织机构类型orgType不能为空")
     @Min(value = 1, message = "组织机构类型orgType有效取值范围为[1,3]")
