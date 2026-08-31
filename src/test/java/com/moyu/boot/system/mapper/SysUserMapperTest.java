@@ -1,7 +1,6 @@
 package com.moyu.boot.system.mapper;
 
 import com.moyu.boot.BaseTest;
-import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -20,10 +19,10 @@ class SysUserMapperTest extends BaseTest {
 
     @Test
     public void testUpdate() {
-        SysUser  sysUser = new SysUser();
+        SysUser sysUser = new SysUser();
         sysUser.setId(105L);
         sysUser.setPassword(null);
-        sysUserMapper.updateById(sysUser);
+        sysUserMapper.update(sysUser);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.moyu.boot.plugin.codeGen.service;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.moyu.boot.BaseTest;
 import com.moyu.boot.plugin.codeGen.model.entity.GenField;
+import com.mybatisflex.core.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
@@ -21,9 +21,9 @@ class GenFieldServiceTest extends BaseTest {
 
     @Test
     public void testSelect() {
-        List<GenField> fieldConfigList = genFieldService.list(Wrappers.lambdaQuery(GenField.class)
+        List<GenField> fieldConfigList = genFieldService.list(QueryWrapper.create()
                 .eq(GenField::getTableId, 1L)
-                .orderByAsc(GenField::getFieldSort)
+                .orderBy(GenField::getFieldSort, true)
         );
         log.info("查询结果:{}", fieldConfigList.size());
     }

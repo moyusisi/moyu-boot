@@ -20,7 +20,7 @@ class SysOrgMapperTest extends BaseTest {
 
     @Test
     public void testSelect() {
-        SysOrg org = sysOrgMapper.selectById(1);
+        SysOrg org = sysOrgMapper.selectOneById(1);
         log.info("查询结果:{}", org);
     }
 
