@@ -53,23 +53,23 @@
           </template>
           <a-row :gutter="24">
             <a-col :span="8">
-              <a-form-item name="createBy" label="创建人" tooltip="" >
-                <span>{{ formData.createBy }}</span>
-              </a-form-item>
-            </a-col>
-            <a-col :span="8">
               <a-form-item name="createTime" label="创建时间" tooltip="" >
                 <span>{{ formData.createTime }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="8">
-              <a-form-item name="updateBy" label="更新人" tooltip="" >
-                <span>{{ formData.updateBy }}</span>
+              <a-form-item name="createBy" label="创建人" tooltip="" >
+                <span>{{ formData.createBy }}</span>
               </a-form-item>
             </a-col>
             <a-col :span="8">
               <a-form-item name="updateTime" label="更新时间" tooltip="" >
                 <span>{{ formData.updateTime }}</span>
+              </a-form-item>
+            </a-col>
+            <a-col :span="8">
+              <a-form-item name="updateBy" label="更新人" tooltip="" >
+                <span>{{ formData.updateBy }}</span>
               </a-form-item>
             </a-col>
           </a-row>
