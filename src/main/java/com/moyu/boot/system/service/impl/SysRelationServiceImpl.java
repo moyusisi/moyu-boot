@@ -73,7 +73,7 @@ public class SysRelationServiceImpl extends ServiceImpl<SysRelationMapper, SysRe
         List<String> list = new ArrayList<>();
         if (ObjectUtil.isNotEmpty(roleSet)) {
             // role查perm
-            this.objListAs(QueryWrapper.create().select(SysRelation::getTargetId)
+            list = this.objListAs(QueryWrapper.create().select(SysRelation::getTargetId)
                     .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                     .in(SysRelation::getObjectId, roleSet), String.class);
         }
