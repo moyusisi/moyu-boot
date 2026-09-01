@@ -139,6 +139,8 @@ public class SaTokenConfigure {
         if (e instanceof NotLoginException) {
             // 处理登录异常，区分未认证的具体场景
             result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
+        } else {
+            log.error("认证鉴权异常", e);
         }
         // 设置响应头
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
