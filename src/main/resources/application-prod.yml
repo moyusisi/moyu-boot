@@ -98,6 +98,9 @@ custom:
     enabled: true
     # 令牌类型，默认redis 支持: jwt | redis
     token-type: redis
+    # 需要进行认证的列表
+    auth-list:
+      - /api/**
     # 白名单列表，不经过认证过滤器
     white-list:
       # 认证授权类
