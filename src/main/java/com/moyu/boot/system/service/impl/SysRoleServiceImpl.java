@@ -556,7 +556,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return permSet;
         }
         // 获取menu上的权限标识
-        List<String> permList = this.objListAs(QueryWrapper.create().select(SysMenu::getPermission)
+        List<String> permList = sysMenuService.objListAs(QueryWrapper.create().select(SysMenu::getPermission)
                 .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .in(SysMenu::getCode, menuSet), String.class);
         return new HashSet<>(permList);
