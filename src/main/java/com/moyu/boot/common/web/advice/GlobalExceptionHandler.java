@@ -193,7 +193,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClientAbortException.class)
     public Result<?> handleClientAbort() {
         log.debug("客户端主动断开TCP连接，无需返回响应");
-        return null;
+        return new Result<>(ResultCodeEnum.USER_ERROR);
     }
 
     /**
