@@ -191,8 +191,9 @@ public class GlobalExceptionHandler {
      * 客户端主动断开连接，避免大量ERROR日志刷屏
      */
     @ExceptionHandler(ClientAbortException.class)
-    public void handleClientAbort() {
+    public Result<?> handleClientAbort() {
         log.debug("客户端主动断开TCP连接，无需返回响应");
+        return null;
     }
 
     /**
