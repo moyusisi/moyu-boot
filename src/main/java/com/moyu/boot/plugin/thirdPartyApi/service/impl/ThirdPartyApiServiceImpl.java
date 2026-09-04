@@ -289,7 +289,7 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
 
         // 保存记录
         //sysLogService.save(sysLog);
-        DbChain.create(SysLog.class).save(sysLog);
+        DbChain.table(SysLog.class).save(sysLog);
     }
 
 }
