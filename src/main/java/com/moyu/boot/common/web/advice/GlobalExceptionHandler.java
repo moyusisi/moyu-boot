@@ -32,6 +32,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.stream.Collectors;
 
 /**
@@ -191,9 +192,21 @@ public class GlobalExceptionHandler {
      * 客户端主动断开连接，避免大量ERROR日志刷屏
      */
     @ExceptionHandler(ClientAbortException.class)
-    public Result<?> handleClientAbort() {
+    public void handleClientAbort() {
         log.debug("客户端主动断开TCP连接，无需返回响应");
-        return new Result<>(ResultCodeEnum.USER_ERROR);
+    }
+
+    // 兜底捕获被包装的IO异常
+    @ExceptionHandler(IOException.class)
+    public Result<?> handleIOException(IOException e) {
+        if (e instanceof ClientAbortException || e.getCause() instanceof ClientAbortException) {
+            log.warn("客户端断开连接(IO包装异常)，无需处理");
+            return null;
+        }
+        log.error("IO读写异常:{}", e.getMessage(), e);
+        Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
+        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
+        return result;
     }
 
     /**
