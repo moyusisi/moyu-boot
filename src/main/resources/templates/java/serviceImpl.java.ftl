@@ -191,7 +191,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         // 待删除的id集合
         Set<Long> idSet = param.getIds();
         // 删除时先查再删
-        long count = this.count(QueryWrapper.create().in(SysLog::getId, idSet));
+        long count = this.count(QueryWrapper.create().in(${entityName}::getId, idSet));
         // 要删除的和查询到的进行数量比对
         if (idSet.size() != count) {
             throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "删除失败，未查到原数据");
@@ -200,7 +200,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         this.removeByIds(idSet);
         //LogicDeleteManager.execWithoutLogicDelete(() -> this.removeByIds(idSet));
         // 逻辑删除
-        //UpdateChain.of(SysRole.class).set(SysRole::getDeleted, 1).where(SysRole::getId).in(idSet).update();
+        //UpdateChain.of(${entityName}.class).set(${entityName}::getDeleted, 1).where(${entityName}::getId).in(idSet).update();
     }
 
     /**
