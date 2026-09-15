@@ -160,7 +160,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }
         // 初始密码为系统默认
         if (ObjectUtil.isEmpty(user.getPassword())) {
-            String defaultPwd = sysConfigService.getCacheValue(SysConstants.Config.DEFAULT_PWD);
+            String defaultPwd = sysConfigService.getValueWithCache(SysConstants.Config.DEFAULT_PWD);
             defaultPwd = StrUtil.emptyToDefault(defaultPwd, SysConstants.DEFAULT_PASSWORD);
             user.setPassword(passwordEncoder.encode(defaultPwd));
         }
