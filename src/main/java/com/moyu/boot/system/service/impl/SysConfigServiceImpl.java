@@ -178,13 +178,13 @@ public class SysConfigServiceImpl extends ServiceImpl<SysConfigMapper, SysConfig
     }
 
     @Override
-    public String getValue(String configKey) {
+    public String getValueWithCache(String configKey) {
         String value = getCacheValue(configKey);
         if (value == null) {
             refreshCache();
-            return getCacheValue(configKey);
+            value = getCacheValue(configKey);
         }
-        return null;
+        return value;
     }
 
 }

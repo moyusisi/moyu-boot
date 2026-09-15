@@ -59,6 +59,6 @@ public interface SysConfigService extends IService<SysConfig> {
     /**
      * 通过key获取对应的value，并更新缓存
      */
-    String getValue(String configKey);
+    String getValueWithCache(String configKey);
 
 }
