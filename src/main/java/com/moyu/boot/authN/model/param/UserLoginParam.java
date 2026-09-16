@@ -39,4 +39,13 @@ public class UserLoginParam {
      * 设备
      */
     private String device;
+
+    /**
+     * 验证码ID
+     */
+    private String captchaId;
+    /**
+     * 验证码
+     */
+    private String captchaCode;
 }

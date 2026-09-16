@@ -4,13 +4,14 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.authN.model.param.UserLoginParam;
 import com.moyu.boot.authN.service.AuthService;
+import com.moyu.boot.authN.service.CaptchaService;
 import com.moyu.boot.authN.service.UserDetailsService;
 import com.moyu.boot.common.authZ.model.LoginUser;
-import com.moyu.boot.system.service.PasswordEncoder;
 import com.moyu.boot.common.authZ.service.TokenService;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.system.model.entity.SysUser;
+import com.moyu.boot.system.service.PasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,9 @@ public class AuthServiceImpl implements AuthService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+    @Resource
+    private CaptchaService captchaService;
+
     /**
      * 用户登陆
      *
@@ -42,6 +46,9 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String login(UserLoginParam param) {
+        if (!captchaService.verify(param.getCaptchaId(), param.getCaptchaCode())) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR.getCode(), "请输入正确的验证码!");
+        }
         // 登录参数
         String username = param.getAccount();
         String password = param.getPassword();

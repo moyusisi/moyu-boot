@@ -1,11 +1,14 @@
 package com.moyu.boot.authN.controller;
 
 import com.moyu.boot.authN.model.param.UserLoginParam;
+import com.moyu.boot.authN.model.vo.CaptchaVO;
 import com.moyu.boot.authN.service.AuthService;
+import com.moyu.boot.authN.service.CaptchaService;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +29,9 @@ public class AuthController {
     @Resource
     private AuthService authService;
 
+    @Resource
+    private CaptchaService captchaService;
+
     /**
      * 用户登陆
      */
@@ -44,6 +50,12 @@ public class AuthController {
     public Result<?> userLogout(UserLoginParam loginParam) {
         authService.logout();
         return Result.success();
+    }
+
+    @GetMapping("/captcha")
+    public Result<CaptchaVO> getCaptcha() {
+        CaptchaVO captcha = captchaService.generate();
+        return Result.success(captcha);
     }
 
 }
