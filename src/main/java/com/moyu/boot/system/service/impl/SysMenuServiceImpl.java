@@ -24,7 +24,6 @@ import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysMenuMapper;
 import com.moyu.boot.system.model.entity.SysMenu;
 import com.moyu.boot.system.model.entity.SysRelation;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.ext.MenuExt;
 import com.moyu.boot.system.model.param.SysMenuParam;
 import com.moyu.boot.system.model.vo.SysMenuVO;
@@ -186,11 +185,6 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 填充一些默认值
         fillSysMenu(menu);
         menu.setId(null);
-        // 若未指定唯一编码code，则自动生成
-        if (Strings.isNullOrEmpty(param.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            menu.setCode(IdUtil.objectId());
-        }
         this.save(menu);
     }
 
@@ -326,25 +320,37 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
             Assert.notEmpty(menu.getParentCode(), "上级菜单parentCode不能为空");
             Assert.notEmpty(menu.getModule(), "归属模块module不能为空");
         }
+        String prefix = "";
         if (Objects.equals(MenuTypeEnum.MODULE, menuType)) {
             Assert.notEmpty(menu.getCode(), "模块编码code不能为空");
             // 模块要设置布局
             if (StrUtil.isEmpty(menu.getComponent())) {
                 menu.setComponent("Layout");
             }
+            prefix = "m_";
         } else if (Objects.equals(MenuTypeEnum.DIR, menuType)) {
             // 目录的组件、权限为空
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
+            prefix = "dir_";
         } else if (Objects.equals(MenuTypeEnum.MENU, menuType)) {
             Assert.notEmpty(menu.getPath(), "路由地址path不能为空");
             Assert.notEmpty(menu.getComponent(), "组件component不能为空");
+            prefix = "menu_";
         } else if (Objects.equals(MenuTypeEnum.BUTTON, menuType)) {
             // 按钮的组件为空
             Assert.notEmpty(menu.getPermission(), "权限标识permission不能为空");
+            prefix = "btn_";
         } else if (Objects.equals(MenuTypeEnum.IFRAME, menuType) || Objects.equals(MenuTypeEnum.LINK, menuType)) {
             Assert.notEmpty(menu.getPath(), "链接地址path不能为空");
             Assert.isTrue(menu.getPath().startsWith("http"), "链接必须以http(s)开头");
+            prefix = "link_";
         }
+        // 若未指定唯一编码code，则自动生成
+        if (Strings.isNullOrEmpty(menu.getCode())) {
+            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
+            menu.setCode(prefix + IdUtil.objectId());
+        }
+
     }
 
     /**
