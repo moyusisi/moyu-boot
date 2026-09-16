@@ -155,7 +155,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         role.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(role.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
+            // 唯一code IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
             role.setCode(SysConstants.ROLE_PREFIX + IdUtil.objectId());
         }
         this.save(role);
