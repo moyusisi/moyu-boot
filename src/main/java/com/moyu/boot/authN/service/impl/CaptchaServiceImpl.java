@@ -40,7 +40,7 @@ public class CaptchaServiceImpl implements CaptchaService {
         String captchaId = IdUtil.objectId();
         // 存入Redis
         stringRedisTemplate.opsForValue().set("CAPTCHA:" + captchaId, captchaCode, 300, TimeUnit.SECONDS);
-        // 4. 图片转Base64返回前端
+        // 图片转Base64返回前端
         CaptchaVO vo = new CaptchaVO();
         vo.setCaptchaId(captchaId);
         vo.setCaptchaBase64(captcha.getImageBase64Data());
@@ -54,11 +54,11 @@ public class CaptchaServiceImpl implements CaptchaService {
             return false;
         }
         String redisKey = "CAPTCHA:" + captchaId;
-        // 1. 从Redis取出标准答案
-        String realAnswer = stringRedisTemplate.opsForValue().get(redisKey);
+        // 从Redis取出验证码
+        String realCode = stringRedisTemplate.opsForValue().get(redisKey);
 
         // 校验失败：过期 / 答案错误
-        if (realAnswer == null || !realAnswer.equals(captchaCode)) {
+        if (realCode == null || !realCode.equals(captchaCode)) {
             return false;
         }
         // 校验通过，立即删除（一次性使用，防止重复刷接口）
