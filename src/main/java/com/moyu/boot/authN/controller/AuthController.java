@@ -52,7 +52,11 @@ public class AuthController {
         return Result.success();
     }
 
-    @GetMapping("/captcha")
+    /**
+     * 获取登录验证码图片
+     */
+    @Log(response = false)
+    @GetMapping("/login/captcha")
     public Result<CaptchaVO> getCaptcha() {
         CaptchaVO captcha = captchaService.generate();
         return Result.success(captcha);
