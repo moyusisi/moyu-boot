@@ -27,6 +27,11 @@ public interface SysUserService extends IService<SysUser> {
     PageData<SysUserVO> pageList(SysUserParam param);
 
     /**
+     * 分页获取记录列表
+     */
+    List<SysUserVO> userSelector(SysUserParam param);
+
+    /**
      * 获取记录详情
      */
     SysUserVO detail(SysUserParam param);

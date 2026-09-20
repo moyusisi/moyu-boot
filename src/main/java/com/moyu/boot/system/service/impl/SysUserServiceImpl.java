@@ -117,6 +117,20 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
     @Override
+    public List<SysUserVO> userSelector(SysUserParam param) {
+        // 查询条件
+        QueryWrapper queryWrapper = QueryWrapper.create();
+        // 仅查询部分字段
+        queryWrapper.select(SysUser::getAccount, SysUser::getName);
+        // 指定account查询
+        queryWrapper.like(SysUser::getAccount, param.getAccount(), ObjectUtil.isNotEmpty(param.getAccount()));
+        // 限制数据权限
+        DataScopeHelper.dataScopeFilter(queryWrapper, SysUser::getAccount, SysUser::getOrgCode);
+        // 查询
+        return this.listAs(queryWrapper, SysUserVO.class);
+    }
+
+    @Override
     public SysUserVO detail(SysUserParam param) {
         QueryWrapper queryWrapper = QueryWrapper.create();
         queryWrapper.eq(SysUser::getId, param.getId(), ObjectUtil.isNotEmpty(param.getId()))

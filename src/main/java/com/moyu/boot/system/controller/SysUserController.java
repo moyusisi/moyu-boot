@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用户控制器
@@ -113,4 +114,12 @@ public class SysUserController {
         return Result.success();
     }
 
+    /**
+     * 分页获取角色列表
+     */
+    @PostMapping("/userSelector")
+    public Result<List<SysUserVO>> userSelector(@RequestBody SysUserParam userParam) {
+        List<SysUserVO> list = sysUserService.userSelector(userParam);
+        return Result.success(list);
+    }
 }
