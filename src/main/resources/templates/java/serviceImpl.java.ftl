@@ -20,6 +20,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.joda.time.DateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.CollectionUtils;
@@ -65,7 +66,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         ${fieldConfig.fieldType} end = param.get${fieldConfig.fieldName?cap_first}2();
                 <#if fieldConfig.formType == "DATE">
         // 如果是日期范围，则endTime应为当日的结尾
-        end = DateUtil.endOfDay(end);
+        end = new DateTime(end).withTime(23, 59, 59, 0).toDate();
                 </#if>
         // 范围查询-起始
         queryWrapper.ge(${entityName}::get${fieldConfig.fieldName?cap_first}, start, ObjectUtil.isNotEmpty(start));
@@ -121,7 +122,7 @@ public class ${entityName}ServiceImpl extends ServiceImpl<${entityName}Mapper, $
         ${fieldConfig.fieldType} end = param.get${fieldConfig.fieldName?cap_first}2();
                 <#if fieldConfig.formType == "DATE">
         // 如果是日期，则endTime应为当日的结尾
-        end = DateUtil.endOfDay(end);
+        end = new DateTime(end).withTime(23, 59, 59, 0).toDate();
                 </#if>
         // 范围查询-起始
         queryWrapper.ge(${entityName}::get${fieldConfig.fieldName?cap_first}, start, ObjectUtil.isNotEmpty(start));

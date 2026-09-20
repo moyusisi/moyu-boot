@@ -71,7 +71,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 指定startTime范围查询
         Date start = param.getStartTime1();
         // 如果是日期，则end应为当日的结尾
-        // end = DateUtil.endOfDay(end);
+        // end = new DateTime(end).withTime(23, 59, 59, 0).toDate();
         Date end = param.getStartTime2();
         // 范围查询-起始
         queryWrapper.ge(SysLog::getStartTime, start, ObjectUtil.isNotEmpty(start));
@@ -129,7 +129,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         // 指定startTime范围查询
         Date start = param.getStartTime1();
         // 如果是日期，则end应为当日的结尾
-        // end = DateUtil.endOfDay(end);
+        // end = new DateTime(end).withTime(23, 59, 59, 0).toDate();
         Date end = param.getStartTime2();
         // 范围查询-起始
         queryWrapper.ge(SysLog::getStartTime, start, ObjectUtil.isNotEmpty(start));
