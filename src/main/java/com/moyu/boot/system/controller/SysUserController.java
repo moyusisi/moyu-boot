@@ -115,8 +115,9 @@ public class SysUserController {
     }
 
     /**
-     * 分页获取角色列表
+     * 获取用户选择下拉列表
      */
+    @SaCheckPermission(value = "sys:user:selector")
     @PostMapping("/userSelector")
     public Result<List<SysUserVO>> userSelector(@RequestBody SysUserParam userParam) {
         List<SysUserVO> list = sysUserService.userSelector(userParam);
