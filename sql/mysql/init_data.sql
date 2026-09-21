@@ -37,8 +37,8 @@ values  (1894925631903645700, 'g_zongbu', '总部管理岗', '11000000', '集团
 
 -- 菜单数据
 insert into moyu.sys_menu (code, name, parent_code, menu_type, path, component, permission, icon, visible, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  ('sys_module', '系统模块', '0', 1, '/sysModule', 'Layout', '', 'appstore-add-outlined', 1, 'sys_module', 1, null, '', 0, null, null, null, null),
-        ('biz_module', '业务模块', '0', 1, '/bizModule', 'Layout', '', 'profile-outlined', 1, null, 2, null, '', 0, null, null, null, null),
+values  ('sys_module', '系统模块', '0', 1, '/index', 'Layout', '', 'appstore-add-outlined', 1, 'sys_module', 1, null, '', 0, null, null, null, null),
+        ('biz_module', '业务模块', '0', 1, '/index', 'Layout', '', 'profile-outlined', 1, null, 2, null, '', 0, null, null, null, null),
 
         ('dir_sys_org', '组织架构', 'sys_module', 2, '/org', null, '', 'apartment-outlined', 1, 'sys_module', 10, null, '', 0, null, null, null, null),
         ('dir_sys_perm', '权限控制', 'sys_module', 2, '/perm', null, '', 'unlock-outlined', 1, 'sys_module', 20, null, '', 0, null, null, null, null),
