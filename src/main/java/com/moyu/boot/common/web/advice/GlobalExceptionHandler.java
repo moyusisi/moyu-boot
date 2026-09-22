@@ -1,6 +1,5 @@
 package com.moyu.boot.common.web.advice;
 
-
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 import cn.dev33.satoken.exception.NotRoleException;
@@ -12,7 +11,6 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -32,7 +30,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
 import java.util.stream.Collectors;
 
 /**
@@ -182,28 +179,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ServletException.class)
     public Result<?> exceptionHandler(ServletException e) {
         log.error("Servlet异常:{}", e.getMessage(), e);
-        Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
-        log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
-        return result;
-    }
-    // ===================== 容器IO异常 =====================
-
-    /**
-     * 客户端主动断开连接，避免大量ERROR日志刷屏
-     */
-    @ExceptionHandler(ClientAbortException.class)
-    public void handleClientAbort() {
-        log.debug("客户端主动断开TCP连接，无需返回响应");
-    }
-
-    // 兜底捕获被包装的IO异常
-    @ExceptionHandler(IOException.class)
-    public Result<?> handleIOException(IOException e) {
-        if (e instanceof ClientAbortException || e.getCause() instanceof ClientAbortException) {
-            log.warn("客户端断开连接(IO包装异常)，无需处理");
-            return null;
-        }
-        log.error("IO读写异常:{}", e.getMessage(), e);
         Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR, e.getMessage());
         log.info("异常捕捉处理后返回结果为:{}", JSONUtil.toJsonStr(result));
         return result;
