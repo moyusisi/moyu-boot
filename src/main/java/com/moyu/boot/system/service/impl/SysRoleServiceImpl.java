@@ -39,10 +39,8 @@ import com.moyu.boot.system.model.vo.PermScopeInfo;
 import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.SysUserVO;
 import com.moyu.boot.system.service.*;
-import com.mybatisflex.core.logicdelete.LogicDeleteManager;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -564,31 +562,32 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     public Map<String, LoginUser.DataScopeInfo> roleDataScopeMap(Set<String> roleSet, String orgCode) {
-        // 权限标识集合
+        // 权限标识集合 <url, dataScope>
         Map<String, LoginUser.DataScopeInfo> apiScopeMap = new HashMap<>();
         if (ObjectUtil.isEmpty(roleSet)) {
             return apiScopeMap;
         }
-        // roleSet拥有的Relation(包含了菜单+按钮): permCode->SysRelation
-        Map<String, SysRelation> allPermMap = new HashMap<>();
-        sysRelationService.list(QueryWrapper.create()
+        // roleSet拥有的所有Relation(包含了菜单+按钮)
+        List<SysRelation> relationList = sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
                 .in(SysRelation::getObjectId, roleSet)
-        ).forEach(e -> allPermMap.put(e.getTargetId(), e));
+        );
+        Map<String, SysRelation> allPermMap = new HashMap<>();
+        relationList.forEach(e -> allPermMap.put(e.getTargetId(), e));
         if (ObjectUtil.isEmpty(allPermMap)) {
             return apiScopeMap;
         }
-        // roleSet拥有的所有按钮 code -> SysResource
+
+        // roleSet拥有的所有按钮 code -> SysMenu
         Map<String, SysMenu> btnMap = new HashMap<>();
-        Set<String> btnPermSet = new HashSet<>();
-        // 查询模块所有按钮
+        Set<String> permSet = new HashSet<>();
+        // 查询模块所有按钮(包括菜单，支持菜单直接加权限标识)
         sysMenuService.list(QueryWrapper.create()
-                .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
                 .in(SysMenu::getCode, allPermMap.keySet())
                 .eq(SysMenu::getDeleted, 0)
         ).forEach(btn -> {
             btnMap.put(btn.getCode(), btn);
-            btnPermSet.add(btn.getPermission());
+            permSet.add(btn.getPermission());
         });
         // role无按钮则返回
         if (CollectionUtils.isEmpty(btnMap)) {
@@ -602,7 +601,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 // 只要有数据范围的接口
                 .eq(SysApi::getHasScope, 1)
                 // 权限标识
-                .in(SysApi::getCode, btnPermSet)
+                .in(SysApi::getCode, permSet)
         ).forEach(api -> {
             apiMap.put(api.getCode(), api);
         });
