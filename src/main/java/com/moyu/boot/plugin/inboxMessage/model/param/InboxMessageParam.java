@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -20,7 +23,10 @@ import java.util.Set;
  * @author moyusisi
  * @since 2026-01-13
  */
-@Data
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class InboxMessageParam extends PageParam {
 
