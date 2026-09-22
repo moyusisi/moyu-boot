@@ -570,11 +570,20 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // roleSet拥有的所有Relation(包含了菜单+按钮)
         List<SysRelation> relationList = sysRelationService.list(QueryWrapper.create()
                 .eq(SysRelation::getRelationType, RelationTypeEnum.ROLE_HAS_PERM.getCode())
+                .isNotNull(SysRelation::getExtJson)
                 .in(SysRelation::getObjectId, roleSet)
         );
+        // 过滤出有数据权限的关系
+        List<SysRelation> hasScopeList = new ArrayList<>();
+        Set<String> btnCodeSet = new HashSet<>();
         Map<String, SysRelation> allPermMap = new HashMap<>();
-        relationList.forEach(e -> allPermMap.put(e.getTargetId(), e));
-        if (ObjectUtil.isEmpty(allPermMap)) {
+        relationList.forEach(e -> {
+            if (!StrUtil.isEmpty(e.getExtJson())) {
+                btnCodeSet.add(e.getTargetId());
+                hasScopeList.add(e);
+            }
+        });
+        if (ObjectUtil.isEmpty(btnCodeSet)) {
             return apiScopeMap;
         }
 
@@ -583,7 +592,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Set<String> permSet = new HashSet<>();
         // 查询模块所有按钮(包括菜单，支持菜单直接加权限标识)
         sysMenuService.list(QueryWrapper.create()
-                .in(SysMenu::getCode, allPermMap.keySet())
+                .in(SysMenu::getCode, btnCodeSet)
                 .eq(SysMenu::getDeleted, 0)
         ).forEach(btn -> {
             btnMap.put(btn.getCode(), btn);
@@ -608,13 +617,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
         Gson gson = new GsonBuilder().create();
         // 接口数据范围组装
-        btnMap.forEach((code, btn) -> {
-            SysApi api = apiMap.get(btn.getPermission());
-            if (api != null) {
-                // 不同btn可能有不同数据范围
-                SysRelation relation = allPermMap.get(btn.getCode());
-                RelationExt.ScopeExt scopeExt = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
-                if (scopeExt != null && scopeExt.getDataScope() != null) {
+        hasScopeList.forEach(relation -> {
+            String extJson = relation.getExtJson();
+            // 不同关系可能有不同数据范围
+            RelationExt.ScopeExt scopeExt = gson.fromJson(extJson, RelationExt.ScopeExt.class);
+            SysMenu btn = btnMap.get(relation.getObjectId());
+            if (btn != null) {
+                SysApi api = apiMap.get(btn.getPermission());
+                if (api != null && scopeExt != null && scopeExt.getDataScope() != null) {
                     LoginUser.DataScopeInfo info = buildDataScopeInfo(orgCode, scopeExt);
                     if (apiScopeMap.containsKey(api.getPath())) {
                         // 已有重复的，则要合并数据范围
