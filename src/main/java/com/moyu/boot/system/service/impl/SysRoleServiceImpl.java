@@ -621,7 +621,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             String extJson = relation.getExtJson();
             // 不同关系可能有不同数据范围
             RelationExt.ScopeExt scopeExt = gson.fromJson(extJson, RelationExt.ScopeExt.class);
-            SysMenu btn = btnMap.get(relation.getObjectId());
+            SysMenu btn = btnMap.get(relation.getTargetId());
             if (btn != null) {
                 SysApi api = apiMap.get(btn.getPermission());
                 if (api != null && scopeExt != null && scopeExt.getDataScope() != null) {
