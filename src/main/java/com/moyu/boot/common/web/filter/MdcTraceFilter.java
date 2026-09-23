@@ -5,9 +5,11 @@ package com.moyu.boot.common.web.filter;
  * @since 2026-08-13
  */
 
+import cn.dev33.satoken.util.SaTokenConsts;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import org.slf4j.MDC;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,9 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * MDC 链路追踪过滤器
+ * MDC 链路追踪过滤器(优先级高于鉴权Filter)
  * Spring会自动识别 Filter 类型 Bean，注册到 Servlet 过滤器链
  */
+@Order(SaTokenConsts.ASSEMBLY_ORDER - 1)
 @Component
 public class MdcTraceFilter extends OncePerRequestFilter {
 
