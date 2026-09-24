@@ -11,7 +11,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
-import com.moyu.boot.plugin.daySeq.service.DaySeqService;
+import com.moyu.boot.plugin.daySeq.service.DaySnService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
@@ -53,7 +53,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     private SysConfigService sysConfigService;
 
     @Resource
-    private DaySeqService daySeqService;
+    private DaySnService daySnService;
 
     @Override
     public List<SysUserVO> list(SysUserParam param) {
@@ -159,7 +159,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser user = BeanUtil.copyProperties(param, SysUser.class);
         user.setId(null);
         // 用户唯一id，202602110001
-        user.setUserId(daySeqService.nextId());
+        user.setUserId(daySnService.nextId());
         // user.setUserId(IdUtil.getSnowflakeNextIdStr());
         // 若指定了直属组织，则设置所属组织
         if (ObjectUtil.isNotEmpty(user.getOrgCode())) {
