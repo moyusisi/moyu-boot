@@ -1,10 +1,10 @@
-package com.moyu.boot.plugin.daySeq.controller;
+package com.moyu.boot.plugin.seq.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.daySeq.model.vo.DaySnVO;
-import com.moyu.boot.plugin.daySeq.service.DaySnService;
+import com.moyu.boot.plugin.seq.model.vo.DaySnVO;
+import com.moyu.boot.plugin.seq.service.DaySnService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,8 +31,8 @@ public class DaySnController {
      * 获取指定key(seq:day:idKey)对应的ID
      */
     @PostMapping("/list")
-    public Result<List<DaySnVO>> list(@RequestParam(required = false) String keyword) {
-        List<DaySnVO> list = daySnService.list(keyword);
+    public Result<List<DaySnVO>> list(@RequestParam(required = false) String idKey) {
+        List<DaySnVO> list = daySnService.list(idKey);
         return Result.success(list);
     }
 

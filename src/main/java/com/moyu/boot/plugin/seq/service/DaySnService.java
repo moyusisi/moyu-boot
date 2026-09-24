@@ -1,6 +1,6 @@
-package com.moyu.boot.plugin.daySeq.service;
+package com.moyu.boot.plugin.seq.service;
 
-import com.moyu.boot.plugin.daySeq.model.vo.DaySnVO;
+import com.moyu.boot.plugin.seq.model.vo.DaySnVO;
 
 import java.util.List;
 

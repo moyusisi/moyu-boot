@@ -1,8 +1,8 @@
-package com.moyu.boot.plugin.daySeq.service.impl;
+package com.moyu.boot.plugin.seq.service.impl;
 
 import cn.hutool.core.util.StrUtil;
-import com.moyu.boot.plugin.daySeq.model.vo.DaySnVO;
-import com.moyu.boot.plugin.daySeq.service.DaySnService;
+import com.moyu.boot.plugin.seq.model.vo.DaySnVO;
+import com.moyu.boot.plugin.seq.service.DaySnService;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 

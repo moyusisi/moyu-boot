@@ -1,4 +1,4 @@
-package com.moyu.boot.plugin.daySeq.model.vo;
+package com.moyu.boot.plugin.seq.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

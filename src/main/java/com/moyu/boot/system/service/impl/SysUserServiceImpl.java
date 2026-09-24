@@ -11,7 +11,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
-import com.moyu.boot.plugin.daySeq.service.DaySnService;
+import com.moyu.boot.plugin.seq.service.DaySnService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
 import com.moyu.boot.system.model.entity.SysUser;
