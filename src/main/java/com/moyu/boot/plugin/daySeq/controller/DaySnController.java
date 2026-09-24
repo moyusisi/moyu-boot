@@ -1,5 +1,6 @@
 package com.moyu.boot.plugin.daySeq.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.daySeq.model.vo.DaySnVO;
@@ -47,6 +48,7 @@ public class DaySnController {
     /**
      * 自增测试接口
      */
+    @SaCheckPermission("dev:seq:inc")
     @PostMapping("/inc")
     public Result<String> inc(@RequestParam String prefix) {
         String sn = daySnService.nextId(prefix, 5);
