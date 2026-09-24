@@ -43,9 +43,10 @@ public interface DaySeqService {
     String nextId(String prefix, Integer size);
 
     /**
-     * 获取指定key对应的ID,格式为: seq:day:idKey
+     * 获取指定key对应的ID的序列值,格式为: seq:day:idKey
+     * @return 序列器对应的值
      */
-    String getId(String idKey);
+    Long getIdValue(String idKey);
 
     /**
      * 返回所有的日内标识

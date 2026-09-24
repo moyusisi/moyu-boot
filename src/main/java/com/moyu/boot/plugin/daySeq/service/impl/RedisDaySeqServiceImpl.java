@@ -41,9 +41,9 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
     @Override
     public String nextId(Integer size) {
         String today = DTF.format(LocalDate.now());
-        Long seq = generatorId(null, today);
+        Long num = generatorId(null, today);
         // 返回日内标识，格式化补零
-        return today + String.format("%0" + size + "d", seq);
+        return today + String.format("%0" + size + "d", num);
     }
 
     @Override
@@ -55,23 +55,27 @@ public class RedisDaySeqServiceImpl implements DaySeqService {
     @Override
     public String nextId(String prefix, Integer size) {
         String today = DTF.format(LocalDate.now());
-        Long seq = generatorId(prefix, today);
+        Long num = generatorId(prefix, today);
         // 返回带前缀的日内标识，格式化补零
-        return prefix + today + String.format("%0" + size + "d", seq);
+        return prefix + today + String.format("%0" + size + "d", num);
     }
 
     /**
      * 读取当前Id序号
      */
     @Override
-    public String getId(String idKey) {
+    public Long getIdValue(String idKey) {
         if (StrUtil.isEmpty(idKey)) {
             return null;
         }
         // 构造fullKey,格式为: seq:day:idKey
         String fullKey = INTRADAY_SEQ_REDIS_KEY + idKey;
         // 从redis读取值并返回
-        return stringRedisTemplate.opsForValue().get(fullKey);
+        String value = stringRedisTemplate.opsForValue().get(fullKey);
+        if (StrUtil.isEmpty(value)) {
+            return null;
+        }
+        return Long.valueOf(value);
     }
 
     @Override

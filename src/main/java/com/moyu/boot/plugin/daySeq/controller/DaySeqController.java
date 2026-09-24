@@ -39,8 +39,8 @@ public class DaySeqController {
      * 获取指定key(seq:day:idKey)对应的ID
      */
     @PostMapping("/currentId")
-    public Result<String> currentId(@RequestParam String idKey) {
-        String sn = daySeqService.getId(idKey);
+    public Result<Long> currentId(@RequestParam String idKey) {
+        Long sn = daySeqService.getIdValue(idKey);
         return Result.success(sn);
     }
 
