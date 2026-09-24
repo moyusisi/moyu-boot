@@ -3,11 +3,13 @@ package com.moyu.boot.common.authZ.config;
 import cn.dev33.satoken.config.SaTokenConfig;
 import cn.dev33.satoken.context.SaHolder;
 import cn.dev33.satoken.context.model.SaStorage;
+import cn.dev33.satoken.exception.FirewallCheckException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.filter.SaServletFilter;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.strategy.SaFirewallStrategy;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.google.gson.Gson;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -132,6 +135,16 @@ public class SaTokenConfigure {
                             .setHeader("X-Content-Type-Options", "nosniff")
                     ;
                 });
+    }
+
+    @PostConstruct
+    public void saTokenPostConstruct() {
+        SaFirewallStrategy.instance.registerHookToFirst((req, res, extArg) -> {
+            // requestPath 为null空指针情况，提前处理
+            if (req.getRequestPath() == null) {
+                throw new FirewallCheckException("非法请求：null");
+            }
+        });
     }
 
     /**
