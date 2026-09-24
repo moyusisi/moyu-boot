@@ -9,7 +9,6 @@ import com.dtflys.forest.http.ForestResponse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
@@ -25,7 +24,6 @@ import com.moyu.boot.system.model.entity.SysLog;
 import com.moyu.boot.system.service.SysLogService;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
-import com.mybatisflex.core.row.DbChain;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -284,12 +282,8 @@ public class ThirdPartyApiServiceImpl extends ServiceImpl<ThirdPartyApiMapper, T
         sysLog.setEndTime(response.getResponseTime());
         sysLog.setExecutionTime(response.getTimeAsMillisecond());
 
-        sysLog.setCreateTime(new Date());
-        sysLog.setCreateBy(LoginUserUtils.getUsername());
-
         // 保存记录
-        //sysLogService.save(sysLog);
-        DbChain.table(SysLog.class).save(sysLog);
+        sysLogService.save(sysLog);
     }
 
 }
