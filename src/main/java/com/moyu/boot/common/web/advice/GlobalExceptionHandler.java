@@ -218,7 +218,7 @@ public class GlobalExceptionHandler {
     public Result<?> noPermissionException(HttpServletRequest request, SaTokenException e) {
         Result<?> result = new Result<>(ResultCodeEnum.ACCESS_UNAUTHORIZED);
         if (e instanceof NotLoginException) {
-            // 处理未登录异常，区分未认证的具体场景
+            // 登陆认证是在Filter层处理的，这里通常走不到
             result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
         }
         log.info("未授权访问：{}", request.getRequestURI());
