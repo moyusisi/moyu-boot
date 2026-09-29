@@ -62,7 +62,7 @@ public class SysUserController {
     @SysLog(module = "system", logType = 2, value = "新增用户", response = true)
     @SaCheckPermission(value = "sys:user:add", orRole = "ROOT")
     @PostMapping("/add")
-    public Result<String> add(@Validated @RequestBody SysUserParam sysUserParam) {
+    public Result<?> add(@Validated @RequestBody SysUserParam sysUserParam) {
         sysUserService.add(sysUserParam);
         return Result.success();
     }
@@ -73,7 +73,7 @@ public class SysUserController {
     @SysLog(module = "system", logType = 2, value = "删除用户", response = true)
     @SaCheckPermission(value = "sys:user:delete", orRole = "ROOT")
     @PostMapping("/delete")
-    public Result<String> delete(@RequestBody SysUserParam sysUserParam) {
+    public Result<?> delete(@RequestBody SysUserParam sysUserParam) {
         Assert.notEmpty(sysUserParam.getIds(), "删除列表ids不能为空");
         sysUserService.deleteByIds(sysUserParam);
         return Result.success();
