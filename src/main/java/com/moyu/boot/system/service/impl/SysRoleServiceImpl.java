@@ -575,16 +575,16 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
                 .isNotNull(SysRelation::getExtJson)
                 .in(SysRelation::getObjectId, roleSet)
         );
-        // 过滤出有数据权限的关系
+        // 过滤出 有数据权限 的关系
         List<SysRelation> hasScopeList = new ArrayList<>();
-        Set<String> btnCodeSet = new HashSet<>();
+        Set<String> hasScopeCodeSet = new HashSet<>();
         relationList.forEach(e -> {
             if (!StrUtil.isEmpty(e.getExtJson())) {
-                btnCodeSet.add(e.getTargetId());
+                hasScopeCodeSet.add(e.getTargetId());
                 hasScopeList.add(e);
             }
         });
-        if (ObjectUtil.isEmpty(btnCodeSet)) {
+        if (ObjectUtil.isEmpty(hasScopeCodeSet)) {
             return apiScopeMap;
         }
 
@@ -593,11 +593,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         Set<String> permSet = new HashSet<>();
         // 查询模块所有按钮(包括菜单，支持菜单直接加权限标识)
         sysMenuService.list(QueryWrapper.create()
-                .in(SysMenu::getCode, btnCodeSet)
+                .in(SysMenu::getCode, hasScopeCodeSet)
                 .eq(SysMenu::getDeleted, 0)
-        ).forEach(btn -> {
-            btnMap.put(btn.getCode(), btn);
-            permSet.add(btn.getPermission());
+        ).forEach(menu -> {
+            btnMap.put(menu.getCode(), menu);
+            permSet.add(menu.getPermission());
         });
         // role无按钮则返回
         if (CollectionUtils.isEmpty(btnMap)) {
