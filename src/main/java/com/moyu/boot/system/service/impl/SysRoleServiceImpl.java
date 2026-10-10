@@ -555,8 +555,10 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         }
         // 获取menu上的权限标识
         List<String> permList = sysMenuService.objListAs(QueryWrapper.create().select(SysMenu::getPermission)
-                .eq(SysMenu::getMenuType, MenuTypeEnum.BUTTON.getCode())
+                .isNotNull(SysMenu::getPermission)
                 .in(SysMenu::getCode, menuSet), String.class);
+        // 移除empty
+        permList.removeIf(StrUtil::isBlank);
         return new HashSet<>(permList);
     }
 
@@ -576,7 +578,6 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 过滤出有数据权限的关系
         List<SysRelation> hasScopeList = new ArrayList<>();
         Set<String> btnCodeSet = new HashSet<>();
-        Map<String, SysRelation> allPermMap = new HashMap<>();
         relationList.forEach(e -> {
             if (!StrUtil.isEmpty(e.getExtJson())) {
                 btnCodeSet.add(e.getTargetId());
