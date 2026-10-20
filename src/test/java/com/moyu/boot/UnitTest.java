@@ -110,11 +110,15 @@ public class UnitTest {
 
     @Test
     public void testSign() {
+        // 默认配置
         SaSignConfig signConfig = new SaSignConfig("6a82ddac41b2c4f7b568e2bb");
         SaSignManager.setConfig(signConfig);
 
+        // 多app配置
         Map<String, SaSignConfig> signMany = new HashMap<>();
-        signMany.put("app1", signConfig);
+        SaSignConfig config1 = new SaSignConfig("6a82ddac41b2c4f7b568e2bb");
+        config1.setDigestAlgo("sha256");
+        signMany.put("appId1", config1);
         SaSignManager.setSignMany(signMany);
 
         // 请求参数
@@ -123,8 +127,9 @@ public class UnitTest {
         paramMap.put("money", 1000);
         // 补全 timestamp、nonce、sign 参数，并序列化为 kv 字符串
         String paramStr = SaSignUtil.addSignParamsAndJoin(paramMap);
-        String paramStr2 = SaSignMany.getSignTemplate("app1").addSignParamsAndJoin(paramMap);
-        Map<String, Object> paramStr3 = SaSignMany.getSignTemplate("app1").addSignParams(paramMap);
+        String paramStr2 = SaSignMany.getSignTemplate("appId1").addSignParamsAndJoin(paramMap);
+        // 补全，以map形式返回
+        Map<String, Object> paramStr3 = SaSignMany.getSignTemplate("appId1").addSignParams(paramMap);
         log.info("paramStr:{}", paramStr);
         log.info("paramStr2:{}", paramStr2);
         log.info("paramStr2:{}", paramStr3);
