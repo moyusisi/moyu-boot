@@ -3,7 +3,6 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.google.common.base.Strings;
@@ -17,6 +16,7 @@ import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
 import com.moyu.boot.system.model.entity.SysGroup;
+import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.entity.SysRelation;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysGroupParam;
@@ -137,17 +137,13 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
             group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
         }
-        // 若指定了直属组织，则设置所属组织
-        if (ObjectUtil.isNotEmpty(group.getOrgCode())) {
-            // 获取组织结构树
-            Tree<String> rootTree = sysOrgService.singleTree();
-            Tree<String> orgNode = rootTree.getNode(group.getOrgCode());
-            // 设置直属机构名称
-            group.setOrgName(orgNode.getName().toString());
-            // 组织机构层级路径,逗号分隔,父节点在后
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            group.setOrgPath(SysConstants.COMMA_JOINER.join(list));
+        // 查询指定组织
+        SysOrg org = sysOrgService.getOne(QueryWrapper.create().eq(SysOrg::getCode, param.getOrgCode()));
+        if (org == null) {
+            throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定组织");
         }
+        // 设置直属机构名称
+        group.setOrgName(org.getName());
         this.save(group);
     }
 
@@ -180,16 +176,15 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 属性复制
         SysGroup updateGroup = BeanUtil.copyProperties(param, SysGroup.class, BaseEntity.UPDATE_TIME, BaseEntity.UPDATE_BY);
         updateGroup.setId(oldGroup.getId());
-        // 若新指定了直属组织，则设置组织名
-        if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateGroup.getOrgCode()) && ObjectUtil.isNotEmpty(updateGroup.getOrgCode())) {
-            // 获取组织结构树
-            Tree<String> rootTree = sysOrgService.singleTree();
-            Tree<String> orgNode = rootTree.getNode(updateGroup.getOrgCode());
+        // 若新指定了直属组织
+        if (ObjectUtil.notEqual(oldGroup.getOrgCode(), updateGroup.getOrgCode())) {
+            // 查询指定组织
+            SysOrg org = sysOrgService.getOne(QueryWrapper.create().eq(SysOrg::getCode, param.getOrgCode()));
+            if (org == null) {
+                throw new BusinessException(ResultCodeEnum.INVALID_PARAMETER_ERROR, "未查到指定组织");
+            }
             // 设置直属机构名称
-            updateGroup.setOrgName(orgNode.getName().toString());
-            // 组织机构层级路径,逗号分隔,父节点在后
-            List<String> list = TreeUtil.getParentsId(orgNode, true);
-            updateGroup.setOrgPath(SysConstants.COMMA_JOINER.join(list));
+            updateGroup.setOrgName(org.getName());
         }
         this.updateById(updateGroup);
     }
