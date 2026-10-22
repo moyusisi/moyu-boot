@@ -30,10 +30,10 @@ values (100, 'r_default', ' 默认角色 ', 1, 0, null, '', 0, null, null, null,
        (150, 'r_auditor', ' 审计员 ', 5, 0, null, '', 0, null, null, null, null);
 
 -- 功能权限组
-insert into moyu.sys_group (id, code, name, org_code, org_name, org_path, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
-values  (1894925631903645700, 'g_zongbu', '总部管理岗', '11000000', '集团总部', '11000000,10000000,0', 2, 0, null, null, 0, null, null, null, null),
-        (1894925631903645701, 'g_beijing', '北京公司管理岗', '12000000', '北京公司', '12000000,10000000,0', 9, 0, null, null, 0, null, null, null, null),
-        (1894925631903645702, 'g_auditor', '全局审计岗', '10000000', 'MY集团', '10000000,0', 5, 0, null, null, 0, null, null, null, null);
+insert into moyu.sys_group (id, code, name, org_code, org_name, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)
+values  (1894925631903645700, 'g_zongbu', '总部管理岗', '11000000', '集团总部', 2, 0, null, null, 0, null, null, null, null),
+        (1894925631903645701, 'g_beijing', '北京公司管理岗', '12000000', '北京公司', 9, 0, null, null, 0, null, null, null, null),
+        (1894925631903645702, 'g_auditor', '全局审计岗', '10000000', 'MY集团', 5, 0, null, null, 0, null, null, null, null);
 
 -- 菜单数据
 insert into moyu.sys_menu (code, name, parent_code, menu_type, path, component, permission, icon, visible, module, sort_num, ext_json, remark, deleted, create_time, create_by, update_time, update_by)

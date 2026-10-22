@@ -105,7 +105,6 @@ create table sys_group
     `name`        VARCHAR(64)   DEFAULT NULL COMMENT '名称',
     `org_code`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织编码',
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
-    `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
     `sort_num`    INT           DEFAULT NULL COMMENT '排序顺序',
     `status`      TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
