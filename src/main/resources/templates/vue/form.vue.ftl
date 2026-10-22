@@ -86,8 +86,9 @@
   // 是否为编辑
   const edit = ref(false)
   // 表单数据
+  const defaultFormData = {}
   const formRef = ref()
-  const formData = ref({})
+  const formData = ref({...defaultFormData})
   const dataLoading = ref(false)
   const submitLoading = ref(false)
   // 下拉框选项
@@ -112,7 +113,10 @@
   }
   // 关闭抽屉
   const onClose = () => {
+    // 重置校验字段
     formRef.value.resetFields()
+    // 关闭时恢复默认值
+    formData.value = { ...defaultFormData }
     visible.value = false
   }
   // 加载数据
