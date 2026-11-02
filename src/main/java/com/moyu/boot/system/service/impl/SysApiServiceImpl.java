@@ -43,8 +43,10 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
         queryWrapper.like(SysApi::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定path查询
         queryWrapper.like(SysApi::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
-        // 指定apiType查询
-        queryWrapper.eq(SysApi::getApiType, param.getApiType(), ObjectUtil.isNotEmpty(param.getApiType()));
+        // 指定hasScope查询
+        queryWrapper.eq(SysApi::getHasScope, param.getHasScope(), ObjectUtil.isNotNull(param.getHasScope()));
+        // 指定remark查询
+        queryWrapper.like(SysApi::getRemark, param.getRemark(), ObjectUtil.isNotEmpty(param.getRemark()));
         // 仅查询未删除的
         queryWrapper.eq(SysApi::getDeleted, 0);
         // 指定排序
@@ -70,8 +72,10 @@ public class SysApiServiceImpl extends ServiceImpl<SysApiMapper, SysApi> impleme
         queryWrapper.like(SysApi::getCode, param.getCode(), ObjectUtil.isNotEmpty(param.getCode()));
         // 指定path查询
         queryWrapper.like(SysApi::getPath, param.getPath(), ObjectUtil.isNotEmpty(param.getPath()));
-        // 指定apiType查询
-        queryWrapper.eq(SysApi::getApiType, param.getApiType(), ObjectUtil.isNotEmpty(param.getApiType()));
+        // 指定hasScope查询
+        queryWrapper.eq(SysApi::getHasScope, param.getHasScope(), ObjectUtil.isNotNull(param.getHasScope()));
+        // 指定remark查询
+        queryWrapper.like(SysApi::getRemark, param.getRemark(), ObjectUtil.isNotEmpty(param.getRemark()));
         // 仅查询未删除的
         queryWrapper.eq(SysApi::getDeleted, 0);
         // 指定排序
