@@ -1,5 +1,6 @@
 package com.moyu.boot.plugin.thirdPartyApi.service;
 
+import com.dtflys.forest.http.ForestResponse;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.plugin.thirdPartyApi.model.entity.ThirdPartyApi;
 import com.moyu.boot.plugin.thirdPartyApi.model.param.ThirdPartyApiParam;
@@ -63,9 +64,22 @@ public interface ThirdPartyApiService extends IService<ThirdPartyApi> {
     String requestApi(String apiCode, Map<String, Object> headers, Map<String, Object> params);
 
     /**
-     * 调用接口(只支持get和postJson)
+     * 发送GET/POST请求
      */
-    default String requestApi(String apiCode, Map<String, Object> params) {
-        return requestApi(apiCode, null, params);
-    }
+    ForestResponse<?> request(String method, String url, Map<String, Object> headers, Map<String, Object> params);
+
+    /**
+     * 发送GET请求，只有query，无body
+     */
+    ForestResponse<?> get(String url, Map<String, Object> headers, Map<String, Object> params);
+
+    /**
+     * 发送POST请求，表单提交
+     */
+    ForestResponse<?> postForm(String url, Map<String, Object> headers, Map<String, Object> params);
+
+    /**
+     * 发送POST请求，body为json
+     */
+    ForestResponse<?> postJson(String url, Map<String, Object> headers, Map<String, Object> params);
 }
