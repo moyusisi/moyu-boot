@@ -21,6 +21,7 @@ import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
@@ -28,10 +29,7 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.MenuTypeEnum;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.mapper.SysRoleMapper;
-import com.moyu.boot.system.model.entity.SysApi;
-import com.moyu.boot.system.model.entity.SysMenu;
-import com.moyu.boot.system.model.entity.SysRelation;
-import com.moyu.boot.system.model.entity.SysRole;
+import com.moyu.boot.system.model.entity.*;
 import com.moyu.boot.system.model.entity.ext.RelationExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
 import com.moyu.boot.system.model.param.SysUserParam;
@@ -93,7 +91,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
-        queryWrapper.orderBy(SysRole::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysRole::getSortNum, true);
+        }
         // 查询
         List<SysRoleVO> voList = this.listAs(queryWrapper, SysRoleVO.class);
         return voList;
@@ -116,7 +120,13 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 仅查询未删除的
         queryWrapper.eq(SysRole::getDeleted, 0);
         // 排序
-        queryWrapper.orderBy(SysRole::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysRole::getSortNum, true);
+        }
         // 分页查询
         Page<SysRoleVO> page = Page.of(param.getPageNum(), param.getPageSize());
         Page<SysRoleVO> voPage = this.pageAs(page, queryWrapper, SysRoleVO.class);

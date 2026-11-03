@@ -7,6 +7,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
@@ -14,6 +15,7 @@ import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.plugin.seq.service.DaySnService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
+import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.SysUserVO;
@@ -80,6 +82,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(SysUser::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 仅查询未删除的
         queryWrapper.eq(SysUser::getDeleted, 0);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        }
         // 查询
         List<SysUserVO> voList = this.listAs(queryWrapper, SysUserVO.class);
         return voList;
@@ -108,6 +115,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         queryWrapper.eq(SysUser::getStatus, param.getStatus(), ObjectUtil.isNotEmpty(param.getStatus()));
         // 仅查询未删除的
         queryWrapper.eq(SysUser::getDeleted, 0);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        }
         // 限制数据权限
         DataScopeHelper.dataScopeFilter(queryWrapper, SysUser::getCreateBy, SysUser::getOrgCode);
         // 分页查询

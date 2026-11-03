@@ -9,18 +9,21 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
+import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.model.vo.SysOrgVO;
@@ -71,7 +74,13 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 仅查询未删除的
         queryWrapper.eq(SysOrg::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysOrg::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysOrg::getSortNum, true);
+        }
         // 查询
         List<SysOrgVO> voList = this.listAs(queryWrapper, SysOrgVO.class);
         return voList;
@@ -100,7 +109,13 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         // 仅查询未删除的
         queryWrapper.eq(SysOrg::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysOrg::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysOrg::getSortNum, true);
+        }
         // 非ROOT则限制数据权限
         DataScopeHelper.dataScopeFilter(queryWrapper, SysOrg::getName, SysOrg::getCode);
         DataScopeHelper.dataScopeFilter(com.mybatisflex.core.query.QueryWrapper.create(), SysOrg::getName, SysOrg::getCode);

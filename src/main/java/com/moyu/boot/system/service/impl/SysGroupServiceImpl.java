@@ -3,15 +3,15 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
+import com.moyu.boot.common.core.enums.SortOrderEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
-import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
@@ -80,7 +80,13 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 仅查询未删除的
         queryWrapper.eq(SysGroup::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysGroup::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysGroup::getSortNum, true);
+        }
         // 查询
         List<SysGroup> groupList = this.list(queryWrapper);
         return groupList;
@@ -103,7 +109,13 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 仅查询未删除的
         queryWrapper.eq(SysGroup::getDeleted, 0);
         // 指定排序
-        queryWrapper.orderBy(SysGroup::getSortNum, true);
+        if (ObjectUtil.isAllNotEmpty(param.getSortField(), param.getSortOrder())) {
+            // 检查排序方式
+            SortOrderEnum.validate(param.getSortOrder());
+            queryWrapper.orderBy(StrUtil.toUnderlineCase(param.getSortField()), param.getSortOrder().equals(SortOrderEnum.ASC.getValue()));
+        } else {
+            queryWrapper.orderBy(SysGroup::getSortNum, true);
+        }
         // 限制数据权限
         DataScopeHelper.dataScopeFilter(queryWrapper, SysGroup::getCreateBy, SysGroup::getOrgCode);
         // 分页查询
@@ -135,7 +147,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(group.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
-            group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
+//            group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
         }
         // 查询指定组织
         SysOrg org = sysOrgService.getOne(QueryWrapper.create().eq(SysOrg::getCode, param.getOrgCode()));
