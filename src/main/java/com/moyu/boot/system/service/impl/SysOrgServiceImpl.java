@@ -138,8 +138,8 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
         org.setId(null);
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(org.getCode())) {
-            // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            org.setCode(IdUtil.objectId());
+            // 唯一code IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
+            org.setCode(SysConstants.ORG_PREFIX + IdUtil.getSnowflakeNextId());
         }
         // 组织机构层级路径,逗号分隔,父节点在后(不包含本节点)
         Tree<String> rootTree = singleTree();
