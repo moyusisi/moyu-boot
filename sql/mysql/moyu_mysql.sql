@@ -163,7 +163,6 @@ create table sys_api
     `name`        VARCHAR(64)   DEFAULT NULL COMMENT '接口名称',
     `path`        VARCHAR(1024) DEFAULT NULL COMMENT '接口地址',
     `has_scope`   TINYINT       DEFAULT 0 COMMENT '是否有数据范围',
-    `api_type`    TINYINT       DEFAULT 0 COMMENT '接口类型（字典 1后端接口 2三方接口）',
 
     `ext_json`    TEXT          DEFAULT NULL COMMENT '扩展信息',
     `remark`      TEXT          DEFAULT NULL COMMENT '备注',
