@@ -22,7 +22,6 @@ import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.MenuTypeEnum;
 import com.moyu.boot.system.model.entity.SysGroup;
 import com.moyu.boot.system.model.entity.SysMenu;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.entity.ext.MenuExt;
 import com.moyu.boot.system.model.param.SysRoleParam;
