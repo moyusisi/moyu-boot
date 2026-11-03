@@ -76,11 +76,6 @@ public class SysUserParam extends PageParam {
     @NotNull(message = "用户性别gender不能为空")
     private Integer gender;
     /**
-     * 生日
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date birthday;
-    /**
      * 邮箱
      */
     private String email;

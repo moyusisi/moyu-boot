@@ -38,7 +38,6 @@ create table sys_user
     `avatar`          VARCHAR(255)  DEFAULT NULL COMMENT '头像',
     `name`            VARCHAR(64)   DEFAULT NULL COMMENT '姓名',
     `gender`          TINYINT(4)    DEFAULT NULL COMMENT '性别(字典 0未知 1男 2女)',
-    `birthday`        DATETIME      DEFAULT NULL COMMENT '生日',
     `email`           VARCHAR(64)   DEFAULT NULL COMMENT '邮箱',
     `phone`           VARCHAR(20)   DEFAULT NULL COMMENT '手机',
     `id_no`           VARCHAR(20)   DEFAULT NULL COMMENT '身份证号',
@@ -49,12 +48,6 @@ create table sys_user
     `org_code`        VARCHAR(64)   DEFAULT NULL COMMENT '直属组织编码',
     `org_name`        VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
     `org_path`        VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
-
-    `login_ip`        VARCHAR(20)   DEFAULT NULL COMMENT '登陆IP',
-    `login_time`      DATETIME      DEFAULT NULL COMMENT '登陆时间',
-    `last_login_ip`   VARCHAR(20)   DEFAULT NULL COMMENT '上次登陆IP',
-    `last_login_time` DATETIME      DEFAULT NULL COMMENT '上次登陆时间',
-    `pwd_update_time` DATETIME      DEFAULT NULL COMMENT '上次密码更新时间',
 
     `status`          TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `remark`          TEXT          DEFAULT NULL comment '备注',

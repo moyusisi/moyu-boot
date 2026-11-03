@@ -14,11 +14,11 @@ values
     (2011, '16001000', '华南行政部', '16000000', 2, 2, '16000000,10000000,0', 84, 0, null, null, 0, null, null, null, null);
 
 -- 用户
-insert into moyu.sys_user (user_id, account, password, nick_name, avatar, name, gender, birthday, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, login_ip, login_time, last_login_ip, last_login_time, pwd_update_time, status, remark, deleted, create_time, create_by, update_time, update_by)
-values  ('202602121001', 'superAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, '超管小李', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        ('202602121002', 'rAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, '超管小王', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        ('202602121003', 'bjAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, 'bjAdmin', 1, null, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null),
-        ('202602121004', 'auditor', '255a58278b06e24018d1f042e8657ea3', null, null, '审计员小王', 1, null, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', null, null, null, null, null, 0, null, 0, null, null, null, null);
+insert into moyu.sys_user (user_id, account, password, nick_name, avatar, name, gender, email, phone, id_no, address, staff_code, entry_date, org_code, org_name, org_path, status, remark, deleted, create_time, create_by, update_time, update_by)
+values  ('202602121001', 'superAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, '超管小李', 1, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', 0, null, 0, null, null, null, null),
+        ('202602121002', 'rAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, '超管小王', 1, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', 0, null, 0, null, null, null, null),
+        ('202602121003', 'bjAdmin', '255a58278b06e24018d1f042e8657ea3', null, null, 'bjAdmin', 1, null, null, null, null, null, null, '12000000', '北京公司', '12000000,10000000,0', 0, null, 0, null, null, null, null),
+        ('202602121004', 'auditor', '255a58278b06e24018d1f042e8657ea3', null, null, '审计员小王', 1, null, null, null, null, null, null, '11000000', '集团总部', '11000000,10000000,0', 0, null, 0, null, null, null, null);
 
 -- 角色
 insert into moyu.sys_role (id, code, name, sort_num, status, ext_json, remark, deleted, create_time, create_by, update_time, update_by)

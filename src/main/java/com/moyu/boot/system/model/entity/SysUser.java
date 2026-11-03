@@ -70,11 +70,6 @@ public class SysUser extends BaseEntity {
     private Integer gender;
 
     /**
-     * 生日
-     */
-    private LocalDate birthday;
-
-    /**
      * 邮箱
      */
     private String email;
@@ -118,31 +113,6 @@ public class SysUser extends BaseEntity {
      * 组织机构层级路径,逗号分隔,父节点在后
      */
     private String orgPath;
-
-    /**
-     * 登陆IP
-     */
-    private String loginIp;
-
-    /**
-     * 登陆时间
-     */
-    private Date loginTime;
-
-    /**
-     * 上次登陆IP
-     */
-    private String lastLoginIp;
-
-    /**
-     * 上次登陆时间
-     */
-    private Date lastLoginTime;
-
-    /**
-     * 上次密码更新时间
-     */
-    private Date pwdUpdateTime;
 
     /**
      * 状态（0正常 1停用）
