@@ -23,7 +23,6 @@ import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.OrgTypeEnum;
 import com.moyu.boot.system.mapper.SysOrgMapper;
-import com.moyu.boot.system.model.entity.SysApi;
 import com.moyu.boot.system.model.entity.SysOrg;
 import com.moyu.boot.system.model.param.SysOrgParam;
 import com.moyu.boot.system.model.vo.SysOrgVO;
@@ -57,10 +56,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public List<SysOrgVO> list(SysOrgParam param) {
         String parentCode = param.getParentCode();
+        // 指定orgCode的所有的children，包含本身
+        List<String> children = new ArrayList<>();
+        if (StrUtil.isNotBlank(param.getParentCode())) {
+            children = childrenCodeList(parentCode);
+        }
         // 查询条件
         QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定parentCode查询(包括本身和直接子节点)
-        queryWrapper.and(qw -> qw.where(SysOrg::getCode).eq(parentCode).or(SysOrg::getParentCode).eq(parentCode), ObjectUtil.isNotEmpty(parentCode));
+        // queryWrapper.and(qw -> qw.where(SysOrg::getCode).eq(parentCode).or(SysOrg::getParentCode).eq(parentCode), ObjectUtil.isNotEmpty(parentCode));
+        // 指定parentCode查询(包括本身和所有子节点)
+        queryWrapper.in(SysOrg::getCode, children, ObjectUtil.isNotEmpty(param.getParentCode()));
         // 指定name查询
         queryWrapper.like(SysOrg::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定code查询
@@ -92,10 +98,17 @@ public class SysOrgServiceImpl extends ServiceImpl<SysOrgMapper, SysOrg> impleme
     @Override
     public PageData<SysOrgVO> pageList(SysOrgParam param) {
         String parentCode = param.getParentCode();
+        // 指定orgCode的所有的children，包含本身
+        List<String> children = new ArrayList<>();
+        if (StrUtil.isNotBlank(param.getParentCode())) {
+            children = childrenCodeList(parentCode);
+        }
         // 查询条件
         QueryWrapper queryWrapper = QueryWrapper.create();
         // 指定parentCode查询(包括本身和直接子节点)
-        queryWrapper.and(qw -> qw.where(SysOrg::getCode).eq(parentCode).or(SysOrg::getParentCode).eq(parentCode), ObjectUtil.isNotEmpty(parentCode));
+        // queryWrapper.and(qw -> qw.where(SysOrg::getCode).eq(parentCode).or(SysOrg::getParentCode).eq(parentCode), ObjectUtil.isNotEmpty(parentCode));
+        // 指定parentCode查询(包括本身和所有子节点)
+        queryWrapper.in(SysOrg::getCode, children, ObjectUtil.isNotEmpty(param.getParentCode()));
         // 指定name查询
         queryWrapper.like(SysOrg::getName, param.getName(), ObjectUtil.isNotEmpty(param.getName()));
         // 指定code查询
