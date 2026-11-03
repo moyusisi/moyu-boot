@@ -43,10 +43,6 @@ public class SysApiVO {
      */
     private Integer hasScope;
     /**
-     * 接口类型（字典 1后端接口 2三方接口）
-     */
-    private Integer apiType;
-    /**
      * 扩展信息
      */
     private String extJson;
