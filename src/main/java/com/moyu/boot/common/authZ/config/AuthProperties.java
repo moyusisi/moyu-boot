@@ -37,16 +37,6 @@ public class AuthProperties {
     private List<String> whiteList = new ArrayList<>();
 
     /**
-     * 密码加密方式
-     */
-    private String cryptoType = "sm4";
-
-    /**
-     * sm4自定义密钥
-     */
-    private String sm4Key = "KeyMustBe16Size.";
-
-    /**
      * 令牌类型
      * * jwt   : JWT令牌
      * * redis : 有状态令牌
