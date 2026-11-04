@@ -15,7 +15,6 @@ import com.moyu.boot.common.mybatis.util.DataScopeHelper;
 import com.moyu.boot.plugin.seq.service.DaySnService;
 import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.mapper.SysUserMapper;
-import com.moyu.boot.system.model.entity.SysRole;
 import com.moyu.boot.system.model.entity.SysUser;
 import com.moyu.boot.system.model.param.SysUserParam;
 import com.moyu.boot.system.model.vo.SysUserVO;

@@ -41,5 +41,4 @@ public class AuthSessionParam extends PageParam {
      */
     private String tokenValue;
 
-
 }
