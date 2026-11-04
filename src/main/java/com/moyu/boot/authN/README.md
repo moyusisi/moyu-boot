@@ -1,4 +1,5 @@
 ## 认证服务
+
 authN = Authentication 身份认证  
 进行登陆认证，颁发令牌，维护用户缓存
 
@@ -10,5 +11,6 @@ authN = Authentication 身份认证
 * 提供`/api/auth/login`、`/api/auth/logout`入口
 
 ### 说明
+
 通过Sa-Token颁发令牌
 
