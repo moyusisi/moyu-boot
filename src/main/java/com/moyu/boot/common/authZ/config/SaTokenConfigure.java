@@ -6,6 +6,7 @@ import cn.dev33.satoken.context.model.SaStorage;
 import cn.dev33.satoken.exception.FirewallCheckException;
 import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.filter.SaServletFilter;
+import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.jwt.StpLogicJwtForSimple;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
@@ -23,6 +24,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -40,7 +44,7 @@ import java.util.List;
  */
 @Slf4j
 @Configuration
-public class SaTokenConfigure {
+public class SaTokenConfigure implements WebMvcConfigurer {
 
     @Resource
     private AuthProperties properties;
@@ -76,6 +80,42 @@ public class SaTokenConfigure {
     public StpLogic getStpLogicJwt() {
         // 仅Token风格替换，仍然需要Redis
         return new StpLogicJwtForSimple();
+    }
+
+    // 注册拦截器 https://sa-token.com/use/route-check.html
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 放行白名单
+        List<String> whiteList = new ArrayList<>();
+        // 如果没有开启认证，则全放行，否则按照白名单放行
+        if (Boolean.FALSE.equals(properties.getEnabled())) {
+            whiteList.add("/**");
+        } else {
+            whiteList.addAll(properties.getWhiteList());
+        }
+        // 注册拦截鉴权，但关闭拦截器注解鉴权，因为已经使用了AOP注解鉴权
+        registry.addInterceptor(
+                        new SaInterceptor(handler -> {
+                            if (handler instanceof HandlerMethod) {
+                                // 确保匹配到 HandlerMethod 再鉴权， 404请求不会进到这里
+                                StpUtil.checkLogin();
+                                // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
+                                SaStorage storage = SaHolder.getStorage();
+                                // 向上下文中设置已认证用户.(避免覆盖)
+                                if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
+                                    // 从会话中获取登陆用户信息
+                                    LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
+                                    // 处理数据范围
+                                    dataScopeHandler(loginUser);
+                                    // loginUser放入本次请求作用域存储
+                                    storage.set(AuthConstants.LOGIN_USER, loginUser);
+                                }
+                            }
+                        }).isAnnotation(false) // 关闭拦截器注解鉴权(使用AOP注解鉴权)
+                )
+                // 指定 拦截路由 与 放行路由
+                .addPathPatterns(properties.getAuthList().toArray(new String[0]))
+                .excludePathPatterns(whiteList.toArray(new String[0]));
     }
 
     // 注册 Sa-Token全局过滤器 https://sa-token.cc/doc.html#/up/global-filter
