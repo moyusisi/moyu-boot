@@ -6,6 +6,7 @@ import com.moyu.boot.common.mybatis.handler.CustomUpdateListener;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
+import com.mybatisflex.core.keygen.KeyGenerators;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +23,7 @@ public class SysConfig extends BaseEntity {
     /**
      * 主键id
      */
-    @Id(keyType = KeyType.Auto)
+    @Id(keyType = KeyType.Generator, value = KeyGenerators.snowFlakeId)
     private Long id;
     /**
      * 配置项名称
