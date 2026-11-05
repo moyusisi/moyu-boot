@@ -3,6 +3,7 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
@@ -12,6 +13,7 @@ import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.BaseEntity;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.mybatis.util.DataScopeHelper;
+import com.moyu.boot.system.constant.SysConstants;
 import com.moyu.boot.system.enums.RelationTypeEnum;
 import com.moyu.boot.system.enums.StatusEnum;
 import com.moyu.boot.system.mapper.SysGroupMapper;
@@ -147,7 +149,7 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(group.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
-//            group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
+            group.setCode(SysConstants.GROUP_PREFIX + IdUtil.getSnowflakeNextId());
         }
         // 查询指定组织
         SysOrg org = sysOrgService.getOne(QueryWrapper.create().eq(SysOrg::getCode, param.getOrgCode()));
