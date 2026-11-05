@@ -143,26 +143,39 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                         // 获取原始请求对象
                         HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
                         // 记录日志
-                        log.info("Filter层，未认证访问{}", request.getRequestURI());
                         String ip = ServletUtil.getClientIP(request);
                         if (ObjectUtil.isNotEmpty(ip)) {
                             log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
                         }
+                        log.info("Filter层，未认证访问{}", request.getRequestURI());
                     }
                 })
-
                 // 异常处理函数：过滤器中抛出的异常无法被Advice处理
                 .setError(e -> {
                     // 获取原始请求对象
                     HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
                     HttpServletResponse response = (HttpServletResponse) SaHolder.getResponse().getSource();
+                    // 设置响应头
+                    response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    // 默认返回
+                    Result<?> result = new Result<>(ResultCodeEnum.SYSTEM_ERROR);
                     if (e instanceof NotLoginException) {
 //                        response.setStatus(HttpStatus.UNAUTHORIZED.value());
                         log.info("===== 进入Filter层异常处理，鉴权未登录:{} =====", e.getMessage());
+                        // 处理登录异常，区分未认证的具体场景
+                        result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
                     } else {
                         log.error("===== 进入Filter层异常处理 =====", e);
                     }
-                    return filterErrorHandler(request, response, e);
+                    String responseBody = new Gson().toJson(result);
+                    // 记录日志
+                    String ip = ServletUtil.getClientIP(request);
+                    if (ObjectUtil.isNotEmpty(ip)) {
+                        log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                    }
+                    log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
+                    return responseBody;
                 })
 
                 // 前置函数：在每次认证函数之前执行（BeforeAuth 不受 includeList 与 excludeList 的限制，所有请求都会进入）
@@ -187,31 +200,6 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 throw new FirewallCheckException("非法请求：null");
             }
         });
-    }
-
-    /**
-     * 处理Filter层的异常
-     */
-    private Object filterErrorHandler(HttpServletRequest request, HttpServletResponse response, Throwable e) {
-        // 未认证时默认返回
-        Result<?> result = new Result<>(ResultCodeEnum.USER_LOGIN_EXPIRED);
-        if (e instanceof NotLoginException) {
-            // 处理登录异常，区分未认证的具体场景
-            result = ExceptionWrapperUtils.handleNotLogin((NotLoginException) e);
-        } else {
-            log.error("认证鉴权异常", e);
-        }
-        // 设置响应头
-        response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        String responseBody = new Gson().toJson(result);
-        // 记录日志
-        String ip = ServletUtil.getClientIP(request);
-        if (ObjectUtil.isNotEmpty(ip)) {
-            log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
-        }
-        log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
-        return responseBody;
     }
 
     private void dataScopeHandler(LoginUser loginUser) {
