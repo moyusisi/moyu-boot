@@ -97,20 +97,9 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         registry.addInterceptor(
                         // 执行顺序为：Filter -> 拦截器(beforeAuth -> 注解鉴权 -> auth) -> AOP注解鉴权
                         new SaInterceptor(auth -> {
+                            // 确保匹配到 HandlerMethod 再鉴权， 404请求不会进到这里
                             if (auth instanceof HandlerMethod) {
-                                // 确保匹配到 HandlerMethod 再鉴权， 404请求不会进到这里
                                 StpUtil.checkLogin();
-                                // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
-                                SaStorage storage = SaHolder.getStorage();
-                                // 向上下文中设置已认证用户.(避免覆盖)
-                                if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
-                                    // 从会话中获取登陆用户信息
-                                    LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
-                                    // 处理数据范围
-                                    dataScopeHandler(loginUser);
-                                    // loginUser放入本次请求作用域存储
-                                    storage.set(AuthConstants.LOGIN_USER, loginUser);
-                                }
                             }
                         }).isAnnotation(false) // 关闭拦截器注解鉴权(使用AOP注解鉴权)
                 )
@@ -137,21 +126,23 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 .addExclude(whiteList.toArray(new String[0]))
                 // 认证函数: 每次请求执行
                 .setAuth(obj -> {
-                    StpUtil.checkLogin();
-                    // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
-                    SaStorage storage = SaHolder.getStorage();
-                    // 向上下文中设置已认证用户.(避免覆盖)
-                    if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
-                        // 从会话中获取登陆用户信息
-                        LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
-                        // 处理数据范围
-                        dataScopeHandler(loginUser);
-                        // loginUser放入本次请求作用域存储
-                        storage.set(AuthConstants.LOGIN_USER, loginUser);
+                    // Filter中不校验登陆，仅处理已登录用户信息(在SaInterceptor中校验登陆)
+                    if (StpUtil.isLogin()) {
+                        // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
+                        SaStorage storage = SaHolder.getStorage();
+                        // 向上下文中设置已认证用户.(避免覆盖)
+                        if (ObjectUtil.isEmpty(storage.get(AuthConstants.LOGIN_USER))) {
+                            // 从会话中获取登陆用户信息
+                            LoginUser loginUser = (LoginUser) StpUtil.getTokenSession().get(AuthConstants.LOGIN_USER);
+                            // 处理数据范围
+                            dataScopeHandler(loginUser);
+                            // loginUser放入本次请求作用域存储
+                            storage.set(AuthConstants.LOGIN_USER, loginUser);
+                        }
                     }
                 })
 
-                // 异常处理函数：过滤器中抛出的异常无法进入全局@ExceptionHandler
+                // 异常处理函数：过滤器中抛出的异常无法被Advice处理
                 .setError(e -> {
                     // 获取原始请求对象
                     HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
