@@ -95,8 +95,9 @@ public class SaTokenConfigure implements WebMvcConfigurer {
         }
         // 注册拦截鉴权，但关闭拦截器注解鉴权，因为已经使用了AOP注解鉴权
         registry.addInterceptor(
-                        new SaInterceptor(handler -> {
-                            if (handler instanceof HandlerMethod) {
+                        // 执行顺序为：Filter -> 拦截器(beforeAuth -> 注解鉴权 -> auth) -> AOP注解鉴权
+                        new SaInterceptor(auth -> {
+                            if (auth instanceof HandlerMethod) {
                                 // 确保匹配到 HandlerMethod 再鉴权， 404请求不会进到这里
                                 StpUtil.checkLogin();
                                 // SaStorage 为请求作用域，存储的数据只在一次请求内有效。
