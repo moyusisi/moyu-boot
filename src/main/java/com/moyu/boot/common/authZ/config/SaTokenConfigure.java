@@ -139,6 +139,15 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                             // loginUser放入本次请求作用域存储
                             storage.set(AuthConstants.LOGIN_USER, loginUser);
                         }
+                    } else {
+                        // 获取原始请求对象
+                        HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
+                        // 记录日志
+                        log.info("Filter层，未认证访问{}", request.getRequestURI());
+                        String ip = ServletUtil.getClientIP(request);
+                        if (ObjectUtil.isNotEmpty(ip)) {
+                            log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                        }
                     }
                 })
 
