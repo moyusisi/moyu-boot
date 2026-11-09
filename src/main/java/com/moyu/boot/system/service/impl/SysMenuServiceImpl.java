@@ -7,8 +7,8 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import com.google.gson.Gson;
@@ -348,7 +348,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(menu.getCode())) {
             // 唯一code RandomUtil.randomString(10)、IdUtil.objectId()24位
-            menu.setCode(prefix + IdUtil.objectId());
+            menu.setCode(prefix + RandomUtil.randomStringLower(10));
         }
 
     }

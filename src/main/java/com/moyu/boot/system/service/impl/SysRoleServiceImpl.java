@@ -9,6 +9,7 @@ import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.base.Strings;
 import com.google.common.collect.ArrayListMultimap;
@@ -167,7 +168,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
         // 若未指定唯一编码code，则自动生成
         if (Strings.isNullOrEmpty(role.getCode())) {
             // 唯一code IdUtil.objectId()24位、IdUtil.getSnowflakeNextId()19位
-            role.setCode(SysConstants.ROLE_PREFIX + IdUtil.getSnowflakeNextId());
+            role.setCode(SysConstants.ROLE_PREFIX + RandomUtil.randomStringLower(10));
         }
         this.save(role);
     }
