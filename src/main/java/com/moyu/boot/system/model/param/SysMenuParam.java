@@ -3,10 +3,7 @@ package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.moyu.boot.common.core.model.PageParam;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,10 +17,8 @@ import java.util.Set;
  * @author shisong
  * @since 2024-11-28
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysMenuParam extends PageParam {
     //********** 额外字段 **********//

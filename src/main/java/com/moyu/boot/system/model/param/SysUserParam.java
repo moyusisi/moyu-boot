@@ -5,10 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,10 +18,8 @@ import java.util.Set;
 /**
  * 用户信息请求参数(查询、修改)
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysUserParam extends PageParam {
     //********** 额外字段 **********//

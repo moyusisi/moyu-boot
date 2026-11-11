@@ -1,20 +1,14 @@
 package com.moyu.boot.system.model.param;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.Set;
 
 /**
  * 关系映射查询参数
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysRelationParam {
     //********** 额外字段 **********//

@@ -539,10 +539,11 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             return new ArrayList<>();
         }
         // 查询用户(可指定搜索词)
-        List<SysUserVO> voList = sysUserService.list(SysUserParam.builder()
-                .name(param.getSearchKey())
-                .orgCode(param.getOrgCode())
-                .codeSet(userSet).build());
+        SysUserParam queryParam = new SysUserParam();
+        queryParam.setName(param.getSearchKey());
+        queryParam.setOrgCode(param.getOrgCode());
+        queryParam.setCodeSet(userSet);
+        List<SysUserVO> voList = sysUserService.list(queryParam);
         return voList;
     }
 

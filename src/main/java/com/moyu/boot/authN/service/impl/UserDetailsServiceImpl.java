@@ -59,22 +59,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 用户直接拥有的角色 USER_HAS_ROLE 关系
         Set<String> roleSet = sysRoleService.userRoles(sysUser.getAccount());
         // 组装LoginUser
-        LoginUser loginUser = LoginUser.builder()
-                .userId(sysUser.getUserId())
-                .username(sysUser.getAccount())
-                .name(sysUser.getName())
-                .orgCode(sysUser.getOrgCode())
-                // 角色集合(默认岗位=直接拥有的角色)
-                .roles(roleSet)
-                // 权限标识集合(仅接口,无菜单)
-                .perms(sysRoleService.rolePerms(roleSet))
-                // 接口权限的数据范围
-                .dataScopeMap(sysRoleService.roleDataScopeMap(roleSet, sysUser.getOrgCode()))
-                // 不设置数据范围时，默认本人数据，真正的数据范围在认证后处理
-                .dataScope(DataScopeEnum.SELF.getCode())
-                // 默认岗位
-                .groupCode(sysGroupService.defaultGroup())
-                .build();
+        LoginUser loginUser = new LoginUser();
+        loginUser.setUserId(sysUser.getUserId());
+        loginUser.setUsername(sysUser.getAccount());
+        loginUser.setName(sysUser.getName());
+        loginUser.setOrgCode(sysUser.getOrgCode());
+        // 角色集合(默认岗位=直接拥有的角色)
+        loginUser.setRoles(roleSet);
+        // 权限标识集合(仅接口,无菜单)
+        loginUser.setPerms(sysRoleService.rolePerms(roleSet));
+        // 接口权限的数据范围
+        loginUser.setDataScopeMap(sysRoleService.roleDataScopeMap(roleSet, sysUser.getOrgCode()));
+        // 不设置数据范围时，默认本人数据，真正的数据范围在认证后处理
+        loginUser.setDataScope(DataScopeEnum.SELF.getCode());
+        // 默认岗位
+        loginUser.setGroupCode(sysGroupService.defaultGroup());
         return loginUser;
     }
 }

@@ -4,10 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Size;
 import java.util.Set;
@@ -18,10 +16,8 @@ import java.util.Set;
  * @author moyusisi
  * @since 2026-05-28
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysConfigParam extends PageParam {
 

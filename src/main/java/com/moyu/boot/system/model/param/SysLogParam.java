@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -18,6 +19,7 @@ import java.util.Set;
  * @since 2025-10-22
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysLogParam extends PageParam {
 
