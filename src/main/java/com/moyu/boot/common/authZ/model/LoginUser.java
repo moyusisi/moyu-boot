@@ -2,7 +2,7 @@ package com.moyu.boot.common.authZ.model;
 
 import cn.dev33.satoken.json.SaJsonType;
 import com.moyu.boot.common.core.enums.DataScopeEnum;
-import lombok.*;
+import lombok.Data;
 
 import java.util.Map;
 import java.util.Set;
@@ -13,12 +13,7 @@ import java.util.Set;
  * @author shisong
  * @since 2024-12-27
  */
-@Getter
-@Setter
-@ToString
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class LoginUser implements SaJsonType {
 
     /**
