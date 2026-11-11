@@ -211,7 +211,10 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
             return new ArrayList<>();
         }
         // 查询角色(可指定搜索词)
-        List<SysRoleVO> roleList = sysRoleService.list(SysRoleParam.builder().name(param.getSearchKey()).codeSet(roleSet).build());
+        SysRoleParam queryParam = new SysRoleParam();
+        queryParam.setName(param.getSearchKey());
+        queryParam.setCodeSet(roleSet);
+        List<SysRoleVO> roleList = sysRoleService.list(queryParam);
         return roleList;
     }
 
@@ -379,7 +382,9 @@ public class SysGroupServiceImpl extends ServiceImpl<SysGroupMapper, SysGroup> i
         Set<String> roleSet = sysRelationService.groupRole(param.getCode());
         // 所有岗位都拥有默认角色
         roleSet.add(sysRoleService.defaultRole());
-        return sysRoleService.menuTree(SysRoleParam.builder().codeSet(roleSet).build());
+        SysRoleParam queryParam = new SysRoleParam();
+        queryParam.setCodeSet(roleSet);
+        return sysRoleService.menuTree(queryParam);
     }
 
     @Override

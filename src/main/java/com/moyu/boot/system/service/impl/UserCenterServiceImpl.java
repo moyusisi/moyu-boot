@@ -170,13 +170,17 @@ public class UserCenterServiceImpl implements UserCenterService {
         if (!LoginUserUtils.getLoginUser().isPresent()) {
             throw new BusinessException(ResultCodeEnum.USER_LOGIN_CHECK_ERROR);
         }
+        // 查询角色
+        SysRoleParam queryParam = new SysRoleParam();
+        queryParam.setName(roleName);
         if (LoginUserUtils.isRoot()) {
             // root拥有所有角色
-            return sysRoleService.list(SysRoleParam.builder().name(roleName).build());
+            return sysRoleService.list(queryParam);
         }
         // 当前用户的角色
         Set<String> roleSet = LoginUserUtils.getRoles();
-        return sysRoleService.list(SysRoleParam.builder().codeSet(roleSet).name(roleName).build());
+        queryParam.setCodeSet(roleSet);
+        return sysRoleService.list(queryParam);
     }
 
     @Override

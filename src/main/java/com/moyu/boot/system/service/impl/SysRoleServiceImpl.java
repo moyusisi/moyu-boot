@@ -7,7 +7,6 @@ import cn.hutool.core.lang.tree.TreeNode;
 import cn.hutool.core.lang.tree.TreeNodeConfig;
 import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.lang.tree.parser.DefaultNodeParser;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -366,13 +365,12 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
             SysApi api = apiMap.get(btn.getPermission());
             // apiMap中仅包含有数据范围的接口
             if (ObjectUtil.isNotNull(api)) {
-                PermScopeInfo vo = PermScopeInfo.builder()
-                        .code(code)
-                        .btnName(btn.getName())
-                        .name(api.getName())
-                        .path(api.getPath())
-                        .permission(api.getCode())
-                        .build();
+                PermScopeInfo vo = new PermScopeInfo();
+                vo.setCode(code);
+                vo.setBtnName(btn.getName());
+                vo.setName(api.getName());
+                vo.setPath(api.getPath());
+                vo.setPermission(api.getCode());
                 SysRelation relation = permMap.get(code);
                 RelationExt.ScopeExt ext = gson.fromJson(relation.getExtJson(), RelationExt.ScopeExt.class);
                 if (ext != null) {

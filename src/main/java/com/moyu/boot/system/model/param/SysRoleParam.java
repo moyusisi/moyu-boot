@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.moyu.boot.common.core.model.PageParam;
 import com.moyu.boot.system.model.vo.PermScopeInfo;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,10 +18,8 @@ import java.util.Set;
 /**
  * 角色信息参数
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SysRoleParam extends PageParam {
     //********** 额外字段 **********//

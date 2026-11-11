@@ -1,20 +1,14 @@
 package com.moyu.boot.system.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.List;
 
 /**
  * 接口的权限+数据范围信息
  */
-@Getter
-@Setter
-@ToString
-@Builder
+@Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PermScopeInfo {
 
