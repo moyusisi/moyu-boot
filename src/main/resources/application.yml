@@ -14,8 +14,8 @@ spring:
     active: local
   config:
     import: classpath:codegen.yml
-  # mvc配置
-  mvc:
+  # http配置
+  http:
     # json转换器，默认为jackson
     converters:
       preferred-json-mapper: jackson
