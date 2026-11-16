@@ -1,5 +1,6 @@
 # idea ignore
 .idea/
+.openidea/
 *.iws
 *.iml
 *.ipr
