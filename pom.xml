@@ -105,7 +105,7 @@
         <!-- MyBatis-Flex MyBatis的轻量增强框架 参考 https://mybatis-flex.com/zh/intro/comparison.html -->
         <dependency>
             <groupId>com.mybatis-flex</groupId>
-            <artifactId>mybatis-flex-spring-boot-starter</artifactId>
+            <artifactId>mybatis-flex-spring-boot3-starter</artifactId>
             <version>1.11.8</version>
         </dependency>
         <!-- mysql JDBC驱动 -->
@@ -140,7 +140,7 @@
         <!-- Sa-Token 权限认证，在线文档：https://sa-token.cc -->
         <dependency>
             <groupId>cn.dev33</groupId>
-            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <artifactId>sa-token-spring-boot3-starter</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
         <!-- Sa-Token AOP模式实现注解鉴权 https://sa-token.cc/doc.html#/plugin/aop-at -->
@@ -184,11 +184,17 @@
             <artifactId>sa-token-forest</artifactId>
             <version>${sa-token.version}</version>
         </dependency>
-        <!-- Jasypt 配置加密 https://www.cnblogs.com/hanease/p/18772373 -->
+        <!-- Jasypt 配置加密 https://jishuzhan.net/article/2062704438938251265 -->
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
             <version>3.0.5</version>
+        </dependency>
+        <!-- 控制台打印所有被移除的配置项，升级完成后删掉这个依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

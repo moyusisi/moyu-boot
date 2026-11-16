@@ -3,7 +3,7 @@ package com.moyu.boot.system.aop;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.http.useragent.Browser;
 import cn.hutool.http.useragent.UserAgent;
 import cn.hutool.http.useragent.UserAgentUtil;
@@ -12,6 +12,9 @@ import com.moyu.boot.common.authZ.util.LoginUserUtils;
 import com.moyu.boot.system.model.entity.SysLog;
 import com.moyu.boot.system.service.SysLogService;
 import com.moyu.boot.system.util.IpUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,9 +26,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -121,7 +121,7 @@ public class SysLogAspect {
             // 客户端信息
             try {
                 // 客户端ip
-                sysLog.setSourceClient(ServletUtil.getClientIP(request));
+                sysLog.setSourceClient(JakartaServletUtil.getClientIP(request));
                 if (StrUtil.isNotBlank(sysLog.getSourceClient()) && !sysLog.getSourceClient().equals("127.0.0.1")) {
                     // 国家|区域|省份|城市|运营商
                     String region = IpUtils.getRegion(sysLog.getSourceClient());
@@ -134,7 +134,7 @@ public class SysLogAspect {
                     }
                 }
                 // 用户代理，简称 UA，是一个特殊字符串头，使得服务器能够识别客户使用的操作系统及版本、浏览器及版本、浏览器渲染引擎等。
-                sysLog.setUserAgent(ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                sysLog.setUserAgent(JakartaServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
                 // UserAgent userAgent = getUserAgent(request);
             } catch (Exception err) {
                 log.error("获取客户端信息异常：", e);
@@ -198,7 +198,7 @@ public class SysLogAspect {
      * 获取请求代理头
      */
     private static UserAgent getUserAgent(HttpServletRequest request) {
-        String userAgentStr = ServletUtil.getHeaderIgnoreCase(request, "User-Agent");
+        String userAgentStr = JakartaServletUtil.getHeaderIgnoreCase(request, "User-Agent");
         UserAgent userAgent = UserAgentUtil.parse(userAgentStr);
         if (ObjectUtil.isNotEmpty(userAgentStr)) {
             if ("Unknown".equals(userAgent.getBrowser().getName())) {

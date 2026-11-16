@@ -3,11 +3,11 @@ package com.moyu.boot.system.service.impl;
 import cn.hutool.crypto.SmUtil;
 import com.moyu.boot.system.config.SysProperties;
 import com.moyu.boot.system.service.PasswordEncoder;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 

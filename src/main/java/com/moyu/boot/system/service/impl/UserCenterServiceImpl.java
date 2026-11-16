@@ -31,11 +31,11 @@ import com.moyu.boot.system.model.vo.SysRoleVO;
 import com.moyu.boot.system.model.vo.UserInfo;
 import com.moyu.boot.system.service.*;
 import com.mybatisflex.core.query.QueryWrapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 

@@ -1,10 +1,10 @@
 package com.moyu.boot.system.util;
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.Searcher;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.InetAddress;
@@ -54,7 +54,7 @@ public class IpUtils {
      * @return 客户端IP地址
      */
     public static String getClientIp(HttpServletRequest request) {
-        return ServletUtil.getClientIP(request);
+        return JakartaServletUtil.getClientIP(request);
     }
 
     /**

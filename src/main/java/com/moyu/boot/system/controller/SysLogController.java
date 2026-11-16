@@ -8,13 +8,12 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.system.model.param.SysLogParam;
 import com.moyu.boot.system.model.vo.SysLogVO;
 import com.moyu.boot.system.service.SysLogService;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * 系统日志控制器
@@ -26,7 +25,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/api/sys/log")
 public class SysLogController {
-
 
     @Resource
     private SysLogService sysLogService;

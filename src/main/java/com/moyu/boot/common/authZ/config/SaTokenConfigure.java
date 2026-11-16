@@ -12,13 +12,17 @@ import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.strategy.SaFirewallStrategy;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.google.gson.Gson;
 import com.moyu.boot.common.authZ.constant.AuthConstants;
 import com.moyu.boot.common.authZ.model.LoginUser;
 import com.moyu.boot.common.authZ.util.ExceptionWrapperUtils;
 import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.model.Result;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -28,10 +32,6 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,9 +143,9 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                         // 获取原始请求对象
                         HttpServletRequest request = (HttpServletRequest) SaHolder.getRequest().getSource();
                         // 记录日志
-                        String ip = ServletUtil.getClientIP(request);
+                        String ip = JakartaServletUtil.getClientIP(request);
                         if (ObjectUtil.isNotEmpty(ip)) {
-                            log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                            log.info("Filter层，From Ip:{}, User-Agent:{}", ip, JakartaServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
                         }
                         log.info("Filter层，未认证访问{}", request.getRequestURI());
                     }
@@ -170,9 +170,9 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                     }
                     String responseBody = new Gson().toJson(result);
                     // 记录日志
-                    String ip = ServletUtil.getClientIP(request);
+                    String ip = JakartaServletUtil.getClientIP(request);
                     if (ObjectUtil.isNotEmpty(ip)) {
-                        log.info("Filter层，From Ip:{}, User-Agent:{}", ip, ServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
+                        log.info("Filter层，From Ip:{}, User-Agent:{}", ip, JakartaServletUtil.getHeaderIgnoreCase(request, "User-Agent"));
                     }
                     log.info("Filter层，未认证访问{}，处理返回:{}", request.getRequestURI(), responseBody);
                     return responseBody;

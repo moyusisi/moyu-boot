@@ -11,13 +11,13 @@ import com.moyu.boot.plugin.inboxMessage.model.param.InboxMessageParam;
 import com.moyu.boot.plugin.inboxMessage.model.vo.InboxMessageVO;
 import com.moyu.boot.plugin.inboxMessage.model.vo.UserMessageVO;
 import com.moyu.boot.plugin.inboxMessage.service.InboxMessageService;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

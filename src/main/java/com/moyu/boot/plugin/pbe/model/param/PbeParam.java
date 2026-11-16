@@ -1,8 +1,7 @@
 package com.moyu.boot.plugin.pbe.model.param;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * jasypt的加解密参数

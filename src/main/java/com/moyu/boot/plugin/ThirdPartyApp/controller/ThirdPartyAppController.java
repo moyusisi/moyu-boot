@@ -8,13 +8,13 @@ import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.ThirdPartyApp.model.param.ThirdPartyAppParam;
 import com.moyu.boot.plugin.ThirdPartyApp.model.vo.ThirdPartyAppVO;
 import com.moyu.boot.plugin.ThirdPartyApp.service.ThirdPartyAppService;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

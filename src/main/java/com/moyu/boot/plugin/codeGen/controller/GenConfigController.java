@@ -8,12 +8,14 @@ import com.moyu.boot.common.core.enums.ResultCodeEnum;
 import com.moyu.boot.common.core.exception.BusinessException;
 import com.moyu.boot.common.core.model.PageData;
 import com.moyu.boot.common.core.model.Result;
-import com.moyu.boot.plugin.codeGen.model.entity.GenConfig;
 import com.moyu.boot.plugin.codeGen.model.param.GenConfigParam;
 import com.moyu.boot.plugin.codeGen.model.vo.CodePreviewVO;
 import com.moyu.boot.plugin.codeGen.model.vo.GenConfigVO;
 import com.moyu.boot.plugin.codeGen.model.vo.TableMetaData;
 import com.moyu.boot.plugin.codeGen.service.GenConfigService;
+import jakarta.annotation.Resource;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -22,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 

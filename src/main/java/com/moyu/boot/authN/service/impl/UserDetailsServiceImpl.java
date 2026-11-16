@@ -10,10 +10,10 @@ import com.moyu.boot.system.service.SysGroupService;
 import com.moyu.boot.system.service.SysRoleService;
 import com.moyu.boot.system.service.SysUserService;
 import com.mybatisflex.core.query.QueryWrapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.Set;
 
 /**

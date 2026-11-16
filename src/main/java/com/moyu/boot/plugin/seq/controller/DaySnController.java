@@ -5,12 +5,12 @@ import com.moyu.boot.common.core.annotation.Log;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.seq.model.vo.DaySnVO;
 import com.moyu.boot.plugin.seq.service.DaySnService;
+import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

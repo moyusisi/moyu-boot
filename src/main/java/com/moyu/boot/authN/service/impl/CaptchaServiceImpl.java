@@ -7,11 +7,11 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.moyu.boot.authN.model.vo.CaptchaVO;
 import com.moyu.boot.authN.service.CaptchaService;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**

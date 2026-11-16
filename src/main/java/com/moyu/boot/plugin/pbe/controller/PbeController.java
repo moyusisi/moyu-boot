@@ -7,13 +7,12 @@ import com.moyu.boot.common.core.annotation.SysLog;
 import com.moyu.boot.common.core.model.Result;
 import com.moyu.boot.plugin.pbe.model.param.PbeParam;
 import com.moyu.boot.plugin.pbe.service.PbeService;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * 加解密控制器

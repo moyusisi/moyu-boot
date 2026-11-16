@@ -10,13 +10,13 @@ import ${packageName}.${moduleName}.model.entity.${entityName};
 import ${packageName}.${moduleName}.model.param.${entityName}Param;
 import ${packageName}.${moduleName}.model.vo.${entityName}VO;
 import ${packageName}.${moduleName}.service.${entityName}Service;
+import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
