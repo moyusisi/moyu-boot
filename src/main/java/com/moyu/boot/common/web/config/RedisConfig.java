@@ -37,9 +37,6 @@ public class RedisConfig {
         redisTemplate.setKeySerializer(RedisSerializer.string());
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
 
-        // json序列化
-        Jackson2JsonRedisSerializer<Object> jsonSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-
         // 使用Jackson来进行json序列化
         ObjectMapper objectMapper = new ObjectMapper();
         // 支持jdk8的时间模块
@@ -49,8 +46,8 @@ public class RedisConfig {
         // 关闭全局默认类型推断（不再自动加 @class 字段）
         objectMapper.deactivateDefaultTyping();
 
-        // 设置 objectMapper
-        jsonSerializer.setObjectMapper(objectMapper);
+        // json序列化
+        Jackson2JsonRedisSerializer<Object> jsonSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
 
         // value/hashValue 使用 json 序列化
         redisTemplate.setValueSerializer(jsonSerializer);
