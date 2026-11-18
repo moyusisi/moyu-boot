@@ -49,9 +49,9 @@ create table sys_user
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
-    `data_hash`   VARCHAR(256)  DEFAULT NULL COMMENT '数据完整性哈希值',
     `status`      TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `remark`      TEXT          DEFAULT NULL comment '备注',
+    `data_hash`   VARCHAR(256)  DEFAULT NULL COMMENT '数据完整性哈希值',
     `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
     `create_time` DATETIME      DEFAULT NULL COMMENT '创建时间',
     `create_by`   VARCHAR(32)   DEFAULT NULL COMMENT '创建人',

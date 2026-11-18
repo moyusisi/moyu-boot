@@ -130,4 +130,8 @@ public class SysUser extends BaseEntity {
      */
     private String remark;
 
+    /**
+     * 数据完整性校验值
+     */
+    private String dataHash;
 }
