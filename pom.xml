@@ -188,13 +188,7 @@
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
             <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>3.0.5</version>
-        </dependency>
-        <!-- 控制台打印所有被移除的配置项，升级完成后删掉这个依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-properties-migrator</artifactId>
-            <scope>runtime</scope>
+            <version>4.0.4</version>
         </dependency>
     </dependencies>
 
