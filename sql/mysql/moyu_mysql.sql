@@ -49,6 +49,7 @@ create table sys_user
     `org_name`    VARCHAR(64)   DEFAULT NULL COMMENT '直属组织名称',
     `org_path`    VARCHAR(1024) DEFAULT NULL COMMENT '组织机构层级路径,逗号分隔,父节点在后',
 
+    `data_hash`   VARCHAR(256)  DEFAULT NULL COMMENT '数据完整性哈希值',
     `status`      TINYINT       DEFAULT 0 COMMENT '状态（0正常 1停用）',
     `remark`      TEXT          DEFAULT NULL comment '备注',
     `deleted`     TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
@@ -176,15 +177,16 @@ DROP TABLE IF EXISTS `sys_relation`;
 CREATE TABLE `sys_relation`
 (
     `id`            BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键id',
-    `object_id`     VARCHAR(64)   DEFAULT NULL COMMENT '对象ID',
-    `target_id`     VARCHAR(64)   DEFAULT NULL COMMENT '目标ID',
-    `relation_type` TINYINT       DEFAULT NULL COMMENT '关系类型(字典 1:user_has_role,2:role_has_perm,3:user_has_group,4:group_has_role)',
-    `ext_json`      TEXT          DEFAULT NULL COMMENT '扩展信息',
-    `deleted`       TINYINT       DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
-    `create_time`   DATETIME      DEFAULT NULL COMMENT '创建时间',
-    `create_by`     VARCHAR(32)   DEFAULT NULL COMMENT '创建人',
-    `update_time`   DATETIME      DEFAULT NULL COMMENT '修改时间',
-    `update_by`     VARCHAR(32)   DEFAULT NULL COMMENT '修改人',
+    `object_id`     VARCHAR(64)  DEFAULT NULL COMMENT '对象ID',
+    `target_id`     VARCHAR(64)  DEFAULT NULL COMMENT '目标ID',
+    `relation_type` TINYINT      DEFAULT NULL COMMENT '关系类型(字典 1:user_has_role,2:role_has_perm,3:user_has_group,4:group_has_role)',
+    `ext_json`      TEXT         DEFAULT NULL COMMENT '扩展信息',
+    `data_hash`     VARCHAR(256) DEFAULT NULL COMMENT '数据完整性哈希值',
+    `deleted`       TINYINT      DEFAULT 0 COMMENT '删除标志（0未删除  1已删除）',
+    `create_time`   DATETIME     DEFAULT NULL COMMENT '创建时间',
+    `create_by`     VARCHAR(32)  DEFAULT NULL COMMENT '创建人',
+    `update_time`   DATETIME     DEFAULT NULL COMMENT '修改时间',
+    `update_by`     VARCHAR(32)  DEFAULT NULL COMMENT '修改人',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   CHARACTER SET = utf8mb4
