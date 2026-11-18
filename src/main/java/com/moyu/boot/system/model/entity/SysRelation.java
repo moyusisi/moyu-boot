@@ -49,4 +49,9 @@ public class SysRelation extends BaseEntity {
      * @see com.moyu.boot.system.model.entity.ext.RelationExt
      */
     private String extJson;
+
+    /**
+     * 数据完整性校验值
+     */
+    private String dataHash;
 }
