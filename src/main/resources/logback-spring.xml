@@ -43,11 +43,10 @@
 
     <!-- 兜底日志 -->
     <root level="INFO">
+        <!-- 输出到控制台 -->
         <appender-ref ref="consoleAppender"/>
-        <!-- 生产环境. -->
-        <springProfile name="prod">
-            <appender-ref ref="fileAppender"/>
-        </springProfile>
+        <!-- 输出到文件 -->
+        <appender-ref ref="fileAppender"/>
     </root>
 
 </configuration>
